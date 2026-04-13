@@ -201,13 +201,13 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
     <div class="g2">
       <div class="fl"><label>اسم المعلمة</label><input type="text" id="teacher" placeholder="أدخلي اسمك"></div>
       <div class="fl"><label>اسم المقرر</label><input type="text" id="cname" placeholder="مثال: جزء عم + تبارك"></div>
-      <div class="fl"><label>عدد الصفحات الكلي</label><input type="number" id="tpages" value="60" min="1" oninput="calcPlan()"></div>
+      <div class="fl"><label>عدد الصفحات الكلي (المقرر)</label><input type="number" id="tpages" value="100" min="1" oninput="calcPlan()"></div>
       <div class="fl"><label>تاريخ البدء</label><input type="date" id="sdate"></div>
       <div class="fl"><label>عدد أسابيع الدورة</label><input type="number" id="tweeks" value="10" min="1" max="52" oninput="calcPlan()"></div>
       <div class="fl"><label>أيام الدراسة في الأسبوع</label>
         <select id="study-days" onchange="calcPlan()">
-          <option value="6" selected>6 أيام (راحة الجمعة)</option>
-          <option value="5">5 أيام</option>
+          <option value="6">6 أيام (راحة الجمعة)</option>
+          <option value="5" selected>5 أيام</option>
           <option value="7">7 أيام كاملة</option>
         </select>
       </div>
@@ -218,13 +218,13 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
   <div class="card">
     <div class="ct">الموزع الآلي — Smart Planner</div>
     <div class="g4" style="margin-bottom:16px;">
-      <div class="metric"><div class="mv" id="m-days">60</div><div class="ml">أيام الدراسة</div></div>
-      <div class="metric"><div class="mv" id="m-ppd">1</div><div class="ml">صفحة / يوم</div></div>
+      <div class="metric"><div class="mv" id="m-days">50</div><div class="ml">أيام الدراسة</div></div>
+      <div class="metric"><div class="mv" id="m-daily">2</div><div class="ml">أوجه / يوم</div></div>
       <div class="metric"><div class="mv" id="m-weeks">10</div><div class="ml">أسبوع</div></div>
-      <div class="metric"><div class="mv" id="m-quota">—</div><div class="ml">نصاب الجلسة</div></div>
+      <div class="metric"><div class="mv" id="m-quota">5</div><div class="ml">نصاب الجلسة</div></div>
     </div>
     <div style="background:var(--jade-lt);border:1px solid rgba(42,107,74,0.2);border-radius:var(--r);padding:10px 13px;font-size:12px;color:#1a4d31;margin-bottom:12px;" id="quota-explain"></div>
-    <div class="sep">التوزيع الأسبوعي</div>
+    <div class="sep">التوزيع الأسبوعي للأوجه</div>
     <div id="week-plan"></div>
   </div>
 
@@ -251,7 +251,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
         <select id="sel-st" onchange="startSession()"><option value="">— اختاري —</option></select>
       </div>
       <div class="fl"><label>عدد الأوجه المسموعة</label>
-        <input type="number" id="faces" value="10" min="0" max="40" oninput="updateBadge()">
+        <input type="number" id="faces" value="5" min="0" max="40" oninput="updateBadge()">
       </div>
       <div class="fl"><label>من (آية / صفحة)</label><input type="number" id="from-a" placeholder="رقم" min="1"></div>
       <div class="fl"><label>إلى (آية / صفحة)</label><input type="number" id="to-a" placeholder="رقم" min="1"></div>
@@ -497,18 +497,18 @@ let loggedInStudentId = null;
 
 function defState(){
   return {
-    course:{teacher:'',cname:'',pages:60,sdate:'',weeks:10,studyDays:6},
+    course:{teacher:'',cname:'',pages:100,sdate:'',weeks:10,studyDays:5},
     students:[], nextId:1, sheetUrl:'', teacherCode:''
   };
 }
 
 function loadState(){
-  try{ const d=localStorage.getItem('alm_v4'); return d?JSON.parse(d):defState(); }catch{ return defState(); }
+  try{ const d=localStorage.getItem('alm_v6'); return d?JSON.parse(d):defState(); }catch{ return defState(); }
 }
 
 function save(){
   if(isStudentMode) return; // Prevent student from saving locally
-  try{ localStorage.setItem('alm_v4',JSON.stringify(S)); setSyncDot('local'); }catch{}
+  try{ localStorage.setItem('alm_v6',JSON.stringify(S)); setSyncDot('local'); }catch{}
 }
 
 // ══ INIT & MAGIC LINK PARSER ═══════════════════════════════
@@ -596,15 +596,32 @@ function gradeOf(s){
 }
 function fmt(n){ return n%1===0?n:parseFloat(n.toFixed(1)); }
 
-// ══ SMART QUOTA ════════════════════════════════════════════
-function calcQuota(pages,weeks,studyDays){
-  const totalStudy = weeks * studyDays;
-  const ppd = Math.ceil(pages / totalStudy);
-  const daysPerSession = Math.ceil(studyDays / 2);
-  const pagesPerSession = daysPerSession * ppd;
-  const wajh = pagesPerSession * 2;
-  return { ppd, pagesPerSession, wajh, daysPerSession };
+// ══ SMART QUOTA (UPDATED MATH) ════════════════════════════
+function calcQuota(pages, weeks, studyDays) {
+  // الحساب يتم بالأوجه لتكون النتائج دقيقة (1 صفحة = 2 وجه)
+  const totalFaces = pages * 2;
+  const weeklyFaces = Math.ceil(totalFaces / weeks);
+  
+  // نفترض وجود موعدين أسبوعياً لكل طالبة
+  const sessionFaces = Math.ceil(weeklyFaces / 2);
+  
+  // حساب الورد اليومي ليظهر كعدد صحيح 
+  const baseDaily = Math.floor(weeklyFaces / studyDays);
+  const remainder = weeklyFaces % studyDays;
+  const maxDaily = remainder > 0 ? baseDaily + 1 : baseDaily;
+  
+  let dailyText = "";
+  if (baseDaily === maxDaily) {
+    dailyText = baseDaily.toString();
+  } else if (baseDaily === 0) {
+    dailyText = `0 إلى ${maxDaily}`;
+  } else {
+    dailyText = `${baseDaily} إلى ${maxDaily}`;
+  }
+
+  return { weeklyFaces, sessionFaces, dailyText, totalFaces };
 }
+
 function getDayNames(n){ return n===5?DAYS_5:n===7?DAYS_7:DAYS_6; }
 
 // ══ SETUP ══════════════════════════════════════════════════
@@ -612,42 +629,50 @@ function initSetup(){
   const c=S.course;
   document.getElementById('teacher').value  = c.teacher   || '';
   document.getElementById('cname').value    = c.cname     || '';
-  document.getElementById('tpages').value   = c.pages     || 60;
+  document.getElementById('tpages').value   = c.pages     || 100;
   document.getElementById('sdate').value    = c.sdate     || '';
   document.getElementById('tweeks').value   = c.weeks     || 10;
-  document.getElementById('study-days').value = c.studyDays||6;
+  document.getElementById('study-days').value = c.studyDays||5;
   calcPlan();
   renderStudentList();
 }
 
 function calcPlan(){
-  const pages     = parseInt(document.getElementById('tpages').value)||60;
+  const pages     = parseInt(document.getElementById('tpages').value)||100;
   const weeks     = parseInt(document.getElementById('tweeks').value)||10;
-  const studyDays = parseInt(document.getElementById('study-days').value)||6;
+  const studyDays = parseInt(document.getElementById('study-days').value)||5;
   const totalStudy= weeks * studyDays;
+  
   const q = calcQuota(pages, weeks, studyDays);
 
   document.getElementById('m-days').textContent  = totalStudy;
-  document.getElementById('m-ppd').textContent   = q.ppd;
+  document.getElementById('m-daily').textContent   = q.dailyText;
   document.getElementById('m-weeks').textContent = weeks;
-  document.getElementById('m-quota').textContent = q.wajh + ' وجه';
+  document.getElementById('m-quota').textContent = q.sessionFaces + ' وجه';
 
   const ex = document.getElementById('quota-explain');
-  if(ex) ex.textContent = `📖 الجلسة تغطي ${q.daysPerSession} أيام = ${q.pagesPerSession} صفحة = ${q.wajh} وجه — النصاب ${q.wajh} وجه مكتمل`;
+  if(ex) ex.textContent = `📖 الورد الأسبوعي: ${q.weeklyFaces} أوجه. الجلسة الواحدة (لموعدين أسبوعياً) تغطي ${q.sessionFaces} أوجه. الحفظ اليومي مقسم كأعداد صحيحة (${q.dailyText} وجه).`;
 
   const si = document.getElementById('quota-info-sess');
-  if(si) si.textContent = `📌 النصاب المقترح: ${q.wajh} وجه (${q.pagesPerSession} صفحة)`;
+  if(si) si.textContent = `📌 النصاب المقترح: ${q.sessionFaces} أوجه`;
 
   window._quota = q;
 
-  const ppw = Math.ceil(pages / weeks);
-  let html='', sofar=0;
-  for(let w=1;w<=weeks;w++){
-    const pg = Math.min(ppw, pages-sofar);
-    if(pg<=0) break;
-    const from=sofar+1, to=sofar+pg;
-    html+=`<div class="wr"><div class="wn">الأسبوع ${w}</div><div class="wp">صفحة ${from} — ${to}</div><div class="wc">${pg} صفحات · ${pg*2} وجه</div></div>`;
-    sofar+=pg;
+  let html='', sofarFaces=0;
+  for(let w=1; w<=weeks; w++){
+    const currentWeeklyFaces = Math.min(q.weeklyFaces, q.totalFaces - sofarFaces);
+    if(currentWeeklyFaces <= 0) break;
+
+    // حساب الصفحات تقريبياً بناءً على الأوجه للتوضيح للطالبة
+    const startPage = Math.floor(sofarFaces / 2) + 1;
+    const endPage = Math.floor((sofarFaces + currentWeeklyFaces - 1) / 2) + 1;
+
+    html+=`<div class="wr">
+      <div class="wn">الأسبوع ${w}</div>
+      <div class="wp">صفحة ${startPage} — ${endPage}</div>
+      <div class="wc">${currentWeeklyFaces} أوجه</div>
+    </div>`;
+    sofarFaces += currentWeeklyFaces;
   }
   document.getElementById('week-plan').innerHTML=html;
 }
@@ -656,10 +681,10 @@ function saveCourse(){
   S.course={
     teacher:   document.getElementById('teacher').value,
     cname:     document.getElementById('cname').value,
-    pages:     parseInt(document.getElementById('tpages').value)||60,
+    pages:     parseInt(document.getElementById('tpages').value)||100,
     sdate:     document.getElementById('sdate').value,
     weeks:     parseInt(document.getElementById('tweeks').value)||10,
-    studyDays: parseInt(document.getElementById('study-days').value)||6,
+    studyDays: parseInt(document.getElementById('study-days').value)||5,
   };
   save(); calcPlan(); toast('✅ تم حفظ إعدادات الدورة');
 }
@@ -692,7 +717,7 @@ function addStudent(){
   const n=document.getElementById('new-name').value.trim();
   if(!n){ toast('⚠ أدخلي اسم الطالبة'); return; }
   if(S.students.find(s=>s.name===n)){ toast('⚠ هذه الطالبة موجودة مسبقاً'); return; }
-  const sd=S.course.studyDays||6;
+  const sd=S.course.studyDays||5;
   S.students.push({id:S.nextId++,name:n,score:100,stars:0,sessions:[],days:Array(sd).fill(0),ok:0,total:0});
   save(); document.getElementById('new-name').value='';
   renderStudentList(); toast('✅ تمت إضافة '+n);
@@ -741,8 +766,8 @@ function startSession(){
   const id=document.getElementById('sel-st').value;
   if(!id){ document.getElementById('sess-body').style.display='none'; return; }
   curSt=parseInt(id); sessScore=100; sessErrors=[];
-  const q=window._quota||{wajh:10};
-  document.getElementById('faces').value=q.wajh;
+  const q=window._quota||{sessionFaces:5};
+  document.getElementById('faces').value=q.sessionFaces;
   document.getElementById('live-score').textContent='100';
   renderErrLog();
   document.getElementById('sess-body').style.display='block';
@@ -792,7 +817,7 @@ function updateGradeDisp(){
 
 function updateBadge(){
   const f=parseInt(document.getElementById('faces').value)||0;
-  const q=window._quota?.wajh||10;
+  const q=window._quota?.sessionFaces||5;
   const el=document.getElementById('sess-badge');
   if(f>q)       el.innerHTML=`<span class="badge bx">⭐ تجاوزت النصاب (${f}/${q})</span>`;
   else if(f>=q) el.innerHTML=`<span class="badge bj">🟢 نصاب مكتمل (${f}/${q})</span>`;
@@ -814,7 +839,7 @@ function saveSession(){
   const st=S.students.find(s=>s.id===curSt);
   if(!st) return;
   const faces=parseInt(document.getElementById('faces').value)||0;
-  const q=window._quota?.wajh||10;
+  const q=window._quota?.sessionFaces||5;
   const isStar=faces>q, isOk=faces>=q;
   st.score=sessScore;
   if(isStar) st.stars=(st.stars||0)+1;
@@ -844,7 +869,7 @@ function copyReport(){
   const from=document.getElementById('from-a').value||'—';
   const to=document.getElementById('to-a').value||'—';
   const g=gradeOf(sessScore);
-  const q=window._quota?.wajh||10;
+  const q=window._quota?.sessionFaces||5;
   const badge=parseInt(faces)>q?'⭐ تجاوزت النصاب':parseInt(faces)>=q?'🟢 نصاب مكتمل':'🔴 لم يكتمل';
   const errLines=sessErrors.length
     ?sessErrors.map((e,i)=>`  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n')
@@ -888,7 +913,7 @@ function loadPortal(){
   document.getElementById('p-avg').textContent=avg;
 
   // Days — toggle-able
-  const sd=S.course.studyDays||6;
+  const sd=S.course.studyDays||5;
   const days=st.days&&st.days.length===sd?st.days:Array(sd).fill(0);
   const done=days.filter(Boolean).length;
   const pct=Math.round(done/sd*100);
@@ -946,7 +971,7 @@ function toggleDay(stId,dayIdx){
   if(isStudentMode) return; // Student cannot edit days
   const st=S.students.find(s=>s.id===stId);
   if(!st) return;
-  const sd=S.course.studyDays||6;
+  const sd=S.course.studyDays||5;
   if(!st.days||st.days.length!==sd) st.days=Array(sd).fill(0);
   st.days[dayIdx]=st.days[dayIdx]?0:1;
   save(); loadPortal();
