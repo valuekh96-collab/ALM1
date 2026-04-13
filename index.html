@@ -201,7 +201,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
     <div class="g2">
       <div class="fl"><label>اسم المعلمة</label><input type="text" id="teacher" placeholder="أدخلي اسمك"></div>
       <div class="fl"><label>اسم المقرر</label><input type="text" id="cname" placeholder="مثال: جزء عم + تبارك"></div>
-      <div class="fl"><label>عدد الصفحات الكلي (المقرر)</label><input type="number" id="tpages" value="100" min="1" oninput="calcPlan()"></div>
+      <div class="fl"><label>عدد الأوجه الكلي (المقرر)</label><input type="number" id="tpages" value="200" min="1" oninput="calcPlan()"></div>
       <div class="fl"><label>تاريخ البدء</label><input type="date" id="sdate"></div>
       <div class="fl"><label>عدد أسابيع الدورة</label><input type="number" id="tweeks" value="10" min="1" max="52" oninput="calcPlan()"></div>
       <div class="fl"><label>أيام الدراسة في الأسبوع</label>
@@ -507,7 +507,7 @@ let loggedInStudentId = null;
 
 function defState(){
   return {
-    course:{teacher:'',cname:'',pages:100,sdate:'',weeks:10,studyDays:5},
+    course:{teacher:'',cname:'',pages:200,sdate:'',weeks:10,studyDays:5},
     students:[], nextId:1, sheetUrl:'', teacherCode:''
   };
 }
@@ -607,9 +607,8 @@ function gradeOf(s){
 function fmt(n){ return n%1===0?n:parseFloat(n.toFixed(1)); }
 
 // ══ SMART QUOTA (UPDATED MATH) ════════════════════════════
-function calcQuota(pages, weeks, studyDays) {
-  // الحساب يتم بالأوجه لتكون النتائج دقيقة (1 صفحة = 2 وجه)
-  const totalFaces = pages * 2;
+function calcQuota(totalFaces, weeks, studyDays) {
+  // الحساب يتم بالأوجه لتكون النتائج دقيقة (1 جزء = 20 وجه)
   const weeklyFaces = Math.ceil(totalFaces / weeks);
   
   // نفترض وجود موعدين أسبوعياً لكل طالبة
@@ -639,7 +638,7 @@ function initSetup(){
   const c=S.course;
   document.getElementById('teacher').value  = c.teacher   || '';
   document.getElementById('cname').value    = c.cname     || '';
-  document.getElementById('tpages').value   = c.pages     || 100;
+  document.getElementById('tpages').value   = c.pages     || 200;
   document.getElementById('sdate').value    = c.sdate     || '';
   document.getElementById('tweeks').value   = c.weeks     || 10;
   document.getElementById('study-days').value = c.studyDays||5;
@@ -648,12 +647,12 @@ function initSetup(){
 }
 
 function calcPlan(){
-  const pages     = parseInt(document.getElementById('tpages').value)||100;
+  const tFaces    = parseInt(document.getElementById('tpages').value)||200;
   const weeks     = parseInt(document.getElementById('tweeks').value)||10;
   const studyDays = parseInt(document.getElementById('study-days').value)||5;
   const totalStudy= weeks * studyDays;
   
-  const q = calcQuota(pages, weeks, studyDays);
+  const q = calcQuota(tFaces, weeks, studyDays);
 
   document.getElementById('m-days').textContent  = totalStudy;
   document.getElementById('m-daily').textContent   = q.dailyText;
@@ -673,13 +672,13 @@ function calcPlan(){
     const currentWeeklyFaces = Math.min(q.weeklyFaces, q.totalFaces - sofarFaces);
     if(currentWeeklyFaces <= 0) break;
 
-    // حساب الصفحات تقريبياً بناءً على الأوجه للتوضيح للطالبة
-    const startPage = Math.floor(sofarFaces / 2) + 1;
-    const endPage = Math.floor((sofarFaces + currentWeeklyFaces - 1) / 2) + 1;
+    // تم التعديل لعرض أرقام الأوجه بشكل مباشر
+    const startFace = sofarFaces + 1;
+    const endFace = sofarFaces + currentWeeklyFaces;
 
     html+=`<div class="wr">
       <div class="wn">الأسبوع ${w}</div>
-      <div class="wp">صفحة ${startPage} — ${endPage}</div>
+      <div class="wp">وجه ${startFace} — ${endFace}</div>
       <div class="wc">${currentWeeklyFaces} أوجه</div>
     </div>`;
     sofarFaces += currentWeeklyFaces;
@@ -691,7 +690,7 @@ function saveCourse(){
   S.course={
     teacher:   document.getElementById('teacher').value,
     cname:     document.getElementById('cname').value,
-    pages:     parseInt(document.getElementById('tpages').value)||100,
+    pages:     parseInt(document.getElementById('tpages').value)||200,
     sdate:     document.getElementById('sdate').value,
     weeks:     parseInt(document.getElementById('tweeks').value)||10,
     studyDays: parseInt(document.getElementById('study-days').value)||5,
