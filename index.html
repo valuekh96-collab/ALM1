@@ -150,8 +150,17 @@ textarea{resize:vertical;min-height:52px;}
 hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
 .sep{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--ink-muted);margin:14px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--sand-dark);}
 .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;font-size:12px;color:var(--ink-muted);}
+
+/* 🔴 STUDENT MODE OVERRIDES 🔴 */
+.student-mode .teacher-only { display: none !important; }
+.student-mode .sidebar { width: 180px; }
+.student-mode .student-view-alert { display: block; background: #D4EDE0; color: #1a4d31; padding: 12px; border-radius: var(--r); margin-bottom: 16px; font-size: 13px; text-align:center; font-weight: bold; border: 1px solid #a3d9b8; }
+.student-view-alert { display: none; }
+.copy-link-input { position: absolute; left: -9999px; } /* Hidden input for copying */
+
 @media(max-width:580px){
   .sidebar{width:58px;}
+  .student-mode .sidebar{width:58px;}
   .logo-sub,.nv span:not(.nv-ic),.sb-foot{display:none;}
   .nv{justify-content:center;padding:13px;}
   .page{padding:18px 12px;}
@@ -170,11 +179,11 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
     <div class="logo-sub">لوحة ألف لام ميم<br>الأكاديمية</div>
   </div>
   <nav class="sb-nav">
-    <button class="nv active" onclick="showPage('setup',this)"><span class="nv-ic">⚙</span><span>إعداد الدورة</span></button>
-    <button class="nv" onclick="showPage('session',this)"><span class="nv-ic">🎙</span><span>جلسة التسميع</span></button>
-    <button class="nv" onclick="showPage('portal',this)"><span class="nv-ic">👤</span><span>بوابة الطالبة</span></button>
+    <button class="nv active teacher-only" onclick="showPage('setup',this)" id="nav-setup"><span class="nv-ic">⚙</span><span>إعداد الدورة</span></button>
+    <button class="nv teacher-only" onclick="showPage('session',this)"><span class="nv-ic">🎙</span><span>جلسة التسميع</span></button>
+    <button class="nv" onclick="showPage('portal',this)" id="nav-portal"><span class="nv-ic">👤</span><span id="portal-nav-text">بوابة الطالبة</span></button>
     <button class="nv" onclick="showPage('board',this)"><span class="nv-ic">🏆</span><span>لوحة الصدارة</span></button>
-    <button class="nv" onclick="showPage('sheets',this)"><span class="nv-ic">☁</span><span>ربط Google Sheets</span></button>
+    <button class="nv teacher-only" onclick="showPage('sheets',this)"><span class="nv-ic">☁</span><span>ربط Google Sheets</span></button>
   </nav>
   <div class="sb-foot">
     <span class="sync-dot" id="sync-dot"></span><span id="sync-lbl">محلي</span><br>حفظ تلقائي
@@ -183,8 +192,8 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
 
 <main class="main">
 
-<!-- ══ SETUP ══ -->
-<div id="page-setup" class="page active">
+<!-- ══ SETUP ══ (Teacher Only) -->
+<div id="page-setup" class="page active teacher-only">
   <div class="pg-head"><div class="pg-title">إعداد الدورة</div><div class="pg-sub">بيانات الدورة · الموزع الآلي · قائمة الطالبات</div></div>
 
   <div class="card">
@@ -221,6 +230,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
 
   <div class="card">
     <div class="ct">قائمة الطالبات</div>
+    <div style="font-size:12px; color:var(--ink-muted); margin-bottom:12px;">ملاحظة: لنسخ "رابط الطالبة" يجب أن تكوني قد قمتِ بضبط "الربط السحابي" أولاً من القائمة الجانبية.</div>
     <div id="student-list"></div>
     <hr>
     <div style="display:flex;gap:9px;margin-top:4px;">
@@ -230,8 +240,8 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
   </div>
 </div>
 
-<!-- ══ SESSION ══ -->
-<div id="page-session" class="page">
+<!-- ══ SESSION ══ (Teacher Only) -->
+<div id="page-session" class="page teacher-only">
   <div class="pg-head"><div class="pg-title">جلسة التسميع</div><div class="pg-sub">تقييم لحظي · خصم مع تراجع · تقرير للإرسال</div></div>
 
   <div class="card">
@@ -349,11 +359,15 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
   </div>
 </div>
 
-<!-- ══ PORTAL ══ -->
+<!-- ══ PORTAL ══ (Shared: Teacher & Student) -->
 <div id="page-portal" class="page">
-  <div class="pg-head"><div class="pg-title">بوابة الطالبة</div><div class="pg-sub">كل طالبة ترى سجلها فقط · خصوصية تامة</div></div>
+  <div class="pg-head"><div class="pg-title" id="portal-title">بوابة الطالبة</div><div class="pg-sub">سجل الأداء والمتابعة</div></div>
 
-  <div class="card">
+  <div class="student-view-alert" id="student-alert">
+    مرحباً بكِ! هذه صفحتكِ الخاصة للمتابعة المستمرة. يمكنكِ متابعة أخطائك ومستواك هنا.
+  </div>
+
+  <div class="card teacher-only" id="portal-select-wrap">
     <div class="ct">اختاري اسمك</div>
     <select id="sel-portal" onchange="loadPortal()"><option value="">— اختاري اسمك —</option></select>
     <div style="font-size:12px;color:var(--ink-muted);margin-top:8px;">🔒 لن ترى بيانات أي طالبة أخرى</div>
@@ -384,7 +398,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
         <span id="p-prog-txt">0 / 6 أيام</span><span id="p-prog-pct">0%</span>
       </div>
       <div id="p-days"></div>
-      <div style="font-size:12px;color:var(--ink-muted);margin-top:8px;">💡 اضغطي مرة ثانية على "تم الورد" لإلغائه في حال الضغط بالخطأ</div>
+      <div class="teacher-only" style="font-size:12px;color:var(--ink-muted);margin-top:8px;">💡 (خاص بالمعلمة): يمكن تعديل الأيام بالضغط عليها أو إلغائها</div>
     </div>
 
     <div class="card">
@@ -399,7 +413,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
   </div>
 </div>
 
-<!-- ══ BOARD ══ -->
+<!-- ══ BOARD ══ (Shared) -->
 <div id="page-board" class="page">
   <div class="pg-head"><div class="pg-title">لوحة الصدارة</div><div class="pg-sub">إحصائيات الدورة · التميز يُكافأ</div></div>
   <div class="priv">🔒 لا يُعرض مستوى الحفظ حفاظاً على الخصوصية وتجنباً للرياء</div>
@@ -424,8 +438,8 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
   </div>
 </div>
 
-<!-- ══ SHEETS ══ -->
-<div id="page-sheets" class="page">
+<!-- ══ SHEETS ══ (Teacher Only) -->
+<div id="page-sheets" class="page teacher-only">
   <div class="pg-head"><div class="pg-title">ربط Google Sheets ☁</div><div class="pg-sub">حفظ سحابي · متعدد المعلمات · من أي جهاز</div></div>
 
   <div class="card">
@@ -444,7 +458,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
       <button class="btn btn-gold" onclick="testSheet()">🔗 اختبار الاتصال</button>
       <button class="btn btn-jade" onclick="saveSheetCfg()">💾 حفظ الإعدادات</button>
       <button class="btn btn-gray" onclick="syncToSheet()">⬆ رفع البيانات</button>
-      <button class="btn btn-gray" onclick="loadFromSheet()">⬇ تحميل البيانات</button>
+      <button class="btn btn-gray" onclick="loadFromSheet(false)">⬇ تحميل البيانات</button>
     </div>
   </div>
 
@@ -462,43 +476,29 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
     <div class="sheet-step"><div class="step-num">6</div><div>انسخي رابط الـ Web app URL والصقيه في الحقل أعلاه</div></div>
     <div class="sheet-step"><div class="step-num">7</div><div>اكتبي رمزاً سرياً خاصاً بكِ ← اضغطي "اختبار الاتصال" ← إذا نجح اضغطي "رفع البيانات"</div></div>
   </div>
-
-  <div class="card">
-    <div class="ct">كيف يعمل النظام متعدد المعلمات</div>
-    <div style="font-size:13px;line-height:2.1;color:var(--ink-soft);">
-      • كل معلمة تنشئ <strong>Apps Script خاصاً بها</strong> في Google Sheet منفصل — البيانات معزولة تماماً<br>
-      • الموقع (GitHub Pages) مشترك — لكن كل معلمة تدخل رمزها السري الخاص فتظهر بياناتها فقط<br>
-      • البيانات تُحفظ في المتصفح <strong>و</strong> في الـ Sheet السحابي معاً — حماية مزدوجة<br>
-      • عند فتح الموقع من جهاز جديد: أدخلي الرابط والرمز ← "تحميل البيانات" ← كل شيء يعود فوراً<br>
-      • الطالبات يفتحن الموقع ويختارن أسماءهن ← يرين بياناتهن الخاصة فقط
-    </div>
-  </div>
 </div>
 
 </main>
 </div>
 <div id="toast"></div>
 
+<!-- Hidden input for copying links -->
+<input type="text" id="copy-helper" class="copy-link-input">
+
 <script>
-// ══ STATE ══════════════════════════════════════════════════
+// ══ STATE & MODES ══════════════════════════════════════════
 const DAYS_6 = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
 const DAYS_5 = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
 const DAYS_7 = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
 
 let S, curSt=null, sessScore=100, sessErrors=[], boardSort='points';
+let isStudentMode = false;
+let loggedInStudentId = null;
 
 function defState(){
   return {
     course:{teacher:'',cname:'',pages:60,sdate:'',weeks:10,studyDays:6},
-    students:[
-      {id:1,name:'فاطمة أحمد',  score:96.0,stars:2,sessions:[],days:[1,1,0,1,1,1],ok:7,total:10},
-      {id:2,name:'لجين عبدالله',score:91.0,stars:0,sessions:[],days:[1,1,0,0,1,0],ok:6,total:10},
-      {id:3,name:'منار خالد',   score:89.0,stars:0,sessions:[],days:[1,0,0,1,0,0],ok:5,total:10},
-      {id:4,name:'نور الهدى',   score:98.5,stars:3,sessions:[],days:[1,1,1,1,1,0],ok:8,total:10},
-      {id:5,name:'هدى محمد',    score:93.0,stars:1,sessions:[],days:[1,0,1,1,0,0],ok:7,total:10},
-      {id:6,name:'ريم سالم',    score:94.5,stars:1,sessions:[],days:[1,1,1,0,1,0],ok:8,total:10},
-    ],
-    nextId:7, sheetUrl:'', teacherCode:''
+    students:[], nextId:1, sheetUrl:'', teacherCode:''
   };
 }
 
@@ -507,10 +507,48 @@ function loadState(){
 }
 
 function save(){
+  if(isStudentMode) return; // Prevent student from saving locally
   try{ localStorage.setItem('alm_v4',JSON.stringify(S)); setSyncDot('local'); }catch{}
 }
 
-S = loadState();
+// ══ INIT & MAGIC LINK PARSER ═══════════════════════════════
+function initApp() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const sParam = urlParams.get('s'); // Student ID
+  const uParam = urlParams.get('u'); // Sheet URL (base64)
+  const cParam = urlParams.get('c'); // Teacher Code (base64)
+
+  if (sParam && uParam && cParam) {
+    // 🎓 STUDENT MODE ENABLED
+    isStudentMode = true;
+    loggedInStudentId = parseInt(sParam);
+    document.body.classList.add('student-mode');
+    
+    // Decode connection parameters
+    S = defState();
+    try {
+      S.sheetUrl = atob(uParam);
+      S.teacherCode = atob(cParam);
+    } catch(e) {
+      toast('⚠ رابط الطالبة غير صالح');
+    }
+
+    // Initial UI setup for student
+    document.getElementById('portal-nav-text').textContent = "بوابتي";
+    document.getElementById('portal-title').textContent = "بوابتي الأكاديمية";
+    toast('جاري الاتصال بقاعدة البيانات...');
+    
+    // Fetch data from cloud
+    loadFromSheet(true); 
+  } else {
+    // 👩‍🏫 TEACHER MODE
+    S = loadState();
+    initSetup();
+    popSelects();
+    if(S.sheetUrl && S.teacherCode) setSyncDot('local');
+    showPage('setup', document.getElementById('nav-setup'));
+  }
+}
 
 // ══ NAV ════════════════════════════════════════════════════
 function showPage(id,btn){
@@ -518,8 +556,15 @@ function showPage(id,btn){
   document.querySelectorAll('.nv').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   if(btn) btn.classList.add('active');
+  
   if(id==='board') renderBoard();
   if(id==='sheets') initSheets();
+  
+  // Auto load portal if student
+  if(id==='portal' && isStudentMode) {
+    document.getElementById('sel-portal').value = loggedInStudentId;
+    loadPortal();
+  }
 }
 
 // ══ TOAST ══════════════════════════════════════════════════
@@ -549,25 +594,18 @@ function gradeOf(s){
   if(s>=90) return {label:'متوسط',   cls:'bs', emoji:'📘'};
   return           {label:'إعادة',   cls:'br', emoji:'🔁'};
 }
-
 function fmt(n){ return n%1===0?n:parseFloat(n.toFixed(1)); }
 
 // ══ SMART QUOTA ════════════════════════════════════════════
 function calcQuota(pages,weeks,studyDays){
   const totalStudy = weeks * studyDays;
-  // pages per day — always whole number (ceiling)
   const ppd = Math.ceil(pages / totalStudy);
-  // sessions per week = 2 → each covers half the week's days
   const daysPerSession = Math.ceil(studyDays / 2);
   const pagesPerSession = daysPerSession * ppd;
-  // 1 page = 2 wajh
   const wajh = pagesPerSession * 2;
   return { ppd, pagesPerSession, wajh, daysPerSession };
 }
-
-function getDayNames(n){
-  return n===5?DAYS_5:n===7?DAYS_7:DAYS_6;
-}
+function getDayNames(n){ return n===5?DAYS_5:n===7?DAYS_7:DAYS_6; }
 
 // ══ SETUP ══════════════════════════════════════════════════
 function initSetup(){
@@ -597,13 +635,11 @@ function calcPlan(){
   const ex = document.getElementById('quota-explain');
   if(ex) ex.textContent = `📖 الجلسة تغطي ${q.daysPerSession} أيام = ${q.pagesPerSession} صفحة = ${q.wajh} وجه — النصاب ${q.wajh} وجه مكتمل`;
 
-  // Session info too
   const si = document.getElementById('quota-info-sess');
   if(si) si.textContent = `📌 النصاب المقترح: ${q.wajh} وجه (${q.pagesPerSession} صفحة)`;
 
   window._quota = q;
 
-  // Week plan — whole pages guaranteed (ceiling)
   const ppw = Math.ceil(pages / weeks);
   let html='', sofar=0;
   for(let w=1;w<=weeks;w++){
@@ -641,8 +677,9 @@ function renderStudentList(){
         <div class="sn">${st.name}</div>
         <div class="ss">درجة: ${fmt(st.score)} | نجوم: ${st.stars>0?'⭐'.repeat(Math.min(st.stars,5)):'—'} | جلسات: ${st.ok||0}/${st.total||0}</div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="badge ${g.cls}">${g.label}</span>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span class="badge ${g.cls}" style="margin-left:5px;">${g.label}</span>
+        <button class="btn btn-gray btn-sm" onclick="copyStudentLink(${st.id})">🔗 رابط الطالبة</button>
         <button class="btn btn-rose btn-sm" onclick="delSt(${st.id})">حذف</button>
       </div>
     </div>`;
@@ -669,6 +706,7 @@ function delSt(id){
 }
 
 function popSelects(){
+  if(isStudentMode) return; // Skip if student
   const ss=sortedSts();
   ['sel-st','sel-portal'].forEach(sid=>{
     const el=document.getElementById(sid);
@@ -677,6 +715,25 @@ function popSelects(){
     el.innerHTML='<option value="">— اختاري —</option>'+ss.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
     el.value=cur;
   });
+}
+
+// ══ MAGIC LINK GENERATOR ═══════════════════════════════════
+function copyStudentLink(id) {
+  if (!S.sheetUrl || !S.teacherCode) {
+    toast('⚠ يجب حفظ إعدادات الربط السحابي أولاً (من القائمة الجانبية) لإنشاء الروابط!');
+    return;
+  }
+  const baseUrl = window.location.href.split('?')[0];
+  const uEnc = btoa(S.sheetUrl);
+  const cEnc = btoa(S.teacherCode);
+  const link = `${baseUrl}?s=${id}&u=${uEnc}&c=${cEnc}`;
+  
+  const helper = document.getElementById('copy-helper');
+  helper.value = link;
+  helper.select();
+  document.execCommand('copy');
+  
+  toast('🔗 تم نسخ الرابط السري للطالبة، أرسليه لها!');
 }
 
 // ══ SESSION ════════════════════════════════════════════════
@@ -811,10 +868,11 @@ function copyReport(){
 
 // ══ PORTAL ═════════════════════════════════════════════════
 function loadPortal(){
-  const id=parseInt(document.getElementById('sel-portal').value);
+  const id=isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
   if(!id){ document.getElementById('portal-body').style.display='none'; return; }
   const st=S.students.find(s=>s.id===id);
   if(!st) return;
+  
   document.getElementById('portal-body').style.display='block';
   document.getElementById('p-av').textContent=st.name[0];
   document.getElementById('p-name').textContent=st.name;
@@ -843,8 +901,8 @@ function loadPortal(){
     <div class="day-row ${d?'day-toggled':''}">
       <div class="sn" style="font-size:13px;">${dn[i]||'يوم '+(i+1)}</div>
       ${d
-        ?`<div class="day-done">✓ تم الورد <button class="btn btn-gray btn-sm" onclick="toggleDay(${id},${i})">إلغاء</button></div>`
-        :`<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">إتمام الورد</button>`
+        ?`<div class="day-done">✓ تم الورد ${isStudentMode ? '' : `<button class="btn btn-gray btn-sm" onclick="toggleDay(${id},${i})">إلغاء</button>`}</div>`
+        : (isStudentMode ? `<span style="font-size:12px;color:var(--ink-muted);">بانتظار الإتمام من المعلمة</span>` : `<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">إتمام الورد</button>`)
       }
     </div>`).join('');
 
@@ -885,6 +943,7 @@ function loadPortal(){
 }
 
 function toggleDay(stId,dayIdx){
+  if(isStudentMode) return; // Student cannot edit days
   const st=S.students.find(s=>s.id===stId);
   if(!st) return;
   const sd=S.course.studyDays||6;
@@ -893,6 +952,7 @@ function toggleDay(stId,dayIdx){
   save(); loadPortal();
   const dn=getDayNames(sd);
   toast(`${st.days[dayIdx]?'✅':'↩'} ${st.days[dayIdx]?'تم تسجيل':'تم إلغاء'} ورد ${dn[dayIdx]||''}`);
+  if(S.sheetUrl) syncToSheet(true);
 }
 
 // ══ BOARD ══════════════════════════════════════════════════
@@ -923,9 +983,11 @@ function renderBoard(){
     const g=gradeOf(st.score);
     const rank=boardSort==='points'?(medals[i]||(i+1)):(i+1);
     const cls=boardSort==='points'?(rnks[i]||''):'';
-    return `<div class="rk ${cls}">
+    const highlight = (isStudentMode && st.id === loggedInStudentId) ? 'border-color:var(--gold); box-shadow:0 0 0 2px var(--gold);' : '';
+    
+    return `<div class="rk ${cls}" style="${highlight}">
       <div class="rm">${rank}</div>
-      <div class="rname">${st.name}</div>
+      <div class="rname">${st.name} ${highlight ? '(أنتِ)' : ''}</div>
       <div class="rmeta">
         <div class="rpts">${fmt(total)}</div>
         ${(st.stars||0)>0?`<span class="badge bx">${'⭐'.repeat(Math.min(st.stars,5))}</span>`:''}
@@ -1006,12 +1068,12 @@ function saveSheetCfg(){
 async function sheetReq(action,extra={}){
   const url=S.sheetUrl||document.getElementById('sheet-url').value.trim();
   const code=S.teacherCode||document.getElementById('teacher-code').value.trim();
-  if(!url||!code){ toast('⚠ أدخلي الرابط والرمز أولاً'); return null; }
+  if(!url||!code){ toast('⚠ الإعدادات غير مكتملة'); return null; }
   setSyncDot('sync');
   try{
     const r=await fetch(url,{method:'POST',body:JSON.stringify({action,code,...extra})});
     return await r.json();
-  }catch(e){ setSyncDot('err'); toast('❌ خطأ في الاتصال — تأكدي من الرابط والصلاحيات'); return null; }
+  }catch(e){ setSyncDot('err'); toast('❌ خطأ في الاتصال'); return null; }
 }
 
 async function testSheet(){
@@ -1021,25 +1083,38 @@ async function testSheet(){
 }
 
 async function syncToSheet(silent=false){
+  if(isStudentMode) return; // Prevent student sync
   const r=await sheetReq('save',{payload:JSON.stringify(S)});
   if(r?.ok){ setSyncDot('ok'); if(!silent) toast('☁ تم رفع البيانات بنجاح'); }
   else if(r){ setSyncDot('err'); if(!silent) toast('❌ فشل الرفع: '+(r.msg||'')); }
 }
 
-async function loadFromSheet(){
+async function loadFromSheet(isInit=false){
   const r=await sheetReq('load');
   if(r?.ok&&r.payload){
     try{
       S=JSON.parse(r.payload);
-      save(); initSetup(); popSelects();
-      toast('✅ تم تحميل البيانات من الـ Sheet'); setSyncDot('ok');
-    }catch{ toast('❌ خطأ في قراءة البيانات'); setSyncDot('err'); }
-  } else if(r?.ok){ toast('⚠ لا توجد بيانات في الـ Sheet بعد'); setSyncDot('ok'); }
+      if(!isStudentMode) save(); // Only teachers save locally
+      
+      if(isStudentMode) {
+         showPage('portal', document.getElementById('nav-portal'));
+         setSyncDot('ok');
+         toast('☁ تم التحديث بنجاح');
+      } else {
+         initSetup(); popSelects();
+         toast('✅ تم تحميل البيانات من الـ Sheet');
+         setSyncDot('ok');
+      }
+    }catch(e){ toast('❌ خطأ في قراءة البيانات'); setSyncDot('err'); }
+  } else if(r?.ok && isStudentMode){ 
+    toast('⚠ لم تقم المعلمة برفع البيانات بعد'); 
+  } else if(r?.ok) {
+    toast('⚠ لا توجد بيانات في الـ Sheet بعد'); setSyncDot('ok');
+  }
 }
 
-// ══ INIT ═══════════════════════════════════════════════════
-initSetup();
-setSyncDot('local');
+// ══ BOOTSTRAP ══════════════════════════════════════════════
+initApp();
 </script>
 </body>
 </html>
