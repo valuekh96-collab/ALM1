@@ -462,13 +462,23 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
     </div>
   </div>
 
+  <div class="card">
+    <div class="ct">🌟 ميزة قاعدة البيانات الذكية</div>
+    <div style="font-size:13px;line-height:1.8;color:var(--ink-soft);">
+      عند رفع البيانات، يقوم النظام بإنشاء <strong>أوراق عمل (Tabs) مقروءة ومرتبة</strong> تلقائياً داخل ملف الـ Google Sheet الخاص بكِ:<br>
+      📄 <strong>ورقة الطالبات:</strong> جدول بأسماء الطالبات ودرجاتهن ونجوم التميز.<br>
+      🗓️ <strong>سجل التسميع:</strong> تاريخ كامل لكل جلسات التسميع لجميع الطالبات مع الملاحظات.<br>
+      🔒 <strong>ورقة النظام (مخفية):</strong> لحفظ البيانات برمجياً واستعادتها دون أخطاء.
+    </div>
+  </div>
+
   <div class="sheet-box">
     <div style="font-size:15px;font-weight:700;margin-bottom:14px;color:var(--gold);">📋 خطوات الإعداد (مرة واحدة فقط لكل معلمة)</div>
     <div class="sheet-step"><div class="step-num">1</div><div>افتحي <a href="https://sheets.google.com" target="_blank" style="color:var(--gold);font-weight:700;">Google Sheets</a> وأنشئي ملفاً جديداً</div></div>
     <div class="sheet-step"><div class="step-num">2</div><div>من القائمة اختاري: <strong>Extensions ← Apps Script</strong></div></div>
     <div class="sheet-step"><div class="step-num">3</div><div>احذفي كل ما في المحرر والصقي الكود أدناه:</div></div>
     <div style="position:relative;margin:10px 0;">
-      <textarea id="gs-code" readonly style="font-family:monospace;font-size:11px;height:240px;background:#1a1714;color:#e8c890;border:none;border-radius:var(--r);padding:14px;direction:ltr;width:100%;"></textarea>
+      <textarea id="gs-code" readonly style="font-family:monospace;font-size:11px;height:240px;background:#1A1714;color:#F5E6C8;border:none;border-radius:var(--r);padding:14px;direction:ltr;width:100%;"></textarea>
       <button class="btn btn-gold btn-sm" onclick="copyGsCode()" style="position:absolute;top:10px;left:10px;">نسخ الكود</button>
     </div>
     <div class="sheet-step"><div class="step-num">4</div><div>اضغطي <strong>Deploy ← New deployment ← Web app</strong></div></div>
@@ -1024,50 +1034,93 @@ function renderBoard(){
 }
 
 // ══ GOOGLE SHEETS ══════════════════════════════════════════
-const GS_CODE=`// لوحة ألف لام ميم — Apps Script Backend
+const GS_CODE=`// لوحة ألف لام ميم — الإصدار المتقدم لقواعد البيانات
 // الصقي هذا الكود في محرر Apps Script ثم انشريه كـ Web App
-
-const SHEET_NAME = 'ALM_Data';
 
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     const action = data.action;
-    const code = data.code;
+    const code = data.code; // رمز المعلمة السري
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    let sheet = ss.getSheetByName(SHEET_NAME + '_' + code);
-    if (!sheet) {
-      sheet = ss.insertSheet(SHEET_NAME + '_' + code);
-      sheet.appendRow(['key', 'value', 'updated_at']);
-    }
+    
     if (action === 'save') {
-      const rows = sheet.getDataRange().getValues();
-      const idx = rows.findIndex(r => r[0] === 'alm_data');
-      const now = new Date().toISOString();
-      if (idx < 0) sheet.appendRow(['alm_data', data.payload, now]);
-      else sheet.getRange(idx+1,2,1,2).setValues([[data.payload, now]]);
-      return json({ok:true});
+      const payloadStr = data.payload;
+      const S = JSON.parse(payloadStr); // تحليل البيانات
+      
+      // 1. حفظ البيانات الخام للنظام (ورقة مخفية)
+      let dbSheet = ss.getSheetByName('DB_' + code);
+      if (!dbSheet) {
+        dbSheet = ss.insertSheet('DB_' + code);
+        dbSheet.hideSheet(); // إخفاء الورقة لتجنب التعديل الخاطئ
+      }
+      dbSheet.getRange(1, 1, 1, 2).setValues([['alm_data', payloadStr]]);
+      
+      // 2. إنشاء ورقة مقروءة للطالبات (للمعلمة)
+      let stSheet = ss.getSheetByName('طالبات_' + code);
+      if (!stSheet) {
+        stSheet = ss.insertSheet('طالبات_' + code);
+        stSheet.setRightToLeft(true);
+      }
+      stSheet.clear();
+      const stHeader = ['رقم الطالبة', 'اسم الطالبة', 'الدرجة', 'نجوم التميز', 'الجلسات المكتملة', 'إجمالي الجلسات'];
+      const stRows = [stHeader];
+      if (S.students) {
+        S.students.forEach(st => {
+          stRows.push([st.id, st.name, st.score, st.stars || 0, st.ok || 0, st.total || 0]);
+        });
+      }
+      stSheet.getRange(1, 1, stRows.length, stHeader.length).setValues(stRows);
+      stSheet.getRange(1, 1, 1, stHeader.length).setFontWeight("bold").setBackground("#F5E6C8");
+
+      // 3. إنشاء ورقة مقروءة لسجل الجلسات بالكامل
+      let sessSheet = ss.getSheetByName('سجل_تسميع_' + code);
+      if (!sessSheet) {
+        sessSheet = ss.insertSheet('سجل_تسميع_' + code);
+        sessSheet.setRightToLeft(true);
+      }
+      sessSheet.clear();
+      const sessHeader = ['التاريخ', 'اسم الطالبة', 'الدرجة', 'الأوجه', 'التقييم', 'الملاحظات'];
+      const sessRows = [sessHeader];
+      if (S.students) {
+        S.students.forEach(st => {
+          if(st.sessions) {
+            st.sessions.forEach(sess => {
+              let errs = sess.errors && sess.errors.length > 0 
+                         ? sess.errors.map(e => e.desc).join(' | ') 
+                         : 'ممتاز - لا توجد ملاحظات';
+              sessRows.push([sess.date, st.name, sess.score, sess.faces, sess.grade || '-', errs]);
+            });
+          }
+        });
+      }
+      if(sessRows.length > 1) {
+        sessSheet.getRange(1, 1, sessRows.length, sessHeader.length).setValues(sessRows);
+        sessSheet.getRange(1, 1, 1, sessHeader.length).setFontWeight("bold").setBackground("#D4EDE0");
+      }
+
+      return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
     }
+    
     if (action === 'load') {
-      const rows = sheet.getDataRange().getValues();
-      const row = rows.find(r => r[0] === 'alm_data');
-      return json({ok:true, payload: row ? row[1] : null});
+      let dbSheet = ss.getSheetByName('DB_' + code);
+      let val = null;
+      if (dbSheet) {
+        val = dbSheet.getRange(1, 2).getValue();
+      }
+      return ContentService.createTextOutput(JSON.stringify({ok:true, payload: val || null})).setMimeType(ContentService.MimeType.JSON);
     }
-    if (action === 'ping') return json({ok:true, msg:'pong'});
-    return json({ok:false, msg:'unknown action'});
+    
+    if (action === 'ping') return ContentService.createTextOutput(JSON.stringify({ok:true, msg:'pong'})).setMimeType(ContentService.MimeType.JSON);
+    
+    return ContentService.createTextOutput(JSON.stringify({ok:false, msg:'unknown action'})).setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
-    return json({ok:false, msg:err.toString()});
+    return ContentService.createTextOutput(JSON.stringify({ok:false, msg:err.toString()})).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
 function doGet(e) {
-  return doPost({postData:{contents:JSON.stringify({action:'ping',code:'test'})}});
-}
-
-function json(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput("ALM API is running...").setMimeType(ContentService.MimeType.TEXT);
 }`;
 
 function initSheets(){
