@@ -22,7 +22,7 @@
 body{font-family:'Cairo',sans-serif;background:var(--sand);color:var(--ink);min-height:100vh;}
 .layout{display:flex;min-height:100vh;}
 /* SIDEBAR */
-.sidebar{width:220px;flex-shrink:0;background:var(--ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;}
+.sidebar{width:220px;flex-shrink:0;background:var(--ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;z-index:100;}
 .sb-head{padding:26px 20px 22px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center;}
 .logo{font-family:'Amiri',serif;font-size:34px;color:var(--gold);letter-spacing:4px;line-height:1;margin-bottom:6px;}
 .logo-sub{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;}
@@ -33,10 +33,10 @@ body{font-family:'Cairo',sans-serif;background:var(--sand);color:var(--ink);min-
 .nv-ic{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
 .sb-foot{padding:12px 14px;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:rgba(255,255,255,0.22);text-align:center;line-height:1.6;}
 /* MAIN */
-.main{flex:1;overflow-y:auto;}
+.main{flex:1;overflow-y:auto;position:relative;}
 .page{display:none;padding:30px 26px;max-width:840px;}
 .page.active{display:block;}
-.pg-head{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+.pg-head{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;}
 .pg-title{font-family:'Amiri',serif;font-size:26px;font-weight:700;margin-bottom:3px;}
 .pg-sub{font-size:13px;color:var(--ink-muted);}
 /* CARDS */
@@ -124,7 +124,7 @@ textarea{resize:vertical;min-height:52px;}
 .hist-item{border-right:3px solid var(--gold);padding:10px 14px;background:var(--sand);border-radius:0 var(--r) var(--r) 0;margin-bottom:8px;}
 .hd{font-size:11px;color:var(--ink-muted);margin-bottom:4px;font-weight:600;}
 .hb{font-size:13px;line-height:1.85;}
-/* RANK */
+/* RANK & GAMIFICATION */
 .rk{display:flex;align-items:center;gap:13px;padding:12px 16px;border-radius:var(--r-lg);border:1px solid var(--border);margin-bottom:8px;background:var(--white);transition:all .2s;}
 .rk:hover{box-shadow:var(--sh-lg);transform:translateY(-1px);}
 .rk.r1{border-color:#e8c44a;background:linear-gradient(135deg,#fffef5,#fff8e0);}
@@ -134,6 +134,14 @@ textarea{resize:vertical;min-height:52px;}
 .rname{flex:1;font-size:14px;font-weight:700;}
 .rmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .rpts{font-family:'Amiri',serif;font-size:19px;font-weight:700;color:var(--gold);}
+
+.gamification-box{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.smart-badge{flex:1;min-width:100px;background:var(--sand);border:1px solid var(--sand-dark);border-radius:var(--r);padding:12px 10px;text-align:center;transition:all 0.3s;opacity:0.4;filter:grayscale(100%);}
+.smart-badge.earned{background:var(--gold-pale);border-color:var(--border-gold);opacity:1;filter:grayscale(0%);transform:translateY(-2px);box-shadow:var(--sh);}
+.sb-ic{font-size:24px;display:block;margin-bottom:4px;}
+.sb-tt{font-size:12px;font-weight:700;color:var(--ink-soft);}
+.sb-ds{font-size:10px;color:var(--ink-muted);margin-top:2px;}
+
 /* PRIVACY */
 .priv{display:flex;align-items:center;gap:10px;background:var(--gold-pale);border:1px solid var(--border-gold);border-radius:var(--r);padding:10px 13px;font-size:13px;color:#7a5000;margin-bottom:14px;}
 /* TOAST */
@@ -158,6 +166,45 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
 .student-view-alert { display: none; }
 .copy-link-input { position: absolute; left: -9999px; } /* Hidden input for copying */
 
+/* 🖨️ PRINT STYLES FOR CERTIFICATE */
+#certificate-layer { display: none; }
+@media print {
+  body * { visibility: hidden; }
+  .layout, .sidebar, .main { display: none !important; margin:0; padding:0; height:0; overflow:hidden;}
+  #certificate-layer { 
+    display: flex !important; visibility: visible !important; 
+    position: absolute; left: 0; top: 0; width: 100vw; height: 100vh;
+    align-items: center; justify-content: center;
+    background: #fff; z-index: 99999;
+  }
+  #certificate-layer * { visibility: visible; }
+  @page { margin: 0; size: A4 landscape; }
+}
+
+/* Certificate Layout Design */
+.cert-card {
+  width: 1000px; height: 700px;
+  background: #FDF8EE;
+  border: 15px solid #C8922A;
+  outline: 4px solid #1A1714;
+  outline-offset: -25px;
+  padding: 60px;
+  text-align: center;
+  position: relative;
+  font-family: 'Amiri', serif;
+}
+.cert-header { font-size: 48px; color: #C8922A; font-weight: 700; margin-bottom: 20px; }
+.cert-sub { font-size: 24px; color: #4A453F; font-family: 'Cairo', sans-serif; margin-bottom: 40px; }
+.cert-text { font-size: 32px; line-height: 1.8; color: #1A1714; }
+.cert-name { font-size: 52px; font-weight: 700; color: #A83240; margin: 20px 0; border-bottom: 2px dashed #C8922A; display: inline-block; padding: 0 40px; }
+.cert-footer { display: flex; justify-content: space-between; margin-top: 80px; font-size: 22px; font-family: 'Cairo', sans-serif; font-weight: 600;}
+.cert-seal {
+  position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 120px; border-radius: 50%; border: 4px solid #C8922A;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; color: #C8922A; text-align: center; background: #fffef5;
+}
+
 @media(max-width:580px){
   .sidebar{width:58px;}
   .student-mode .sidebar{width:58px;}
@@ -166,6 +213,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
   .page{padding:18px 12px;}
   .deduct-row{grid-template-columns:1fr;}
   .d-btn{min-width:auto;width:100%;}
+  .pg-head{flex-direction:column;align-items:flex-start;gap:10px;}
 }
 </style>
 </head>
@@ -194,14 +242,16 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
 
 <!-- ══ SETUP ══ (Teacher Only) -->
 <div id="page-setup" class="page active teacher-only">
-  <div class="pg-head"><div class="pg-title">إعداد الدورة</div><div class="pg-sub">بيانات الدورة · الموزع الآلي · قائمة الطالبات</div></div>
+  <div class="pg-head">
+    <div><div class="pg-title">إعداد الدورة</div><div class="pg-sub">بيانات الدورة · الموزع الآلي · قائمة الطالبات</div></div>
+  </div>
 
   <div class="card">
     <div class="ct">بيانات الدورة</div>
     <div class="g2">
       <div class="fl"><label>اسم المعلمة</label><input type="text" id="teacher" placeholder="أدخلي اسمك"></div>
       <div class="fl"><label>اسم المقرر</label><input type="text" id="cname" placeholder="مثال: جزء عم + تبارك"></div>
-      <div class="fl"><label>عدد الأوجه الكلي (المقرر)</label><input type="number" id="tpages" value="200" min="1" oninput="calcPlan()"></div>
+      <div class="fl"><label>عدد الأوجه الكلي (المقرر العام)</label><input type="number" id="tpages" value="200" min="1" oninput="calcPlan()"></div>
       <div class="fl"><label>تاريخ البدء</label><input type="date" id="sdate"></div>
       <div class="fl"><label>عدد أسابيع الدورة</label><input type="number" id="tweeks" value="10" min="1" max="52" oninput="calcPlan()"></div>
       <div class="fl"><label>أيام الدراسة في الأسبوع</label>
@@ -216,7 +266,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
   </div>
 
   <div class="card">
-    <div class="ct">الموزع الآلي — Smart Planner</div>
+    <div class="ct">الموزع الآلي (للمقرر العام)</div>
     <div class="g4" style="margin-bottom:16px;">
       <div class="metric"><div class="mv" id="m-days">50</div><div class="ml">أيام الدراسة</div></div>
       <div class="metric"><div class="mv" id="m-daily">2</div><div class="ml">أوجه / يوم</div></div>
@@ -225,16 +275,17 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
     </div>
     <div style="background:var(--jade-lt);border:1px solid rgba(42,107,74,0.2);border-radius:var(--r);padding:10px 13px;font-size:12px;color:#1a4d31;margin-bottom:12px;" id="quota-explain"></div>
     <div class="sep">التوزيع الأسبوعي للأوجه</div>
-    <div id="week-plan"></div>
+    <div id="week-plan" style="max-height:250px; overflow-y:auto; padding-left:10px;"></div>
   </div>
 
   <div class="card">
-    <div class="ct">قائمة الطالبات</div>
-    <div style="font-size:12px; color:var(--ink-muted); margin-bottom:12px;">ملاحظة: لنسخ "رابط الطالبة" يجب أن تكوني قد قمتِ بضبط "الربط السحابي" أولاً من القائمة الجانبية.</div>
+    <div class="ct">قائمة الطالبات والمقررات الفردية</div>
+    <div style="font-size:12px; color:var(--ink-muted); margin-bottom:12px;">ملاحظة: إذا تركتِ حقل (مقرر خاص) فارغاً، ستمشي الطالبة على المقرر العام للدورة.</div>
     <div id="student-list"></div>
     <hr>
-    <div style="display:flex;gap:9px;margin-top:4px;">
-      <input type="text" id="new-name" placeholder="اسم الطالبة الجديدة" style="flex:1;" onkeydown="if(event.key==='Enter')addStudent()">
+    <div style="display:flex;gap:9px;margin-top:4px;flex-wrap:wrap;">
+      <input type="text" id="new-name" placeholder="اسم الطالبة الجديدة" style="flex:2;min-width:150px;" onkeydown="if(event.key==='Enter')addStudent()">
+      <input type="number" id="new-custom-faces" placeholder="مقرر خاص (عدد أوجه) - اختياري" style="flex:1;min-width:150px;" onkeydown="if(event.key==='Enter')addStudent()">
       <button class="btn btn-gold" onclick="addStudent()">+ إضافة</button>
     </div>
   </div>
@@ -242,12 +293,14 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
 
 <!-- ══ SESSION ══ (Teacher Only) -->
 <div id="page-session" class="page teacher-only">
-  <div class="pg-head"><div class="pg-title">جلسة التسميع</div><div class="pg-sub">تقييم لحظي · خصم مع تراجع · تقرير للإرسال</div></div>
+  <div class="pg-head">
+    <div><div class="pg-title">جلسة التسميع</div><div class="pg-sub">حضور · تقييم لحظي · مراجعة كبرى وصغرى</div></div>
+  </div>
 
   <div class="card">
     <div class="ct">اختيار الطالبة والجلسة</div>
     <div class="g2">
-      <div class="fl"><label>الطالبة</label>
+      <div class="fl"><label>الطالبة (يتغير النصاب تلقائياً حسب مقررها)</label>
         <select id="sel-st" onchange="startSession()"><option value="">— اختاري —</option></select>
       </div>
       <div class="fl"><label>عدد الأوجه المسموعة</label>
@@ -256,104 +309,130 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
       <div class="fl"><label>من (آية / صفحة)</label><input type="number" id="from-a" placeholder="رقم" min="1"></div>
       <div class="fl"><label>إلى (آية / صفحة)</label><input type="number" id="to-a" placeholder="رقم" min="1"></div>
     </div>
-    <div id="quota-info-sess" style="font-size:12px;color:var(--ink-muted);margin-top:4px;"></div>
+    <div id="quota-info-sess" style="font-size:12px;color:var(--ink-muted);margin-top:4px;font-weight:bold;"></div>
+    
+    <hr style="margin:16px 0;">
+    <div class="ct">الحضور والمراجعة الإلزامية</div>
+    <div class="g2">
+      <div class="fl">
+        <label>سجل الحضور اليوم</label>
+        <select id="sess-att" onchange="toggleSessBody()" style="background-color: var(--gold-pale);">
+          <option value="present"> حاضرة (تقييم الحفظ)</option>
+          <option value="excused"> غائبة (بعذر) - لا يؤثر على المتوسط</option>
+          <option value="unexcused"> غائبة (بدون عذر) - يُسجل للتوثيق</option>
+        </select>
+      </div>
+      <div class="fl">
+        <label>سجل المراجعة</label>
+        <div style="display:flex;gap:15px;margin-top:8px;">
+          <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;cursor:pointer;">
+            <input type="checkbox" id="rev-minor" style="width:16px;height:16px;"> مراجعة صغرى
+          </label>
+          <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;cursor:pointer;">
+            <input type="checkbox" id="rev-major" style="width:16px;height:16px;"> مراجعة كبرى
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="sess-body" style="display:none;">
-    <div class="g2" style="align-items:start;">
-      <div class="card">
-        <div class="ct">الدرجة الحية</div>
-        <div class="score-wrap">
-          <div class="score-num" id="live-score">100</div>
-          <div class="score-den">/ 100</div>
-          <div class="score-gl" id="grade-badge"><span class="badge bx">ممتاز ✓</span></div>
-          <div style="margin-top:10px;" id="sess-badge"><span class="badge bj">🟢 نصاب مكتمل</span></div>
+    <div id="evaluation-wrap">
+      <div class="g2" style="align-items:start;">
+        <div class="card">
+          <div class="ct">الدرجة الحية</div>
+          <div class="score-wrap">
+            <div class="score-num" id="live-score">100</div>
+            <div class="score-den">/ 100</div>
+            <div class="score-gl" id="grade-badge"><span class="badge bx">ممتاز ✓</span></div>
+            <div style="margin-top:10px;" id="sess-badge"><span class="badge bj">🟢 نصاب مكتمل</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ct">سجل الملاحظات</div>
+          <div id="err-log" style="font-size:13px;line-height:2;min-height:100px;max-height:200px;overflow-y:auto;">
+            <span style="color:var(--ink-muted);">لا توجد ملاحظات بعد</span>
+          </div>
+          <div style="display:flex;gap:7px;margin-top:10px;">
+            <button class="btn btn-rose btn-sm" style="flex:1;" onclick="undoLast()">↩ تراجع عن آخر خصم</button>
+            <button class="btn btn-gray btn-sm" style="flex:1;" onclick="resetSess()">🔄 إعادة الضبط</button>
+          </div>
         </div>
       </div>
+
       <div class="card">
-        <div class="ct">سجل الملاحظات</div>
-        <div id="err-log" style="font-size:13px;line-height:2;min-height:100px;max-height:200px;overflow-y:auto;">
-          <span style="color:var(--ink-muted);">لا توجد ملاحظات بعد</span>
+        <div class="ct">أزرار الخصم السريع</div>
+        <div style="background:var(--gold-pale);border:1px solid var(--border-gold);border-radius:var(--r);padding:9px 13px;margin-bottom:14px;font-size:12px;color:#7a5000;">
+          💡 أدخلي رقم الآية والكلمة في الحقول بجانب كل زر، ثم اضغطي الزر لتسجيل الخصم فوراً
         </div>
-        <div style="display:flex;gap:7px;margin-top:10px;">
-          <button class="btn btn-rose btn-sm" style="flex:1;" onclick="undoLast()">↩ تراجع عن آخر خصم</button>
-          <button class="btn btn-gray btn-sm" style="flex:1;" onclick="resetSess()">🔄 إعادة الضبط</button>
+
+        <div class="deduct-row">
+          <div class="di">
+            <input type="number" id="ay1" placeholder="آية" min="1" style="width:75px;flex:none;">
+            <input type="text" id="kw1" placeholder="الكلمة الخاطئة">
+          </div>
+          <button class="d-btn da" onclick="deduct(1,'تنبيه حفظ','ay1','kw1')">
+            <span class="d-ic">⚠️</span><span class="d-lb">تنبيه حفظ</span><span class="d-pt">−1</span>
+          </button>
+        </div>
+
+        <div class="deduct-row">
+          <div class="di">
+            <input type="number" id="ay2" placeholder="آية" min="1" style="width:75px;flex:none;">
+            <input type="text" id="kw2" placeholder="الكلمة الخاطئة">
+          </div>
+          <button class="d-btn dd" onclick="deduct(2,'حفظ + تصحيح','ay2','kw2')">
+            <span class="d-ic">✗</span><span class="d-lb">حفظ + تصحيح</span><span class="d-pt">−2</span>
+          </button>
+        </div>
+
+        <div class="deduct-row">
+          <div class="di">
+            <input type="number" id="ay3" placeholder="آية" min="1" style="width:75px;flex:none;">
+            <input type="text" id="kw3" placeholder="الكلمة الخاطئة">
+          </div>
+          <button class="d-btn da" onclick="deduct(2,'تنبيه تشكيل','ay3','kw3')">
+            <span class="d-ic">◌</span><span class="d-lb">تنبيه تشكيل</span><span class="d-pt">−2</span>
+          </button>
+        </div>
+
+        <div class="deduct-row">
+          <div class="di">
+            <input type="number" id="ay4" placeholder="آية" min="1" style="width:75px;flex:none;">
+            <input type="text" id="kw4" placeholder="الكلمة الخاطئة">
+          </div>
+          <button class="d-btn dd" onclick="deduct(4,'تشكيل + تصحيح','ay4','kw4')">
+            <span class="d-ic">✗◌</span><span class="d-lb">تشكيل + تصحيح</span><span class="d-pt">−4</span>
+          </button>
+        </div>
+
+        <div class="deduct-row">
+          <div class="di">
+            <input type="number" id="ay5" placeholder="آية" min="1" style="width:75px;flex:none;">
+            <input type="text" id="kw5" placeholder="ملاحظة (اختياري)">
+          </div>
+          <button class="d-btn dn" onclick="deduct(0.5,'تردد','ay5','kw5')">
+            <span class="d-ic">⋯</span><span class="d-lb">تردد</span><span class="d-pt">−0.5</span>
+          </button>
+        </div>
+
+        <div class="deduct-row">
+          <div class="di">
+            <input type="number" id="ay6" placeholder="آية" min="1" style="width:75px;flex:none;">
+            <input type="text" id="kw6" placeholder="سبب التميز (اختياري)">
+          </div>
+          <button class="d-btn dg" onclick="deduct(-2,'نجمة تميز','ay6','kw6')">
+            <span class="d-ic">⭐</span><span class="d-lb">نجمة تميز</span><span class="d-pt">+2</span>
+          </button>
         </div>
       </div>
-    </div>
+    </div> <!-- End evaluation-wrap -->
 
     <div class="card">
-      <div class="ct">أزرار الخصم السريع</div>
-      <div style="background:var(--gold-pale);border:1px solid var(--border-gold);border-radius:var(--r);padding:9px 13px;margin-bottom:14px;font-size:12px;color:#7a5000;">
-        💡 أدخلي رقم الآية والكلمة في الحقول بجانب كل زر، ثم اضغطي الزر لتسجيل الخصم فوراً
-      </div>
-
-      <div class="deduct-row">
-        <div class="di">
-          <input type="number" id="ay1" placeholder="آية" min="1" style="width:75px;flex:none;">
-          <input type="text" id="kw1" placeholder="الكلمة الخاطئة">
-        </div>
-        <button class="d-btn da" onclick="deduct(1,'تنبيه حفظ','ay1','kw1')">
-          <span class="d-ic">⚠️</span><span class="d-lb">تنبيه حفظ</span><span class="d-pt">−1</span>
-        </button>
-      </div>
-
-      <div class="deduct-row">
-        <div class="di">
-          <input type="number" id="ay2" placeholder="آية" min="1" style="width:75px;flex:none;">
-          <input type="text" id="kw2" placeholder="الكلمة الخاطئة">
-        </div>
-        <button class="d-btn dd" onclick="deduct(2,'حفظ + تصحيح','ay2','kw2')">
-          <span class="d-ic">✗</span><span class="d-lb">حفظ + تصحيح</span><span class="d-pt">−2</span>
-        </button>
-      </div>
-
-      <div class="deduct-row">
-        <div class="di">
-          <input type="number" id="ay3" placeholder="آية" min="1" style="width:75px;flex:none;">
-          <input type="text" id="kw3" placeholder="الكلمة الخاطئة">
-        </div>
-        <button class="d-btn da" onclick="deduct(2,'تنبيه تشكيل','ay3','kw3')">
-          <span class="d-ic">◌</span><span class="d-lb">تنبيه تشكيل</span><span class="d-pt">−2</span>
-        </button>
-      </div>
-
-      <div class="deduct-row">
-        <div class="di">
-          <input type="number" id="ay4" placeholder="آية" min="1" style="width:75px;flex:none;">
-          <input type="text" id="kw4" placeholder="الكلمة الخاطئة">
-        </div>
-        <button class="d-btn dd" onclick="deduct(4,'تشكيل + تصحيح','ay4','kw4')">
-          <span class="d-ic">✗◌</span><span class="d-lb">تشكيل + تصحيح</span><span class="d-pt">−4</span>
-        </button>
-      </div>
-
-      <div class="deduct-row">
-        <div class="di">
-          <input type="number" id="ay5" placeholder="آية" min="1" style="width:75px;flex:none;">
-          <input type="text" id="kw5" placeholder="ملاحظة (اختياري)">
-        </div>
-        <button class="d-btn dn" onclick="deduct(0.5,'تردد','ay5','kw5')">
-          <span class="d-ic">⋯</span><span class="d-lb">تردد</span><span class="d-pt">−0.5</span>
-        </button>
-      </div>
-
-      <div class="deduct-row">
-        <div class="di">
-          <input type="number" id="ay6" placeholder="آية" min="1" style="width:75px;flex:none;">
-          <input type="text" id="kw6" placeholder="سبب التميز (اختياري)">
-        </div>
-        <button class="d-btn dg" onclick="deduct(-2,'نجمة تميز','ay6','kw6')">
-          <span class="d-ic">⭐</span><span class="d-lb">نجمة تميز</span><span class="d-pt">+2</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="ct">إنهاء الجلسة</div>
+      <div class="ct">إنهاء الجلسة وحفظ السجل</div>
       <div class="g2">
-        <button class="btn btn-jade btn-full" onclick="saveSession()">💾 حفظ الجلسة</button>
-        <button class="btn btn-gold btn-full" onclick="copyReport()">📋 نسخ التقرير للطالبة</button>
+        <button class="btn btn-jade btn-full" onclick="saveSession()">💾 حفظ الجلسة (حضور أو غياب)</button>
+        <button class="btn btn-gold btn-full" id="btn-copy-rep" onclick="copyReport()">📋 نسخ التقرير للطالبة</button>
       </div>
     </div>
   </div>
@@ -361,7 +440,10 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
 
 <!-- ══ PORTAL ══ (Shared: Teacher & Student) -->
 <div id="page-portal" class="page">
-  <div class="pg-head"><div class="pg-title" id="portal-title">بوابة الطالبة</div><div class="pg-sub">سجل الأداء والمتابعة</div></div>
+  <div class="pg-head">
+    <div><div class="pg-title" id="portal-title">بوابة الطالبة</div><div class="pg-sub">سجل الأداء والمتابعة</div></div>
+    <button class="btn btn-gold btn-sm" id="btn-print-cert" style="display:none;" onclick="printCert()">🖨️ طباعة شهادة التفوق</button>
+  </div>
 
   <div class="student-view-alert" id="student-alert">
     مرحباً بكِ! هذه صفحتكِ الخاصة للمتابعة المستمرة. يمكنكِ متابعة أخطائك ومستواك هنا.
@@ -379,15 +461,37 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
         <div class="av" id="p-av" style="width:52px;height:52px;font-size:20px;">—</div>
         <div style="flex:1;">
           <div style="font-size:17px;font-weight:700;font-family:'Amiri',serif;" id="p-name">—</div>
-          <div style="font-size:12px;color:var(--ink-muted);">سجل شخصي محمي</div>
+          <div style="font-size:12px;color:var(--ink-muted);" id="p-course-info">سجل شخصي محمي</div>
         </div>
         <div id="p-grade-badge"></div>
       </div>
       <div class="g4">
-        <div class="metric"><div class="mv" id="p-score">—</div><div class="ml">آخر درجة</div></div>
+        <div class="metric"><div class="mv" id="p-score">—</div><div class="ml">آخر درجة حفظ</div></div>
         <div class="metric"><div class="mv" id="p-stars">0</div><div class="ml">نجوم التميز</div></div>
-        <div class="metric"><div class="mv" id="p-sess-cnt">0</div><div class="ml">جلسات ناجحة</div></div>
+        <div class="metric"><div class="mv" id="p-sess-cnt">0</div><div class="ml">حضور منضبط</div></div>
         <div class="metric"><div class="mv" id="p-avg">—</div><div class="ml">متوسط الدرجات</div></div>
+      </div>
+    </div>
+
+    <!-- GAMIFICATION (Smart Badges) -->
+    <div class="card">
+      <div class="ct">الأوسمة الذكية (Gamification)</div>
+      <div class="gamification-box">
+        <div class="smart-badge" id="bdg-disc">
+          <span class="sb-ic">👑</span>
+          <div class="sb-tt">تاج الانضباط</div>
+          <div class="sb-ds">لا يوجد غياب بدون عذر</div>
+        </div>
+        <div class="smart-badge" id="bdg-mast">
+          <span class="sb-ic">🌟</span>
+          <div class="sb-tt">نجمة الإتقان</div>
+          <div class="sb-ds">متوسط الحفظ > 95%</div>
+        </div>
+        <div class="smart-badge" id="bdg-fast">
+          <span class="sb-ic">🚀</span>
+          <div class="sb-tt">همة عالية</div>
+          <div class="sb-ds">تجاوزت النصاب 3 مرات</div>
+        </div>
       </div>
     </div>
 
@@ -402,7 +506,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
     </div>
 
     <div class="card">
-      <div class="ct">السجل التاريخي الكامل للجلسات</div>
+      <div class="ct">السجل التاريخي الكامل (حفظ ومراجعة)</div>
       <div id="p-hist"></div>
     </div>
 
@@ -467,7 +571,7 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
     <div style="font-size:13px;line-height:1.8;color:var(--ink-soft);">
       عند رفع البيانات، يقوم النظام بإنشاء <strong>أوراق عمل (Tabs) مقروءة ومرتبة</strong> تلقائياً داخل ملف الـ Google Sheet الخاص بكِ:<br>
       📄 <strong>ورقة الطالبات:</strong> جدول بأسماء الطالبات ودرجاتهن ونجوم التميز.<br>
-      🗓️ <strong>سجل التسميع:</strong> تاريخ كامل لكل جلسات التسميع لجميع الطالبات مع الملاحظات.<br>
+      🗓️ <strong>سجل التسميع:</strong> تاريخ كامل لكل جلسات التسميع لجميع الطالبات (يشمل الغياب والمراجعة).<br>
       🔒 <strong>ورقة النظام (مخفية):</strong> لحفظ البيانات برمجياً واستعادتها دون أخطاء.
     </div>
   </div>
@@ -490,6 +594,30 @@ hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
 
 </main>
 </div>
+
+<!-- 🖨️ CERTIFICATE TEMPLATE (Hidden until print) -->
+<div id="certificate-layer">
+  <div class="cert-card">
+    <div class="cert-header">شهادة شكر وتقدير</div>
+    <div class="cert-sub">"خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ"</div>
+    
+    <div class="cert-text">تتقدم إدارة الحلقة والمعلمة <span id="cert-t-name" style="color:#C8922A;font-weight:700;">---</span></div>
+    <div class="cert-text">بخالص الشكر والتقدير للطالبة المتميزة:</div>
+    
+    <div class="cert-name" id="cert-s-name">---</div>
+    
+    <div class="cert-text">نظير تفوقها وانضباطها في إتمام مقرر <span id="cert-c-name" style="color:#C8922A;font-weight:700;">---</span></div>
+    <div class="cert-text">وحصولها على متوسط درجة إتقان: <span id="cert-score" style="font-weight:700;">---</span>%</div>
+    
+    <div class="cert-footer">
+      <div>التاريخ: <span id="cert-date">---</span></div>
+      <div>التوقيع: ............................</div>
+    </div>
+    
+    <div class="cert-seal">ألف لام ميم<br>للتميز</div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <!-- Hidden input for copying links -->
@@ -513,12 +641,12 @@ function defState(){
 }
 
 function loadState(){
-  try{ const d=localStorage.getItem('alm_v6'); return d?JSON.parse(d):defState(); }catch{ return defState(); }
+  try{ const d=localStorage.getItem('alm_v7'); return d?JSON.parse(d):defState(); }catch{ return defState(); }
 }
 
 function save(){
   if(isStudentMode) return; // Prevent student from saving locally
-  try{ localStorage.setItem('alm_v6',JSON.stringify(S)); setSyncDot('local'); }catch{}
+  try{ localStorage.setItem('alm_v7',JSON.stringify(S)); setSyncDot('local'); }catch{}
 }
 
 // ══ INIT & MAGIC LINK PARSER ═══════════════════════════════
@@ -663,7 +791,7 @@ function calcPlan(){
   if(ex) ex.textContent = `📖 الورد الأسبوعي: ${q.weeklyFaces} أوجه. الجلسة الواحدة (لموعدين أسبوعياً) تغطي ${q.sessionFaces} أوجه. الحفظ اليومي مقسم كأعداد صحيحة (${q.dailyText} وجه).`;
 
   const si = document.getElementById('quota-info-sess');
-  if(si) si.textContent = `📌 النصاب المقترح: ${q.sessionFaces} أوجه`;
+  if(si) si.textContent = `📌 النصاب المقترح للمقرر العام: ${q.sessionFaces} أوجه`;
 
   window._quota = q;
 
@@ -705,11 +833,12 @@ function renderStudentList(){
   let html='';
   ss.forEach(st=>{
     const g=gradeOf(st.score);
+    const customTxt = st.customFaces ? ` | 🎯 مقرر خاص: ${st.customFaces} وجه` : '';
     html+=`<div class="sr">
       <div class="av">${st.name[0]}</div>
       <div style="flex:1">
         <div class="sn">${st.name}</div>
-        <div class="ss">درجة: ${fmt(st.score)} | نجوم: ${st.stars>0?'⭐'.repeat(Math.min(st.stars,5)):'—'} | جلسات: ${st.ok||0}/${st.total||0}</div>
+        <div class="ss">درجة: ${fmt(st.score)} | نجوم: ${st.stars>0?'⭐'.repeat(Math.min(st.stars,5)):'—'}${customTxt}</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <span class="badge ${g.cls}" style="margin-left:5px;">${g.label}</span>
@@ -724,11 +853,20 @@ function renderStudentList(){
 
 function addStudent(){
   const n=document.getElementById('new-name').value.trim();
+  const cF=parseInt(document.getElementById('new-custom-faces').value);
   if(!n){ toast('⚠ أدخلي اسم الطالبة'); return; }
   if(S.students.find(s=>s.name===n)){ toast('⚠ هذه الطالبة موجودة مسبقاً'); return; }
+  
   const sd=S.course.studyDays||5;
-  S.students.push({id:S.nextId++,name:n,score:100,stars:0,sessions:[],days:Array(sd).fill(0),ok:0,total:0});
-  save(); document.getElementById('new-name').value='';
+  const newSt = {
+    id:S.nextId++, name:n, score:100, stars:0, sessions:[], days:Array(sd).fill(0), ok:0, total:0
+  };
+  if(cF && cF > 0) newSt.customFaces = cF;
+  
+  S.students.push(newSt);
+  save(); 
+  document.getElementById('new-name').value='';
+  document.getElementById('new-custom-faces').value='';
   renderStudentList(); toast('✅ تمت إضافة '+n);
 }
 
@@ -774,13 +912,59 @@ function copyStudentLink(id) {
 function startSession(){
   const id=document.getElementById('sel-st').value;
   if(!id){ document.getElementById('sess-body').style.display='none'; return; }
-  curSt=parseInt(id); sessScore=100; sessErrors=[];
-  const q=window._quota||{sessionFaces:5};
+  
+  const st=S.students.find(s=>s.id===parseInt(id));
+  if(!st) return;
+
+  curSt=st.id; sessScore=100; sessErrors=[];
+  
+  // Calculate dynamic quota based on student's custom faces or global
+  const targetFaces = st.customFaces || S.course.pages || 200;
+  const q = calcQuota(targetFaces, S.course.weeks||10, S.course.studyDays||5);
+  window._activeSessQuota = q; // store active quota
+
+  const si = document.getElementById('quota-info-sess');
+  if(si) {
+    si.textContent = st.customFaces 
+      ? `🎯 هذه الطالبة لديها مقرر خاص (${targetFaces} وجه) - النصاب: ${q.sessionFaces} أوجه`
+      : `📌 النصاب المقترح (المقرر العام): ${q.sessionFaces} أوجه`;
+  }
+
   document.getElementById('faces').value=q.sessionFaces;
   document.getElementById('live-score').textContent='100';
+  document.getElementById('sess-att').value = 'present';
+  document.getElementById('rev-minor').checked = false;
+  document.getElementById('rev-major').checked = false;
+  
   renderErrLog();
+  toggleSessBody();
   document.getElementById('sess-body').style.display='block';
   updateGradeDisp(); updateBadge();
+}
+
+function toggleSessBody() {
+  const att = document.getElementById('sess-att').value;
+  const wrap = document.getElementById('evaluation-wrap');
+  const btnCopy = document.getElementById('btn-copy-rep');
+  const attSelect = document.getElementById('sess-att');
+
+  if(att === 'present') {
+    wrap.style.display = 'block';
+    btnCopy.style.display = 'inline-flex';
+    attSelect.style.backgroundColor = 'var(--gold-pale)';
+    attSelect.style.color = '#7a5000';
+  } else {
+    // Hide evaluation if absent
+    wrap.style.display = 'none';
+    btnCopy.style.display = 'none';
+    if(att === 'excused') {
+      attSelect.style.backgroundColor = 'var(--jade-lt)';
+      attSelect.style.color = '#1a4d31';
+    } else {
+      attSelect.style.backgroundColor = 'var(--rose-lt)';
+      attSelect.style.color = 'var(--rose)';
+    }
+  }
 }
 
 function deduct(pts,label,ayId,kwId){
@@ -826,7 +1010,7 @@ function updateGradeDisp(){
 
 function updateBadge(){
   const f=parseInt(document.getElementById('faces').value)||0;
-  const q=window._quota?.sessionFaces||5;
+  const q=window._activeSessQuota?.sessionFaces||5;
   const el=document.getElementById('sess-badge');
   if(f>q)       el.innerHTML=`<span class="badge bx">⭐ تجاوزت النصاب (${f}/${q})</span>`;
   else if(f>=q) el.innerHTML=`<span class="badge bj">🟢 نصاب مكتمل (${f}/${q})</span>`;
@@ -847,28 +1031,56 @@ function saveSession(){
   if(!curSt){ toast('اختاري طالبة أولاً'); return; }
   const st=S.students.find(s=>s.id===curSt);
   if(!st) return;
+  
+  const att = document.getElementById('sess-att').value;
+  const revMinor = document.getElementById('rev-minor').checked;
+  const revMajor = document.getElementById('rev-major').checked;
+  
   const faces=parseInt(document.getElementById('faces').value)||0;
-  const q=window._quota?.sessionFaces||5;
-  const isStar=faces>q, isOk=faces>=q;
-  st.score=sessScore;
-  if(isStar) st.stars=(st.stars||0)+1;
+  const q=window._activeSessQuota?.sessionFaces||5;
+  
+  let isStar=false, isOk=false, finalScore=null, finalGrade='—';
+  
+  if (att === 'present') {
+    isStar = faces > q;
+    isOk = faces >= q;
+    finalScore = sessScore;
+    finalGrade = gradeOf(sessScore).label;
+    st.score = finalScore; // Update latest score only if present
+    if(isStar) st.stars=(st.stars||0)+1;
+    if(isOk) st.ok=(st.ok||0)+1;
+  }
+  
   st.total=(st.total||0)+1;
-  if(isOk) st.ok=(st.ok||0)+1;
   st.sessions=st.sessions||[];
+  
   st.sessions.push({
     date:new Date().toLocaleDateString('ar-EG'),
     ts:Date.now(),
-    score:sessScore,
-    faces,
-    from:document.getElementById('from-a').value||'—',
-    to:document.getElementById('to-a').value||'—',
-    errors:sessErrors.map(e=>({desc:e.desc,pts:e.pts})),
-    star:isStar, ok:isOk,
-    grade:gradeOf(sessScore).label,
+    att: att, // present, excused, unexcused
+    revMinor: revMinor,
+    revMajor: revMajor,
+    score: finalScore,
+    faces: att === 'present' ? faces : 0,
+    from: att === 'present' ? (document.getElementById('from-a').value||'—') : '—',
+    to: att === 'present' ? (document.getElementById('to-a').value||'—') : '—',
+    errors: att === 'present' ? sessErrors.map(e=>({desc:e.desc,pts:e.pts})) : [],
+    star: isStar, 
+    ok: isOk,
+    grade: finalGrade,
   });
+  
   save(); renderStudentList();
-  toast('✅ تم حفظ جلسة '+st.name);
+  
+  if(att === 'present') toast('✅ تم حفظ جلسة التسميع لـ '+st.name);
+  else toast('🗓️ تم تسجيل غياب لـ '+st.name);
+  
   if(S.sheetUrl) syncToSheet(true);
+  
+  // Refresh portal if open and same student
+  if (document.getElementById('page-portal').classList.contains('active') && document.getElementById('sel-portal').value == curSt) {
+      loadPortal();
+  }
 }
 
 function copyReport(){
@@ -878,11 +1090,22 @@ function copyReport(){
   const from=document.getElementById('from-a').value||'—';
   const to=document.getElementById('to-a').value||'—';
   const g=gradeOf(sessScore);
-  const q=window._quota?.sessionFaces||5;
+  const q=window._activeSessQuota?.sessionFaces||5;
   const badge=parseInt(faces)>q?'⭐ تجاوزت النصاب':parseInt(faces)>=q?'🟢 نصاب مكتمل':'🔴 لم يكتمل';
+  
+  const revMinor = document.getElementById('rev-minor').checked;
+  const revMajor = document.getElementById('rev-major').checked;
+  let revTxt = '';
+  if(revMinor || revMajor) {
+    revTxt = `المراجعة : ${revMinor?'[صغرى ✓]':''} ${revMajor?'[كبرى ✓]':''}`;
+  } else {
+    revTxt = `المراجعة : لم تُسمع مراجعة`;
+  }
+
   const errLines=sessErrors.length
     ?sessErrors.map((e,i)=>`  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n')
-    :'  لا توجد ملاحظات';
+    :'  ممتاز - لا توجد ملاحظات';
+    
   const rep=[
     `📋 تقرير جلسة التسميع — ${S.course.cname||'حلقة التحفيظ'}`,
     '━━━━━━━━━━━━━━━━━━━━━━',
@@ -890,6 +1113,7 @@ function copyReport(){
     `التاريخ  : ${new Date().toLocaleDateString('ar-EG')}`,
     `من        : ${from}   إلى : ${to}`,
     `الأوجه   : ${faces} ${badge}`,
+    revTxt,
     `الدرجة   : ${fmt(sessScore)} / 100`,
     `التقييم  : ${g.emoji} ${g.label}`,
     '──────────────────────',
@@ -903,13 +1127,15 @@ function copyReport(){
 // ══ PORTAL ═════════════════════════════════════════════════
 function loadPortal(){
   const id=isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
-  if(!id){ document.getElementById('portal-body').style.display='none'; return; }
+  if(!id){ document.getElementById('portal-body').style.display='none'; document.getElementById('btn-print-cert').style.display='none'; return; }
   const st=S.students.find(s=>s.id===id);
   if(!st) return;
   
   document.getElementById('portal-body').style.display='block';
+  document.getElementById('btn-print-cert').style.display='inline-flex';
   document.getElementById('p-av').textContent=st.name[0];
   document.getElementById('p-name').textContent=st.name;
+  document.getElementById('p-course-info').textContent = st.customFaces ? `سجل محمي | مقرر خاص (${st.customFaces} وجه)` : `سجل محمي | المقرر العام للدورة`;
 
   const g=gradeOf(st.score);
   document.getElementById('p-score').textContent=fmt(st.score);
@@ -918,8 +1144,19 @@ function loadPortal(){
   document.getElementById('p-grade-badge').innerHTML=`<span class="badge ${g.cls}" style="font-size:14px;padding:5px 14px;">${g.emoji} ${g.label}</span>`;
 
   const sess=st.sessions||[];
-  const avg=sess.length?(sess.reduce((a,s)=>a+s.score,0)/sess.length).toFixed(1):'—';
+  const presentSess = sess.filter(s => s.att === 'present');
+  const avg=presentSess.length?(presentSess.reduce((a,s)=>a+s.score,0)/presentSess.length).toFixed(1):'—';
   document.getElementById('p-avg').textContent=avg;
+
+  // Gamification Calculation
+  let unexcusedCount = sess.filter(s => s.att === 'unexcused').length;
+  let hasCrown = sess.length >= 3 && unexcusedCount === 0;
+  let hasStar = presentSess.length >= 2 && parseFloat(avg) >= 95;
+  let hasRocket = (st.stars||0) >= 3;
+
+  document.getElementById('bdg-disc').className = hasCrown ? 'smart-badge earned' : 'smart-badge';
+  document.getElementById('bdg-mast').className = hasStar ? 'smart-badge earned' : 'smart-badge';
+  document.getElementById('bdg-fast').className = hasRocket ? 'smart-badge earned' : 'smart-badge';
 
   // Days — toggle-able
   const sd=S.course.studyDays||5;
@@ -944,19 +1181,32 @@ function loadPortal(){
   const sorted=[...sess].sort((a,b)=>b.ts-a.ts);
   document.getElementById('p-hist').innerHTML=sorted.length
     ?sorted.map(s=>{
+      if (s.att !== 'present') {
+        const isExcused = s.att === 'excused';
+        return `<div class="hist-item" style="border-right-color:${isExcused?'var(--jade)':'var(--rose)'};">
+          <div class="hd">${s.date} · غياب</div>
+          <div class="hb" style="color:${isExcused?'var(--jade)':'var(--rose)'};font-weight:700;">${isExcused?'غياب بعذر (لا يؤثر على التقييم)':'غياب بدون عذر'}</div>
+        </div>`;
+      }
+      
       const errHtml=s.errors&&s.errors.length
         ?'<div style="margin-top:6px;padding-right:8px;border-right:2px solid var(--rose-lt);">'+
           s.errors.map(e=>`<div style="font-size:12px;color:var(--rose);">${e.desc} <strong>(${e.pts<0?'+':'-'}${Math.abs(e.pts)})</strong></div>`).join('')+'</div>'
         :'';
+        
+      let revBadges = '';
+      if(s.revMinor) revBadges += `<span class="badge bj" style="font-size:10px;padding:2px 6px;">صغرى ✓</span> `;
+      if(s.revMajor) revBadges += `<span class="badge bx" style="font-size:10px;padding:2px 6px;">كبرى ✓</span>`;
+
       return `<div class="hist-item">
-        <div class="hd">${s.date} · أوجه: ${s.faces} ${s.star?'⭐':''} ${s.ok?'🟢':'🔴'}</div>
+        <div class="hd">${s.date} · أوجه: ${s.faces} ${s.star?'⭐':''} ${s.ok?'🟢':'🔴'} ${revBadges}</div>
         <div class="hb">الدرجة: <strong>${fmt(s.score)}</strong> · ${gradeOf(s.score).emoji} ${gradeOf(s.score).label} · من ${s.from} إلى ${s.to}${errHtml}</div>
       </div>`;
     }).join('')
     :'<div style="color:var(--ink-muted);font-size:13px;">لا توجد جلسات بعد.</div>';
 
   // Analysis
-  const allErr=sess.flatMap(s=>s.errors||[]);
+  const allErr=presentSess.flatMap(s=>s.errors||[]);
   const pa=document.getElementById('p-analysis');
   if(!allErr.length){ pa.innerHTML='<span style="color:var(--ink-muted);">لا توجد بيانات كافية بعد.</span>'; return; }
   const tc={};
@@ -974,6 +1224,24 @@ function loadPortal(){
     </div>`;
   });
   pa.innerHTML=ahtml;
+}
+
+function printCert(){
+  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const st = S.students.find(s=>s.id===id);
+  if(!st) return;
+
+  const sess = st.sessions||[];
+  const presentSess = sess.filter(s => s.att === 'present');
+  const avg = presentSess.length ? (presentSess.reduce((a,s)=>a+s.score,0)/presentSess.length).toFixed(1) : 100;
+
+  document.getElementById('cert-t-name').textContent = S.course.teacher || 'المعلمة';
+  document.getElementById('cert-s-name').textContent = st.name;
+  document.getElementById('cert-c-name').textContent = S.course.cname || 'القرآن الكريم';
+  document.getElementById('cert-score').textContent = avg;
+  document.getElementById('cert-date').textContent = new Date().toLocaleDateString('ar-EG');
+
+  window.print();
 }
 
 function toggleDay(stId,dayIdx){
@@ -1062,11 +1330,11 @@ function doPost(e) {
         stSheet.setRightToLeft(true);
       }
       stSheet.clear();
-      const stHeader = ['رقم الطالبة', 'اسم الطالبة', 'الدرجة', 'نجوم التميز', 'الجلسات المكتملة', 'إجمالي الجلسات'];
+      const stHeader = ['رقم الطالبة', 'اسم الطالبة', 'مقرر خاص', 'الدرجة', 'نجوم التميز', 'الجلسات المكتملة', 'إجمالي الجلسات'];
       const stRows = [stHeader];
       if (S.students) {
         S.students.forEach(st => {
-          stRows.push([st.id, st.name, st.score, st.stars || 0, st.ok || 0, st.total || 0]);
+          stRows.push([st.id, st.name, st.customFaces || 'المقرر العام', st.score, st.stars || 0, st.ok || 0, st.total || 0]);
         });
       }
       stSheet.getRange(1, 1, stRows.length, stHeader.length).setValues(stRows);
@@ -1079,16 +1347,23 @@ function doPost(e) {
         sessSheet.setRightToLeft(true);
       }
       sessSheet.clear();
-      const sessHeader = ['التاريخ', 'اسم الطالبة', 'الدرجة', 'الأوجه', 'التقييم', 'الملاحظات'];
+      const sessHeader = ['التاريخ', 'اسم الطالبة', 'الحضور', 'مراجعة', 'الدرجة', 'الأوجه', 'التقييم', 'الملاحظات'];
       const sessRows = [sessHeader];
       if (S.students) {
         S.students.forEach(st => {
           if(st.sessions) {
             st.sessions.forEach(sess => {
-              let errs = sess.errors && sess.errors.length > 0 
+              let attText = sess.att === 'excused' ? 'غائبة (بعذر)' : (sess.att === 'unexcused' ? 'غائبة (بدون)' : 'حاضرة');
+              let revText = (sess.revMinor ? 'صغرى ' : '') + (sess.revMajor ? 'كبرى' : '');
+              if(!revText) revText = '-';
+              
+              let errs = '-';
+              if(sess.att === 'present') {
+                 errs = sess.errors && sess.errors.length > 0 
                          ? sess.errors.map(e => e.desc).join(' | ') 
                          : 'ممتاز - لا توجد ملاحظات';
-              sessRows.push([sess.date, st.name, sess.score, sess.faces, sess.grade || '-', errs]);
+              }
+              sessRows.push([sess.date, st.name, attText, revText, sess.score !== null ? sess.score : '-', sess.faces || '-', sess.grade || '-', errs]);
             });
           }
         });
