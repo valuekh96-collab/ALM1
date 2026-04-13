@@ -6,553 +6,341 @@
 <title>لوحة ألف لام ميم الأكاديمية</title>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --ink:       #1A1714;
-  --ink-soft:  #4A453F;
-  --ink-muted: #8A8278;
-  --gold:      #C8922A;
-  --gold-lt:   #F5E6C8;
-  --gold-pale: #FDF8EE;
-  --jade:      #2A6B4A;
-  --jade-lt:   #D4EDE0;
-  --rose:      #A83240;
-  --rose-lt:   #F5D6DA;
-  --sand:      #F7F3EC;
-  --sand-dark: #EDE6D8;
-  --white:     #FDFCFA;
-  --border:    rgba(26,23,20,0.12);
-  --border-gold: rgba(200,146,42,0.3);
-  --shadow-sm: 0 1px 4px rgba(26,23,20,0.08);
-  --shadow:    0 4px 20px rgba(26,23,20,0.10);
-  --shadow-lg: 0 8px 40px rgba(26,23,20,0.15);
-  --r:   10px;
-  --r-lg:16px;
-  --r-xl:24px;
+:root{
+  --ink:#1A1714;--ink-soft:#4A453F;--ink-muted:#8A8278;
+  --gold:#C8922A;--gold-lt:#F5E6C8;--gold-pale:#FDF8EE;
+  --jade:#2A6B4A;--jade-lt:#D4EDE0;
+  --rose:#A83240;--rose-lt:#F5D6DA;
+  --sand:#F7F3EC;--sand-dark:#EDE6D8;
+  --white:#FDFCFA;--border:rgba(26,23,20,0.12);
+  --border-gold:rgba(200,146,42,0.3);
+  --sh:0 1px 4px rgba(26,23,20,0.08);
+  --sh-lg:0 6px 28px rgba(26,23,20,0.13);
+  --r:10px;--r-lg:16px;
 }
-
-* { box-sizing:border-box; margin:0; padding:0; }
-
-body {
-  font-family: 'Cairo', sans-serif;
-  background: var(--sand);
-  color: var(--ink);
-  min-height: 100vh;
-  font-size: 15px;
-}
-
-/* ══════════ SIDEBAR ══════════ */
-.layout { display:flex; min-height:100vh; }
-
-.sidebar {
-  width: 220px;
-  flex-shrink: 0;
-  background: var(--ink);
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.sidebar-head {
-  padding: 28px 20px 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  text-align: center;
-}
-
-.logo-mark {
-  font-family: 'Amiri', serif;
-  font-size: 32px;
-  color: var(--gold);
-  line-height: 1;
-  margin-bottom: 6px;
-  letter-spacing: 4px;
-}
-
-.logo-title {
-  font-size: 12px;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.5;
-  letter-spacing: .03em;
-}
-
-.sidebar-nav { padding: 16px 12px; flex:1; }
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 14px;
-  border-radius: var(--r);
-  cursor: pointer;
-  color: rgba(255,255,255,0.55);
-  font-size: 13.5px;
-  font-weight: 500;
-  transition: all .2s;
-  margin-bottom: 2px;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: right;
-  font-family: 'Cairo', sans-serif;
-}
-.nav-item:hover { color:#fff; background: rgba(255,255,255,0.07); }
-.nav-item.active { color: var(--gold); background: rgba(200,146,42,0.12); border: 1px solid rgba(200,146,42,0.2); }
-.nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink:0; }
-
-.sidebar-footer {
-  padding: 14px 16px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  font-size: 11px;
-  color: rgba(255,255,255,0.25);
-  text-align: center;
-  line-height: 1.6;
-}
-
-/* ══════════ MAIN ══════════ */
-.main { flex:1; overflow-y:auto; }
-
-.page { display:none; padding: 32px 28px; max-width: 820px; }
-.page.active { display:block; }
-
-.page-header {
-  margin-bottom: 28px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border);
-}
-.page-title {
-  font-family: 'Amiri', serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 4px;
-}
-.page-sub { font-size: 13px; color: var(--ink-muted); }
-
-/* ══════════ CARDS ══════════ */
-.card {
-  background: var(--white);
-  border-radius: var(--r-lg);
-  border: 1px solid var(--border);
-  padding: 22px 24px;
-  margin-bottom: 18px;
-  box-shadow: var(--shadow-sm);
-}
-.card-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink-soft);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-transform: uppercase;
-  letter-spacing: .05em;
-}
-.card-title::before {
-  content:'';
-  display: block;
-  width: 3px;
-  height: 14px;
-  background: var(--gold);
-  border-radius: 2px;
-}
-
-/* ══════════ GRID ══════════ */
-.g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
-.g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
-@media(max-width:680px){ .g2,.g3,.g4 { grid-template-columns:1fr; } }
-
-/* ══════════ FORM ══════════ */
-.field { margin-bottom: 14px; }
-.field label { display:block; font-size:12px; font-weight:600; color:var(--ink-muted); margin-bottom:5px; letter-spacing:.03em; }
-input[type=text], input[type=number], input[type=date], select, textarea {
-  width:100%; padding:9px 13px;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  font-size: 14px;
-  font-family: 'Cairo', sans-serif;
-  color: var(--ink);
-  background: var(--white);
-  transition: border .15s, box-shadow .15s;
-  outline: none;
-}
-input:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,146,42,0.15); }
-
-/* ══════════ BUTTONS ══════════ */
-.btn {
-  display: inline-flex; align-items:center; justify-content:center; gap:7px;
-  padding: 9px 20px; border-radius: var(--r);
-  border: 1px solid var(--border);
-  background: var(--white); color: var(--ink);
-  cursor: pointer; font-size: 13.5px; font-weight: 600;
-  font-family: 'Cairo', sans-serif;
-  transition: all .15s;
-}
-.btn:hover { background: var(--sand); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-.btn:active { transform: translateY(0) scale(0.98); }
-
-.btn-gold { background: var(--gold); color: #fff; border-color: var(--gold); }
-.btn-gold:hover { background: #B07B20; }
-
-.btn-jade { background: var(--jade); color: #fff; border-color: var(--jade); }
-.btn-jade:hover { background: #1E5438; }
-
-.btn-rose-soft { background: var(--rose-lt); color: var(--rose); border-color: rgba(168,50,64,0.25); }
-.btn-full { width:100%; }
-
-/* ══════════ METRICS ══════════ */
-.metric {
-  background: var(--sand);
-  border: 1px solid var(--sand-dark);
-  border-radius: var(--r-lg);
-  padding: 16px 14px;
-  text-align: center;
-}
-.metric-val { font-size:28px; font-weight:700; color:var(--gold); font-family:'Amiri',serif; }
-.metric-lbl { font-size:12px; color:var(--ink-muted); margin-top:2px; }
-
-/* ══════════ BADGES ══════════ */
-.badge {
-  display: inline-flex; align-items:center; gap:4px;
-  padding: 3px 11px; border-radius: 20px;
-  font-size: 12px; font-weight: 700;
-}
-.b-gold    { background:var(--gold-lt); color:#7A5000; border: 1px solid var(--border-gold); }
-.b-jade    { background:var(--jade-lt); color:#1A4D31; }
-.b-rose    { background:var(--rose-lt); color:var(--rose); }
-.b-sand    { background:var(--sand-dark); color:var(--ink-soft); }
-
-/* ══════════ STUDENT ROW ══════════ */
-.s-row {
-  display:flex; align-items:center; gap:12px;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--sand-dark);
-}
-.s-row:last-child { border-bottom: none; }
-.avatar {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: var(--gold-lt);
-  display: flex; align-items:center; justify-content:center;
-  font-family: 'Amiri', serif;
-  font-size: 16px; font-weight: 700; color: var(--gold);
-  flex-shrink: 0;
-  border: 1px solid var(--border-gold);
-}
-.s-name { font-size:14px; font-weight:700; }
-.s-sub  { font-size:12px; color:var(--ink-muted); margin-top:2px; }
-.s-right { margin-right:auto; display:flex; align-items:center; gap:8px; }
-
-/* ══════════ WEEK PLANNER ══════════ */
-.week-row {
-  display:flex; align-items:center; gap:10px;
-  padding: 9px 14px; border-radius: var(--r);
-  background: var(--sand); margin-bottom:4px;
-  font-size: 13px;
-  border: 1px solid transparent;
-  transition: border .15s;
-}
-.week-row:hover { border-color: var(--border-gold); }
-.wk-num   { width:90px; font-weight:700; color:var(--gold); }
-.wk-pages { flex:1; font-weight:600; }
-.wk-count { font-size:12px; color:var(--ink-muted); }
-
-/* ══════════ DEDUCT BUTTONS ══════════ */
-.deduct-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
-.d-btn {
-  padding: 14px 10px; border-radius: var(--r-lg);
-  cursor: pointer; font-family: 'Cairo', sans-serif;
-  text-align: center; line-height: 1.5;
-  border: 1px solid; transition: all .15s;
-}
-.d-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-.d-btn:active { transform: scale(0.97); }
-.d-btn .d-icon { font-size: 20px; display:block; margin-bottom:4px; }
-.d-btn .d-label { font-size: 12px; font-weight: 600; display:block; }
-.d-btn .d-pts   { font-size: 17px; font-weight: 800; display:block; margin-top:4px; }
-
-.d-amber { background:var(--gold-pale); color:#7A5000; border-color:var(--border-gold); }
-.d-red   { background:var(--rose-lt); color:var(--rose); border-color:rgba(168,50,64,0.25); }
-.d-neutral { background:var(--sand); color:var(--ink-soft); border-color:var(--border); }
-.d-star  { background:#F0F8F4; color:var(--jade); border-color:rgba(42,107,74,0.25); }
-
-/* ══════════ SCORE DISPLAY ══════════ */
-.score-wrap { text-align:center; padding:28px 20px; }
-.score-num {
-  font-family: 'Amiri', serif;
-  font-size: 80px; font-weight:700; line-height:1;
-  background: linear-gradient(135deg, var(--gold), #E8A832);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.score-denom { font-size:18px; color:var(--ink-muted); margin-top:4px; }
-.score-grade-lbl { margin-top:12px; font-size:16px; }
-
-/* ══════════ ERROR LOG ══════════ */
-.err-log {
-  background: var(--sand); border: 1px solid var(--sand-dark);
-  border-radius: var(--r); padding: 12px 14px;
-  font-size: 13px; min-height:90px; max-height:160px; overflow-y:auto;
-  line-height: 1.9;
-}
-.err-item { display:flex; align-items:baseline; gap:8px; }
-.err-dot  { width:5px; height:5px; border-radius:50%; background:var(--rose); flex-shrink:0; margin-top:7px; }
-.err-plus { width:5px; height:5px; border-radius:50%; background:var(--jade); flex-shrink:0; margin-top:7px; }
-
-/* ══════════ PROGRESS ══════════ */
-.prog-wrap { background:var(--sand-dark); border-radius:20px; height:14px; overflow:hidden; margin:8px 0; }
-.prog-fill  {
-  height:100%; border-radius:20px;
-  background: linear-gradient(90deg, var(--jade), var(--gold));
-  transition: width .6s cubic-bezier(.4,0,.2,1);
-}
-
-/* ══════════ DAY ROW ══════════ */
-.day-row {
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 10px 14px; border-radius: var(--r);
-  border: 1px solid var(--sand-dark);
-  margin-bottom: 6px; background: var(--white);
-}
-.day-done { color:var(--jade); font-size:13px; font-weight:700; display:flex; align-items:center; gap:4px; }
-
-/* ══════════ HISTORY ══════════ */
-.hist-item {
-  border-right: 3px solid var(--gold);
-  padding: 10px 14px; background: var(--sand);
-  border-radius: 0 var(--r) var(--r) 0;
-  margin-bottom: 8px;
-}
-.hist-date { font-size:11px; color:var(--ink-muted); margin-bottom:4px; font-weight:600; }
-.hist-body { font-size:13px; line-height:1.8; }
-
-/* ══════════ LEADERBOARD ══════════ */
-.rank-card {
-  display:flex; align-items:center; gap:14px;
-  padding: 14px 18px; border-radius: var(--r-lg);
-  border: 1px solid var(--border);
-  margin-bottom: 8px; background: var(--white);
-  transition: all .2s;
-}
-.rank-card:hover { box-shadow:var(--shadow); transform: translateY(-1px); }
-.rank-card.rank-1 { border-color: #E8C44A; background: linear-gradient(135deg, #FFFEF5, #FFF8E0); }
-.rank-card.rank-2 { border-color: #C8C8C8; background: linear-gradient(135deg, #FAFAFA, #F4F4F4); }
-.rank-card.rank-3 { border-color: #E8A050; background: linear-gradient(135deg, #FFFBF5, #FFF4E0); }
-.rank-medal { font-size:28px; min-width:38px; text-align:center; }
-.rank-name  { flex:1; font-size:14px; font-weight:700; }
-.rank-meta  { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-.rank-pts   { font-family:'Amiri',serif; font-size:20px; font-weight:700; color:var(--gold); }
-
-/* ══════════ PRIVACY NOTICE ══════════ */
-.privacy-note {
-  display:flex; align-items:center; gap:10px;
-  background: var(--gold-pale); border: 1px solid var(--border-gold);
-  border-radius: var(--r); padding: 10px 14px;
-  font-size:13px; color:#7A5000; margin-bottom:16px;
-}
-
-/* ══════════ TOAST ══════════ */
-#toast {
-  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(60px);
-  background:var(--ink); color:#fff;
-  padding:10px 26px; border-radius:30px;
-  font-size:13px; font-weight:600;
-  opacity:0; transition:all .3s cubic-bezier(.4,0,.2,1);
-  z-index:9999; pointer-events:none;
-  border: 1px solid rgba(255,255,255,0.1);
-  white-space: nowrap;
-}
-#toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
-
-/* ══════════ DIVIDER ══════════ */
-hr { border:none; border-top:1px solid var(--sand-dark); margin:16px 0; }
-
-/* ══════════ LEGEND ══════════ */
-.legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; font-size:12px; color:var(--ink-muted); }
-.legend span { display:flex; align-items:center; gap:5px; }
-
-/* ══════════ STATS BAR ══════════ */
-.stats-bar {
-  background: var(--ink);
-  color: #fff;
-  padding: 14px 24px;
-  display: flex;
-  gap: 28px;
-  margin-bottom: 0;
-  font-size: 13px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.stat-item { display:flex; align-items:center; gap:6px; color: rgba(255,255,255,0.6); }
-.stat-val { font-family:'Amiri',serif; font-size:18px; color:var(--gold); font-weight:700; }
-
-/* ══════════ SECTION SEP ══════════ */
-.sec-sep {
-  font-size:11px; font-weight:700; letter-spacing:.08em;
-  color:var(--ink-muted); margin:16px 0 8px;
-  padding-bottom:6px; border-bottom:1px solid var(--sand-dark);
-}
-
-@media(max-width:600px){
-  .sidebar { width:60px; }
-  .sidebar .logo-title, .sidebar .nav-item span:not(.nav-icon), .sidebar-footer { display:none; }
-  .nav-item { justify-content:center; padding:14px; }
-  .page { padding: 20px 14px; }
-  .deduct-grid { grid-template-columns:1fr 1fr; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Cairo',sans-serif;background:var(--sand);color:var(--ink);min-height:100vh;}
+.layout{display:flex;min-height:100vh;}
+/* SIDEBAR */
+.sidebar{width:220px;flex-shrink:0;background:var(--ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;}
+.sb-head{padding:26px 20px 22px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center;}
+.logo{font-family:'Amiri',serif;font-size:34px;color:var(--gold);letter-spacing:4px;line-height:1;margin-bottom:6px;}
+.logo-sub{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;}
+.sb-nav{padding:14px 10px;flex:1;}
+.nv{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r);cursor:pointer;color:rgba(255,255,255,0.5);font-size:13px;font-weight:500;transition:all .2s;margin-bottom:2px;border:none;background:none;width:100%;text-align:right;font-family:'Cairo',sans-serif;}
+.nv:hover{color:#fff;background:rgba(255,255,255,0.07);}
+.nv.active{color:var(--gold);background:rgba(200,146,42,0.12);border:1px solid rgba(200,146,42,0.2);}
+.nv-ic{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
+.sb-foot{padding:12px 14px;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:rgba(255,255,255,0.22);text-align:center;line-height:1.6;}
+/* MAIN */
+.main{flex:1;overflow-y:auto;}
+.page{display:none;padding:30px 26px;max-width:840px;}
+.page.active{display:block;}
+.pg-head{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+.pg-title{font-family:'Amiri',serif;font-size:26px;font-weight:700;margin-bottom:3px;}
+.pg-sub{font-size:13px;color:var(--ink-muted);}
+/* CARDS */
+.card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--border);padding:20px 22px;margin-bottom:16px;box-shadow:var(--sh);}
+.ct{font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:14px;display:flex;align-items:center;gap:8px;letter-spacing:.05em;text-transform:uppercase;}
+.ct::before{content:'';display:block;width:3px;height:13px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+/* FORM */
+.fl{margin-bottom:13px;}
+.fl label{display:block;font-size:12px;font-weight:600;color:var(--ink-muted);margin-bottom:4px;letter-spacing:.03em;}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:14px;font-family:'Cairo',sans-serif;color:var(--ink);background:var(--white);transition:border .15s,box-shadow .15s;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,146,42,0.15);}
+textarea{resize:vertical;min-height:52px;}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;border-radius:var(--r);border:1px solid var(--border);background:var(--white);color:var(--ink);cursor:pointer;font-size:13px;font-weight:600;font-family:'Cairo',sans-serif;transition:all .15s;}
+.btn:hover{background:var(--sand);transform:translateY(-1px);box-shadow:var(--sh);}
+.btn:active{transform:scale(0.98);}
+.btn-gold{background:var(--gold);color:#fff;border-color:var(--gold);}
+.btn-gold:hover{background:#a97520;}
+.btn-jade{background:var(--jade);color:#fff;border-color:var(--jade);}
+.btn-jade:hover{background:#1d5238;}
+.btn-rose{background:var(--rose-lt);color:var(--rose);border-color:rgba(168,50,64,.25);}
+.btn-gray{background:var(--sand);color:var(--ink-soft);border-color:var(--sand-dark);}
+.btn-full{width:100%;}
+.btn-sm{padding:5px 12px;font-size:12px;}
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;}
+.bx{background:var(--gold-lt);color:#7a5000;border:1px solid var(--border-gold);}
+.bj{background:var(--jade-lt);color:#1a4d31;}
+.br{background:var(--rose-lt);color:var(--rose);}
+.bs{background:var(--sand-dark);color:var(--ink-soft);}
+/* METRIC */
+.metric{background:var(--sand);border:1px solid var(--sand-dark);border-radius:var(--r-lg);padding:14px;text-align:center;}
+.mv{font-size:26px;font-weight:700;color:var(--gold);font-family:'Amiri',serif;}
+.ml{font-size:12px;color:var(--ink-muted);margin-top:2px;}
+/* STUDENT ROW */
+.sr{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--sand-dark);}
+.sr:last-child{border-bottom:none;}
+.av{width:36px;height:36px;border-radius:50%;background:var(--gold-lt);display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:16px;font-weight:700;color:var(--gold);flex-shrink:0;border:1px solid var(--border-gold);}
+.sn{font-size:14px;font-weight:700;}
+.ss{font-size:12px;color:var(--ink-muted);margin-top:1px;}
+/* WEEK PLAN */
+.wr{display:flex;align-items:center;gap:10px;padding:8px 13px;border-radius:var(--r);background:var(--sand);margin-bottom:4px;font-size:13px;border:1px solid transparent;transition:border .15s;}
+.wr:hover{border-color:var(--border-gold);}
+.wn{width:90px;font-weight:700;color:var(--gold);}
+.wp{flex:1;font-weight:600;}
+.wc{font-size:12px;color:var(--ink-muted);}
+/* DEDUCT */
+.deduct-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--sand-dark);}
+.deduct-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.di{display:flex;gap:6px;}
+.di input{min-width:0;}
+.d-btn{padding:10px 14px;border-radius:var(--r-lg);cursor:pointer;font-family:'Cairo',sans-serif;text-align:center;border:1px solid;transition:all .15s;min-width:120px;}
+.d-btn:hover{transform:translateY(-2px);box-shadow:var(--sh);}
+.d-btn:active{transform:scale(0.97);}
+.d-ic{font-size:17px;display:block;margin-bottom:3px;}
+.d-lb{font-size:11px;font-weight:600;display:block;}
+.d-pt{font-size:16px;font-weight:800;display:block;margin-top:3px;}
+.da{background:var(--gold-pale);color:#7a5000;border-color:var(--border-gold);}
+.dd{background:var(--rose-lt);color:var(--rose);border-color:rgba(168,50,64,.25);}
+.dn{background:var(--sand);color:var(--ink-soft);border-color:var(--border);}
+.dg{background:#f0f8f4;color:var(--jade);border-color:rgba(42,107,74,.25);}
+/* ERROR LOG */
+.undo-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r);background:var(--sand);margin-bottom:5px;font-size:13px;}
+.undo-txt{flex:1;}
+.um{color:var(--rose);font-weight:700;}
+.up{color:var(--jade);font-weight:700;}
+/* SCORE */
+.score-wrap{text-align:center;padding:20px 10px;}
+.score-num{font-family:'Amiri',serif;font-size:72px;font-weight:700;line-height:1;background:linear-gradient(135deg,var(--gold),#e8a832);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.score-den{font-size:16px;color:var(--ink-muted);margin-top:2px;}
+.score-gl{margin-top:10px;}
+/* PROGRESS */
+.prog-wrap{background:var(--sand-dark);border-radius:20px;height:13px;overflow:hidden;margin:8px 0;}
+.prog-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--jade),var(--gold));transition:width .6s cubic-bezier(.4,0,.2,1);}
+/* DAY ROW */
+.day-row{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-radius:var(--r);border:1px solid var(--sand-dark);margin-bottom:6px;background:var(--white);transition:all .15s;}
+.day-done{color:var(--jade);font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.day-toggled{border-color:var(--jade);background:#f0fff6;}
+/* HISTORY */
+.hist-item{border-right:3px solid var(--gold);padding:10px 14px;background:var(--sand);border-radius:0 var(--r) var(--r) 0;margin-bottom:8px;}
+.hd{font-size:11px;color:var(--ink-muted);margin-bottom:4px;font-weight:600;}
+.hb{font-size:13px;line-height:1.85;}
+/* RANK */
+.rk{display:flex;align-items:center;gap:13px;padding:12px 16px;border-radius:var(--r-lg);border:1px solid var(--border);margin-bottom:8px;background:var(--white);transition:all .2s;}
+.rk:hover{box-shadow:var(--sh-lg);transform:translateY(-1px);}
+.rk.r1{border-color:#e8c44a;background:linear-gradient(135deg,#fffef5,#fff8e0);}
+.rk.r2{border-color:#c8c8c8;background:linear-gradient(135deg,#fafafa,#f4f4f4);}
+.rk.r3{border-color:#e8a050;background:linear-gradient(135deg,#fffbf5,#fff4e0);}
+.rm{font-size:26px;min-width:36px;text-align:center;}
+.rname{flex:1;font-size:14px;font-weight:700;}
+.rmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.rpts{font-family:'Amiri',serif;font-size:19px;font-weight:700;color:var(--gold);}
+/* PRIVACY */
+.priv{display:flex;align-items:center;gap:10px;background:var(--gold-pale);border:1px solid var(--border-gold);border-radius:var(--r);padding:10px 13px;font-size:13px;color:#7a5000;margin-bottom:14px;}
+/* TOAST */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:10px 24px;border-radius:28px;font-size:13px;font-weight:600;opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);z-index:9999;pointer-events:none;white-space:nowrap;}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+/* SYNC */
+.sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-left:6px;}
+.sok{background:#2a6b4a;}.serr{background:#a83240;}.spnd{background:#c8922a;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+/* SHEET */
+.sheet-box{background:var(--gold-pale);border:1px solid var(--border-gold);border-radius:var(--r-lg);padding:18px 20px;margin-bottom:16px;}
+.sheet-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;font-size:13px;line-height:1.7;}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px;}
+hr{border:none;border-top:1px solid var(--sand-dark);margin:14px 0;}
+.sep{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--ink-muted);margin:14px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--sand-dark);}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;font-size:12px;color:var(--ink-muted);}
+@media(max-width:580px){
+  .sidebar{width:58px;}
+  .logo-sub,.nv span:not(.nv-ic),.sb-foot{display:none;}
+  .nv{justify-content:center;padding:13px;}
+  .page{padding:18px 12px;}
+  .deduct-row{grid-template-columns:1fr;}
+  .d-btn{min-width:auto;width:100%;}
 }
 </style>
 </head>
 <body>
-
 <div class="layout">
 
-<!-- ══════════ SIDEBAR ══════════ -->
+<!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-head">
-    <div class="logo-mark">الم</div>
-    <div class="logo-title">لوحة ألف لام ميم<br>الأكاديمية</div>
+  <div class="sb-head">
+    <div class="logo">الم</div>
+    <div class="logo-sub">لوحة ألف لام ميم<br>الأكاديمية</div>
   </div>
-  <nav class="sidebar-nav">
-    <button class="nav-item active" onclick="showPage('setup',this)">
-      <span class="nav-icon">⚙</span><span>إعداد الدورة</span>
-    </button>
-    <button class="nav-item" onclick="showPage('session',this)">
-      <span class="nav-icon">🎙</span><span>جلسة التسميع</span>
-    </button>
-    <button class="nav-item" onclick="showPage('portal',this)">
-      <span class="nav-icon">👤</span><span>بوابة الطالبة</span>
-    </button>
-    <button class="nav-item" onclick="showPage('board',this)">
-      <span class="nav-icon">🏆</span><span>لوحة الصدارة</span>
-    </button>
+  <nav class="sb-nav">
+    <button class="nv active" onclick="showPage('setup',this)"><span class="nv-ic">⚙</span><span>إعداد الدورة</span></button>
+    <button class="nv" onclick="showPage('session',this)"><span class="nv-ic">🎙</span><span>جلسة التسميع</span></button>
+    <button class="nv" onclick="showPage('portal',this)"><span class="nv-ic">👤</span><span>بوابة الطالبة</span></button>
+    <button class="nv" onclick="showPage('board',this)"><span class="nv-ic">🏆</span><span>لوحة الصدارة</span></button>
+    <button class="nv" onclick="showPage('sheets',this)"><span class="nv-ic">☁</span><span>ربط Google Sheets</span></button>
   </nav>
-  <div class="sidebar-footer">حفظ البيانات<br>في المتصفح تلقائياً</div>
+  <div class="sb-foot">
+    <span class="sync-dot" id="sync-dot"></span><span id="sync-lbl">محلي</span><br>حفظ تلقائي
+  </div>
 </aside>
 
-<!-- ══════════ MAIN ══════════ -->
 <main class="main">
 
-<!-- ───── PAGE: SETUP ───── -->
+<!-- ══ SETUP ══ -->
 <div id="page-setup" class="page active">
-  <div class="page-header">
-    <div class="page-title">إعداد الدورة</div>
-    <div class="page-sub">بيانات الدورة والموزع الآلي وقائمة الطالبات</div>
-  </div>
+  <div class="pg-head"><div class="pg-title">إعداد الدورة</div><div class="pg-sub">بيانات الدورة · الموزع الآلي · قائمة الطالبات</div></div>
 
   <div class="card">
-    <div class="card-title">بيانات الدورة</div>
+    <div class="ct">بيانات الدورة</div>
     <div class="g2">
-      <div class="field"><label>اسم المعلمة</label><input type="text" id="teacher" placeholder="أدخلي اسمك"></div>
-      <div class="field"><label>اسم المقرر</label><input type="text" id="cname" placeholder="مثال: جزء عم"></div>
-      <div class="field"><label>عدد الصفحات الكلي</label><input type="number" id="tpages" value="60" min="1" oninput="calcPlan()"></div>
-      <div class="field"><label>تاريخ البدء</label><input type="date" id="sdate"></div>
+      <div class="fl"><label>اسم المعلمة</label><input type="text" id="teacher" placeholder="أدخلي اسمك"></div>
+      <div class="fl"><label>اسم المقرر</label><input type="text" id="cname" placeholder="مثال: جزء عم + تبارك"></div>
+      <div class="fl"><label>عدد الصفحات الكلي</label><input type="number" id="tpages" value="60" min="1" oninput="calcPlan()"></div>
+      <div class="fl"><label>تاريخ البدء</label><input type="date" id="sdate"></div>
+      <div class="fl"><label>عدد أسابيع الدورة</label><input type="number" id="tweeks" value="10" min="1" max="52" oninput="calcPlan()"></div>
+      <div class="fl"><label>أيام الدراسة في الأسبوع</label>
+        <select id="study-days" onchange="calcPlan()">
+          <option value="6" selected>6 أيام (راحة الجمعة)</option>
+          <option value="5">5 أيام</option>
+          <option value="7">7 أيام كاملة</option>
+        </select>
+      </div>
     </div>
     <button class="btn btn-gold" onclick="saveCourse()">💾 حفظ الإعدادات</button>
   </div>
 
   <div class="card">
-    <div class="card-title">الموزع الآلي — Smart Planner</div>
-    <div class="g4" style="margin-bottom:18px;" id="plan-metrics">
-      <div class="metric"><div class="metric-val" id="m-days">70</div><div class="metric-lbl">يوم الدورة</div></div>
-      <div class="metric"><div class="metric-val" id="m-ppd">0.86</div><div class="metric-lbl">صفحة / يوم</div></div>
-      <div class="metric"><div class="metric-val">10</div><div class="metric-lbl">أسابيع</div></div>
-      <div class="metric"><div class="metric-val">10</div><div class="metric-lbl">أوجه / جلسة</div></div>
+    <div class="ct">الموزع الآلي — Smart Planner</div>
+    <div class="g4" style="margin-bottom:16px;">
+      <div class="metric"><div class="mv" id="m-days">60</div><div class="ml">أيام الدراسة</div></div>
+      <div class="metric"><div class="mv" id="m-ppd">1</div><div class="ml">صفحة / يوم</div></div>
+      <div class="metric"><div class="mv" id="m-weeks">10</div><div class="ml">أسبوع</div></div>
+      <div class="metric"><div class="mv" id="m-quota">—</div><div class="ml">نصاب الجلسة</div></div>
     </div>
-    <div class="sec-sep">التوزيع الأسبوعي</div>
+    <div style="background:var(--jade-lt);border:1px solid rgba(42,107,74,0.2);border-radius:var(--r);padding:10px 13px;font-size:12px;color:#1a4d31;margin-bottom:12px;" id="quota-explain"></div>
+    <div class="sep">التوزيع الأسبوعي</div>
     <div id="week-plan"></div>
   </div>
 
   <div class="card">
-    <div class="card-title">قائمة الطالبات</div>
+    <div class="ct">قائمة الطالبات</div>
     <div id="student-list"></div>
     <hr>
-    <div style="display:flex;gap:10px;margin-top:4px;">
+    <div style="display:flex;gap:9px;margin-top:4px;">
       <input type="text" id="new-name" placeholder="اسم الطالبة الجديدة" style="flex:1;" onkeydown="if(event.key==='Enter')addStudent()">
       <button class="btn btn-gold" onclick="addStudent()">+ إضافة</button>
     </div>
   </div>
 </div>
 
-<!-- ───── PAGE: SESSION ───── -->
+<!-- ══ SESSION ══ -->
 <div id="page-session" class="page">
-  <div class="page-header">
-    <div class="page-title">جلسة التسميع</div>
-    <div class="page-sub">تقييم لحظي · أزرار خصم سريعة · تقرير قابل للنسخ</div>
-  </div>
+  <div class="pg-head"><div class="pg-title">جلسة التسميع</div><div class="pg-sub">تقييم لحظي · خصم مع تراجع · تقرير للإرسال</div></div>
 
   <div class="card">
-    <div class="card-title">اختيار الطالبة</div>
+    <div class="ct">اختيار الطالبة والجلسة</div>
     <div class="g2">
-      <div class="field"><label>الطالبة</label>
+      <div class="fl"><label>الطالبة</label>
         <select id="sel-st" onchange="startSession()"><option value="">— اختاري —</option></select>
       </div>
-      <div class="field"><label>عدد الأوجه المسموعة</label>
-        <input type="number" id="faces" value="10" min="0" max="30" oninput="updateBadge()">
+      <div class="fl"><label>عدد الأوجه المسموعة</label>
+        <input type="number" id="faces" value="10" min="0" max="40" oninput="updateBadge()">
       </div>
-      <div class="field"><label>من آية</label><input type="number" id="from-a" placeholder="رقم الآية" min="1"></div>
-      <div class="field"><label>إلى آية</label><input type="number" id="to-a" placeholder="رقم الآية" min="1"></div>
+      <div class="fl"><label>من (آية / صفحة)</label><input type="number" id="from-a" placeholder="رقم" min="1"></div>
+      <div class="fl"><label>إلى (آية / صفحة)</label><input type="number" id="to-a" placeholder="رقم" min="1"></div>
     </div>
+    <div id="quota-info-sess" style="font-size:12px;color:var(--ink-muted);margin-top:4px;"></div>
   </div>
 
   <div id="sess-body" style="display:none;">
     <div class="g2" style="align-items:start;">
       <div class="card">
-        <div class="card-title">الدرجة الحية</div>
+        <div class="ct">الدرجة الحية</div>
         <div class="score-wrap">
           <div class="score-num" id="live-score">100</div>
-          <div class="score-denom">/ 100</div>
-          <div class="score-grade-lbl" id="grade-badge"><span class="badge b-gold">ممتاز ✓</span></div>
-          <div style="margin-top:10px;" id="sess-badge"><span class="badge b-jade">🟢 نصاب مكتمل</span></div>
+          <div class="score-den">/ 100</div>
+          <div class="score-gl" id="grade-badge"><span class="badge bx">ممتاز ✓</span></div>
+          <div style="margin-top:10px;" id="sess-badge"><span class="badge bj">🟢 نصاب مكتمل</span></div>
         </div>
       </div>
       <div class="card">
-        <div class="card-title">سجل الملاحظات</div>
-        <div class="err-log" id="err-log"><span style="color:var(--ink-muted);">لا توجد ملاحظات بعد</span></div>
-        <button class="btn" style="width:100%;margin-top:10px;font-size:12px;" onclick="resetSess()">🔄 إعادة ضبط الجلسة</button>
+        <div class="ct">سجل الملاحظات</div>
+        <div id="err-log" style="font-size:13px;line-height:2;min-height:100px;max-height:200px;overflow-y:auto;">
+          <span style="color:var(--ink-muted);">لا توجد ملاحظات بعد</span>
+        </div>
+        <div style="display:flex;gap:7px;margin-top:10px;">
+          <button class="btn btn-rose btn-sm" style="flex:1;" onclick="undoLast()">↩ تراجع عن آخر خصم</button>
+          <button class="btn btn-gray btn-sm" style="flex:1;" onclick="resetSess()">🔄 إعادة الضبط</button>
+        </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">أزرار الخصم السريع</div>
-      <div class="deduct-grid">
-        <button class="d-btn d-amber" onclick="deduct(1,'تنبيه حفظ')">
-          <span class="d-icon">⚠️</span>
-          <span class="d-label">تنبيه حفظ</span>
-          <span class="d-pts">−1</span>
+      <div class="ct">أزرار الخصم السريع</div>
+      <div style="background:var(--gold-pale);border:1px solid var(--border-gold);border-radius:var(--r);padding:9px 13px;margin-bottom:14px;font-size:12px;color:#7a5000;">
+        💡 أدخلي رقم الآية والكلمة في الحقول بجانب كل زر، ثم اضغطي الزر لتسجيل الخصم فوراً
+      </div>
+
+      <div class="deduct-row">
+        <div class="di">
+          <input type="number" id="ay1" placeholder="آية" min="1" style="width:75px;flex:none;">
+          <input type="text" id="kw1" placeholder="الكلمة الخاطئة">
+        </div>
+        <button class="d-btn da" onclick="deduct(1,'تنبيه حفظ','ay1','kw1')">
+          <span class="d-ic">⚠️</span><span class="d-lb">تنبيه حفظ</span><span class="d-pt">−1</span>
         </button>
-        <button class="d-btn d-red" onclick="deduct(2,'حفظ + تصحيح')">
-          <span class="d-icon">✗</span>
-          <span class="d-label">حفظ + تصحيح</span>
-          <span class="d-pts">−2</span>
+      </div>
+
+      <div class="deduct-row">
+        <div class="di">
+          <input type="number" id="ay2" placeholder="آية" min="1" style="width:75px;flex:none;">
+          <input type="text" id="kw2" placeholder="الكلمة الخاطئة">
+        </div>
+        <button class="d-btn dd" onclick="deduct(2,'حفظ + تصحيح','ay2','kw2')">
+          <span class="d-ic">✗</span><span class="d-lb">حفظ + تصحيح</span><span class="d-pt">−2</span>
         </button>
-        <button class="d-btn d-amber" onclick="deduct(2,'تنبيه تشكيل')">
-          <span class="d-icon">◌</span>
-          <span class="d-label">تنبيه تشكيل</span>
-          <span class="d-pts">−2</span>
+      </div>
+
+      <div class="deduct-row">
+        <div class="di">
+          <input type="number" id="ay3" placeholder="آية" min="1" style="width:75px;flex:none;">
+          <input type="text" id="kw3" placeholder="الكلمة الخاطئة">
+        </div>
+        <button class="d-btn da" onclick="deduct(2,'تنبيه تشكيل','ay3','kw3')">
+          <span class="d-ic">◌</span><span class="d-lb">تنبيه تشكيل</span><span class="d-pt">−2</span>
         </button>
-        <button class="d-btn d-red" onclick="deduct(4,'تشكيل + تصحيح')">
-          <span class="d-icon">✗◌</span>
-          <span class="d-label">تشكيل + تصحيح</span>
-          <span class="d-pts">−4</span>
+      </div>
+
+      <div class="deduct-row">
+        <div class="di">
+          <input type="number" id="ay4" placeholder="آية" min="1" style="width:75px;flex:none;">
+          <input type="text" id="kw4" placeholder="الكلمة الخاطئة">
+        </div>
+        <button class="d-btn dd" onclick="deduct(4,'تشكيل + تصحيح','ay4','kw4')">
+          <span class="d-ic">✗◌</span><span class="d-lb">تشكيل + تصحيح</span><span class="d-pt">−4</span>
         </button>
-        <button class="d-btn d-neutral" onclick="deduct(0.5,'تردد')">
-          <span class="d-icon">⋯</span>
-          <span class="d-label">تردد</span>
-          <span class="d-pts">−0.5</span>
+      </div>
+
+      <div class="deduct-row">
+        <div class="di">
+          <input type="number" id="ay5" placeholder="آية" min="1" style="width:75px;flex:none;">
+          <input type="text" id="kw5" placeholder="ملاحظة (اختياري)">
+        </div>
+        <button class="d-btn dn" onclick="deduct(0.5,'تردد','ay5','kw5')">
+          <span class="d-ic">⋯</span><span class="d-lb">تردد</span><span class="d-pt">−0.5</span>
         </button>
-        <button class="d-btn d-star" onclick="deduct(-2,'نجمة تميز')">
-          <span class="d-icon">⭐</span>
-          <span class="d-label">نجمة تميز</span>
-          <span class="d-pts">+2</span>
+      </div>
+
+      <div class="deduct-row">
+        <div class="di">
+          <input type="number" id="ay6" placeholder="آية" min="1" style="width:75px;flex:none;">
+          <input type="text" id="kw6" placeholder="سبب التميز (اختياري)">
+        </div>
+        <button class="d-btn dg" onclick="deduct(-2,'نجمة تميز','ay6','kw6')">
+          <span class="d-ic">⭐</span><span class="d-lb">نجمة تميز</span><span class="d-pt">+2</span>
         </button>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">إنهاء الجلسة</div>
+      <div class="ct">إنهاء الجلسة</div>
       <div class="g2">
         <button class="btn btn-jade btn-full" onclick="saveSession()">💾 حفظ الجلسة</button>
         <button class="btn btn-gold btn-full" onclick="copyReport()">📋 نسخ التقرير للطالبة</button>
@@ -561,442 +349,697 @@ hr { border:none; border-top:1px solid var(--sand-dark); margin:16px 0; }
   </div>
 </div>
 
-<!-- ───── PAGE: PORTAL ───── -->
+<!-- ══ PORTAL ══ -->
 <div id="page-portal" class="page">
-  <div class="page-header">
-    <div class="page-title">بوابة الطالبة</div>
-    <div class="page-sub">سجلك الشخصي الخاص · لا يراه أحد سواكِ</div>
-  </div>
+  <div class="pg-head"><div class="pg-title">بوابة الطالبة</div><div class="pg-sub">كل طالبة ترى سجلها فقط · خصوصية تامة</div></div>
 
   <div class="card">
-    <div class="card-title">اختاري اسمك</div>
+    <div class="ct">اختاري اسمك</div>
     <select id="sel-portal" onchange="loadPortal()"><option value="">— اختاري اسمك —</option></select>
+    <div style="font-size:12px;color:var(--ink-muted);margin-top:8px;">🔒 لن ترى بيانات أي طالبة أخرى</div>
   </div>
 
   <div id="portal-body" style="display:none;">
     <div class="card">
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px;">
-        <div class="avatar" id="p-av" style="width:54px;height:54px;font-size:22px;">—</div>
-        <div>
-          <div style="font-size:18px;font-weight:700;font-family:'Amiri',serif;" id="p-name">—</div>
-          <div style="font-size:12px;color:var(--ink-muted);">سجل شخصي خاص · محمي بالكامل</div>
+      <div style="display:flex;align-items:center;gap:15px;margin-bottom:16px;">
+        <div class="av" id="p-av" style="width:52px;height:52px;font-size:20px;">—</div>
+        <div style="flex:1;">
+          <div style="font-size:17px;font-weight:700;font-family:'Amiri',serif;" id="p-name">—</div>
+          <div style="font-size:12px;color:var(--ink-muted);">سجل شخصي محمي</div>
         </div>
+        <div id="p-grade-badge"></div>
       </div>
-      <div class="g3">
-        <div class="metric"><div class="metric-val" id="p-score">—</div><div class="metric-lbl">آخر درجة</div></div>
-        <div class="metric"><div class="metric-val" id="p-grade" style="font-size:16px;">—</div><div class="metric-lbl">مستوى الأداء</div></div>
-        <div class="metric"><div class="metric-val" id="p-stars">0</div><div class="metric-lbl">نجوم التميز</div></div>
+      <div class="g4">
+        <div class="metric"><div class="mv" id="p-score">—</div><div class="ml">آخر درجة</div></div>
+        <div class="metric"><div class="mv" id="p-stars">0</div><div class="ml">نجوم التميز</div></div>
+        <div class="metric"><div class="mv" id="p-sess-cnt">0</div><div class="ml">جلسات ناجحة</div></div>
+        <div class="metric"><div class="mv" id="p-avg">—</div><div class="ml">متوسط الدرجات</div></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">ورد الأسبوع</div>
+      <div class="ct">ورد الأسبوع الحالي</div>
       <div class="prog-wrap"><div class="prog-fill" id="p-prog" style="width:0%"></div></div>
-      <div style="font-size:13px;color:var(--ink-muted);margin-bottom:14px;" id="p-prog-txt">0 / 7 أيام</div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-muted);margin-bottom:14px;">
+        <span id="p-prog-txt">0 / 6 أيام</span><span id="p-prog-pct">0%</span>
+      </div>
       <div id="p-days"></div>
+      <div style="font-size:12px;color:var(--ink-muted);margin-top:8px;">💡 اضغطي مرة ثانية على "تم الورد" لإلغائه في حال الضغط بالخطأ</div>
     </div>
 
     <div class="card">
-      <div class="card-title">سجل الجلسات السابقة</div>
-      <div id="p-hist"><div style="color:var(--ink-muted);font-size:13px;">لا توجد جلسات بعد.</div></div>
+      <div class="ct">السجل التاريخي الكامل للجلسات</div>
+      <div id="p-hist"></div>
+    </div>
+
+    <div class="card">
+      <div class="ct">تحليل الأخطاء الشائعة</div>
+      <div id="p-analysis"></div>
     </div>
   </div>
 </div>
 
-<!-- ───── PAGE: BOARD ───── -->
+<!-- ══ BOARD ══ -->
 <div id="page-board" class="page">
-  <div class="page-header">
-    <div class="page-title">لوحة الصدارة</div>
-    <div class="page-sub">ترتيب بالنقاط · التميز يُكافأ</div>
-  </div>
-
-  <div class="privacy-note">
-    🔒 لا يُعرض مستوى الحفظ في هذه اللوحة حفاظاً على الخصوصية وتجنباً للرياء
-  </div>
-
+  <div class="pg-head"><div class="pg-title">لوحة الصدارة</div><div class="pg-sub">إحصائيات الدورة · التميز يُكافأ</div></div>
+  <div class="priv">🔒 لا يُعرض مستوى الحفظ حفاظاً على الخصوصية وتجنباً للرياء</div>
   <div class="card" style="margin-bottom:14px;">
-    <div class="g4" id="board-stats">
-      <div class="metric"><div class="metric-val" id="bs-count">0</div><div class="metric-lbl">طالبات</div></div>
-      <div class="metric"><div class="metric-val" id="bs-exc">0</div><div class="metric-lbl">ممتازات</div></div>
-      <div class="metric"><div class="metric-val" id="bs-stars">0</div><div class="metric-lbl">نجوم التميز</div></div>
-      <div class="metric"><div class="metric-val" id="bs-avg">—</div><div class="metric-lbl">متوسط الدرجات</div></div>
+    <div class="g4">
+      <div class="metric"><div class="mv" id="bs-cnt">0</div><div class="ml">طالبات</div></div>
+      <div class="metric"><div class="mv" id="bs-exc">0</div><div class="ml">ممتازات</div></div>
+      <div class="metric"><div class="mv" id="bs-stars">0</div><div class="ml">نجوم التميز</div></div>
+      <div class="metric"><div class="mv" id="bs-avg">—</div><div class="ml">متوسط الدرجات</div></div>
     </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div class="ct" style="margin:0;">الترتيب</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-sm btn-gray" id="sort-alpha-btn" onclick="setBoardSort('alpha')">أبجدي</button>
+        <button class="btn btn-sm btn-gold" id="sort-pts-btn"  onclick="setBoardSort('points')">بالنقاط</button>
+      </div>
+    </div>
+    <div class="legend"><span>🟢 أتمت النصاب</span><span>🔴 لم تكتمل</span><span>⭐ نجوم التميز</span></div>
+    <div id="board-list"></div>
+  </div>
+</div>
+
+<!-- ══ SHEETS ══ -->
+<div id="page-sheets" class="page">
+  <div class="pg-head"><div class="pg-title">ربط Google Sheets ☁</div><div class="pg-sub">حفظ سحابي · متعدد المعلمات · من أي جهاز</div></div>
+
+  <div class="card">
+    <div class="ct">الحالة</div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--sand);border-radius:var(--r);margin-bottom:14px;">
+      <span class="sync-dot" id="sheet-dot" style="width:12px;height:12px;"></span>
+      <span id="sheet-st-txt" style="font-size:14px;font-weight:600;">لم يتم الربط بعد</span>
+    </div>
+    <div class="fl"><label>رابط Apps Script (Web App URL)</label>
+      <input type="text" id="sheet-url" placeholder="https://script.google.com/macros/s/.../exec">
+    </div>
+    <div class="fl"><label>رمز المعلمة السري (يميّز بياناتك عن غيرك)</label>
+      <input type="text" id="teacher-code" placeholder="مثال: fatima2025" autocomplete="off">
+    </div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;">
+      <button class="btn btn-gold" onclick="testSheet()">🔗 اختبار الاتصال</button>
+      <button class="btn btn-jade" onclick="saveSheetCfg()">💾 حفظ الإعدادات</button>
+      <button class="btn btn-gray" onclick="syncToSheet()">⬆ رفع البيانات</button>
+      <button class="btn btn-gray" onclick="loadFromSheet()">⬇ تحميل البيانات</button>
+    </div>
+  </div>
+
+  <div class="sheet-box">
+    <div style="font-size:15px;font-weight:700;margin-bottom:14px;color:var(--gold);">📋 خطوات الإعداد (مرة واحدة فقط لكل معلمة)</div>
+    <div class="sheet-step"><div class="step-num">1</div><div>افتحي <a href="https://sheets.google.com" target="_blank" style="color:var(--gold);font-weight:700;">Google Sheets</a> وأنشئي ملفاً جديداً</div></div>
+    <div class="sheet-step"><div class="step-num">2</div><div>من القائمة اختاري: <strong>Extensions ← Apps Script</strong></div></div>
+    <div class="sheet-step"><div class="step-num">3</div><div>احذفي كل ما في المحرر والصقي الكود أدناه:</div></div>
+    <div style="position:relative;margin:10px 0;">
+      <textarea id="gs-code" readonly style="font-family:monospace;font-size:11px;height:240px;background:#1a1714;color:#e8c890;border:none;border-radius:var(--r);padding:14px;direction:ltr;width:100%;"></textarea>
+      <button class="btn btn-gold btn-sm" onclick="copyGsCode()" style="position:absolute;top:10px;left:10px;">نسخ الكود</button>
+    </div>
+    <div class="sheet-step"><div class="step-num">4</div><div>اضغطي <strong>Deploy ← New deployment ← Web app</strong></div></div>
+    <div class="sheet-step"><div class="step-num">5</div><div>اختاري: <strong>Execute as: Me</strong> و <strong>Who has access: Anyone</strong> ← اضغطي Deploy</div></div>
+    <div class="sheet-step"><div class="step-num">6</div><div>انسخي رابط الـ Web app URL والصقيه في الحقل أعلاه</div></div>
+    <div class="sheet-step"><div class="step-num">7</div><div>اكتبي رمزاً سرياً خاصاً بكِ ← اضغطي "اختبار الاتصال" ← إذا نجح اضغطي "رفع البيانات"</div></div>
   </div>
 
   <div class="card">
-    <div class="card-title">الترتيب</div>
-    <div class="legend">
-      <span>🟢 أتمت النصاب</span>
-      <span>🔴 لم تكتمل</span>
-      <span>⭐ نجوم التميز</span>
+    <div class="ct">كيف يعمل النظام متعدد المعلمات</div>
+    <div style="font-size:13px;line-height:2.1;color:var(--ink-soft);">
+      • كل معلمة تنشئ <strong>Apps Script خاصاً بها</strong> في Google Sheet منفصل — البيانات معزولة تماماً<br>
+      • الموقع (GitHub Pages) مشترك — لكن كل معلمة تدخل رمزها السري الخاص فتظهر بياناتها فقط<br>
+      • البيانات تُحفظ في المتصفح <strong>و</strong> في الـ Sheet السحابي معاً — حماية مزدوجة<br>
+      • عند فتح الموقع من جهاز جديد: أدخلي الرابط والرمز ← "تحميل البيانات" ← كل شيء يعود فوراً<br>
+      • الطالبات يفتحن الموقع ويختارن أسماءهن ← يرين بياناتهن الخاصة فقط
     </div>
-    <div id="board-list"></div>
   </div>
 </div>
 
 </main>
 </div>
-
 <div id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════════
-const DAYS = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
-let S = loadState();
-let curSt = null, sessScore = 100, sessErrors = [];
+// ══ STATE ══════════════════════════════════════════════════
+const DAYS_6 = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
+const DAYS_5 = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
+const DAYS_7 = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
 
-function defaultState() {
+let S, curSt=null, sessScore=100, sessErrors=[], boardSort='points';
+
+function defState(){
   return {
-    course: { teacher:'', cname:'', pages:60, sdate:'' },
-    students: [
-      {id:1,name:'نور الهدى',     score:98.5,stars:3,sessions:[],days:[1,1,1,1,1,0,1],ok:8,total:10},
-      {id:2,name:'فاطمة أحمد',   score:96.0,stars:2,sessions:[],days:[1,1,0,1,1,1,0],ok:7,total:10},
-      {id:3,name:'ريم سالم',      score:94.5,stars:1,sessions:[],days:[1,1,1,0,1,0,0],ok:8,total:10},
-      {id:4,name:'هدى محمد',      score:93.0,stars:1,sessions:[],days:[1,0,1,1,0,0,0],ok:7,total:10},
-      {id:5,name:'لجين عبدالله', score:91.0,stars:0,sessions:[],days:[1,1,0,0,1,0,0],ok:6,total:10},
-      {id:6,name:'منار خالد',     score:89.0,stars:0,sessions:[],days:[1,0,0,1,0,0,0],ok:5,total:10},
+    course:{teacher:'',cname:'',pages:60,sdate:'',weeks:10,studyDays:6},
+    students:[
+      {id:1,name:'فاطمة أحمد',  score:96.0,stars:2,sessions:[],days:[1,1,0,1,1,1],ok:7,total:10},
+      {id:2,name:'لجين عبدالله',score:91.0,stars:0,sessions:[],days:[1,1,0,0,1,0],ok:6,total:10},
+      {id:3,name:'منار خالد',   score:89.0,stars:0,sessions:[],days:[1,0,0,1,0,0],ok:5,total:10},
+      {id:4,name:'نور الهدى',   score:98.5,stars:3,sessions:[],days:[1,1,1,1,1,0],ok:8,total:10},
+      {id:5,name:'هدى محمد',    score:93.0,stars:1,sessions:[],days:[1,0,1,1,0,0],ok:7,total:10},
+      {id:6,name:'ريم سالم',    score:94.5,stars:1,sessions:[],days:[1,1,1,0,1,0],ok:8,total:10},
     ],
-    nextId: 7
+    nextId:7, sheetUrl:'', teacherCode:''
   };
 }
 
-function loadState() {
-  try { const d = localStorage.getItem('alm_v2'); return d ? JSON.parse(d) : defaultState(); }
-  catch { return defaultState(); }
+function loadState(){
+  try{ const d=localStorage.getItem('alm_v4'); return d?JSON.parse(d):defState(); }catch{ return defState(); }
 }
 
-function save() {
-  try { localStorage.setItem('alm_v2', JSON.stringify(S)); } catch {}
+function save(){
+  try{ localStorage.setItem('alm_v4',JSON.stringify(S)); setSyncDot('local'); }catch{}
 }
 
-// ══════════════════════════════════════════════════
-//  NAV
-// ══════════════════════════════════════════════════
-function showPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (id === 'board') renderBoard();
+S = loadState();
+
+// ══ NAV ════════════════════════════════════════════════════
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nv').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='board') renderBoard();
+  if(id==='sheets') initSheets();
 }
 
-// ══════════════════════════════════════════════════
-//  TOAST
-// ══════════════════════════════════════════════════
-let toastTimer;
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+// ══ TOAST ══════════════════════════════════════════════════
+let toastT;
+function toast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-// ══════════════════════════════════════════════════
-//  GRADE
-// ══════════════════════════════════════════════════
-function gradeOf(s) {
-  if (s >= 97) return {label:'ممتاز ✓',    cls:'b-gold', key:'excellent'};
-  if (s >= 95) return {label:'جيد جداً',   cls:'b-jade', key:'very-good'};
-  if (s >= 92) return {label:'جيد',        cls:'b-jade', key:'good'};
-  if (s >= 90) return {label:'متوسط',      cls:'b-sand', key:'average'};
-  return              {label:'إعادة',      cls:'b-rose', key:'fail'};
+// ══ SYNC DOT ═══════════════════════════════════════════════
+function setSyncDot(s){
+  const d=document.getElementById('sync-dot');
+  const l=document.getElementById('sync-lbl');
+  const sd=document.getElementById('sheet-dot');
+  if(s==='ok'){ d.className='sync-dot sok'; l.textContent='متزامن ☁'; if(sd) sd.className='sync-dot sok'; }
+  else if(s==='err'){ d.className='sync-dot serr'; l.textContent='خطأ'; if(sd) sd.className='sync-dot serr'; }
+  else if(s==='sync'){ d.className='sync-dot spnd'; l.textContent='جارٍ...'; if(sd) sd.className='sync-dot spnd'; }
+  else{ d.className='sync-dot serr'; l.textContent='محلي فقط'; if(sd) sd.className='sync-dot serr'; }
 }
 
-// ══════════════════════════════════════════════════
-//  SETUP PAGE
-// ══════════════════════════════════════════════════
-function initSetup() {
-  const c = S.course;
-  document.getElementById('teacher').value = c.teacher || '';
-  document.getElementById('cname').value   = c.cname   || '';
-  document.getElementById('tpages').value  = c.pages   || 60;
-  document.getElementById('sdate').value   = c.sdate   || '';
+// ══ GRADE ══════════════════════════════════════════════════
+function gradeOf(s){
+  if(s>=97) return {label:'ممتاز ✓', cls:'bx', emoji:'🌟'};
+  if(s>=95) return {label:'جيد جداً',cls:'bj', emoji:'✅'};
+  if(s>=92) return {label:'جيد',     cls:'bj', emoji:'👍'};
+  if(s>=90) return {label:'متوسط',   cls:'bs', emoji:'📘'};
+  return           {label:'إعادة',   cls:'br', emoji:'🔁'};
+}
+
+function fmt(n){ return n%1===0?n:parseFloat(n.toFixed(1)); }
+
+// ══ SMART QUOTA ════════════════════════════════════════════
+function calcQuota(pages,weeks,studyDays){
+  const totalStudy = weeks * studyDays;
+  // pages per day — always whole number (ceiling)
+  const ppd = Math.ceil(pages / totalStudy);
+  // sessions per week = 2 → each covers half the week's days
+  const daysPerSession = Math.ceil(studyDays / 2);
+  const pagesPerSession = daysPerSession * ppd;
+  // 1 page = 2 wajh
+  const wajh = pagesPerSession * 2;
+  return { ppd, pagesPerSession, wajh, daysPerSession };
+}
+
+function getDayNames(n){
+  return n===5?DAYS_5:n===7?DAYS_7:DAYS_6;
+}
+
+// ══ SETUP ══════════════════════════════════════════════════
+function initSetup(){
+  const c=S.course;
+  document.getElementById('teacher').value  = c.teacher   || '';
+  document.getElementById('cname').value    = c.cname     || '';
+  document.getElementById('tpages').value   = c.pages     || 60;
+  document.getElementById('sdate').value    = c.sdate     || '';
+  document.getElementById('tweeks').value   = c.weeks     || 10;
+  document.getElementById('study-days').value = c.studyDays||6;
   calcPlan();
   renderStudentList();
 }
 
-function calcPlan() {
-  const pages = parseInt(document.getElementById('tpages').value) || 60;
-  const days  = 70;
-  const ppd   = (pages / days).toFixed(2);
-  document.getElementById('m-days').textContent = days;
-  document.getElementById('m-ppd').textContent  = ppd;
-  const ppw = pages / 10;
-  let html = '';
-  for (let w = 1; w <= 10; w++) {
-    const s = Math.round((w-1)*ppw) + 1;
-    const e = Math.min(Math.round(w*ppw), pages);
-    html += `<div class="week-row">
-      <div class="wk-num">الأسبوع ${w}</div>
-      <div class="wk-pages">صفحة ${s} — ${e}</div>
-      <div class="wk-count">${e - s + 1} صفحات</div>
-    </div>`;
+function calcPlan(){
+  const pages     = parseInt(document.getElementById('tpages').value)||60;
+  const weeks     = parseInt(document.getElementById('tweeks').value)||10;
+  const studyDays = parseInt(document.getElementById('study-days').value)||6;
+  const totalStudy= weeks * studyDays;
+  const q = calcQuota(pages, weeks, studyDays);
+
+  document.getElementById('m-days').textContent  = totalStudy;
+  document.getElementById('m-ppd').textContent   = q.ppd;
+  document.getElementById('m-weeks').textContent = weeks;
+  document.getElementById('m-quota').textContent = q.wajh + ' وجه';
+
+  const ex = document.getElementById('quota-explain');
+  if(ex) ex.textContent = `📖 الجلسة تغطي ${q.daysPerSession} أيام = ${q.pagesPerSession} صفحة = ${q.wajh} وجه — النصاب ${q.wajh} وجه مكتمل`;
+
+  // Session info too
+  const si = document.getElementById('quota-info-sess');
+  if(si) si.textContent = `📌 النصاب المقترح: ${q.wajh} وجه (${q.pagesPerSession} صفحة)`;
+
+  window._quota = q;
+
+  // Week plan — whole pages guaranteed (ceiling)
+  const ppw = Math.ceil(pages / weeks);
+  let html='', sofar=0;
+  for(let w=1;w<=weeks;w++){
+    const pg = Math.min(ppw, pages-sofar);
+    if(pg<=0) break;
+    const from=sofar+1, to=sofar+pg;
+    html+=`<div class="wr"><div class="wn">الأسبوع ${w}</div><div class="wp">صفحة ${from} — ${to}</div><div class="wc">${pg} صفحات · ${pg*2} وجه</div></div>`;
+    sofar+=pg;
   }
-  document.getElementById('week-plan').innerHTML = html;
+  document.getElementById('week-plan').innerHTML=html;
 }
 
-function saveCourse() {
-  S.course = {
-    teacher: document.getElementById('teacher').value,
-    cname:   document.getElementById('cname').value,
-    pages:   parseInt(document.getElementById('tpages').value) || 60,
-    sdate:   document.getElementById('sdate').value,
+function saveCourse(){
+  S.course={
+    teacher:   document.getElementById('teacher').value,
+    cname:     document.getElementById('cname').value,
+    pages:     parseInt(document.getElementById('tpages').value)||60,
+    sdate:     document.getElementById('sdate').value,
+    weeks:     parseInt(document.getElementById('tweeks').value)||10,
+    studyDays: parseInt(document.getElementById('study-days').value)||6,
   };
-  save(); toast('✅ تم حفظ إعدادات الدورة');
+  save(); calcPlan(); toast('✅ تم حفظ إعدادات الدورة');
 }
 
-function renderStudentList() {
-  let html = '';
-  S.students.forEach((st, i) => {
-    const g = gradeOf(st.score);
-    html += `<div class="s-row">
-      <div class="avatar">${st.name[0]}</div>
-      <div style="flex:1;">
-        <div class="s-name">${st.name}</div>
-        <div class="s-sub">درجة: ${st.score} | نجوم: ${st.stars > 0 ? '⭐'.repeat(Math.min(st.stars,5)) : '—'}</div>
+function sortedSts(){ return [...S.students].sort((a,b)=>a.name.localeCompare(b.name,'ar')); }
+
+function renderStudentList(){
+  const ss=sortedSts();
+  let html='';
+  ss.forEach(st=>{
+    const g=gradeOf(st.score);
+    html+=`<div class="sr">
+      <div class="av">${st.name[0]}</div>
+      <div style="flex:1">
+        <div class="sn">${st.name}</div>
+        <div class="ss">درجة: ${fmt(st.score)} | نجوم: ${st.stars>0?'⭐'.repeat(Math.min(st.stars,5)):'—'} | جلسات: ${st.ok||0}/${st.total||0}</div>
       </div>
-      <div class="s-right">
+      <div style="display:flex;align-items:center;gap:8px;">
         <span class="badge ${g.cls}">${g.label}</span>
-        <button class="btn btn-rose-soft" style="padding:5px 12px;font-size:12px;" onclick="deleteStudent(${st.id})">حذف</button>
+        <button class="btn btn-rose btn-sm" onclick="delSt(${st.id})">حذف</button>
       </div>
     </div>`;
   });
-  document.getElementById('student-list').innerHTML = html || '<div style="color:var(--ink-muted);font-size:13px;padding:10px 0;">لا توجد طالبات بعد. أضيفي الأسماء أدناه.</div>';
-  populateSelects();
+  document.getElementById('student-list').innerHTML=html||'<div style="color:var(--ink-muted);padding:10px 0;font-size:13px;">لا توجد طالبات بعد.</div>';
+  popSelects();
 }
 
-function addStudent() {
-  const n = document.getElementById('new-name').value.trim();
-  if (!n) { toast('⚠ أدخلي اسم الطالبة'); return; }
-  S.students.push({id:S.nextId++, name:n, score:100, stars:0, sessions:[], days:[0,0,0,0,0,0,0], ok:0, total:0});
-  save();
-  document.getElementById('new-name').value = '';
-  renderStudentList();
-  toast('✅ تمت إضافة الطالبة');
+function addStudent(){
+  const n=document.getElementById('new-name').value.trim();
+  if(!n){ toast('⚠ أدخلي اسم الطالبة'); return; }
+  if(S.students.find(s=>s.name===n)){ toast('⚠ هذه الطالبة موجودة مسبقاً'); return; }
+  const sd=S.course.studyDays||6;
+  S.students.push({id:S.nextId++,name:n,score:100,stars:0,sessions:[],days:Array(sd).fill(0),ok:0,total:0});
+  save(); document.getElementById('new-name').value='';
+  renderStudentList(); toast('✅ تمت إضافة '+n);
 }
 
-function deleteStudent(id) {
-  if (!confirm('هل تريدين حذف هذه الطالبة؟')) return;
-  S.students = S.students.filter(s => s.id !== id);
-  save();
-  renderStudentList();
-  toast('🗑 تم الحذف');
+function delSt(id){
+  const st=S.students.find(s=>s.id===id);
+  if(!confirm(`حذف الطالبة "${st?.name}"؟`)) return;
+  S.students=S.students.filter(s=>s.id!==id);
+  save(); renderStudentList(); toast('🗑 تم الحذف');
 }
 
-function populateSelects() {
-  ['sel-st','sel-portal'].forEach(sid => {
-    const el = document.getElementById(sid);
-    if (!el) return;
-    const cur = el.value;
-    el.innerHTML = '<option value="">— اختاري —</option>' +
-      S.students.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-    el.value = cur;
+function popSelects(){
+  const ss=sortedSts();
+  ['sel-st','sel-portal'].forEach(sid=>{
+    const el=document.getElementById(sid);
+    if(!el) return;
+    const cur=el.value;
+    el.innerHTML='<option value="">— اختاري —</option>'+ss.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+    el.value=cur;
   });
 }
 
-// ══════════════════════════════════════════════════
-//  SESSION PAGE
-// ══════════════════════════════════════════════════
-function startSession() {
-  const id = document.getElementById('sel-st').value;
-  if (!id) { document.getElementById('sess-body').style.display = 'none'; return; }
-  curSt = parseInt(id);
-  sessScore = 100; sessErrors = [];
-  document.getElementById('live-score').textContent = '100';
-  renderErrors();
-  document.getElementById('sess-body').style.display = 'block';
-  updateGradeDisplay();
-  updateBadge();
+// ══ SESSION ════════════════════════════════════════════════
+function startSession(){
+  const id=document.getElementById('sel-st').value;
+  if(!id){ document.getElementById('sess-body').style.display='none'; return; }
+  curSt=parseInt(id); sessScore=100; sessErrors=[];
+  const q=window._quota||{wajh:10};
+  document.getElementById('faces').value=q.wajh;
+  document.getElementById('live-score').textContent='100';
+  renderErrLog();
+  document.getElementById('sess-body').style.display='block';
+  updateGradeDisp(); updateBadge();
 }
 
-function deduct(pts, label) {
-  sessScore = parseFloat(Math.max(0, Math.min(110, sessScore - pts)).toFixed(1));
-  const from = document.getElementById('from-a').value;
-  sessErrors.push({label: from ? `آية ${from}: ${label}` : label, pts, plus: pts < 0});
-  document.getElementById('live-score').textContent = sessScore % 1 === 0 ? sessScore : sessScore.toFixed(1);
-  renderErrors();
-  updateGradeDisplay();
+function deduct(pts,label,ayId,kwId){
+  const aya=document.getElementById(ayId)?.value?.trim()||'';
+  const kw =document.getElementById(kwId)?.value?.trim()||'';
+  const desc=[aya?`آية ${aya}`:'', kw?`"${kw}"`:'', label].filter(Boolean).join(' · ');
+  sessScore=parseFloat(Math.max(0,Math.min(110,sessScore-pts)).toFixed(1));
+  sessErrors.push({desc,pts,id:Date.now()+Math.random()});
+  document.getElementById('live-score').textContent=fmt(sessScore);
+  if(ayId) document.getElementById(ayId).value='';
+  if(kwId) document.getElementById(kwId).value='';
+  renderErrLog(); updateGradeDisp();
 }
 
-function renderErrors() {
-  if (!sessErrors.length) {
-    document.getElementById('err-log').innerHTML = '<span style="color:var(--ink-muted);">لا توجد ملاحظات بعد</span>';
+function undoLast(){
+  if(!sessErrors.length){ toast('لا توجد عمليات للتراجع'); return; }
+  const last=sessErrors.pop();
+  sessScore=parseFloat(Math.min(110,Math.max(0,sessScore+last.pts)).toFixed(1));
+  document.getElementById('live-score').textContent=fmt(sessScore);
+  renderErrLog(); updateGradeDisp();
+  toast('↩ تم التراجع عن: '+last.desc);
+}
+
+function renderErrLog(){
+  if(!sessErrors.length){
+    document.getElementById('err-log').innerHTML='<span style="color:var(--ink-muted);">لا توجد ملاحظات بعد</span>';
     return;
   }
-  document.getElementById('err-log').innerHTML = sessErrors.map(e =>
-    `<div class="err-item">
-      <div class="${e.plus ? 'err-plus' : 'err-dot'}"></div>
-      <div>${e.label} <strong style="color:${e.plus?'var(--jade)':'var(--rose)'};">${e.plus?'+':'-'}${Math.abs(e.pts)}</strong></div>
-    </div>`
-  ).join('');
+  document.getElementById('err-log').innerHTML=sessErrors.map((e,i)=>{
+    const plus=e.pts<0;
+    return `<div class="undo-item">
+      <div style="font-size:11px;color:var(--ink-muted);min-width:20px;">${i+1}</div>
+      <div class="undo-txt">${e.desc}</div>
+      <div class="${plus?'up':'um'}">${plus?'+':'-'}${Math.abs(e.pts)}</div>
+    </div>`;
+  }).join('');
 }
 
-function updateGradeDisplay() {
-  const g = gradeOf(sessScore);
-  document.getElementById('grade-badge').innerHTML = `<span class="badge ${g.cls}">${g.label}</span>`;
+function updateGradeDisp(){
+  const g=gradeOf(sessScore);
+  document.getElementById('grade-badge').innerHTML=`<span class="badge ${g.cls}">${g.label}</span>`;
 }
 
-function updateBadge() {
-  const f = parseInt(document.getElementById('faces').value) || 0;
-  const el = document.getElementById('sess-badge');
-  if (f > 10)      el.innerHTML = '<span class="badge b-gold">⭐ تجاوزت النصاب</span>';
-  else if (f >= 10) el.innerHTML = '<span class="badge b-jade">🟢 نصاب مكتمل</span>';
-  else              el.innerHTML = '<span class="badge b-rose">🔴 النصاب غير مكتمل</span>';
+function updateBadge(){
+  const f=parseInt(document.getElementById('faces').value)||0;
+  const q=window._quota?.wajh||10;
+  const el=document.getElementById('sess-badge');
+  if(f>q)       el.innerHTML=`<span class="badge bx">⭐ تجاوزت النصاب (${f}/${q})</span>`;
+  else if(f>=q) el.innerHTML=`<span class="badge bj">🟢 نصاب مكتمل (${f}/${q})</span>`;
+  else          el.innerHTML=`<span class="badge br">🔴 لم يكتمل النصاب (${f}/${q})</span>`;
 }
 
-function resetSess() {
-  sessScore = 100; sessErrors = [];
-  document.getElementById('live-score').textContent = '100';
-  document.getElementById('faces').value = '10';
-  document.getElementById('from-a').value = '';
-  document.getElementById('to-a').value = '';
-  renderErrors(); updateGradeDisplay(); updateBadge();
+function resetSess(){
+  if(!confirm('إعادة ضبط الجلسة بالكامل؟')) return;
+  sessScore=100; sessErrors=[];
+  document.getElementById('live-score').textContent='100';
+  document.getElementById('from-a').value='';
+  document.getElementById('to-a').value='';
+  renderErrLog(); updateGradeDisp(); updateBadge();
+  toast('🔄 تمت إعادة الضبط');
 }
 
-function saveSession() {
-  if (!curSt) { toast('اختاري طالبة أولاً'); return; }
-  const st = S.students.find(s => s.id === curSt);
-  if (!st) return;
-  const faces = parseInt(document.getElementById('faces').value) || 0;
-  const isStar = faces > 10;
-  st.score = sessScore;
-  if (isStar) st.stars = (st.stars || 0) + 1;
-  st.total = (st.total || 0) + 1;
-  if (faces >= 10) st.ok = (st.ok || 0) + 1;
-  st.sessions = st.sessions || [];
+function saveSession(){
+  if(!curSt){ toast('اختاري طالبة أولاً'); return; }
+  const st=S.students.find(s=>s.id===curSt);
+  if(!st) return;
+  const faces=parseInt(document.getElementById('faces').value)||0;
+  const q=window._quota?.wajh||10;
+  const isStar=faces>q, isOk=faces>=q;
+  st.score=sessScore;
+  if(isStar) st.stars=(st.stars||0)+1;
+  st.total=(st.total||0)+1;
+  if(isOk) st.ok=(st.ok||0)+1;
+  st.sessions=st.sessions||[];
   st.sessions.push({
-    date: new Date().toLocaleDateString('ar-EG'),
-    score: sessScore,
+    date:new Date().toLocaleDateString('ar-EG'),
+    ts:Date.now(),
+    score:sessScore,
     faces,
-    from: document.getElementById('from-a').value || '—',
-    to: document.getElementById('to-a').value || '—',
-    errors: sessErrors.map(e => `${e.plus?'+':'-'}${Math.abs(e.pts)} ${e.label}`),
-    star: isStar,
+    from:document.getElementById('from-a').value||'—',
+    to:document.getElementById('to-a').value||'—',
+    errors:sessErrors.map(e=>({desc:e.desc,pts:e.pts})),
+    star:isStar, ok:isOk,
+    grade:gradeOf(sessScore).label,
   });
-  save();
-  renderStudentList();
-  toast('✅ تم حفظ الجلسة بنجاح');
+  save(); renderStudentList();
+  toast('✅ تم حفظ جلسة '+st.name);
+  if(S.sheetUrl) syncToSheet(true);
 }
 
-function copyReport() {
-  const st = S.students.find(s => s.id === curSt);
-  const name = st ? st.name : '—';
-  const faces = document.getElementById('faces').value;
-  const from  = document.getElementById('from-a').value || '—';
-  const to    = document.getElementById('to-a').value || '—';
-  const g = gradeOf(sessScore);
-  const scoreStr = sessScore % 1 === 0 ? sessScore : sessScore.toFixed(1);
-  const errLines = sessErrors.length
-    ? sessErrors.map(e => `  • ${e.plus?'+':'-'}${Math.abs(e.pts)}: ${e.label}`).join('\n')
-    : '  لا توجد ملاحظات';
-  const txt = [
-    '📋 تقرير جلسة التسميع',
-    '━━━━━━━━━━━━━━━━━━',
+function copyReport(){
+  const st=S.students.find(s=>s.id===curSt);
+  const name=st?st.name:'—';
+  const faces=document.getElementById('faces').value;
+  const from=document.getElementById('from-a').value||'—';
+  const to=document.getElementById('to-a').value||'—';
+  const g=gradeOf(sessScore);
+  const q=window._quota?.wajh||10;
+  const badge=parseInt(faces)>q?'⭐ تجاوزت النصاب':parseInt(faces)>=q?'🟢 نصاب مكتمل':'🔴 لم يكتمل';
+  const errLines=sessErrors.length
+    ?sessErrors.map((e,i)=>`  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n')
+    :'  لا توجد ملاحظات';
+  const rep=[
+    `📋 تقرير جلسة التسميع — ${S.course.cname||'حلقة التحفيظ'}`,
+    '━━━━━━━━━━━━━━━━━━━━━━',
     `الطالبة  : ${name}`,
     `التاريخ  : ${new Date().toLocaleDateString('ar-EG')}`,
-    `الآيات   : من ${from} إلى ${to}`,
-    `الأوجه   : ${faces}`,
-    `الدرجة   : ${scoreStr} / 100`,
-    `التقييم  : ${g.label}`,
-    '──────────────────',
-    'الملاحظات:',
-    errLines,
-    '━━━━━━━━━━━━━━━━━━',
-    'بالتوفيق والتمام 💜',
+    `من        : ${from}   إلى : ${to}`,
+    `الأوجه   : ${faces} ${badge}`,
+    `الدرجة   : ${fmt(sessScore)} / 100`,
+    `التقييم  : ${g.emoji} ${g.label}`,
+    '──────────────────────',
+    'الملاحظات:', errLines,
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    'وفّقكِ الله وبارك في جهدكِ 💜',
   ].join('\n');
-  navigator.clipboard.writeText(txt).then(() => toast('📋 تم نسخ التقرير')).catch(() => { alert(txt); });
+  navigator.clipboard.writeText(rep).then(()=>toast('📋 تم نسخ التقرير')).catch(()=>{ alert(rep); });
 }
 
-// ══════════════════════════════════════════════════
-//  PORTAL PAGE
-// ══════════════════════════════════════════════════
-function loadPortal() {
-  const id = parseInt(document.getElementById('sel-portal').value);
-  if (!id) { document.getElementById('portal-body').style.display = 'none'; return; }
-  const st = S.students.find(s => s.id === id);
-  if (!st) return;
-  document.getElementById('portal-body').style.display = 'block';
-  document.getElementById('p-av').textContent   = st.name[0];
-  document.getElementById('p-name').textContent = st.name;
-  const scoreStr = st.score % 1 === 0 ? st.score : st.score.toFixed(1);
-  document.getElementById('p-score').textContent = scoreStr;
-  const g = gradeOf(st.score);
-  document.getElementById('p-grade').textContent = g.label;
-  document.getElementById('p-stars').textContent = st.stars > 0 ? '⭐'.repeat(Math.min(st.stars,7)) : '0';
+// ══ PORTAL ═════════════════════════════════════════════════
+function loadPortal(){
+  const id=parseInt(document.getElementById('sel-portal').value);
+  if(!id){ document.getElementById('portal-body').style.display='none'; return; }
+  const st=S.students.find(s=>s.id===id);
+  if(!st) return;
+  document.getElementById('portal-body').style.display='block';
+  document.getElementById('p-av').textContent=st.name[0];
+  document.getElementById('p-name').textContent=st.name;
 
-  const done = (st.days||[]).filter(Boolean).length;
-  const pct  = Math.round(done / 7 * 100);
-  document.getElementById('p-prog').style.width = pct + '%';
-  document.getElementById('p-prog-txt').textContent = `${done} / 7 أيام مكتملة هذا الأسبوع (${pct}%)`;
+  const g=gradeOf(st.score);
+  document.getElementById('p-score').textContent=fmt(st.score);
+  document.getElementById('p-stars').textContent=st.stars>0?'⭐'.repeat(Math.min(st.stars,7)):'0';
+  document.getElementById('p-sess-cnt').textContent=st.ok||0;
+  document.getElementById('p-grade-badge').innerHTML=`<span class="badge ${g.cls}" style="font-size:14px;padding:5px 14px;">${g.emoji} ${g.label}</span>`;
 
-  document.getElementById('p-days').innerHTML = (st.days||[0,0,0,0,0,0,0]).map((d,i) => `
-    <div class="day-row">
-      <div class="s-name" style="font-size:13px;">${DAYS[i]}</div>
+  const sess=st.sessions||[];
+  const avg=sess.length?(sess.reduce((a,s)=>a+s.score,0)/sess.length).toFixed(1):'—';
+  document.getElementById('p-avg').textContent=avg;
+
+  // Days — toggle-able
+  const sd=S.course.studyDays||6;
+  const days=st.days&&st.days.length===sd?st.days:Array(sd).fill(0);
+  const done=days.filter(Boolean).length;
+  const pct=Math.round(done/sd*100);
+  document.getElementById('p-prog').style.width=pct+'%';
+  document.getElementById('p-prog-txt').textContent=`${done} / ${sd} أيام`;
+  document.getElementById('p-prog-pct').textContent=pct+'%';
+
+  const dn=getDayNames(sd);
+  document.getElementById('p-days').innerHTML=days.map((d,i)=>`
+    <div class="day-row ${d?'day-toggled':''}">
+      <div class="sn" style="font-size:13px;">${dn[i]||'يوم '+(i+1)}</div>
       ${d
-        ? `<div class="day-done">✓ تم الورد</div>`
-        : `<button class="btn btn-gold" style="padding:5px 14px;font-size:12px;" onclick="markDay(${id},${i})">إتمام الورد</button>`}
+        ?`<div class="day-done">✓ تم الورد <button class="btn btn-gray btn-sm" onclick="toggleDay(${id},${i})">إلغاء</button></div>`
+        :`<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">إتمام الورد</button>`
+      }
     </div>`).join('');
 
-  const sess = (st.sessions || []).slice().reverse();
-  document.getElementById('p-hist').innerHTML = sess.length
-    ? sess.map(s => `<div class="hist-item">
-        <div class="hist-date">${s.date} · أوجه: ${s.faces} ${s.star?'⭐':''}</div>
-        <div class="hist-body">الدرجة: <strong>${s.score}</strong> · ${gradeOf(s.score).label}${s.errors.length?'<br>'+s.errors.join(' · '):''}</div>
-      </div>`).join('')
-    : '<div style="color:var(--ink-muted);font-size:13px;">لا توجد جلسات بعد.</div>';
+  // History
+  const sorted=[...sess].sort((a,b)=>b.ts-a.ts);
+  document.getElementById('p-hist').innerHTML=sorted.length
+    ?sorted.map(s=>{
+      const errHtml=s.errors&&s.errors.length
+        ?'<div style="margin-top:6px;padding-right:8px;border-right:2px solid var(--rose-lt);">'+
+          s.errors.map(e=>`<div style="font-size:12px;color:var(--rose);">${e.desc} <strong>(${e.pts<0?'+':'-'}${Math.abs(e.pts)})</strong></div>`).join('')+'</div>'
+        :'';
+      return `<div class="hist-item">
+        <div class="hd">${s.date} · أوجه: ${s.faces} ${s.star?'⭐':''} ${s.ok?'🟢':'🔴'}</div>
+        <div class="hb">الدرجة: <strong>${fmt(s.score)}</strong> · ${gradeOf(s.score).emoji} ${gradeOf(s.score).label} · من ${s.from} إلى ${s.to}${errHtml}</div>
+      </div>`;
+    }).join('')
+    :'<div style="color:var(--ink-muted);font-size:13px;">لا توجد جلسات بعد.</div>';
+
+  // Analysis
+  const allErr=sess.flatMap(s=>s.errors||[]);
+  const pa=document.getElementById('p-analysis');
+  if(!allErr.length){ pa.innerHTML='<span style="color:var(--ink-muted);">لا توجد بيانات كافية بعد.</span>'; return; }
+  const tc={};
+  allErr.forEach(e=>{ const t=e.desc.split(' · ').pop()||e.desc; tc[t]=(tc[t]||0)+1; });
+  const sorted2=Object.entries(tc).sort((a,b)=>b[1]-a[1]);
+  const tot=allErr.length;
+  let ahtml=`<div style="font-size:12px;color:var(--ink-muted);margin-bottom:10px;">إجمالي الملاحظات: <strong>${tot}</strong></div>`;
+  sorted2.forEach(([type,cnt])=>{
+    const p=Math.round(cnt/tot*100);
+    ahtml+=`<div style="margin-bottom:9px;">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+        <span>${type}</span><span><strong>${cnt}</strong> مرة (${p}%)</span>
+      </div>
+      <div class="prog-wrap" style="height:8px;"><div class="prog-fill" style="width:${p}%;background:var(--rose);"></div></div>
+    </div>`;
+  });
+  pa.innerHTML=ahtml;
 }
 
-function markDay(id, i) {
-  const st = S.students.find(s => s.id === id);
-  if (!st) return;
-  if (!st.days) st.days = [0,0,0,0,0,0,0];
-  st.days[i] = 1;
-  save();
-  loadPortal();
-  toast('✅ تم تسجيل ورد اليوم');
+function toggleDay(stId,dayIdx){
+  const st=S.students.find(s=>s.id===stId);
+  if(!st) return;
+  const sd=S.course.studyDays||6;
+  if(!st.days||st.days.length!==sd) st.days=Array(sd).fill(0);
+  st.days[dayIdx]=st.days[dayIdx]?0:1;
+  save(); loadPortal();
+  const dn=getDayNames(sd);
+  toast(`${st.days[dayIdx]?'✅':'↩'} ${st.days[dayIdx]?'تم تسجيل':'تم إلغاء'} ورد ${dn[dayIdx]||''}`);
 }
 
-// ══════════════════════════════════════════════════
-//  BOARD PAGE
-// ══════════════════════════════════════════════════
-function renderBoard() {
-  const sorted = [...S.students].sort((a,b) => (b.score + b.stars*2) - (a.score + a.stars*2));
-  const medals = ['🥇','🥈','🥉'];
-  const rnks   = ['rank-1','rank-2','rank-3'];
+// ══ BOARD ══════════════════════════════════════════════════
+function setBoardSort(s){
+  boardSort=s;
+  document.getElementById('sort-alpha-btn').className=s==='alpha'?'btn btn-sm btn-gold':'btn btn-sm btn-gray';
+  document.getElementById('sort-pts-btn').className=s==='points'?'btn btn-sm btn-gold':'btn btn-sm btn-gray';
+  renderBoard();
+}
 
-  // stats
-  const exc   = S.students.filter(s => s.score >= 97).length;
-  const stars  = S.students.reduce((a,s) => a + (s.stars||0), 0);
-  const avg    = S.students.length ? (S.students.reduce((a,s)=>a+s.score,0)/S.students.length).toFixed(1) : '—';
-  document.getElementById('bs-count').textContent = S.students.length;
-  document.getElementById('bs-exc').textContent   = exc;
-  document.getElementById('bs-stars').textContent = stars;
-  document.getElementById('bs-avg').textContent   = avg;
+function renderBoard(){
+  const exc=S.students.filter(s=>s.score>=97).length;
+  const stars=S.students.reduce((a,s)=>a+(s.stars||0),0);
+  const avg=S.students.length?(S.students.reduce((a,s)=>a+s.score,0)/S.students.length).toFixed(1):'—';
+  document.getElementById('bs-cnt').textContent=S.students.length;
+  document.getElementById('bs-exc').textContent=exc;
+  document.getElementById('bs-stars').textContent=stars;
+  document.getElementById('bs-avg').textContent=avg;
 
-  document.getElementById('board-list').innerHTML = sorted.map((st, i) => {
-    const total = st.score + (st.stars||0) * 2;
-    const ok = (st.ok||0) >= (st.total||1) && st.total > 0;
-    const g = gradeOf(st.score);
-    return `<div class="rank-card ${rnks[i]||''}">
-      <div class="rank-medal">${medals[i] || (i+1)}</div>
-      <div class="rank-name">${st.name}</div>
-      <div class="rank-meta">
-        <div class="rank-pts">${total % 1 ? total.toFixed(1) : total}</div>
-        ${(st.stars||0) > 0 ? `<span class="badge b-gold">${'⭐'.repeat(Math.min(st.stars,5))}</span>` : ''}
+  let sorted;
+  if(boardSort==='alpha') sorted=[...S.students].sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  else sorted=[...S.students].sort((a,b)=>(b.score+(b.stars||0)*2)-(a.score+(a.stars||0)*2));
+
+  const medals=['🥇','🥈','🥉'],rnks=['r1','r2','r3'];
+  document.getElementById('board-list').innerHTML=sorted.map((st,i)=>{
+    const total=st.score+(st.stars||0)*2;
+    const isOk=(st.ok||0)>=(st.total||1)&&st.total>0;
+    const g=gradeOf(st.score);
+    const rank=boardSort==='points'?(medals[i]||(i+1)):(i+1);
+    const cls=boardSort==='points'?(rnks[i]||''):'';
+    return `<div class="rk ${cls}">
+      <div class="rm">${rank}</div>
+      <div class="rname">${st.name}</div>
+      <div class="rmeta">
+        <div class="rpts">${fmt(total)}</div>
+        ${(st.stars||0)>0?`<span class="badge bx">${'⭐'.repeat(Math.min(st.stars,5))}</span>`:''}
         <span class="badge ${g.cls}">${g.label}</span>
-        <span style="font-size:20px;">${ok ? '🟢' : '🔴'}</span>
+        <span style="font-size:20px;">${isOk?'🟢':'🔴'}</span>
       </div>
     </div>`;
-  }).join('') || '<div style="color:var(--ink-muted);font-size:13px;">لا توجد طالبات.</div>';
+  }).join('')||'<div style="color:var(--ink-muted);font-size:13px;">لا توجد طالبات.</div>';
 }
 
-// ══════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════
+// ══ GOOGLE SHEETS ══════════════════════════════════════════
+const GS_CODE=`// لوحة ألف لام ميم — Apps Script Backend
+// الصقي هذا الكود في محرر Apps Script ثم انشريه كـ Web App
+
+const SHEET_NAME = 'ALM_Data';
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const action = data.action;
+    const code = data.code;
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(SHEET_NAME + '_' + code);
+    if (!sheet) {
+      sheet = ss.insertSheet(SHEET_NAME + '_' + code);
+      sheet.appendRow(['key', 'value', 'updated_at']);
+    }
+    if (action === 'save') {
+      const rows = sheet.getDataRange().getValues();
+      const idx = rows.findIndex(r => r[0] === 'alm_data');
+      const now = new Date().toISOString();
+      if (idx < 0) sheet.appendRow(['alm_data', data.payload, now]);
+      else sheet.getRange(idx+1,2,1,2).setValues([[data.payload, now]]);
+      return json({ok:true});
+    }
+    if (action === 'load') {
+      const rows = sheet.getDataRange().getValues();
+      const row = rows.find(r => r[0] === 'alm_data');
+      return json({ok:true, payload: row ? row[1] : null});
+    }
+    if (action === 'ping') return json({ok:true, msg:'pong'});
+    return json({ok:false, msg:'unknown action'});
+  } catch(err) {
+    return json({ok:false, msg:err.toString()});
+  }
+}
+
+function doGet(e) {
+  return doPost({postData:{contents:JSON.stringify({action:'ping',code:'test'})}});
+}
+
+function json(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}`;
+
+function initSheets(){
+  document.getElementById('gs-code').value=GS_CODE;
+  document.getElementById('sheet-url').value=S.sheetUrl||'';
+  document.getElementById('teacher-code').value=S.teacherCode||'';
+  const ok=S.sheetUrl&&S.teacherCode;
+  document.getElementById('sheet-st-txt').textContent=ok?'الإعدادات مسجلة — اختبري الاتصال':'لم يتم الربط بعد';
+  setSyncDot(ok?'local':'local');
+}
+
+function copyGsCode(){
+  navigator.clipboard.writeText(GS_CODE).then(()=>toast('✅ تم نسخ الكود')).catch(()=>{});
+}
+
+function saveSheetCfg(){
+  S.sheetUrl=document.getElementById('sheet-url').value.trim();
+  S.teacherCode=document.getElementById('teacher-code').value.trim();
+  save(); document.getElementById('sheet-st-txt').textContent='تم حفظ الإعدادات';
+  toast('✅ تم حفظ إعدادات الربط');
+}
+
+async function sheetReq(action,extra={}){
+  const url=S.sheetUrl||document.getElementById('sheet-url').value.trim();
+  const code=S.teacherCode||document.getElementById('teacher-code').value.trim();
+  if(!url||!code){ toast('⚠ أدخلي الرابط والرمز أولاً'); return null; }
+  setSyncDot('sync');
+  try{
+    const r=await fetch(url,{method:'POST',body:JSON.stringify({action,code,...extra})});
+    return await r.json();
+  }catch(e){ setSyncDot('err'); toast('❌ خطأ في الاتصال — تأكدي من الرابط والصلاحيات'); return null; }
+}
+
+async function testSheet(){
+  const r=await sheetReq('ping');
+  if(r?.ok){ setSyncDot('ok'); toast('✅ الاتصال يعمل!'); document.getElementById('sheet-st-txt').textContent='متصل ✓'; }
+  else if(r){ setSyncDot('err'); toast('⚠ فشل: '+(r.msg||'')); }
+}
+
+async function syncToSheet(silent=false){
+  const r=await sheetReq('save',{payload:JSON.stringify(S)});
+  if(r?.ok){ setSyncDot('ok'); if(!silent) toast('☁ تم رفع البيانات بنجاح'); }
+  else if(r){ setSyncDot('err'); if(!silent) toast('❌ فشل الرفع: '+(r.msg||'')); }
+}
+
+async function loadFromSheet(){
+  const r=await sheetReq('load');
+  if(r?.ok&&r.payload){
+    try{
+      S=JSON.parse(r.payload);
+      save(); initSetup(); popSelects();
+      toast('✅ تم تحميل البيانات من الـ Sheet'); setSyncDot('ok');
+    }catch{ toast('❌ خطأ في قراءة البيانات'); setSyncDot('err'); }
+  } else if(r?.ok){ toast('⚠ لا توجد بيانات في الـ Sheet بعد'); setSyncDot('ok'); }
+}
+
+// ══ INIT ═══════════════════════════════════════════════════
 initSetup();
+setSyncDot('local');
 </script>
 </body>
 </html>
