@@ -197,8 +197,8 @@ input,select,textarea{font-family:'Cairo',sans-serif;}
 }
 .card:hover{box-shadow:var(--shadow-sm);}
 .card-title{
-  font-size:12px;font-weight:700; color:var(--ink-3);
-  letter-spacing:.07em;text-transform:uppercase; margin-bottom:14px; display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:700; color:var(--ink-3);
+  letter-spacing:.05em; margin-bottom:14px; display:flex;align-items:center;gap:8px;
 }
 .card-title::before{content:'';display:block;width:3px;height:12px;background:var(--gold);border-radius:2px;flex-shrink:0;}
 
@@ -344,6 +344,10 @@ select option{background:var(--bg-1);}
 /* Dashboard Charts */
 .chart-container{position:relative;height:260px;width:100%;margin-top:10px;}
 
+/* Sheet step */
+.sheet-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;font-size:13px;line-height:1.7;}
+.step-n{width:24px;height:24px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;}
+
 /* ══ TOAST ══ */
 #toast{ position:fixed;bottom:24px;left:50%; transform:translateX(-50%) translateY(70px); background:var(--ink);color:var(--bg-1); padding:10px 22px;border-radius:30px; font-size:13px;font-weight:600; opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1); z-index:9999;pointer-events:none;white-space:nowrap; box-shadow:var(--shadow-lg); }
 #toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
@@ -364,7 +368,7 @@ select option{background:var(--bg-1);}
 
 /* ══ DIVIDER ══ */
 hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
-.sep{ font-size:11px;font-weight:700;letter-spacing:.07em; color:var(--ink-4);margin:14px 0 8px; padding-bottom:5px;border-bottom:1px solid var(--border); }
+.sep{ font-size:12px;font-weight:700; color:var(--ink-3);margin:14px 0 8px; padding-bottom:5px;border-bottom:1px solid var(--border); }
 
 /* ══ PRINT STYLES ══ */
 #rep-layer{display:none;}
@@ -448,10 +452,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
     <button class="nv teacher-only" onclick="showPage('board',this)">
       <span class="nv-ic">🏆</span><span class="nv-txt">لوحة الصدارة</span>
     </button>
-    <div class="nv-sep"></div>
-    <button class="nv teacher-only" onclick="showPage('sheets',this)">
-      <span class="nv-ic">☁️</span><span class="nv-txt">ربط Google Sheets</span>
-    </button>
   </nav>
 
   <div class="sb-bottom">
@@ -480,7 +480,7 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
       <div class="topbar-sub" id="topbar-sub">بيانات الدورة والموزع الآلي</div>
     </div>
     <div class="topbar-actions">
-      <div class="sync-pill" id="sync-pill" onclick="syncToSheet()">
+      <div class="sync-pill" id="sync-pill" onclick="syncToSheet(false, true)" title="مزامنة مع Google Sheets">
         <div class="sync-dot slocal" id="sync-dot"></div>
         <span id="sync-lbl">محلي</span>
       </div>
@@ -496,23 +496,40 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
     <div id="page-setup" class="page active teacher-only">
       <div class="pg-head">
         <div>
-          <div class="pg-title">إعداد الدورة</div>
+          <div class="pg-title">إعداد الدورة والربط السحابي</div>
           <div class="pg-sub">بيانات الدورة · الموزع الآلي · قائمة الطالبات</div>
         </div>
-        <!-- زر الأرشفة الذكية -->
         <button class="btn btn-rose btn-sm" onclick="archiveCourse()">🗄️ أرشفة الدورة (بدء دورة جديدة)</button>
       </div>
 
-      <div class="card">
-        <div class="card-title">بيانات الدورة (الأساسية)</div>
-        <div class="info-box">💡 تحديد "تاريخ البدء" ضروري جداً لكي يحسب النظام تواريخ الأيام للطالبات تلقائياً!</div>
+      <!-- LOCKED VIEW CARD -->
+      <div id="setup-locked-view" class="card" style="display:none; position:relative;">
+        <button class="btn btn-ghost btn-sm" onclick="unlockSetup()" style="position:absolute; top:18px; left:20px; color:var(--gold);">✏️ تعديل الإعدادات</button>
+        <div class="card-title">معلومات الدورة والربط الحالية</div>
+        <div class="g4" style="margin-bottom:10px;">
+          <div class="mc"><div class="mc-val" id="sum-teacher" style="font-size:18px;">—</div><div class="mc-lbl">المعلمة</div></div>
+          <div class="mc"><div class="mc-val" id="sum-course" style="font-size:18px;">—</div><div class="mc-lbl">المقرر</div></div>
+          <div class="mc"><div class="mc-val" id="sum-days" style="font-size:18px;">—</div><div class="mc-lbl">أيام الورد اليومي</div></div>
+          <div class="mc">
+             <div class="mc-val" style="font-size:18px; display:flex; align-items:center; justify-content:center; gap:6px; height:100%;">
+               <div class="sync-dot" id="sum-sync-dot"></div> <span id="sum-sync-txt" style="font-size:13px;font-family:'Cairo',sans-serif;">غير متصل</span>
+             </div>
+             <div class="mc-lbl">الربط السحابي</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDIT VIEW CARD -->
+      <div id="setup-edit-view" class="card">
+        <div class="card-title">بيانات الدورة والربط السحابي (الأساسية)</div>
+        <div class="info-box">💡 إعدادات الدورة والربط تضمن حفظ عملك وتوزيع تواريخ الورد للطالبات بدقة.</div>
         <div class="g2">
           <div class="field"><label>اسم المعلمة</label><input type="text" id="teacher" placeholder="أدخلي اسمك" oninput="updateSbName()"></div>
           <div class="field"><label>اسم المقرر</label><input type="text" id="cname" placeholder="مثال: جزء عم + تبارك"></div>
           <div class="field"><label>عدد الأوجه الكلي (المقرر العام)</label><input type="number" id="tpages" value="200" min="1" oninput="calcPlan()"></div>
           <div class="field"><label>تاريخ بدء الدورة</label><input type="date" id="sdate" onchange="calcPlan()"></div>
           <div class="field"><label>عدد أسابيع الدورة</label><input type="number" id="tweeks" value="10" min="1" oninput="calcPlan()"></div>
-          <div class="field"><label>أيام الدراسة في الأسبوع</label>
+          <div class="field"><label>أيام الورد اليومي</label>
             <select id="study-days" onchange="calcPlan()">
               <option value="5" selected>5 أيام (الأحد — الخميس)</option>
               <option value="6">6 أيام (السبت — الخميس)</option>
@@ -520,7 +537,16 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
             </select>
           </div>
         </div>
-        <button class="btn btn-gold" onclick="saveCourse()">💾 حفظ الإعدادات</button>
+        <div class="sep" style="margin-top:20px;">الربط السحابي للحفظ والمزامنة (Google Sheets)</div>
+        <div class="g2">
+          <div class="field"><label>رابط Apps Script (Web App URL)</label>
+            <input type="text" id="sheet-url" placeholder="https://script.google.com/macros/s/.../exec">
+          </div>
+          <div class="field"><label>رمز المعلمة السري (يميّز بياناتك)</label>
+            <input type="text" id="teacher-code" placeholder="مثال: fatima2025" autocomplete="off">
+          </div>
+        </div>
+        <button class="btn btn-gold btn-full btn-lg" style="margin-top:10px;" onclick="saveCourse()">💾 حفظ وتثبيت الإعدادات</button>
       </div>
 
       <div class="card">
@@ -546,6 +572,22 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
           <button class="btn btn-gold" onclick="addStudent()">+ إضافة</button>
         </div>
       </div>
+
+      <details class="card" style="cursor:pointer; background:var(--gold-pale); border-color:rgba(200,146,42,.25);">
+        <summary class="card-title" style="margin:0; user-select:none; color:var(--gold-dk);">🛠️ كيف أحصل على رابط Google Sheets؟ (اضغطي للفتح)</summary>
+        <div style="margin-top:15px; font-size:13px; color:var(--ink-2); line-height:1.7; cursor:default;">
+          <div class="sheet-step"><div class="step-n">1</div><div>افتحي <a href="https://sheets.google.com" target="_blank" style="font-weight:bold;color:var(--sky);">Google Sheets</a> وأنشئي ملفاً جديداً</div></div>
+          <div class="sheet-step"><div class="step-n">2</div><div>من القائمة: <strong>Extensions ← Apps Script</strong></div></div>
+          <div class="sheet-step"><div class="step-n">3</div><div>احذفي كل ما في المحرر والصقي الكود أدناه:</div></div>
+          <div style="position:relative;margin:10px 0;">
+            <textarea id="gs-code" readonly style="font-family:monospace;font-size:11px;height:230px;background:#1a1714;color:#e8c890;border:none;border-radius:var(--r-sm);padding:14px;direction:ltr;width:100%;"></textarea>
+            <button class="btn btn-gold btn-sm" onclick="copyGsCode()" style="position:absolute;top:10px;left:10px;">نسخ الكود</button>
+          </div>
+          <div class="sheet-step"><div class="step-n">4</div><div>اضغطي <strong>Deploy ← New deployment ← Web app</strong></div></div>
+          <div class="sheet-step"><div class="step-n">5</div><div>اختاري: <strong>Execute as: Me</strong> و <strong>Who has access: Anyone</strong> ← Deploy</div></div>
+          <div class="sheet-step"><div class="step-n">6</div><div>انسخي الـ Web app URL والصقيه في إعدادات الدورة + أدخلي أي رمز سري خاص بكِ</div></div>
+        </div>
+      </details>
     </div>
 
     <!-- ══ SESSION ══ -->
@@ -606,86 +648,88 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
       </div>
 
       <div id="sess-body" style="display:none;">
-        <div class="g2" style="align-items:start;">
-          <div class="card">
-            <div class="card-title">درجة الحفظ الجديد</div>
-            <div class="score-hero">
-              <div class="score-big" id="live-score">100</div>
-              <div class="score-den">/ 100</div>
-              <div style="margin-top:10px;" id="grade-badge"><span class="badge bx">ممتاز ✓</span></div>
-              <div style="margin-top:8px;" id="sess-badge"></div>
+        <div id="evaluation-wrap">
+          <div class="g2" style="align-items:start;">
+            <div class="card">
+              <div class="card-title">درجة الحفظ الجديد</div>
+              <div class="score-hero">
+                <div class="score-big" id="live-score">100</div>
+                <div class="score-den">/ 100</div>
+                <div style="margin-top:10px;" id="grade-badge"><span class="badge bx">ممتاز ✓</span></div>
+                <div style="margin-top:8px;" id="sess-badge"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">سجل ملاحظات الحفظ</div>
+              <div id="err-log" style="min-height:90px;max-height:200px;overflow-y:auto;">
+                <span style="font-size:13px;color:var(--ink-4);">لا توجد ملاحظات بعد</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:10px;">
+                <button class="btn btn-rose btn-sm" style="flex:1;" onclick="undoLast()">↩ تراجع</button>
+                <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="resetSess()">🔄 إعادة</button>
+              </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-title">سجل ملاحظات الحفظ</div>
-            <div id="err-log" style="min-height:90px;max-height:200px;overflow-y:auto;">
-              <span style="font-size:13px;color:var(--ink-4);">لا توجد ملاحظات بعد</span>
-            </div>
-            <div style="display:flex;gap:6px;margin-top:10px;">
-              <button class="btn btn-rose btn-sm" style="flex:1;" onclick="undoLast()">↩ تراجع</button>
-              <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="resetSess()">🔄 إعادة</button>
-            </div>
-          </div>
-        </div>
 
-        <div class="card">
-          <div class="card-title">أزرار الخصم السريع (للحفظ)</div>
-          <div class="info-box">💡 أدخلي رقم الآية والكلمة، ثم اضغطي الزر لتسجيل الخصم في الحفظ</div>
-          <div class="ded-row">
-            <div class="ded-inputs">
-              <input type="number" id="ay1" placeholder="آية" min="1" style="width:70px;flex:none;">
-              <input type="text" id="kw1" placeholder="الكلمة الخاطئة">
+          <div class="card">
+            <div class="card-title">أزرار الخصم السريع (للحفظ)</div>
+            <div class="info-box">💡 أدخلي رقم الآية والكلمة، ثم اضغطي الزر لتسجيل الخصم في الحفظ</div>
+            <div class="ded-row">
+              <div class="ded-inputs">
+                <input type="number" id="ay1" placeholder="آية" min="1" style="width:70px;flex:none;">
+                <input type="text" id="kw1" placeholder="الكلمة الخاطئة">
+              </div>
+              <button class="d-btn da" onclick="deduct(1,'تنبيه حفظ','ay1','kw1')">
+                <span class="d-ic">⚠️</span><span class="d-lb">تنبيه حفظ</span><span class="d-pt">−1</span>
+              </button>
             </div>
-            <button class="d-btn da" onclick="deduct(1,'تنبيه حفظ','ay1','kw1')">
-              <span class="d-ic">⚠️</span><span class="d-lb">تنبيه حفظ</span><span class="d-pt">−1</span>
-            </button>
-          </div>
-          <div class="ded-row">
-            <div class="ded-inputs">
-              <input type="number" id="ay2" placeholder="آية" min="1" style="width:70px;flex:none;">
-              <input type="text" id="kw2" placeholder="الكلمة الخاطئة">
+            <div class="ded-row">
+              <div class="ded-inputs">
+                <input type="number" id="ay2" placeholder="آية" min="1" style="width:70px;flex:none;">
+                <input type="text" id="kw2" placeholder="الكلمة الخاطئة">
+              </div>
+              <button class="d-btn dd" onclick="deduct(2,'حفظ + تصحيح','ay2','kw2')">
+                <span class="d-ic">✗</span><span class="d-lb">حفظ + تصحيح</span><span class="d-pt">−2</span>
+              </button>
             </div>
-            <button class="d-btn dd" onclick="deduct(2,'حفظ + تصحيح','ay2','kw2')">
-              <span class="d-ic">✗</span><span class="d-lb">حفظ + تصحيح</span><span class="d-pt">−2</span>
-            </button>
-          </div>
-          <div class="ded-row">
-            <div class="ded-inputs">
-              <input type="number" id="ay3" placeholder="آية" min="1" style="width:70px;flex:none;">
-              <input type="text" id="kw3" placeholder="الكلمة الخاطئة">
+            <div class="ded-row">
+              <div class="ded-inputs">
+                <input type="number" id="ay3" placeholder="آية" min="1" style="width:70px;flex:none;">
+                <input type="text" id="kw3" placeholder="الكلمة الخاطئة">
+              </div>
+              <button class="d-btn da" onclick="deduct(2,'تنبيه تشكيل','ay3','kw3')">
+                <span class="d-ic">◌</span><span class="d-lb">تنبيه تشكيل</span><span class="d-pt">−2</span>
+              </button>
             </div>
-            <button class="d-btn da" onclick="deduct(2,'تنبيه تشكيل','ay3','kw3')">
-              <span class="d-ic">◌</span><span class="d-lb">تنبيه تشكيل</span><span class="d-pt">−2</span>
-            </button>
-          </div>
-          <div class="ded-row">
-            <div class="ded-inputs">
-              <input type="number" id="ay4" placeholder="آية" min="1" style="width:70px;flex:none;">
-              <input type="text" id="kw4" placeholder="الكلمة الخاطئة">
+            <div class="ded-row">
+              <div class="ded-inputs">
+                <input type="number" id="ay4" placeholder="آية" min="1" style="width:70px;flex:none;">
+                <input type="text" id="kw4" placeholder="الكلمة الخاطئة">
+              </div>
+              <button class="d-btn dd" onclick="deduct(4,'تشكيل + تصحيح','ay4','kw4')">
+                <span class="d-ic">✗◌</span><span class="d-lb">تشكيل+تصحيح</span><span class="d-pt">−4</span>
+              </button>
             </div>
-            <button class="d-btn dd" onclick="deduct(4,'تشكيل + تصحيح','ay4','kw4')">
-              <span class="d-ic">✗◌</span><span class="d-lb">تشكيل+تصحيح</span><span class="d-pt">−4</span>
-            </button>
-          </div>
-          <div class="ded-row">
-            <div class="ded-inputs">
-              <input type="number" id="ay5" placeholder="آية" min="1" style="width:70px;flex:none;">
-              <input type="text" id="kw5" placeholder="ملاحظة (اختياري)">
+            <div class="ded-row">
+              <div class="ded-inputs">
+                <input type="number" id="ay5" placeholder="آية" min="1" style="width:70px;flex:none;">
+                <input type="text" id="kw5" placeholder="ملاحظة (اختياري)">
+              </div>
+              <button class="d-btn dn" onclick="deduct(0.5,'تردد','ay5','kw5')">
+                <span class="d-ic">⋯</span><span class="d-lb">تردد</span><span class="d-pt">−0.5</span>
+              </button>
             </div>
-            <button class="d-btn dn" onclick="deduct(0.5,'تردد','ay5','kw5')">
-              <span class="d-ic">⋯</span><span class="d-lb">تردد</span><span class="d-pt">−0.5</span>
-            </button>
-          </div>
-          <div class="ded-row">
-            <div class="ded-inputs">
-              <input type="number" id="ay6" placeholder="آية" min="1" style="width:70px;flex:none;">
-              <input type="text" id="kw6" placeholder="سبب التميز (اختياري)">
+            <div class="ded-row">
+              <div class="ded-inputs">
+                <input type="number" id="ay6" placeholder="آية" min="1" style="width:70px;flex:none;">
+                <input type="text" id="kw6" placeholder="سبب التميز (اختياري)">
+              </div>
+              <button class="d-btn dg" onclick="deduct(-2,'نجمة تميز','ay6','kw6')">
+                <span class="d-ic">⭐</span><span class="d-lb">نجمة تميز</span><span class="d-pt">+2</span>
+              </button>
             </div>
-            <button class="d-btn dg" onclick="deduct(-2,'نجمة تميز','ay6','kw6')">
-              <span class="d-ic">⭐</span><span class="d-lb">نجمة تميز</span><span class="d-pt">+2</span>
-            </button>
           </div>
-        </div>
+        </div> <!-- End of evaluation-wrap -->
 
         <div class="card">
           <div class="card-title">إنهاء الجلسة</div>
@@ -741,7 +785,7 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
           <div class="streak-fire">🔥</div>
           <div class="streak-info">
             <div class="streak-num" id="p-streak">0 أيام</div>
-            <div class="streak-lbl">شعلة الحماس (حضور מתتالي بدون غياب)</div>
+            <div class="streak-lbl">شعلة الحماس (حضور متتالي بدون غياب)</div>
           </div>
         </div>
 
@@ -832,46 +876,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
       </div>
     </div>
 
-    <!-- ══ SHEETS ══ -->
-    <div id="page-sheets" class="page teacher-only">
-      <div class="pg-head"><div class="pg-title">ربط Google Sheets ☁️</div><div class="pg-sub">حفظ سحابي · متعدد المعلمات · من أي جهاز</div></div>
-
-      <div class="card">
-        <div class="card-title">الحالة الحالية</div>
-        <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg-0);border-radius:var(--r-sm);border:1px solid var(--border);margin-bottom:14px;">
-          <div class="sync-dot" id="sheet-dot" style="width:12px;height:12px;"></div>
-          <span id="sheet-st-txt" style="font-size:14px;font-weight:600;">لم يتم الربط بعد</span>
-        </div>
-        <div class="field"><label>رابط Apps Script (Web App URL)</label>
-          <input type="text" id="sheet-url" placeholder="https://script.google.com/macros/s/.../exec">
-        </div>
-        <div class="field"><label>رمز المعلمة السري (يميّز بياناتك)</label>
-          <input type="text" id="teacher-code" placeholder="مثال: fatima2025" autocomplete="off">
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-gold" onclick="testSheet()">🔗 اختبار الاتصال</button>
-          <button class="btn btn-jade" onclick="saveSheetCfg()">💾 حفظ الإعدادات</button>
-          <button class="btn" onclick="syncToSheet()">⬆️ رفع البيانات</button>
-          <button class="btn" onclick="loadFromSheet()">⬇️ تحميل البيانات</button>
-        </div>
-      </div>
-
-      <div class="card" style="background:var(--gold-pale);border-color:rgba(200,146,42,.25);">
-        <div style="font-size:15px;font-weight:700;margin-bottom:14px;color:var(--gold-dk);">📋 خطوات الإعداد (مرة واحدة فقط لكل معلمة)</div>
-        <div class="sheet-step"><div class="step-n">1</div><div>افتحي <a href="https://sheets.google.com" target="_blank">Google Sheets</a> وأنشئي ملفاً جديداً</div></div>
-        <div class="sheet-step"><div class="step-n">2</div><div>من القائمة: <strong>Extensions ← Apps Script</strong></div></div>
-        <div class="sheet-step"><div class="step-n">3</div><div>احذفي كل ما في المحرر والصقي الكود أدناه:</div></div>
-        <div style="position:relative;margin:10px 0;">
-          <textarea id="gs-code" readonly style="font-family:monospace;font-size:11px;height:230px;background:#1a1714;color:#e8c890;border:none;border-radius:var(--r-sm);padding:14px;direction:ltr;width:100%;"></textarea>
-          <button class="btn btn-gold btn-sm" onclick="copyGsCode()" style="position:absolute;top:10px;left:10px;">نسخ الكود</button>
-        </div>
-        <div class="sheet-step"><div class="step-n">4</div><div><strong>Deploy ← New deployment ← Web app</strong></div></div>
-        <div class="sheet-step"><div class="step-n">5</div><div>اختاري: <strong>Execute as: Me</strong> و <strong>Who has access: Anyone</strong> ← Deploy</div></div>
-        <div class="sheet-step"><div class="step-n">6</div><div>انسخي الـ Web app URL والصقيه في الحقل أعلاه + أدخلي رمزك السري</div></div>
-        <div class="sheet-step"><div class="step-n">7</div><div>اضغطي "اختبار الاتصال" ← إذا نجح "رفع البيانات" ← ستجدي في الـ Sheet 3 أوراق تلقائياً</div></div>
-      </div>
-    </div>
-
   </div><!-- /pages -->
 </div><!-- /main -->
 </div><!-- /app -->
@@ -891,8 +895,8 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
     <button class="mnav-item teacher-only" onclick="mobileNav('dash',this)">
       <span class="mic">📊</span>تحليل
     </button>
-    <button class="mnav-item teacher-only" onclick="mobileNav('sheets',this)">
-      <span class="mic">☁️</span>Sheets
+    <button class="mnav-item teacher-only" onclick="mobileNav('board',this)">
+      <span class="mic">🏆</span>صدارة
     </button>
   </div>
 </nav>
@@ -948,6 +952,58 @@ const strT = dToday.toLocaleDateString('ar-EG');
 const strY = dYesterday.toLocaleDateString('ar-EG');
 const strB = dBefore.toLocaleDateString('ar-EG');
 
+const GS_CODE=`// لوحة ألف لام ميم — Apps Script Backend v3
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const code = data.code;
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+    if (data.action === 'save') {
+      const S = JSON.parse(data.payload);
+      let db = ss.getSheetByName('DB_'+code) || ss.insertSheet('DB_'+code);
+      db.hideSheet();
+      db.getRange(1,1,1,2).setValues([['alm_data', data.payload]]);
+      
+      let st = ss.getSheetByName('طالبات_'+code) || ss.insertSheet('طالبات_'+code);
+      st.clear(); st.setRightToLeft(true);
+      const stH = ['رقم','الاسم','مقرر خاص','آخر درجة','نجوم','جلسات ناجحة','إجمالي الجلسات'];
+      const stR = [stH, ...(S.students||[]).map(s=>
+        [s.id, s.name, s.customFaces||'المقرر العام', s.score||'-', s.stars||0, s.ok||0, s.total||0])];
+      st.getRange(1,1,stR.length,stH.length).setValues(stR);
+      st.getRange(1,1,1,stH.length).setFontWeight('bold').setBackground('#F5E6C8');
+      
+      let sess = ss.getSheetByName('سجل_تسميع_'+code) || ss.insertSheet('سجل_تسميع_'+code);
+      sess.clear(); sess.setRightToLeft(true);
+      const sH = ['التاريخ','اسم الطالبة','الحضور','المراجعة','الدرجة','الأوجه','التقييم','الملاحظات'];
+      const sR = [sH];
+      (S.students||[]).forEach(s_t => {
+        (s_t.sessions||[]).forEach(s => {
+          const att = s.att==='excused'?'غائبة بعذر':s.att==='unexcused'?'غائبة بدون عذر':'حاضرة';
+          let revTxt = '-';
+          if(s.rev && s.rev !== 'none') revTxt = (s.rev==='minor'?'صغرى':s.rev==='major'?'كبرى':'شاملة') + ' ('+s.revG+')';
+          const errs = s.att==='present'?(s.errors&&s.errors.length?s.errors.map(e=>e.desc).join(' | '):'ممتاز'):'-';
+          sR.push([s.date, s_t.name, att, revTxt, s.score||'-', s.faces||'-', s.grade||'-', errs]);
+        });
+      });
+      if(sR.length>1) {
+        sess.getRange(1,1,sR.length,sH.length).setValues(sR);
+        sess.getRange(1,1,1,sH.length).setFontWeight('bold').setBackground('#D8F0E4');
+      }
+      return json({ok:true});
+    }
+    if (data.action === 'load') {
+      const db = ss.getSheetByName('DB_'+code);
+      const val = db ? db.getRange(1,2).getValue() : null;
+      return json({ok:true, payload: val||null});
+    }
+    if (data.action === 'ping') return json({ok:true, msg:'pong'});
+    return json({ok:false, msg:'unknown action'});
+  } catch(err) { return json({ok:false, msg:err.toString()}); }
+}
+function doGet(e) { return ContentService.createTextOutput('ALM API running').setMimeType(ContentService.MimeType.TEXT); }
+function json(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }`;
+
 function defState(){
   return{
     course:{teacher:'أ. هدى المحمدي', cname:'الزهراوين (البقرة وآل عمران)', pages:100, sdate:new Date().toISOString().split('T')[0], weeks:10, studyDays:5},
@@ -974,12 +1030,12 @@ function defState(){
 }
 
 function loadState(){
-  try{const d=localStorage.getItem('alm_v9');return d?JSON.parse(d):defState();}
+  try{const d=localStorage.getItem('alm_v10');return d?JSON.parse(d):defState();}
   catch{return defState();}
 }
 function save(){
   if(isStudentMode)return;
-  try{localStorage.setItem('alm_v9',JSON.stringify(S));setSyncDot('local');}catch{}
+  try{localStorage.setItem('alm_v10',JSON.stringify(S));setSyncDot('local');}catch{}
 }
 
 S = loadState();
@@ -1059,8 +1115,7 @@ const TOPBAR_DATA={
   session:['جلسة التسميع','حضور، تقييم، ومراجعة'],
   portal:['بوابة الطالبة','سجل شخصي خاص'],
   dash:['لوحة التحليلات 📊','نظرة عامة على أداء الحلقة'],
-  board:['لوحة الصدارة','إحصائيات الدورة'],
-  sheets:['ربط Google Sheets ☁️','حفظ سحابي ومزامنة']
+  board:['لوحة الصدارة','إحصائيات الدورة']
 };
 function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1073,7 +1128,6 @@ function showPage(id,btn){
   
   if(id==='board') renderBoard();
   if(id==='dash') initCharts();
-  if(id==='sheets') initSheets();
   if(id==='portal'&&isStudentMode){document.getElementById('sel-portal').value=loggedInStudentId;loadPortal();}
   closeSidebar();
 }
@@ -1096,12 +1150,12 @@ function toast(m){
 function setSyncDot(s){
   const dot=document.getElementById('sync-dot');
   const lbl=document.getElementById('sync-lbl');
-  const sd=document.getElementById('sheet-dot');
+  const sumDot=document.getElementById('sum-sync-dot');
+  const sumTxt=document.getElementById('sum-sync-txt');
   const map={ok:['sok','متزامن ☁️'],err:['serr','خطأ'],sync:['spnd','جارٍ...'],local:['slocal','محلي']};
   const[cls,txt]=map[s]||map.local;
-  dot.className='sync-dot '+cls;
-  lbl.textContent=txt;
-  if(sd) sd.className='sync-dot '+cls;
+  if(dot){ dot.className='sync-dot '+cls; lbl.textContent=txt; }
+  if(sumDot){ sumDot.className='sync-dot '+cls; sumTxt.textContent=txt; }
 }
 
 // ══ QUOTA CALC ═══════════════════════════════════════════
@@ -1122,6 +1176,22 @@ function updateSbName(){
   document.getElementById('sb-uname').textContent=n;
   document.getElementById('sb-av').textContent=n[0]||'م';
 }
+
+function lockSetup(){
+  document.getElementById('setup-edit-view').style.display='none';
+  document.getElementById('setup-locked-view').style.display='block';
+  document.getElementById('sum-teacher').textContent = S.course.teacher || '—';
+  document.getElementById('sum-course').textContent = S.course.cname || '—';
+  const sdMap = {5:'الأحد-الخميس', 6:'السبت-الخميس', 7:'كامل الأسبوع'};
+  document.getElementById('sum-days').textContent = sdMap[S.course.studyDays] || '—';
+  setSyncDot(S.sheetUrl ? 'ok' : 'local');
+}
+
+function unlockSetup(){
+  document.getElementById('setup-edit-view').style.display='block';
+  document.getElementById('setup-locked-view').style.display='none';
+}
+
 function initSetup(){
   const c=S.course;
   document.getElementById('teacher').value=c.teacher||'';
@@ -1130,10 +1200,21 @@ function initSetup(){
   document.getElementById('sdate').value=c.sdate||'';
   document.getElementById('tweeks').value=c.weeks||10;
   document.getElementById('study-days').value=c.studyDays||5;
+  document.getElementById('sheet-url').value=S.sheetUrl||'';
+  document.getElementById('teacher-code').value=S.teacherCode||'';
+  document.getElementById('gs-code').value=GS_CODE;
+  
   updateSbName();
   calcPlan();
   renderStudentList();
+
+  if(c.teacher && S.sheetUrl) {
+    lockSetup();
+  } else {
+    unlockSetup();
+  }
 }
+
 function calcPlan(){
   const tF=parseInt(document.getElementById('tpages').value)||200;
   const wks=parseInt(document.getElementById('tweeks').value)||10;
@@ -1152,13 +1233,32 @@ function calcPlan(){
   }
   document.getElementById('week-plan').innerHTML=html;
 }
-function saveCourse(){
-  S.course={teacher:document.getElementById('teacher').value,cname:document.getElementById('cname').value,
-    pages:parseInt(document.getElementById('tpages').value)||200,sdate:document.getElementById('sdate').value,
-    weeks:parseInt(document.getElementById('tweeks').value)||10,studyDays:parseInt(document.getElementById('study-days').value)||5};
-  save();calcPlan();updateSbName();toast('✅ تم حفظ إعدادات الدورة');
-  if(S.sheetUrl) syncToSheet(true);
+
+async function saveCourse(){
+  S.course={
+    teacher:document.getElementById('teacher').value.trim(),
+    cname:document.getElementById('cname').value.trim(),
+    pages:parseInt(document.getElementById('tpages').value)||200,
+    sdate:document.getElementById('sdate').value,
+    weeks:parseInt(document.getElementById('tweeks').value)||10,
+    studyDays:parseInt(document.getElementById('study-days').value)||5
+  };
+  S.sheetUrl = document.getElementById('sheet-url').value.trim();
+  S.teacherCode = document.getElementById('teacher-code').value.trim();
+  
+  save(); calcPlan(); updateSbName(); lockSetup(); 
+  toast('✅ تم حفظ وتثبيت الإعدادات');
+  
+  if(S.sheetUrl && S.teacherCode) {
+     setSyncDot('sync');
+     const r = await sheetReq('ping');
+     if(r?.ok) { syncToSheet(true); } 
+     else { setSyncDot('err'); toast('⚠️ فشل الاتصال بقاعدة البيانات'); }
+  } else {
+     setSyncDot('local');
+  }
 }
+
 // 🗄️ الأرشفة الذكية
 function archiveCourse() {
   if(!confirm('⚠️ تحذير: هل أنتِ متأكدة من أرشفة هذه الدورة؟ \nسيتم تصفير جميع درجات وسجلات الطالبات للبدء من جديد، مع الاحتفاظ بأسمائهن ومقرراتهن. \n(تأكدي من طباعة التقارير قبل الأرشفة)')) return;
@@ -1174,7 +1274,6 @@ function archiveCourse() {
   });
   // Reset course start date to today
   S.course.sdate = new Date().toISOString().split('T')[0];
-  document.getElementById('sdate').value = S.course.sdate;
   
   save(); initSetup(); toast('🗄️ تم تصفير الدورة بنجاح. عام جديد مبارك!');
   if(S.sheetUrl) syncToSheet(true);
@@ -1230,7 +1329,7 @@ function popSelects(){
   });
 }
 function copyStudentLink(id){
-  if(!S.sheetUrl||!S.teacherCode){toast('⚠️ احفظي إعدادات Google Sheets أولاً');return;}
+  if(!S.sheetUrl||!S.teacherCode){toast('⚠️ احفظي إعدادات الدورة والربط السحابي أولاً');return;}
   const base=window.location.href.split('?')[0];
   const link=`${base}?s=${id}&u=${btoa(S.sheetUrl)}&c=${btoa(S.teacherCode)}`;
   const h=document.getElementById('copy-helper');h.value=link;h.select();
@@ -1238,7 +1337,7 @@ function copyStudentLink(id){
   toast('🔗 تم نسخ الرابط السري للطالبة!');
 }
 
-// ══ SESSION (WITH REVIEW) ════════════════════════════════
+// ══ SESSION (WITH REVIEW & DEDUCT) ═══════════════════════
 function startSession(){
   const id=document.getElementById('sel-st').value;
   if(!id){document.getElementById('sess-body').style.display='none';return;}
@@ -1263,8 +1362,9 @@ function startSession(){
 function toggleSessBody(){
   const att=document.getElementById('sess-att').value;
   const isPresent=att==='present';
-  // Hide deduct section and live score if absent
-  document.getElementById('evaluation-wrap').style.display = isPresent ? 'block' : 'none';
+  
+  const wrap=document.getElementById('evaluation-wrap');
+  if(wrap) wrap.style.display = isPresent ? 'block' : 'none';
   document.getElementById('btn-copy-rep').style.display = isPresent ? 'inline-flex' : 'none';
   
   const sel = document.getElementById('sess-att');
@@ -1408,20 +1508,15 @@ function initCharts() {
   const jadeColor = isDark ? '#3AA870' : '#2A7A50';
   const roseColor = isDark ? '#E05570' : '#B03348';
 
-  // حساب الإحصائيات العامة
   let totalScore = 0, validScores = 0, totalStars = 0;
   let attPres = 0, attEx = 0, attUnex = 0;
-  
-  const names = [];
-  const scores = [];
+  const names = []; const scores = [];
 
   S.students.forEach(st => {
-    names.push(st.name.split(' ')[0]); // الاسم الأول فقط للشارت
+    names.push(st.name.split(' ')[0]);
     scores.push(st.score || 0);
     totalStars += (st.stars || 0);
-    
     if(st.score) { totalScore += st.score; validScores++; }
-    
     if(st.sessions) {
       st.sessions.forEach(sess => {
         if(sess.att === 'present') attPres++;
@@ -1439,19 +1534,13 @@ function initCharts() {
   document.getElementById('d-total-stars').textContent = totalStars;
   document.getElementById('d-att-rate').textContent = attRate + '%';
 
-  // Chart 1: Scores (Bar)
   const ctxScore = document.getElementById('scoreChart');
   if(window.scoreChartInst) window.scoreChartInst.destroy();
   window.scoreChartInst = new Chart(ctxScore, {
     type: 'bar',
     data: {
       labels: names,
-      datasets: [{
-        label: 'آخر درجة إتقان',
-        data: scores,
-        backgroundColor: goldColor,
-        borderRadius: 4
-      }]
+      datasets: [{ label: 'آخر درجة إتقان', data: scores, backgroundColor: goldColor, borderRadius: 4 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
@@ -1463,24 +1552,17 @@ function initCharts() {
     }
   });
 
-  // Chart 2: Attendance (Doughnut)
   const ctxAtt = document.getElementById('attChart');
   if(window.attChartInst) window.attChartInst.destroy();
   window.attChartInst = new Chart(ctxAtt, {
     type: 'doughnut',
     data: {
       labels: ['حضور', 'غياب بعذر', 'غياب بدون عذر'],
-      datasets: [{
-        data: [attPres, attEx, attUnex],
-        backgroundColor: [jadeColor, goldColor, roseColor],
-        borderWidth: 0
-      }]
+      datasets: [{ data: [attPres, attEx, attUnex], backgroundColor: [jadeColor, goldColor, roseColor], borderWidth: 0 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'left', labels: { color: textColor, font: {family: 'Cairo'} } }
-      }
+      plugins: { legend: { position: 'left', labels: { color: textColor, font: {family: 'Cairo'} } } }
     }
   });
 }
@@ -1489,11 +1571,10 @@ function initCharts() {
 function calculateStreak(sessions) {
   if (!sessions || sessions.length === 0) return 0;
   let streak = 0;
-  // Sort from newest to oldest
   const sorted = [...sessions].sort((a,b) => b.ts - a.ts);
   for (let i = 0; i < sorted.length; i++) {
     if (sorted[i].att === 'present') streak++;
-    else if (sorted[i].att === 'unexcused') break; // Streak broken! (Excused doesn't break it, just skips)
+    else if (sorted[i].att === 'unexcused') break; 
   }
   return streak;
 }
@@ -1545,9 +1626,6 @@ function loadPortal(){
   document.getElementById('p-prog-pct').textContent=pct+'%';
   
   const dn=getDayNames(sd);
-  // Get actual dates for the *current* week based on start date.
-  // For simplicity in this UI, we assume we are looking at Week 1 UI. 
-  // In a full app, you'd have a week selector. Here we just show sequential dates from start.
   document.getElementById('p-days').innerHTML=days.map((d,i)=>{
     const actDate = getActualDateStr(S.course.sdate, 1, i, sd);
     return `
@@ -1696,83 +1774,6 @@ function renderBoard(){
 }
 
 // ══ GOOGLE SHEETS ═════════════════════════════════════════
-const GS_CODE=`// لوحة ألف لام ميم — Apps Script Backend v3 (يدعم المراجعة)
-// الصقي هذا الكود في محرر Apps Script ثم انشريه كـ Web App
-
-function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents);
-    const code = data.code;
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-
-    if (data.action === 'save') {
-      const S = JSON.parse(data.payload);
-      
-      // 1. Data Base
-      let db = ss.getSheetByName('DB_'+code) || ss.insertSheet('DB_'+code);
-      db.hideSheet();
-      db.getRange(1,1,1,2).setValues([['alm_data', data.payload]]);
-      
-      // 2. Students
-      let st = ss.getSheetByName('طالبات_'+code) || ss.insertSheet('طالبات_'+code);
-      st.clear(); st.setRightToLeft(true);
-      const stH = ['رقم','الاسم','مقرر خاص','آخر درجة','نجوم','جلسات ناجحة','إجمالي الجلسات'];
-      const stR = [stH, ...(S.students||[]).map(s=>
-        [s.id, s.name, s.customFaces||'المقرر العام', s.score||'-', s.stars||0, s.ok||0, s.total||0])];
-      st.getRange(1,1,stR.length,stH.length).setValues(stR);
-      st.getRange(1,1,1,stH.length).setFontWeight('bold').setBackground('#F5E6C8');
-      
-      // 3. Sessions
-      let sess = ss.getSheetByName('سجل_تسميع_'+code) || ss.insertSheet('سجل_تسميع_'+code);
-      sess.clear(); sess.setRightToLeft(true);
-      const sH = ['التاريخ','اسم الطالبة','الحضور','المراجعة','الدرجة','الأوجه','التقييم','الملاحظات'];
-      const sR = [sH];
-      (S.students||[]).forEach(s_t => {
-        (s_t.sessions||[]).forEach(s => {
-          const att = s.att==='excused'?'غائبة بعذر':s.att==='unexcused'?'غائبة بدون عذر':'حاضرة';
-          let revTxt = '-';
-          if(s.rev && s.rev !== 'none') revTxt = (s.rev==='minor'?'صغرى':s.rev==='major'?'كبرى':'شاملة') + ' ('+s.revG+')';
-          const errs = s.att==='present'?(s.errors&&s.errors.length?s.errors.map(e=>e.desc).join(' | '):'ممتاز'):'-';
-          sR.push([s.date, s_t.name, att, revTxt, s.score||'-', s.faces||'-', s.grade||'-', errs]);
-        });
-      });
-      if(sR.length>1) {
-        sess.getRange(1,1,sR.length,sH.length).setValues(sR);
-        sess.getRange(1,1,1,sH.length).setFontWeight('bold').setBackground('#D8F0E4');
-      }
-      return json({ok:true});
-    }
-    
-    if (data.action === 'load') {
-      const db = ss.getSheetByName('DB_'+code);
-      const val = db ? db.getRange(1,2).getValue() : null;
-      return json({ok:true, payload: val||null});
-    }
-    
-    if (data.action === 'ping') return json({ok:true, msg:'pong'});
-    return json({ok:false, msg:'unknown action'});
-    
-  } catch(err) {
-    return json({ok:false, msg:err.toString()});
-  }
-}
-function doGet(e) { return ContentService.createTextOutput('ALM API running').setMimeType(ContentService.MimeType.TEXT); }
-function json(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }`;
-
-function initSheets(){
-  document.getElementById('gs-code').value=GS_CODE;
-  document.getElementById('sheet-url').value=S.sheetUrl||'';
-  document.getElementById('teacher-code').value=S.teacherCode||'';
-  const ok=S.sheetUrl&&S.teacherCode;
-  document.getElementById('sheet-st-txt').textContent=ok?'الإعدادات مسجلة — اختبري الاتصال':'لم يتم الربط بعد';
-}
-function copyGsCode(){navigator.clipboard.writeText(GS_CODE).then(()=>toast('✅ تم نسخ الكود')).catch(()=>{});}
-function saveSheetCfg(){
-  S.sheetUrl=document.getElementById('sheet-url').value.trim();
-  S.teacherCode=document.getElementById('teacher-code').value.trim();
-  save();document.getElementById('sheet-st-txt').textContent='تم حفظ الإعدادات';
-  toast('✅ تم حفظ إعدادات الربط');
-}
 async function sheetReq(action,extra={}){
   const url=S.sheetUrl||document.getElementById('sheet-url')?.value?.trim();
   const code=S.teacherCode||document.getElementById('teacher-code')?.value?.trim();
@@ -1785,7 +1786,7 @@ async function sheetReq(action,extra={}){
 }
 async function testSheet(){
   const r=await sheetReq('ping');
-  if(r?.ok){setSyncDot('ok');toast('✅ الاتصال يعمل بنجاح!');document.getElementById('sheet-st-txt').textContent='متصل ✓';}
+  if(r?.ok){setSyncDot('ok');toast('✅ الاتصال يعمل بنجاح!');}
   else if(r){setSyncDot('err');toast('⚠️ فشل: '+(r.msg||''));}
 }
 async function syncToSheet(silent=false,force=false){
@@ -1806,6 +1807,7 @@ async function loadFromSheet(isInit=false){
   }else if(r?.ok&&isStudentMode){toast('⚠️ لم تقم المعلمة برفع البيانات بعد');}
   else if(r?.ok){toast('⚠️ لا توجد بيانات بعد');setSyncDot('ok');}
 }
+function copyGsCode(){navigator.clipboard.writeText(GS_CODE).then(()=>toast('✅ تم نسخ الكود')).catch(()=>{});}
 
 // ══ BOOTSTRAP ════════════════════════════════════════════
 function initApp(){
@@ -1824,7 +1826,6 @@ function initApp(){
     loadFromSheet(true);
   }else{
     initSetup();popSelects();
-    if(S.sheetUrl&&S.teacherCode)setSyncDot('local');
     showPage('setup',document.getElementById('nav-setup'));
   }
 }
