@@ -2,910 +2,754 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>لوحة ألف لام ميم الأكاديمية</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>منصة ألف لام ميم الأكاديمية</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <!-- مكتبة الرسوم البيانية -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 /* ══════════════════════════════════════════════════
-   DESIGN TOKENS — LIGHT / DARK
+   LUXURY DESIGN TOKENS (PURPLE & GOLD)
 ══════════════════════════════════════════════════ */
 :root {
-  --gold:#C8922A; --gold-lt:#F5E6C8; --gold-pale:#FDF8EE; --gold-dk:#8B6318;
-  --jade:#2A7A50; --jade-lt:#D8F0E4; --jade-dk:#1A4D31;
-  --rose:#B03348; --rose-lt:#FCEAED; --rose-dk:#7A1F2E;
-  --sky:#3B7DD8;  --sky-lt:#E8F0FD;
-  --ink:#1A1714; --ink-2:#3A3530; --ink-3:#6B6560; --ink-4:#9A948E;
-  --bg-0:#F5F1EB; --bg-1:#FDFCFA; --bg-2:#EDE8E0; --bg-3:#E4DED4;
-  --border:rgba(26,23,20,0.10); --border-md:rgba(26,23,20,0.18);
-  --shadow-xs:0 1px 3px rgba(0,0,0,0.06);
-  --shadow-sm:0 2px 8px rgba(0,0,0,0.08);
-  --shadow-md:0 4px 20px rgba(0,0,0,0.10);
-  --shadow-lg:0 8px 36px rgba(0,0,0,0.14);
-  --r-sm:8px; --r:12px; --r-lg:18px; --r-xl:24px;
-  --sidebar-w:240px;
-  --trans:.2s cubic-bezier(.4,0,.2,1);
+  /* Brand Colors */
+  --primary: #3B1C40; /* Dark Purple */
+  --primary-lt: #562B5C;
+  --primary-pale: #F3EAF4;
+  --gold: #D4AF37;
+  --gold-lt: #F1DFA6;
+  --gold-pale: #FCF9F1;
+  --gold-dk: #AA8A2A;
+  
+  /* Status Colors */
+  --success: #2E7D52;
+  --success-lt: #E2F3E9;
+  --danger: #C0392B;
+  --danger-lt: #FBEAE8;
+  --info: #2980B9;
+  --info-lt: #EAF4FB;
+
+  /* Neutrals - Light Mode */
+  --bg-app: #F8F7F9;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F3F1F4;
+  --text-main: #1A151A;
+  --text-muted: #6B626D;
+  --border: rgba(59, 28, 64, 0.08);
+  --border-strong: rgba(59, 28, 64, 0.15);
+  
+  /* Shadows */
+  --shadow-sm: 0 4px 12px rgba(59, 28, 64, 0.04);
+  --shadow-md: 0 8px 24px rgba(59, 28, 64, 0.06);
+  --shadow-lg: 0 16px 48px rgba(59, 28, 64, 0.08);
+  
+  /* Radii & Transitions */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --sidebar-w: 260px;
+  --trans: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   color-scheme: light;
 }
+
 [data-theme="dark"] {
-  --gold:#E0A83A; --gold-lt:#3A2E10; --gold-pale:#2A2210; --gold-dk:#F5D070;
-  --jade:#3AA870; --jade-lt:#0F2E1E; --jade-dk:#7ADBA8;
-  --rose:#E05570; --rose-lt:#2E0F18; --rose-dk:#F5A0B0;
-  --sky:#5B9DF8;  --sky-lt:#0F1E38;
-  --ink:#F0ECE6; --ink-2:#C8C2BA; --ink-3:#8A8278; --ink-4:#5A5450;
-  --bg-0:#181614; --bg-1:#211E1B; --bg-2:#2A2622; --bg-3:#33302B;
-  --border:rgba(255,255,255,0.08); --border-md:rgba(255,255,255,0.16);
-  --shadow-xs:0 1px 3px rgba(0,0,0,0.3);
-  --shadow-sm:0 2px 8px rgba(0,0,0,0.35);
-  --shadow-md:0 4px 20px rgba(0,0,0,0.4);
-  --shadow-lg:0 8px 36px rgba(0,0,0,0.5);
+  /* Neutrals - Dark Mode */
+  --primary: #C59BCC; /* Lighter purple for dark mode text/accents */
+  --primary-lt: #9B6C9E;
+  --primary-pale: #2C1830;
+  --gold: #D4AF37;
+  --gold-pale: #2B2312;
+  
+  --bg-app: #110E12;
+  --bg-surface: #1C171E;
+  --bg-elevated: #28222B;
+  --text-main: #F0EBF1;
+  --text-muted: #A39CA6;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
   color-scheme: dark;
 }
 
-/* ══ RESET & BASE ══ */
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html{font-size:15px;}
-body{font-family:'Cairo',sans-serif;background:var(--bg-0);color:var(--ink);min-height:100vh;transition:background var(--trans),color var(--trans);overflow-x:hidden;}
-a{color:var(--gold);text-decoration:none;}
-button{cursor:pointer;font-family:'Cairo',sans-serif;}
-input,select,textarea{font-family:'Cairo',sans-serif;}
+/* ══ BASE ══ */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { 
+  font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(--text-main); 
+  min-height: 100vh; overflow-x: hidden; transition: background var(--trans), color var(--trans);
+}
+h1, h2, h3, h4 { font-family: 'Amiri', serif; font-weight: 700; color: var(--primary); }
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 { color: var(--gold); }
+a { color: var(--gold); text-decoration: none; }
+button { cursor: pointer; font-family: 'Cairo', sans-serif; border: none; outline: none; }
+input, select, textarea { font-family: 'Cairo', sans-serif; }
 
 /* ══ SCROLLBAR ══ */
-::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--border-md);border-radius:10px;}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
 
-/* ══════════════════════════════════════════════════
-   LAYOUT
-══════════════════════════════════════════════════ */
-.app{display:flex;min-height:100vh;position:relative;}
+/* ══ LAYOUT ══ */
+.app-container { display: flex; min-height: 100vh; }
 
 /* ══ SIDEBAR ══ */
-.sidebar{
-  width:var(--sidebar-w);flex-shrink:0;
-  background:var(--bg-1);
-  border-left:1px solid var(--border);
-  display:flex;flex-direction:column;
-  position:fixed;right:0;top:0;height:100vh;
-  z-index:200;
-  transition:transform var(--trans),width var(--trans),background var(--trans);
-  overflow:hidden;
+.sidebar {
+  width: var(--sidebar-w); background: var(--bg-surface); border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; position: fixed; right: 0; top: 0; height: 100vh;
+  z-index: 200; transition: transform var(--trans);
 }
-.sidebar.collapsed{width:64px;}
-.sb-logo{
-  display:flex;align-items:center;gap:12px;
-  padding:20px 16px 16px;
-  border-bottom:1px solid var(--border);
+.sidebar-header {
+  padding: 30px 24px 20px; border-bottom: 1px solid var(--border-strong);
+  display: flex; align-items: center; gap: 14px;
 }
-.logo-mark{
-  width:42px;height:42px;border-radius:var(--r-sm);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0; overflow:hidden; position:relative;
+.logo-container {
+  width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-lt));
+  display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(59, 28, 64, 0.2);
 }
-.logo-img { width:100%; height:100%; object-fit:contain; }
-.logo-fallback {
-  position:absolute; inset:0; background:linear-gradient(135deg,var(--gold),#E8A832);
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Amiri',serif; font-size:18px; font-weight:700; color:#fff;
-  box-shadow:0 2px 8px rgba(200,146,42,0.4);
-}
+.logo-container img { width: 100%; height: 100%; object-fit: contain; border-radius: 14px; }
+.logo-fallback { font-family: 'Amiri', serif; font-size: 20px; color: var(--gold); font-weight: 700; }
+.brand-text h1 { font-size: 18px; margin-bottom: 2px; }
+.brand-text p { font-size: 12px; color: var(--text-muted); font-weight: 600; }
 
-.logo-text{overflow:hidden;transition:opacity var(--trans),width var(--trans);}
-.logo-text h1{font-family:'Amiri',serif;font-size:15px;font-weight:700;color:var(--gold);white-space:nowrap;}
-.logo-text p{font-size:11px;color:var(--ink-4);white-space:nowrap;margin-top:1px;}
-.sidebar.collapsed .logo-text{opacity:0;width:0;pointer-events:none;}
-
-.sb-nav{flex:1;padding:12px 8px;overflow-y:auto;overflow-x:hidden;}
-.nv{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 12px;border-radius:var(--r-sm);
-  border:none;background:none;width:100%;
-  text-align:right;color:var(--ink-3);
-  font-size:13.5px;font-weight:500;
-  transition:all var(--trans);margin-bottom:2px;
-  white-space:nowrap;overflow:hidden;
-  position:relative;
+.nav-menu { flex: 1; padding: 20px 14px; overflow-y: auto; }
+.nav-item {
+  display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: var(--r-md);
+  color: var(--text-muted); font-size: 15px; font-weight: 600; margin-bottom: 8px;
+  transition: all var(--trans); background: transparent; width: 100%; text-align: right;
 }
-.nv:hover{background:var(--bg-2);color:var(--ink);}
-.nv.active{background:var(--gold-pale);color:var(--gold);font-weight:700;}
-.nv.active::before{
-  content:'';position:absolute;right:0;top:20%;height:60%;
-  width:3px;background:var(--gold);border-radius:2px;
+.nav-item:hover { background: var(--bg-elevated); color: var(--text-main); }
+.nav-item.active { background: var(--primary-pale); color: var(--primary); }
+[data-theme="dark"] .nav-item.active { background: var(--primary-pale); color: var(--gold); }
+.nav-icon { font-size: 20px; }
+
+.sidebar-footer { padding: 20px; border-top: 1px solid var(--border); }
+.user-profile { display: flex; align-items: center; gap: 12px; }
+.user-avatar {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--gold-pale);
+  border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center;
+  font-family: 'Amiri', serif; font-weight: 700; color: var(--gold-dk); font-size: 16px;
 }
-.nv-ic{font-size:17px;flex-shrink:0;width:22px;text-align:center;}
-.nv-txt{transition:opacity var(--trans);}
-.sidebar.collapsed .nv-txt,.sidebar.collapsed .nv::before{opacity:0;pointer-events:none;}
-.sidebar.collapsed .nv{justify-content:center;padding:12px;}
-
-.nv-sep{height:1px;background:var(--border);margin:8px 4px;}
-
-.sb-bottom{padding:10px 8px 16px;border-top:1px solid var(--border);}
-.sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);background:var(--bg-2);}
-.sb-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--jade));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
-.sb-uinfo{overflow:hidden;transition:opacity var(--trans);}
-.sb-uname{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;}
-.sb-urole{font-size:10px;color:var(--ink-4);white-space:nowrap;}
-.sidebar.collapsed .sb-uinfo,.sidebar.collapsed .sb-user-extra{opacity:0;width:0;pointer-events:none;}
+.user-info h4 { font-family: 'Cairo', sans-serif; font-size: 14px; color: var(--text-main); }
+.user-info p { font-size: 11px; color: var(--text-muted); }
 
 /* ══ MAIN CONTENT ══ */
-.main{
-  flex:1; margin-right:var(--sidebar-w); min-height:100vh;
-  transition:margin var(--trans); display:flex;flex-direction:column;
+.main-content {
+  flex: 1; margin-right: var(--sidebar-w); display: flex; flex-direction: column;
+  min-height: 100vh;
 }
-.sidebar.collapsed~.main{margin-right:64px;}
-
-/* ══ TOP BAR ══ */
-.topbar{
-  position:sticky;top:0;z-index:100; background:var(--bg-1);
-  border-bottom:1px solid var(--border); padding:0 24px; height:58px;
-  display:flex;align-items:center;gap:12px; backdrop-filter:blur(12px);
-  transition:background var(--trans);
+.top-header {
+  height: 76px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; position: sticky; top: 0; z-index: 100;
 }
-.topbar-title{font-size:15px;font-weight:700;color:var(--ink);flex:1;}
-.topbar-sub{font-size:12px;color:var(--ink-4);margin-top:1px;}
-.topbar-actions{display:flex;align-items:center;gap:8px;}
+[data-theme="dark"] .top-header { background: rgba(28, 23, 30, 0.8); }
+.header-titles h2 { font-size: 22px; margin-bottom: 2px; }
+.header-titles p { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+.header-actions { display: flex; align-items: center; gap: 12px; }
 
-/* Toggle collapse */
-.btn-icon{
-  width:36px;height:36px;border-radius:var(--r-sm);border:1px solid var(--border);
-  background:var(--bg-2);display:flex;align-items:center;justify-content:center;
-  font-size:16px;transition:all var(--trans);flex-shrink:0;
+/* Sync Pill */
+.sync-indicator {
+  display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 30px;
+  background: var(--bg-elevated); border: 1px solid var(--border-strong);
+  font-size: 12px; font-weight: 700; cursor: pointer; transition: all var(--trans);
 }
-.btn-icon:hover{background:var(--bg-3);transform:scale(1.05);}
+.sync-indicator:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot.ok { background: var(--success); box-shadow: 0 0 8px var(--success); }
+.dot.err { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+.dot.sync { background: var(--gold); animation: pulse 1s infinite; }
+.dot.local { background: var(--text-muted); }
 
-/* Theme toggle */
-.theme-toggle{
-  width:52px;height:28px;border-radius:20px; background:var(--bg-3);border:1px solid var(--border);
-  position:relative;cursor:pointer;transition:all var(--trans); flex-shrink:0;
+/* Theme Toggle */
+.btn-icon {
+  width: 42px; height: 42px; border-radius: 50%; background: var(--bg-elevated);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+  border: 1px solid var(--border); transition: all var(--trans); color: var(--text-main);
 }
-.theme-toggle::after{
-  content:'☀️';position:absolute;right:3px;top:50%; transform:translateY(-50%);font-size:14px; transition:all var(--trans);
-}
-[data-theme="dark"] .theme-toggle{background:var(--bg-3);}
-[data-theme="dark"] .theme-toggle::after{content:'🌙';right:auto;left:3px;}
+.btn-icon:hover { background: var(--primary-pale); color: var(--primary); transform: rotate(15deg); }
+[data-theme="dark"] .btn-icon:hover { color: var(--gold); }
 
-/* Sync status */
-.sync-pill{
-  display:flex;align-items:center;gap:5px; padding:4px 10px;border-radius:20px;
-  font-size:11px;font-weight:600; background:var(--bg-2);border:1px solid var(--border);
-  transition:all var(--trans);cursor:default;
-}
-.sync-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.sok{background:#2A7A50;} .serr{background:#B03348;} .spnd{background:var(--gold);animation:pulse .9s infinite;} .slocal{background:var(--ink-4);}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+/* ══ PAGE STRUCTURE ══ */
+.page-wrapper { padding: 32px; max-width: 1100px; margin: 0 auto; width: 100%; display: none; animation: fadeUp 0.4s ease; }
+.page-wrapper.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ══ PAGE CONTAINER ══ */
-.pages{flex:1;overflow:hidden;}
-.page{display:none;padding:24px;animation:fadeIn .25s ease; max-width:960px; margin:0 auto;}
-.page.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-
-.pg-head{margin-bottom:22px; display:flex; justify-content:space-between; align-items:flex-end;}
-.pg-title{font-family:'Amiri',serif;font-size:24px;font-weight:700;color:var(--ink);}
-.pg-sub{font-size:12.5px;color:var(--ink-4);margin-top:3px;}
-
-/* ══════════════════════════════════════════════════
-   COMPONENTS
-══════════════════════════════════════════════════ */
-
+/* ══ UI COMPONENTS ══ */
 /* Cards */
-.card{
-  background:var(--bg-1); border:1px solid var(--border); border-radius:var(--r-lg);
-  padding:18px 20px; margin-bottom:14px; box-shadow:var(--shadow-xs);
-  transition:background var(--trans),border var(--trans),box-shadow var(--trans);
+.card {
+  background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+  padding: 28px; margin-bottom: 24px; box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--trans), transform var(--trans);
 }
-.card:hover{box-shadow:var(--shadow-sm);}
-.card-title{
-  font-size:13px;font-weight:700; color:var(--ink-3);
-  letter-spacing:.05em; margin-bottom:14px; display:flex;align-items:center;gap:8px;
-}
-.card-title::before{content:'';display:block;width:3px;height:12px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+.card:hover { box-shadow: var(--shadow-md); }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.card-title { font-size: 18px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+[data-theme="dark"] .card-title { color: var(--gold); }
+.card-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--gold); border-radius: 4px; }
 
-/* Grid */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-@media(max-width:700px){.g2{grid-template-columns:1fr;}.g3,.g4{grid-template-columns:1fr 1fr;}}
-@media(max-width:480px){.g3,.g4{grid-template-columns:1fr;}}
+/* Grid Layouts */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 
-/* Form */
-.field{margin-bottom:12px;}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--ink-3);margin-bottom:5px;}
-input[type=text],input[type=number],input[type=date],select{
-  width:100%;padding:9px 12px; border:1px solid var(--border-md); border-radius:var(--r-sm);
-  font-size:13.5px; background:var(--bg-0); color:var(--ink); outline:none;
-  transition:border var(--trans),box-shadow var(--trans),background var(--trans);
+/* Forms */
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+.form-control {
+  width: 100%; padding: 14px 16px; border: 2px solid var(--border-strong); border-radius: var(--r-md);
+  font-size: 15px; font-weight: 600; background: var(--bg-app); color: var(--text-main);
+  transition: all var(--trans);
 }
-input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,146,42,0.15);}
-select option{background:var(--bg-1);}
+.form-control:focus { border-color: var(--gold); background: var(--bg-surface); box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1); }
+select.form-control { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 16px center; background-size: 16px; }
 
 /* Buttons */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  padding:8px 16px;border-radius:var(--r-sm); border:1px solid var(--border-md);
-  background:var(--bg-2);color:var(--ink); font-size:13px;font-weight:600;
-  transition:all var(--trans);white-space:nowrap;
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 24px; border-radius: var(--r-md); font-size: 15px; font-weight: 700;
+  transition: all var(--trans); cursor: pointer; border: 2px solid transparent;
 }
-.btn:hover{background:var(--bg-3);transform:translateY(-1px);box-shadow:var(--shadow-sm);}
-.btn:active{transform:scale(.98);}
-.btn-gold{background:var(--gold);color:#fff;border-color:var(--gold);}
-.btn-gold:hover{background:var(--gold-dk);border-color:var(--gold-dk);}
-.btn-jade{background:var(--jade);color:#fff;border-color:var(--jade);}
-.btn-jade:hover{background:var(--jade-dk);}
-.btn-rose{background:var(--rose-lt);color:var(--rose);border-color:rgba(176,51,72,.2);}
-.btn-sky{background:var(--sky-lt);color:var(--sky);border-color:rgba(59,125,216,.2);}
-.btn-ghost{background:transparent;border-color:transparent;color:var(--ink-3);}
-.btn-ghost:hover{background:var(--bg-2);}
-.btn-full{width:100%;}
-.btn-sm{padding:5px 12px;font-size:12px;}
-.btn-lg{padding:11px 22px;font-size:14px;}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 15px rgba(59, 28, 64, 0.2); }
+.btn-primary:hover { background: var(--primary-lt); box-shadow: 0 6px 20px rgba(59, 28, 64, 0.3); transform: translateY(-2px); }
+.btn-gold { background: var(--gold); color: #fff; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
+.btn-gold:hover { background: var(--gold-dk); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); transform: translateY(-2px); }
+.btn-outline { background: transparent; border-color: var(--border-strong); color: var(--text-main); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-pale); }
+[data-theme="dark"] .btn-outline:hover { border-color: var(--gold); color: var(--gold); background: var(--primary-pale); }
+.btn-danger { background: var(--danger-lt); color: var(--danger); border-color: rgba(192, 57, 43, 0.2); }
+.btn-block { width: 100%; }
 
-/* Metric cards */
-.mc{ background:var(--bg-0);border:1px solid var(--border); border-radius:var(--r);padding:14px 12px;text-align:center; transition:all var(--trans); }
-.mc:hover{border-color:var(--gold);transform:translateY(-1px);}
-.mc-val{font-family:'Amiri',serif;font-size:28px;font-weight:700;color:var(--gold);line-height:1;}
-.mc-lbl{font-size:11px;color:var(--ink-4);margin-top:4px;}
+/* Stat Cards (KPIs) */
+.kpi-card {
+  background: var(--bg-app); border: 1px solid var(--border); border-radius: var(--r-md);
+  padding: 24px; display: flex; flex-direction: column; justify-content: center;
+  transition: all var(--trans); position: relative; overflow: hidden;
+}
+.kpi-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 100%; height: 4px; background: var(--gold); transform: scaleX(0); transform-origin: right; transition: transform var(--trans); }
+.kpi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--gold); }
+.kpi-card:hover::after { transform: scaleX(1); }
+.kpi-value { font-family: 'Amiri', serif; font-size: 36px; font-weight: 700; color: var(--primary); line-height: 1.2; }
+[data-theme="dark"] .kpi-value { color: var(--gold); }
+.kpi-label { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-/* Badge */
-.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700;}
-.bx{background:var(--gold-pale);color:var(--gold-dk);}
-.bj{background:var(--jade-lt);color:var(--jade-dk);}
-.br{background:var(--rose-lt);color:var(--rose-dk);}
-.bs{background:var(--bg-2);color:var(--ink-3);}
-.bsky{background:var(--sky-lt);color:var(--sky);}
+/* Alerts / Info Boxes */
+.alert {
+  padding: 16px 20px; border-radius: var(--r-md); margin-bottom: 20px;
+  font-size: 14px; font-weight: 600; display: flex; align-items: flex-start; gap: 12px;
+}
+.alert-info { background: var(--info-lt); color: var(--info); border: 1px solid rgba(41, 128, 185, 0.2); }
+.alert-warning { background: var(--gold-pale); color: var(--gold-dk); border: 1px solid rgba(212, 175, 55, 0.2); }
 
-/* Progress */
-.prog{background:var(--bg-2);border-radius:20px;height:10px;overflow:hidden;}
-.prog-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--jade),var(--gold));transition:width .5s cubic-bezier(.4,0,.2,1);}
+/* Badges */
+.status-badge {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+  border-radius: 30px; font-size: 12px; font-weight: 700;
+}
+.status-excellent { background: var(--gold-pale); color: var(--gold-dk); border: 1px solid rgba(212, 175, 55, 0.3); }
+.status-good { background: var(--success-lt); color: var(--success); }
+.status-poor { background: var(--danger-lt); color: var(--danger); }
+.status-neutral { background: var(--bg-elevated); color: var(--text-muted); }
 
-/* Student row */
-.st-row{ display:flex;align-items:center;gap:12px; padding:10px 0;border-bottom:1px solid var(--border); }
-.st-row:last-child{border-bottom:none;}
-.av{ width:36px;height:36px;border-radius:50%; background:linear-gradient(135deg,var(--gold-pale),var(--gold-lt)); border:1.5px solid var(--gold); display:flex;align-items:center;justify-content:center; font-family:'Amiri',serif;font-size:15px;font-weight:700; color:var(--gold-dk);flex-shrink:0; }
+/* Lists & Rows */
+.list-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px; border: 1px solid var(--border-strong); border-radius: var(--r-md);
+  margin-bottom: 12px; background: var(--bg-surface); transition: all var(--trans);
+}
+.list-row:hover { border-color: var(--primary); box-shadow: var(--shadow-sm); }
+[data-theme="dark"] .list-row:hover { border-color: var(--gold); }
+.list-content { display: flex; align-items: center; gap: 16px; }
+.list-actions { display: flex; gap: 8px; }
 
-/* Week row */
-.wk-row{ display:flex;align-items:center;gap:10px; padding:8px 12px;border-radius:var(--r-sm); background:var(--bg-0);border:1px solid var(--border); margin-bottom:5px;font-size:13px; transition:border var(--trans); }
-.wk-row:hover{border-color:var(--gold);}
-.wk-num{width:85px;font-weight:700;color:var(--gold);}
-.wk-pages{flex:1;font-weight:600;}
-.wk-count{font-size:11px;color:var(--ink-4);}
+/* Large Score Display */
+.score-display { text-align: center; padding: 30px 0; }
+.score-number {
+  font-family: 'Amiri', serif; font-size: 96px; font-weight: 700; line-height: 1;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;
+}
+[data-theme="dark"] .score-number { background: linear-gradient(135deg, var(--gold-lt), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
 
-/* Deduct row */
-.ded-row{ display:grid;grid-template-columns:1fr auto; gap:10px;align-items:center; padding:10px 0;border-bottom:1px solid var(--border); }
-.ded-row:last-child{border-bottom:none;padding-bottom:0;}
-.ded-inputs{display:flex;gap:6px;}
-.ded-inputs input{min-width:0;}
-.d-btn{ padding:10px 16px;border-radius:var(--r);border:1.5px solid; text-align:center;transition:all var(--trans);min-width:120px; }
-.d-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);}
-.d-btn:active{transform:scale(.97);}
-.d-ic{font-size:18px;display:block;margin-bottom:3px;}
-.d-lb{font-size:11px;font-weight:700;display:block;}
-.d-pt{font-size:17px;font-weight:800;display:block;margin-top:3px;}
-.da{background:var(--gold-pale);color:var(--gold-dk);border-color:rgba(200,146,42,.3);}
-.dd{background:var(--rose-lt);color:var(--rose);border-color:rgba(176,51,72,.25);}
-.dn{background:var(--bg-2);color:var(--ink-2);border-color:var(--border-md);}
-.dg{background:var(--jade-lt);color:var(--jade-dk);border-color:rgba(42,122,80,.25);}
-
-/* Score display */
-.score-hero{text-align:center;padding:22px 10px;}
-.score-big{ font-family:'Amiri',serif;font-size:76px;font-weight:700;line-height:1; background:linear-gradient(135deg,var(--gold),#E8A832); -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-.score-den{font-size:15px;color:var(--ink-4);margin-top:2px;}
-
-/* Error log items */
-.err-item{ display:flex;align-items:center;gap:8px; padding:7px 10px;border-radius:var(--r-sm); background:var(--bg-0);margin-bottom:5px;font-size:13px; border:1px solid var(--border); }
-.err-txt{flex:1;} .err-m{color:var(--rose);font-weight:700;} .err-p{color:var(--jade);font-weight:700;}
-
-/* Streaks & Dates */
-.streak-wrap{display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(135deg,var(--gold-pale),var(--bg-0));border:1px solid var(--border-gold);padding:16px;border-radius:var(--r-lg);margin-bottom:16px;}
-.streak-fire{font-size:36px;animation:float 2s ease-in-out infinite;}
-.streak-info{text-align:right;}
-.streak-num{font-family:'Amiri',serif;font-size:26px;font-weight:700;color:var(--gold-dk);line-height:1;}
-.streak-lbl{font-size:12px;color:var(--ink-3);font-weight:600;}
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-
-/* Day row */
-.day-row{ display:flex;align-items:center;justify-content:space-between; padding:10px 14px;border-radius:var(--r-sm); border:1px solid var(--border);margin-bottom:6px; background:var(--bg-1);transition:all var(--trans); }
-.day-done{color:var(--jade);font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
-.day-row.toggled{border-color:var(--jade);background:var(--jade-lt);}
-.day-date{font-size:11px;color:var(--ink-4);margin-top:2px;}
-
-/* History item */
-.hist{ border-right:3px solid var(--gold); padding:10px 14px;background:var(--bg-0); border-radius:0 var(--r-sm) var(--r-sm) 0; margin-bottom:8px;border:1px solid var(--border); border-right:3px solid var(--gold); transition:border var(--trans),background var(--trans); }
-.hist-d{font-size:11px;color:var(--ink-4);margin-bottom:4px;font-weight:600;}
-.hist-b{font-size:13px;line-height:1.9;}
-.hist-abs{border-right-color:var(--rose);}
-.rev-box{display:inline-block; background:var(--bg-1);border:1px solid var(--border);padding:4px 8px;border-radius:var(--r-sm);margin-top:4px;font-size:11px;color:var(--ink-2);font-weight:600;}
-
-/* Rank card */
-.rk{ display:flex;align-items:center;gap:13px; padding:13px 16px;border-radius:var(--r-lg); border:1px solid var(--border);margin-bottom:8px; background:var(--bg-1);transition:all var(--trans); }
-.rk:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
-.rk.r1{border-color:rgba(212,175,55,.5);background:linear-gradient(135deg,var(--bg-1),var(--gold-pale));}
-.rk.r2{border-color:rgba(192,192,192,.4);}
-.rk.r3{border-color:rgba(205,127,50,.4);}
-.rk.me{box-shadow:0 0 0 2px var(--gold);}
-.rm{font-size:24px;min-width:34px;text-align:center;}
-.rname{flex:1;font-size:14px;font-weight:700;}
-.rmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.rpts{font-family:'Amiri',serif;font-size:19px;font-weight:700;color:var(--gold);}
-
-/* Gamification badges */
-.gbadge-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
-.gbadge{ flex:1;min-width:90px; background:var(--bg-2);border:1px solid var(--border); border-radius:var(--r);padding:12px 8px;text-align:center; transition:all .3s;opacity:.4;filter:grayscale(80%); }
-.gbadge.earned{ background:var(--gold-pale);border-color:rgba(200,146,42,.3); opacity:1;filter:none;transform:translateY(-2px); box-shadow:var(--shadow-sm); }
-.gb-ic{font-size:24px;display:block;margin-bottom:4px;}
-.gb-tt{font-size:11px;font-weight:700;color:var(--ink-2);}
-.gb-ds{font-size:10px;color:var(--ink-4);margin-top:2px;}
-
-/* Privacy note & Info Box */
-.priv-note{ display:flex;align-items:center;gap:10px; background:var(--gold-pale);border:1px solid rgba(200,146,42,.25); border-radius:var(--r-sm);padding:10px 14px; font-size:12.5px;color:var(--gold-dk);margin-bottom:14px; }
-.info-box{ background:var(--jade-lt);border:1px solid rgba(42,122,80,.2); border-radius:var(--r-sm);padding:10px 14px; font-size:12.5px;color:var(--jade-dk);margin-bottom:12px; }
+/* Deduct Buttons */
+.deduct-grid { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-strong); }
+.deduct-grid:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.deduct-inputs { display: flex; gap: 8px; }
+.btn-deduct {
+  padding: 12px 20px; border-radius: var(--r-md); border: 2px solid;
+  text-align: center; font-weight: 800; min-width: 130px; display: flex; flex-direction: column; align-items: center;
+}
+.d-warn { background: var(--gold-pale); color: var(--gold-dk); border-color: rgba(212,175,55,0.3); }
+.d-err { background: var(--danger-lt); color: var(--danger); border-color: rgba(192,57,43,0.3); }
+.d-pos { background: var(--success-lt); color: var(--success); border-color: rgba(46,125,82,0.3); }
 
 /* Dashboard Charts */
-.chart-container{position:relative;height:260px;width:100%;margin-top:10px;}
+.chart-wrapper { position: relative; height: 300px; width: 100%; margin-top: 20px; }
+.chart-wrapper.large { height: 400px; }
 
-/* Sheet step */
-.sheet-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;font-size:13px;line-height:1.7;}
-.step-n{width:24px;height:24px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;}
-
-/* ══ TOAST ══ */
-#toast{ position:fixed;bottom:24px;left:50%; transform:translateX(-50%) translateY(70px); background:var(--ink);color:var(--bg-1); padding:10px 22px;border-radius:30px; font-size:13px;font-weight:600; opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1); z-index:9999;pointer-events:none;white-space:nowrap; box-shadow:var(--shadow-lg); }
-#toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
-
-/* ══ MOBILE NAV ══ */
-.mobile-nav{ display:none; position:fixed;bottom:0;left:0;right:0;z-index:200; background:var(--bg-1);border-top:1px solid var(--border); padding:6px 0 max(8px,env(safe-area-inset-bottom)); }
-.mnav-items{display:flex;justify-content:space-around;}
-.mnav-item{ display:flex;flex-direction:column;align-items:center;gap:2px; padding:6px 12px;border-radius:var(--r-sm);border:none; background:none;color:var(--ink-4);font-size:10px;font-weight:600; transition:all var(--trans);min-width:56px; }
-.mnav-item.active{color:var(--gold);}
-.mnav-item .mic{font-size:20px;}
-
-/* ══ MOBILE OVERLAY ══ */
-.sb-overlay{ display:none;position:fixed;inset:0;background:rgba(0,0,0,.5); z-index:190;backdrop-filter:blur(2px); opacity:0;transition:opacity var(--trans); }
-.sb-overlay.visible{opacity:1;}
-
-/* ══ HIDDEN INPUT FOR COPY ══ */
-.copy-helper{position:absolute;left:-9999px;top:-9999px;opacity:0;}
-
-/* ══ DIVIDER ══ */
-hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
-.sep{ font-size:12px;font-weight:700; color:var(--ink-3);margin:14px 0 8px; padding-bottom:5px;border-bottom:1px solid var(--border); }
-
-/* ══ PRINT STYLES ══ */
-#rep-layer{display:none;}
-@media print{
-  body *{visibility:hidden;}
-  .app,.sidebar,.main{display:none!important;}
-  #rep-layer{display:block!important;visibility:visible!important;position:absolute;left:0;top:0;width:100vw;background:#fff;z-index:99999;}
-  #rep-layer *{visibility:visible;}
-  @page{margin:15mm;size:A4 portrait;}
+/* Toast */
+#toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--text-main); color: var(--bg-surface); padding: 14px 28px;
+  border-radius: 30px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow-lg);
+  opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; pointer-events: none;
 }
+#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ══ RESPONSIVE & MOBILE ══ */
+.mobile-header-btn { display: none; }
+.bottom-nav { display: none; }
+
+@media (max-width: 992px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  :root { --sidebar-w: 280px; }
+  .sidebar { transform: translateX(100%); box-shadow: var(--shadow-lg); }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { margin-right: 0 !important; padding-bottom: 80px; } /* Space for bottom nav */
+  .top-header { padding: 0 20px; }
+  .mobile-header-btn { display: flex; }
+  .hide-mobile { display: none !important; }
+  .page-wrapper { padding: 20px 16px; }
+  .grid-2, .grid-4 { grid-template-columns: 1fr; }
+  
+  /* Bottom App Bar */
+  .bottom-nav {
+    display: flex; position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-top: 1px solid var(--border);
+    z-index: 150; padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
+    justify-content: space-between; box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+  }
+  [data-theme="dark"] .bottom-nav { background: rgba(28, 23, 30, 0.9); }
+  .b-nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    color: var(--text-muted); font-size: 11px; font-weight: 700; flex: 1;
+    padding: 8px 0; border-radius: var(--r-md); transition: all var(--trans); cursor: pointer;
+  }
+  .b-nav-item.active { color: var(--primary); }
+  [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
+  .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
+  .deduct-grid { grid-template-columns: 1fr; }
+  .btn-deduct { width: 100%; }
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 190;
+  backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity var(--trans);
+}
+.sidebar-overlay.active { opacity: 1; pointer-events: all; }
+
+/* Print Layer */
+@media print {
+  body * { visibility: hidden; }
+  .app-container { display: none !important; margin:0; padding:0; height:0; overflow:hidden;}
+  #rep-layer { 
+    display: block !important; visibility: visible !important; 
+    position: absolute; left: 0; top: 0; width: 100vw; background: #fff; z-index: 99999; color: #1A1714;
+  }
+  #rep-layer * { visibility: visible; }
+  @page { margin: 15mm; size: A4 portrait; }
+}
+
 .rep-wrap{width:100%;max-width:780px;margin:0 auto;font-family:'Cairo',sans-serif;color:#1A1714;}
-.rep-hd{text-align:center;border-bottom:3px solid #C8922A;padding-bottom:18px;margin-bottom:26px;}
-.rep-hd h1{font-family:'Amiri',serif;font-size:32px;color:#C8922A;margin-bottom:4px;}
-.rep-hd p{font-size:14px;color:#8A8278;}
-.rep-info{display:flex;justify-content:space-between;background:#FDF8EE;border:1px solid rgba(200,146,42,.3);padding:13px 18px;border-radius:10px;margin-bottom:24px;font-size:14px;font-weight:600;}
+.rep-hd{text-align:center;border-bottom:3px solid #D4AF37;padding-bottom:18px;margin-bottom:26px;}
+.rep-hd h1{font-family:'Amiri',serif;font-size:32px;color:#3B1C40;margin-bottom:4px;}
+.rep-hd p{font-size:14px;color:#6B626D;}
+.rep-info{display:flex;justify-content:space-between;background:#FCF9F1;border:1px solid rgba(212,175,55,.3);padding:13px 18px;border-radius:10px;margin-bottom:24px;font-size:14px;font-weight:600;}
 .rep-stats{display:flex;gap:12px;margin-bottom:24px;}
-.rep-stat{flex:1;text-align:center;background:#F7F3EC;border:1px solid #EDE8E0;padding:13px;border-radius:10px;}
-.rep-sv{font-family:'Amiri',serif;font-size:26px;font-weight:700;color:#C8922A;display:block;}
-.rep-sl{font-size:12px;color:#4A453F;}
-.rep-title{font-size:16px;font-weight:700;margin-bottom:12px;border-right:4px solid #C8922A;padding-right:10px;}
-.rep-table{width:100%;border-collapse:collapse;font-size:12px;}
-.rep-table th{background:#F7F3EC;color:#4A453F;padding:9px;text-align:right;border-bottom:2px solid #EDE8E0;}
-.rep-table td{padding:9px;border-bottom:1px solid #EDE8E0;}
-.rep-foot{text-align:center;font-size:12px;color:#8A8278;margin-top:30px;border-top:1px dashed #EDE8E0;padding-top:16px;}
+.rep-stat{flex:1;text-align:center;background:#F8F7F9;border:1px solid #E4DED4;padding:13px;border-radius:10px;}
+.rep-sv{font-family:'Amiri',serif;font-size:26px;font-weight:700;color:#3B1C40;display:block;}
+.rep-sl{font-size:12px;color:#6B626D;}
+.rep-title{font-size:16px;font-weight:700;margin-bottom:12px;border-right:4px solid #D4AF37;padding-right:10px;color:#3B1C40;}
+.rep-table{width:100%;border-collapse:collapse;font-size:12px; color:#1A1714;}
+.rep-table th{background:#F3EAF4;color:#3B1C40;padding:9px;text-align:right;border-bottom:2px solid #E4DED4;}
+.rep-table td{padding:9px;border-bottom:1px solid #E4DED4;}
+.rep-foot{text-align:center;font-size:12px;color:#6B626D;margin-top:30px;border-top:1px dashed #E4DED4;padding-top:16px;}
 
-/* ══ RESPONSIVE ══ */
-@media(max-width:768px){
-  :root{--sidebar-w:260px;}
-  .sidebar{transform:translateX(100%);box-shadow:var(--shadow-lg);}
-  .sidebar.mobile-open{transform:translateX(0);}
-  .main{margin-right:0!important;}
-  .sb-overlay{display:block;}
-  .mobile-nav{display:block;}
-  .topbar .btn-icon.collapse-btn{display:none;}
-  .page{padding:16px 14px 80px;}
-  .topbar{padding:0 14px;}
-  .ded-row{grid-template-columns:1fr;}
-  .d-btn{min-width:auto;width:100%;}
-  .pg-head{flex-direction:column;align-items:flex-start;gap:10px;}
-}
-@media(max-width:480px){
-  .score-big{font-size:60px;}
-  .topbar-sub{display:none;}
-}
-
-/* Student mode */
-.student-mode .teacher-only{display:none!important;}
-.student-mode .student-alert{display:block;}
 </style>
 </head>
 <body>
-<div class="app">
 
-<!-- ══════════ SIDEBAR ══════════ -->
-<aside class="sidebar" id="sidebar">
-  <div class="sb-logo">
-    <!-- اللوغو مع كود احتياطي (Fallback) في حال عدم وجود الصورة -->
-    <div class="logo-mark" style="background:transparent; box-shadow:none;">
-      <img src="Logo.png" alt="لوغو ألف لام ميم" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <div class="logo-fallback" style="display:none;">الم</div>
-    </div>
-    <div class="logo-text">
-      <h1>ألف لام ميم</h1>
-      <p>نظام إدارة التحفيظ</p>
-    </div>
-  </div>
+<div class="app-container">
 
-  <nav class="sb-nav">
-    <button class="nv active teacher-only" onclick="showPage('setup',this)" id="nav-setup">
-      <span class="nv-ic">⚙️</span><span class="nv-txt">إعداد الدورة</span>
-    </button>
-    <button class="nv teacher-only" onclick="showPage('session',this)">
-      <span class="nv-ic">🎙️</span><span class="nv-txt">جلسة التسميع</span>
-    </button>
-    <button class="nv" onclick="showPage('portal',this)" id="nav-portal">
-      <span class="nv-ic">👤</span><span class="nv-txt" id="portal-nav-txt">بوابة الطالبة</span>
-    </button>
-    <button class="nv teacher-only" onclick="showPage('dash',this)">
-      <span class="nv-ic">📊</span><span class="nv-txt">لوحة التحليلات</span>
-    </button>
-    <button class="nv teacher-only" onclick="showPage('board',this)">
-      <span class="nv-ic">🏆</span><span class="nv-txt">لوحة الصدارة</span>
-    </button>
-  </nav>
-
-  <div class="sb-bottom">
-    <div class="sb-user">
-      <div class="sb-av" id="sb-av">م</div>
-      <div class="sb-uinfo">
-        <div class="sb-uname" id="sb-uname">المعلمة</div>
-        <div class="sb-urole" id="sb-urole">وضع المعلمة</div>
+  <!-- ════ SIDEBAR ════ -->
+  <div class="sidebar-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <img src="Logo.png" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="logo-fallback" style="display:none;">الم</div>
+      </div>
+      <div class="brand-text">
+        <h1>ألف لام ميم</h1>
+        <p>نظام الإدارة الأكاديمية</p>
       </div>
     </div>
-  </div>
-</aside>
 
-<!-- Overlay for mobile -->
-<div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+    <nav class="nav-menu">
+      <button class="nav-item active teacher-only" onclick="navigate('setup')">
+        <span class="nav-icon">⚙️</span> إعداد الدورة
+      </button>
+      <button class="nav-item teacher-only" onclick="navigate('session')">
+        <span class="nav-icon">🎙️</span> جلسة التسميع
+      </button>
+      <button class="nav-item teacher-only" onclick="navigate('dash')">
+        <span class="nav-icon">📊</span> لوحة التحليلات
+      </button>
+      <button class="nav-item" onclick="navigate('portal')">
+        <span class="nav-icon">👤</span> بوابة الطالبة
+      </button>
+      <button class="nav-item teacher-only" onclick="navigate('board')">
+        <span class="nav-icon">🏆</span> لوحة الصدارة
+      </button>
+      <hr style="margin:16px 0; border:none; border-top:1px solid var(--border);">
+      <button class="nav-item teacher-only" onclick="navigate('sheets')">
+        <span class="nav-icon">☁️</span> الربط السحابي
+      </button>
+    </nav>
 
-<!-- ══════════ MAIN ══════════ -->
-<div class="main">
-
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <button class="btn-icon collapse-btn" onclick="toggleSidebar()" title="طي القائمة">☰</button>
-    <button class="btn-icon" id="mobile-menu-btn" onclick="openSidebar()" style="display:none;">☰</button>
-    <div style="flex:1;">
-      <div class="topbar-title" id="topbar-title">إعداد الدورة</div>
-      <div class="topbar-sub" id="topbar-sub">بيانات الدورة والموزع الآلي</div>
-    </div>
-    <div class="topbar-actions">
-      <div class="sync-pill" id="sync-pill" onclick="syncToSheet(false, true)" title="مزامنة مع Google Sheets">
-        <div class="sync-dot slocal" id="sync-dot"></div>
-        <span id="sync-lbl">محلي</span>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()" title="تغيير الوضع"></button>
-      <button class="btn btn-gold btn-sm teacher-only" id="btn-print-cert" style="display:none;" onclick="printReport()">🖨️ تقرير رحلة الحفظ</button>
-    </div>
-  </div>
-
-  <!-- PAGES -->
-  <div class="pages">
-
-    <!-- ══ SETUP ══ -->
-    <div id="page-setup" class="page active teacher-only">
-      <div class="pg-head">
-        <div>
-          <div class="pg-title">إعداد الدورة والربط السحابي</div>
-          <div class="pg-sub">بيانات الدورة · الموزع الآلي · قائمة الطالبات</div>
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar" id="sb-avatar">م</div>
+        <div class="user-info">
+          <h4 id="sb-uname">المعلمة</h4>
+          <p id="sb-role">مديرة الحلقة</p>
         </div>
-        <button class="btn btn-rose btn-sm" onclick="archiveCourse()">🗄️ أرشفة الدورة (بدء دورة جديدة)</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════ MAIN CONTENT ════ -->
+  <main class="main-content">
+    
+    <!-- HEADER -->
+    <header class="top-header">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <button class="btn-icon mobile-header-btn" onclick="toggleSidebar()">☰</button>
+        <div class="header-titles">
+          <h2 id="top-title">إعداد الدورة</h2>
+          <p id="top-sub" class="hide-mobile">تخصيص البيانات والموزع الآلي</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="sync-indicator teacher-only" onclick="syncToSheet()" title="مزامنة البيانات">
+          <div class="dot local" id="sync-dot"></div>
+          <span class="hide-mobile" id="sync-lbl">محلي</span>
+        </div>
+        <button class="btn-icon" onclick="toggleTheme()" title="تبديل المظهر">🌓</button>
+      </div>
+    </header>
+
+    <!-- ════ PAGE: SETUP ════ -->
+    <div id="page-setup" class="page-wrapper active teacher-only">
+      
+      <div class="alert alert-info">
+        <span>💡</span>
+        <div><strong>مرحباً بكِ في منصة ألف لام ميم!</strong> لقد قمنا بوضع (بيانات تجريبية) لتتمكني من تجربة لوحة التحليلات فوراً. يمكنك أرشفة الدورة متى شئتِ للبدء بسجل نظيف.</div>
       </div>
 
-      <!-- LOCKED VIEW CARD -->
-      <div id="setup-locked-view" class="card" style="display:none; position:relative;">
-        <button class="btn btn-ghost btn-sm" onclick="unlockSetup()" style="position:absolute; top:18px; left:20px; color:var(--gold);">✏️ تعديل الإعدادات</button>
-        <div class="card-title">معلومات الدورة والربط الحالية</div>
-        <div class="g4" style="margin-bottom:10px;">
-          <div class="mc"><div class="mc-val" id="sum-teacher" style="font-size:18px;">—</div><div class="mc-lbl">المعلمة</div></div>
-          <div class="mc"><div class="mc-val" id="sum-course" style="font-size:18px;">—</div><div class="mc-lbl">المقرر</div></div>
-          <div class="mc"><div class="mc-val" id="sum-days" style="font-size:18px;">—</div><div class="mc-lbl">أيام الورد اليومي</div></div>
-          <div class="mc">
-             <div class="mc-val" style="font-size:18px; display:flex; align-items:center; justify-content:center; gap:6px; height:100%;">
-               <div class="sync-dot" id="sum-sync-dot"></div> <span id="sum-sync-txt" style="font-size:13px;font-family:'Cairo',sans-serif;">غير متصل</span>
-             </div>
-             <div class="mc-lbl">الربط السحابي</div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">البيانات الأساسية للحلقة</h3>
+          <button class="btn btn-outline" style="padding:8px 16px; font-size:12px;" onclick="archiveCourse()">🗄️ بدء دورة جديدة</button>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>اسم المعلمة</label>
+            <input type="text" class="form-control" id="teacher" placeholder="مثال: أ. فاطمة" oninput="updateUI()">
           </div>
-        </div>
-      </div>
-
-      <!-- EDIT VIEW CARD -->
-      <div id="setup-edit-view" class="card">
-        <div class="card-title">بيانات الدورة والربط السحابي (الأساسية)</div>
-        <div class="info-box">💡 إعدادات الدورة والربط تضمن حفظ عملك وتوزيع تواريخ الورد للطالبات بدقة.</div>
-        <div class="g2">
-          <div class="field"><label>اسم المعلمة</label><input type="text" id="teacher" placeholder="أدخلي اسمك" oninput="updateSbName()"></div>
-          <div class="field"><label>اسم المقرر</label><input type="text" id="cname" placeholder="مثال: جزء عم + تبارك"></div>
-          <div class="field"><label>عدد الأوجه الكلي (المقرر العام)</label><input type="number" id="tpages" value="200" min="1" oninput="calcPlan()"></div>
-          <div class="field"><label>تاريخ بدء الدورة</label><input type="date" id="sdate" onchange="calcPlan()"></div>
-          <div class="field"><label>عدد أسابيع الدورة</label><input type="number" id="tweeks" value="10" min="1" oninput="calcPlan()"></div>
-          <div class="field"><label>أيام الورد اليومي</label>
-            <select id="study-days" onchange="calcPlan()">
+          <div class="form-group">
+            <label>اسم المقرر العام</label>
+            <input type="text" class="form-control" id="cname" placeholder="مثال: الزهراوين">
+          </div>
+          <div class="form-group">
+            <label>إجمالي أوجه المقرر</label>
+            <input type="number" class="form-control" id="tpages" value="200" oninput="calcPlan()">
+          </div>
+          <div class="form-group">
+            <label>تاريخ بدء الدورة</label>
+            <input type="date" class="form-control" id="sdate" onchange="calcPlan()">
+          </div>
+          <div class="form-group">
+            <label>مدة الدورة (بالأسابيع)</label>
+            <input type="number" class="form-control" id="tweeks" value="10" oninput="calcPlan()">
+          </div>
+          <div class="form-group">
+            <label>أيام الورد اليومي (للحفظ)</label>
+            <select class="form-control" id="study-days" onchange="calcPlan()">
               <option value="5" selected>5 أيام (الأحد — الخميس)</option>
               <option value="6">6 أيام (السبت — الخميس)</option>
-              <option value="7">7 أيام</option>
+              <option value="7">7 أيام (بدون راحة)</option>
             </select>
           </div>
         </div>
-        <div class="sep" style="margin-top:20px;">الربط السحابي للحفظ والمزامنة (Google Sheets)</div>
-        <div class="g2">
-          <div class="field"><label>رابط Apps Script (Web App URL)</label>
-            <input type="text" id="sheet-url" placeholder="https://script.google.com/macros/s/.../exec">
-          </div>
-          <div class="field"><label>رمز المعلمة السري (يميّز بياناتك)</label>
-            <input type="text" id="teacher-code" placeholder="مثال: fatima2025" autocomplete="off">
-          </div>
-        </div>
-        <button class="btn btn-gold btn-full btn-lg" style="margin-top:10px;" onclick="saveCourse()">💾 حفظ وتثبيت الإعدادات</button>
+        <button class="btn btn-primary btn-block" style="margin-top:16px;" onclick="saveCourse()">حفظ وتحديث الموزع الآلي</button>
       </div>
 
       <div class="card">
-        <div class="card-title">الموزع الآلي — Smart Planner</div>
-        <div class="g4" style="margin-bottom:14px;">
-          <div class="mc"><div class="mc-val" id="m-days">50</div><div class="mc-lbl">أيام الدراسة</div></div>
-          <div class="mc"><div class="mc-val" id="m-daily">4</div><div class="mc-lbl">أوجه / يوم</div></div>
-          <div class="mc"><div class="mc-val" id="m-weeks">10</div><div class="mc-lbl">أسبوع</div></div>
-          <div class="mc"><div class="mc-val" id="m-quota">10</div><div class="mc-lbl">نصاب الجلسة</div></div>
+        <div class="card-header"><h3 class="card-title">خطة الموزع الآلي (Smart Planner)</h3></div>
+        <div class="grid-4" style="margin-bottom:24px;">
+          <div class="kpi-card"><div class="kpi-value" id="m-days">50</div><div class="kpi-label">أيام الورد</div></div>
+          <div class="kpi-card"><div class="kpi-value" id="m-daily">4</div><div class="kpi-label">أوجه يومياً</div></div>
+          <div class="kpi-card"><div class="kpi-value" id="m-weeks">10</div><div class="kpi-label">أسابيع</div></div>
+          <div class="kpi-card"><div class="kpi-value" id="m-quota">10</div><div class="kpi-label">نصاب الجلسة</div></div>
         </div>
-        <div class="sep">التوزيع الأسبوعي بالأوجه</div>
-        <div id="week-plan" style="max-height:240px;overflow-y:auto;padding-left:6px;"></div>
+        <h4 style="font-size:14px; margin-bottom:12px; color:var(--text-muted);">التوزيع الموصى به للمقرر العام:</h4>
+        <div id="week-plan" style="max-height:200px; overflow-y:auto; padding-right:10px; border-right:2px solid var(--border-strong);"></div>
       </div>
 
       <div class="card">
-        <div class="card-title">قائمة الطالبات والمقررات الفردية</div>
-        <div class="info-box" style="margin-bottom:12px;">إذا تركتِ حقل "مقرر خاص" فارغاً ستسير الطالبة على المقرر العام للدورة</div>
-        <div id="student-list"></div>
-        <hr>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
-          <input type="text" id="new-name" placeholder="اسم الطالبة" style="flex:2;min-width:140px;" onkeydown="if(event.key==='Enter')addStudent()">
-          <input type="number" id="new-custom-faces" placeholder="مقرر خاص (أوجه)" style="flex:1;min-width:130px;">
-          <button class="btn btn-gold" onclick="addStudent()">+ إضافة</button>
+        <div class="card-header"><h3 class="card-title">إدارة الطالبات والمقررات الخاصة</h3></div>
+        <div class="grid-2" style="align-items:end; margin-bottom:24px; background:var(--bg-elevated); padding:20px; border-radius:var(--r-md);">
+          <div class="form-group" style="margin:0;"><label>اسم الطالبة الجديدة</label><input type="text" class="form-control" id="new-name" placeholder="الاسم الثلاثي"></div>
+          <div class="form-group" style="margin:0;"><label>مقرر مخصص (اختياري - بالأوجه)</label><input type="number" class="form-control" id="new-custom-faces" placeholder="يترك فارغاً للمقرر العام"></div>
+          <button class="btn btn-gold" style="grid-column: span 2;" onclick="addStudent()">إضافة للطالبة للمنصة ➕</button>
+        </div>
+        <div id="student-list">
+          <!-- Students injected here -->
         </div>
       </div>
-
-      <details class="card" style="cursor:pointer; background:var(--gold-pale); border-color:rgba(200,146,42,.25);">
-        <summary class="card-title" style="margin:0; user-select:none; color:var(--gold-dk);">🛠️ كيف أحصل على رابط Google Sheets؟ (اضغطي للفتح)</summary>
-        <div style="margin-top:15px; font-size:13px; color:var(--ink-2); line-height:1.7; cursor:default;">
-          <div class="sheet-step"><div class="step-n">1</div><div>افتحي <a href="https://sheets.google.com" target="_blank" style="font-weight:bold;color:var(--sky);">Google Sheets</a> وأنشئي ملفاً جديداً</div></div>
-          <div class="sheet-step"><div class="step-n">2</div><div>من القائمة: <strong>Extensions ← Apps Script</strong></div></div>
-          <div class="sheet-step"><div class="step-n">3</div><div>احذفي كل ما في المحرر والصقي الكود أدناه:</div></div>
-          <div style="position:relative;margin:10px 0;">
-            <textarea id="gs-code" readonly style="font-family:monospace;font-size:11px;height:230px;background:#1a1714;color:#e8c890;border:none;border-radius:var(--r-sm);padding:14px;direction:ltr;width:100%;"></textarea>
-            <button class="btn btn-gold btn-sm" onclick="copyGsCode()" style="position:absolute;top:10px;left:10px;">نسخ الكود</button>
-          </div>
-          <div class="sheet-step"><div class="step-n">4</div><div>اضغطي <strong>Deploy ← New deployment ← Web app</strong></div></div>
-          <div class="sheet-step"><div class="step-n">5</div><div>اختاري: <strong>Execute as: Me</strong> و <strong>Who has access: Anyone</strong> ← Deploy</div></div>
-          <div class="sheet-step"><div class="step-n">6</div><div>انسخي الـ Web app URL والصقيه في إعدادات الدورة + أدخلي أي رمز سري خاص بكِ</div></div>
-        </div>
-      </details>
     </div>
 
-    <!-- ══ SESSION ══ -->
-    <div id="page-session" class="page teacher-only">
-      <div class="pg-head"><div class="pg-title">جلسة التسميع</div><div class="pg-sub">حضور · مراجعة (كبرى وصغرى) · تقييم الحفظ</div></div>
+    <!-- ════ PAGE: DASHBOARD 📊 ════ -->
+    <div id="page-dash" class="page-wrapper teacher-only">
+      
+      <div id="dash-empty-state" class="alert alert-warning" style="display:none;">
+        ⚠️ لا توجد بيانات كافية لعرض التحليلات. أضيفي طالبات وقومي بتقييمهن في "جلسة التسميع" لتفعيل هذه اللوحة.
+      </div>
 
+      <div id="dash-content">
+        <div class="grid-3" style="margin-bottom:24px;">
+          <div class="kpi-card"><div class="kpi-value" id="d-avg-score">—</div><div class="kpi-label">المتوسط العام للإتقان</div></div>
+          <div class="kpi-card"><div class="kpi-value" id="d-att-rate">—</div><div class="kpi-label">معدل الانضباط والحضور</div></div>
+          <div class="kpi-card"><div class="kpi-value" id="d-total-sess">0</div><div class="kpi-label">إجمالي جلسات التسميع</div></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3 class="card-title">متوسط إتقان الطالبات (المقارنة)</h3>
+            <div class="chart-wrapper"><canvas id="scoreBarChart"></canvas></div>
+          </div>
+          <div class="card">
+            <h3 class="card-title">تحليل الأخطاء التجويدية والحفظ</h3>
+            <div class="chart-wrapper"><canvas id="errorRadarChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">التقدم الزمني لمتوسط الحلقة</h3>
+          <div class="chart-wrapper large"><canvas id="trendLineChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ PAGE: SESSION ════ -->
+    <div id="page-session" class="page-wrapper teacher-only">
       <div class="card">
-        <div class="card-title">الطالبة والحفظ الجديد</div>
-        <div class="g2">
-          <div class="field"><label>الطالبة (النصاب يتغير تلقائياً)</label>
-            <select id="sel-st" onchange="startSession()"><option value="">— اختاري —</option></select>
+        <div class="card-header"><h3 class="card-title">بدء جلسة التقييم</h3></div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>اختيار الطالبة</label>
+            <select class="form-control" id="sel-st" onchange="startSession()"><option value="">— حددي الطالبة —</option></select>
           </div>
-          <div class="field"><label>عدد الأوجه المسموعة</label>
-            <input type="number" id="faces" value="10" min="0" max="60" oninput="updateBadge()">
-          </div>
-          <div class="field"><label>من (وجه / آية)</label><input type="number" id="from-a" placeholder="رقم"></div>
-          <div class="field"><label>إلى (وجه / آية)</label><input type="number" id="to-a" placeholder="رقم"></div>
-        </div>
-        <div id="quota-info-sess" style="font-size:12px;color:var(--ink-3);margin-top:4px;font-weight:600;"></div>
-
-        <hr>
-        
-        <div class="card-title">سجل المراجعة المستقل 🔄</div>
-        <div class="info-box" style="background:var(--sky-lt); color:var(--sky); border-color:rgba(59,125,216,0.2);">
-          خصصي تقييماً منفصلاً للمراجعة (صغرى أو كبرى) لتظهر في تقرير الطالبة.
-        </div>
-        <div class="g3" style="align-items:end;">
-          <div class="field">
-            <label>نوع المراجعة</label>
-            <select id="rev-type">
-              <option value="none">بدون مراجعة اليوم</option>
-              <option value="minor">مراجعة صغرى</option>
-              <option value="major">مراجعة كبرى</option>
-              <option value="both">صغرى + كبرى</option>
-            </select>
-          </div>
-          <div class="field"><label>نطاق المراجعة (مثال: من ص 20 لـ 30)</label><input type="text" id="rev-range" placeholder="النطاق المسموع"></div>
-          <div class="field">
-            <label>تقييم المراجعة</label>
-            <select id="rev-grade">
-              <option value="ممتاز">🌟 ممتاز</option>
-              <option value="جيد جداً">✅ جيد جداً</option>
-              <option value="جيد">👍 جيد</option>
-              <option value="يحتاج مراجعة">🔁 يحتاج إعادة مراجعة</option>
+          <div class="form-group">
+            <label>تسجيل الحضور</label>
+            <select class="form-control" id="sess-att" onchange="toggleSessBody()">
+              <option value="present">حاضرة (تقييم شامل)</option>
+              <option value="excused">غائبة بعذر (لا يُحسب في المتوسط)</option>
+              <option value="unexcused">غائبة بدون عذر (يؤثر على الانضباط)</option>
             </select>
           </div>
         </div>
-
-        <hr>
-        <div class="card-title">الحضور</div>
-        <div class="field">
-          <select id="sess-att" onchange="toggleSessBody()" style="font-weight:600;">
-            <option value="present">✅ حاضرة — تقييم الحفظ والمراجعة</option>
-            <option value="excused">🟡 غائبة بعذر — لا يؤثر على المتوسط</option>
-            <option value="unexcused">🔴 غائبة بدون عذر — يُسجل غياب وتفقد شعلة الحماس</option>
-          </select>
-        </div>
+        <div id="quota-info-sess" style="font-size:13px; color:var(--primary); font-weight:700; margin-top:8px;"></div>
       </div>
 
       <div id="sess-body" style="display:none;">
         <div id="evaluation-wrap">
-          <div class="g2" style="align-items:start;">
-            <div class="card">
-              <div class="card-title">درجة الحفظ الجديد</div>
-              <div class="score-hero">
-                <div class="score-big" id="live-score">100</div>
-                <div class="score-den">/ 100</div>
-                <div style="margin-top:10px;" id="grade-badge"><span class="badge bx">ممتاز ✓</span></div>
-                <div style="margin-top:8px;" id="sess-badge"></div>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-title">سجل ملاحظات الحفظ</div>
-              <div id="err-log" style="min-height:90px;max-height:200px;overflow-y:auto;">
-                <span style="font-size:13px;color:var(--ink-4);">لا توجد ملاحظات بعد</span>
-              </div>
-              <div style="display:flex;gap:6px;margin-top:10px;">
-                <button class="btn btn-rose btn-sm" style="flex:1;" onclick="undoLast()">↩ تراجع</button>
-                <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="resetSess()">🔄 إعادة</button>
-              </div>
-            </div>
-          </div>
-
+          <!-- المراجعة -->
           <div class="card">
-            <div class="card-title">أزرار الخصم السريع (للحفظ)</div>
-            <div class="info-box">💡 أدخلي رقم الآية والكلمة، ثم اضغطي الزر لتسجيل الخصم في الحفظ</div>
-            <div class="ded-row">
-              <div class="ded-inputs">
-                <input type="number" id="ay1" placeholder="آية" min="1" style="width:70px;flex:none;">
-                <input type="text" id="kw1" placeholder="الكلمة الخاطئة">
-              </div>
-              <button class="d-btn da" onclick="deduct(1,'تنبيه حفظ','ay1','kw1')">
-                <span class="d-ic">⚠️</span><span class="d-lb">تنبيه حفظ</span><span class="d-pt">−1</span>
-              </button>
-            </div>
-            <div class="ded-row">
-              <div class="ded-inputs">
-                <input type="number" id="ay2" placeholder="آية" min="1" style="width:70px;flex:none;">
-                <input type="text" id="kw2" placeholder="الكلمة الخاطئة">
-              </div>
-              <button class="d-btn dd" onclick="deduct(2,'حفظ + تصحيح','ay2','kw2')">
-                <span class="d-ic">✗</span><span class="d-lb">حفظ + تصحيح</span><span class="d-pt">−2</span>
-              </button>
-            </div>
-            <div class="ded-row">
-              <div class="ded-inputs">
-                <input type="number" id="ay3" placeholder="آية" min="1" style="width:70px;flex:none;">
-                <input type="text" id="kw3" placeholder="الكلمة الخاطئة">
-              </div>
-              <button class="d-btn da" onclick="deduct(2,'تنبيه تشكيل','ay3','kw3')">
-                <span class="d-ic">◌</span><span class="d-lb">تنبيه تشكيل</span><span class="d-pt">−2</span>
-              </button>
-            </div>
-            <div class="ded-row">
-              <div class="ded-inputs">
-                <input type="number" id="ay4" placeholder="آية" min="1" style="width:70px;flex:none;">
-                <input type="text" id="kw4" placeholder="الكلمة الخاطئة">
-              </div>
-              <button class="d-btn dd" onclick="deduct(4,'تشكيل + تصحيح','ay4','kw4')">
-                <span class="d-ic">✗◌</span><span class="d-lb">تشكيل+تصحيح</span><span class="d-pt">−4</span>
-              </button>
-            </div>
-            <div class="ded-row">
-              <div class="ded-inputs">
-                <input type="number" id="ay5" placeholder="آية" min="1" style="width:70px;flex:none;">
-                <input type="text" id="kw5" placeholder="ملاحظة (اختياري)">
-              </div>
-              <button class="d-btn dn" onclick="deduct(0.5,'تردد','ay5','kw5')">
-                <span class="d-ic">⋯</span><span class="d-lb">تردد</span><span class="d-pt">−0.5</span>
-              </button>
-            </div>
-            <div class="ded-row">
-              <div class="ded-inputs">
-                <input type="number" id="ay6" placeholder="آية" min="1" style="width:70px;flex:none;">
-                <input type="text" id="kw6" placeholder="سبب التميز (اختياري)">
-              </div>
-              <button class="d-btn dg" onclick="deduct(-2,'نجمة تميز','ay6','kw6')">
-                <span class="d-ic">⭐</span><span class="d-lb">نجمة تميز</span><span class="d-pt">+2</span>
-              </button>
+            <h3 class="card-title">قسم المراجعة المستقل 🔄</h3>
+            <div class="grid-3">
+              <div class="form-group"><label>نوع المراجعة</label><select class="form-control" id="rev-type"><option value="none">بدون مراجعة اليوم</option><option value="minor">مراجعة صغرى</option><option value="major">مراجعة كبرى</option><option value="both">صغرى + كبرى</option></select></div>
+              <div class="form-group"><label>النطاق</label><input type="text" class="form-control" id="rev-range" placeholder="مثال: البقرة 1-5"></div>
+              <div class="form-group"><label>التقييم</label><select class="form-control" id="rev-grade"><option value="ممتاز">🌟 ممتاز</option><option value="جيد جداً">✅ جيد جداً</option><option value="جيد">👍 جيد</option><option value="إعادة">🔁 يحتاج إعادة</option></select></div>
             </div>
           </div>
-        </div> <!-- End of evaluation-wrap -->
 
-        <div class="card">
-          <div class="card-title">إنهاء الجلسة</div>
-          <div class="g2">
-            <button class="btn btn-jade btn-full btn-lg" onclick="saveSession()">💾 حفظ الجلسة (حضور/غياب)</button>
-            <button class="btn btn-gold btn-full btn-lg" id="btn-copy-rep" onclick="copyReport()">📋 نسخ التقرير للطالبة</button>
+          <!-- الحفظ الجديد -->
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">تقييم الحفظ الجديد (المقرر)</h3></div>
+            <div class="grid-3" style="margin-bottom:24px;">
+              <div class="form-group"><label>الأوجه المسموعة</label><input type="number" class="form-control" id="faces" oninput="updateBadge()"></div>
+              <div class="form-group"><label>من (رقم الصفحة/الآية)</label><input type="text" class="form-control" id="from-a"></div>
+              <div class="form-group"><label>إلى (رقم الصفحة/الآية)</label><input type="text" class="form-control" id="to-a"></div>
+            </div>
+
+            <div class="grid-2">
+              <div style="background:var(--bg-app); border-radius:var(--r-md); padding:24px; text-align:center; border:1px solid var(--border);">
+                <h4 style="font-size:14px; color:var(--text-muted); margin-bottom:10px;">درجة الإتقان</h4>
+                <div class="score-number" id="live-score">100</div>
+                <div id="grade-badge"></div>
+                <div id="sess-badge" style="margin-top:12px;"></div>
+              </div>
+              
+              <div>
+                <h4 style="font-size:14px; margin-bottom:16px;">أزرار الخصم السريع:</h4>
+                <div class="deduct-grid">
+                  <div class="deduct-inputs"><input type="number" id="ay1" class="form-control" placeholder="آية" style="width:80px;"><input type="text" id="kw1" class="form-control" placeholder="الكلمة"></div>
+                  <button class="btn btn-deduct d-warn" onclick="deduct(1,'تنبيه حفظ','ay1','kw1')"><span class="d-pt">-1</span><span class="d-lb">تنبيه حفظ</span></button>
+                </div>
+                <div class="deduct-grid">
+                  <div class="deduct-inputs"><input type="number" id="ay2" class="form-control" placeholder="آية" style="width:80px;"><input type="text" id="kw2" class="form-control" placeholder="الكلمة"></div>
+                  <button class="btn btn-deduct d-err" onclick="deduct(2,'حفظ وتصحيح','ay2','kw2')"><span class="d-pt">-2</span><span class="d-lb">حفظ وتصحيح</span></button>
+                </div>
+                <div class="deduct-grid">
+                  <div class="deduct-inputs"><input type="number" id="ay3" class="form-control" placeholder="آية" style="width:80px;"><input type="text" id="kw3" class="form-control" placeholder="الكلمة"></div>
+                  <button class="btn btn-deduct d-warn" onclick="deduct(2,'خطأ تشكيل','ay3','kw3')"><span class="d-pt">-2</span><span class="d-lb">تنبيه تشكيل</span></button>
+                </div>
+                <div class="deduct-grid">
+                  <div class="deduct-inputs"><input type="text" id="kw5" class="form-control" placeholder="ملاحظة المتردد"></div>
+                  <button class="btn btn-deduct" style="background:var(--bg-elevated); border-color:var(--border-strong);" onclick="deduct(0.5,'تردد','','kw5')"><span class="d-pt">-0.5</span><span class="d-lb">تردد</span></button>
+                </div>
+                <div class="deduct-grid">
+                  <div class="deduct-inputs"><input type="text" id="kw6" class="form-control" placeholder="سبب التميز"></div>
+                  <button class="btn btn-deduct d-pos" onclick="deduct(-2,'نجمة تميز','','kw6')"><span class="d-pt">+2</span><span class="d-lb">نجمة تميز</span></button>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--border);">
+              <h4 style="font-size:14px; margin-bottom:12px;">سجل الخصومات:</h4>
+              <div id="err-log" style="font-size:13px; color:var(--text-muted); background:var(--bg-app); padding:12px; border-radius:var(--r-sm);">لا توجد ملاحظات.</div>
+              <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="undoLast()">↩ تراجع عن الخصم الأخير</button>
+            </div>
           </div>
+        </div>
+
+        <div class="grid-2">
+          <button class="btn btn-primary btn-block" onclick="saveSession()">💾 اعتماد وحفظ الجلسة</button>
+          <button class="btn btn-outline btn-block" id="btn-copy-rep" onclick="copyReport()">📋 نسخ التقرير للطالبة</button>
         </div>
       </div>
     </div>
 
-    <!-- ══ DASHBOARD 📊 ══ -->
-    <div id="page-dash" class="page teacher-only">
-      <div class="pg-head"><div class="pg-title">لوحة التحليلات 📊</div><div class="pg-sub">نظرة عامة على أداء الحلقة لرفعها للإدارة</div></div>
-      
-      <div class="g3" style="margin-bottom:16px;">
-        <div class="mc"><div class="mc-val" id="d-avg-score">—</div><div class="mc-lbl">المتوسط العام للحلقة</div></div>
-        <div class="mc"><div class="mc-val" id="d-att-rate">—</div><div class="mc-lbl">نسبة الحضور المنضبط</div></div>
-        <div class="mc"><div class="mc-val" id="d-total-stars">0</div><div class="mc-lbl">إجمالي نجوم التميز</div></div>
-      </div>
-
-      <div class="g2">
-        <div class="card">
-          <div class="card-title">متوسط درجات الطالبات</div>
-          <div class="chart-container"><canvas id="scoreChart"></canvas></div>
+    <!-- ════ PAGE: PORTAL ════ -->
+    <div id="page-portal" class="page-wrapper">
+      <div class="card teacher-only">
+        <div class="form-group" style="margin:0;">
+          <label>معاينة بوابة الطالبة:</label>
+          <select class="form-control" id="sel-portal" onchange="loadPortal()"><option value="">— اختاري الطالبة —</option></select>
         </div>
-        <div class="card">
-          <div class="card-title">إحصائيات الحضور والغياب</div>
-          <div class="chart-container"><canvas id="attChart"></canvas></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ PORTAL ══ -->
-    <div id="page-portal" class="page">
-      <div class="pg-head">
-        <div class="pg-title" id="portal-title">بوابة الطالبة</div>
-        <div class="pg-sub">سجل شخصي خاص · خصوصية تامة</div>
-      </div>
-
-      <div class="student-alert" id="student-alert">أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟 (تحديث مباشر)</div>
-
-      <div class="card teacher-only" id="portal-select-wrap">
-        <div class="card-title">اختاري اسم الطالبة</div>
-        <select id="sel-portal" onchange="loadPortal()"><option value="">— اختاري —</option></select>
-        <div style="font-size:12px;color:var(--ink-4);margin-top:8px;">🔒 كل طالبة ترى سجلها فقط</div>
       </div>
 
       <div id="portal-body" style="display:none;">
-        
-        <!-- STREAK SECTION 🔥 -->
-        <div class="streak-wrap">
-          <div class="streak-fire">🔥</div>
-          <div class="streak-info">
-            <div class="streak-num" id="p-streak">0 أيام</div>
-            <div class="streak-lbl">شعلة الحماس (حضور متتالي بدون غياب)</div>
+        <div class="card" style="background: linear-gradient(135deg, var(--primary), var(--primary-lt)); color:#fff; border:none;">
+          <div style="display:flex; align-items:center; gap:20px;">
+            <div class="user-avatar" style="width:70px; height:70px; font-size:28px; background:var(--gold); border:none; color:#fff;" id="p-av"></div>
+            <div>
+              <h2 id="p-name" style="color:#fff; margin-bottom:4px; font-size:24px;">الاسم</h2>
+              <p id="p-course-info" style="color:rgba(255,255,255,0.8); font-size:14px;">المقرر</p>
+            </div>
+            <button class="btn btn-gold btn-sm" style="margin-right:auto; padding:8px 16px;" onclick="printReport()">🖨️ طباعة تقريري</button>
           </div>
         </div>
 
-        <div class="card">
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-            <div class="av" id="p-av" style="width:52px;height:52px;font-size:20px;">—</div>
-            <div style="flex:1;">
-              <div style="font-size:17px;font-weight:700;font-family:'Amiri',serif;" id="p-name">—</div>
-              <div style="font-size:12px;color:var(--ink-4);" id="p-course-info">—</div>
-            </div>
-            <div id="p-grade-badge"></div>
-          </div>
-          <div class="g4">
-            <div class="mc"><div class="mc-val" id="p-score">—</div><div class="mc-lbl">آخر درجة حفظ</div></div>
-            <div class="mc"><div class="mc-val" id="p-stars">0</div><div class="mc-lbl">نجوم التميز</div></div>
-            <div class="mc"><div class="mc-val" id="p-sess-cnt">0</div><div class="mc-lbl">حضور منضبط</div></div>
-            <div class="mc"><div class="mc-val" id="p-avg">—</div><div class="mc-lbl">متوسط الحفظ</div></div>
-          </div>
+        <div class="grid-3">
+          <div class="kpi-card"><div class="kpi-value" id="p-score">—</div><div class="kpi-label">معدل الإتقان</div></div>
+          <div class="kpi-card"><div class="kpi-value" id="p-streak">0</div><div class="kpi-label">شعلة الحماس 🔥</div></div>
+          <div class="kpi-card"><div class="kpi-value" id="p-stars">0</div><div class="kpi-label">أوسمة التميز 🌟</div></div>
         </div>
 
         <div class="card">
-          <div class="card-title">شارات الإنجاز الأكاديمية</div>
-          <div class="gbadge-row">
-            <div class="gbadge" id="bdg-disc">
-              <span class="gb-ic">👑</span>
-              <div class="gb-tt">منضبطة</div>
-              <div class="gb-ds">لا غياب بدون عذر</div>
-            </div>
-            <div class="gbadge" id="bdg-mast">
-              <span class="gb-ic">🌟</span>
-              <div class="gb-tt">متقنة</div>
-              <div class="gb-ds">متوسط ≥ 95</div>
-            </div>
-            <div class="gbadge" id="bdg-fast">
-              <span class="gb-ic">🚀</span>
-              <div class="gb-tt">متميزة</div>
-              <div class="gb-ds">3+ نجوم تميز</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">الورد اليومي (تأكيد الإنجاز)</div>
-          <div class="info-box" style="background:var(--sky-lt);color:var(--sky);border-color:var(--sky-lt);">
-            تم حساب تواريخ الأيام والورد المطلوب بناءً على تاريخ بدء الدورة. اضغطي "تأكيد" عند إتمام حفظكِ في المنزل.
-          </div>
-          <div class="prog" style="height:13px;margin-bottom:8px;"><div class="prog-fill" id="p-prog" style="width:0%"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-4);margin-bottom:14px;">
-            <span id="p-prog-txt">0 / 5 أيام</span><span id="p-prog-pct">0%</span>
-          </div>
+          <h3 class="card-title">تأكيد الورد اليومي (المنزل)</h3>
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">تم حساب أيام الورد بناءً على خطة الدورة. اضغطي لتأكيد إتمامك للحفظ.</p>
+          <div class="prog" style="margin-bottom:16px;"><div class="prog-fill" id="p-prog"></div></div>
           <div id="p-days"></div>
         </div>
 
         <div class="card">
-          <div class="card-title">السجل التاريخي (تسميع ومراجعة)</div>
+          <h3 class="card-title">السجل الأكاديمي (تسميع ومراجعة)</h3>
           <div id="p-hist"></div>
         </div>
       </div>
     </div>
 
-    <!-- ══ BOARD ══ -->
-    <div id="page-board" class="page teacher-only">
-      <div class="pg-head"><div class="pg-title">لوحة الصدارة</div><div class="pg-sub">إحصائيات الدورة · التميز يُكافأ</div></div>
-
-      <div class="priv-note">🔒 لا يُعرض مستوى الحفظ حفاظاً على الخصوصية وتجنباً للرياء</div>
-
-      <div class="card" style="margin-bottom:14px;">
-        <div class="g4">
-          <div class="mc"><div class="mc-val" id="bs-cnt">0</div><div class="mc-lbl">طالبات</div></div>
-          <div class="mc"><div class="mc-val" id="bs-exc">0</div><div class="mc-lbl">ممتازات</div></div>
-          <div class="mc"><div class="mc-val" id="bs-stars">0</div><div class="mc-lbl">نجوم التميز</div></div>
-          <div class="mc"><div class="mc-val" id="bs-avg">—</div><div class="mc-lbl">متوسط الدرجات</div></div>
-        </div>
-      </div>
-
+    <!-- ════ PAGE: BOARD ════ -->
+    <div id="page-board" class="page-wrapper teacher-only">
+      <div class="alert alert-info">🔒 الأسماء تُعرض بدون تفاصيل دقيقة للمحفوظ حفاظاً على التنافس الشريف والخصوصية.</div>
       <div class="card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-          <div class="card-title" style="margin:0;">الترتيب العام</div>
-          <div style="display:flex;gap:6px;">
-            <button class="btn btn-sm btn-ghost" id="sort-alpha-btn" onclick="setBoardSort('alpha')">أبجدي</button>
-            <button class="btn btn-sm btn-gold" id="sort-pts-btn" onclick="setBoardSort('points')">بالنقاط</button>
+        <div class="card-header">
+          <h3 class="card-title">لوحة الشرف والصدارة</h3>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline btn-sm" id="sort-alpha-btn" onclick="setBoardSort('alpha')">أبجدي</button>
+            <button class="btn btn-gold btn-sm" id="sort-pts-btn" onclick="setBoardSort('points')">بالنقاط</button>
           </div>
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;font-size:12px;color:var(--ink-4);">
-          <span>🟢 أتمت النصاب</span><span>🔴 لم تكتمل</span><span>⭐ نجوم</span>
         </div>
         <div id="board-list"></div>
       </div>
     </div>
 
-  </div><!-- /pages -->
-</div><!-- /main -->
-</div><!-- /app -->
+    <!-- ════ PAGE: SHEETS ════ -->
+    <div id="page-sheets" class="page-wrapper teacher-only">
+      <div class="card">
+        <h3 class="card-title">الربط السحابي (Google Sheets)</h3>
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px; line-height:1.6;">
+          الربط السحابي يضمن حفظ بياناتك للأبد، ويتيح لك الوصول إليها من أي جهاز عبر الإنترنت. كما أنه يولد الروابط السرية لتدخل كل طالبة لبوابتها بأمان.
+        </p>
+        
+        <div class="grid-2">
+          <div class="form-group">
+            <label>رابط التطبيق (Web App URL)</label>
+            <input type="text" class="form-control" id="sheet-url" placeholder="https://script.google.com/...">
+          </div>
+          <div class="form-group">
+            <label>رمزك السري (لحماية ملفك)</label>
+            <input type="text" class="form-control" id="teacher-code" placeholder="أدخلي رمزاً فريداً">
+          </div>
+        </div>
+        
+        <div style="display:flex; gap:12px; margin-top:16px;">
+          <button class="btn btn-primary" onclick="saveSheetCfg()">حفظ وإعداد</button>
+          <button class="btn btn-outline" onclick="testSheet()">اختبار الاتصال</button>
+          <button class="btn btn-outline" onclick="loadFromSheet(true)">⬇️ تحميل سحابي</button>
+        </div>
+      </div>
 
-<!-- Mobile Bottom Nav -->
-<nav class="mobile-nav">
-  <div class="mnav-items">
-    <button class="mnav-item active teacher-only" onclick="mobileNav('setup',this)" id="mnav-setup">
-      <span class="mic">⚙️</span>إعداد
-    </button>
-    <button class="mnav-item teacher-only" onclick="mobileNav('session',this)">
-      <span class="mic">🎙️</span>تسميع
-    </button>
-    <button class="mnav-item" onclick="mobileNav('portal',this)" id="mnav-portal">
-      <span class="mic">👤</span>بوابتي
-    </button>
-    <button class="mnav-item teacher-only" onclick="mobileNav('dash',this)">
-      <span class="mic">📊</span>تحليل
-    </button>
-    <button class="mnav-item teacher-only" onclick="mobileNav('board',this)">
-      <span class="mic">🏆</span>صدارة
-    </button>
-  </div>
-</nav>
+      <div class="card" style="background: var(--bg-elevated);">
+        <h3 class="card-title" style="color:var(--text-main);">كود التفعيل (Apps Script)</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">انسخي هذا الكود والصقيه في مشروع Google Apps Script الخاص بكِ لتفعيل قاعدة البيانات.</p>
+        <div style="position:relative;">
+          <textarea id="gs-code" class="form-control" style="font-family:monospace; font-size:12px; height:200px; direction:ltr; background:#1C171E; color:#E0E0E0;" readonly></textarea>
+          <button class="btn btn-gold btn-sm" style="position:absolute; top:12px; right:12px;" onclick="copyGsCode()">نسخ الكود</button>
+        </div>
+      </div>
+    </div>
 
-<!-- Hidden copy helper -->
-<input class="copy-helper" id="copy-helper" type="text" readonly>
+  </main>
 
-<!-- Print layer -->
-<div id="rep-layer">
+  <!-- ════ MOBILE BOTTOM NAV ════ -->
+  <nav class="bottom-nav hide-mobile">
+    <div class="b-nav-item active teacher-only" onclick="navigate('setup')"><span class="b-nav-icon">⚙️</span>إعداد</div>
+    <div class="b-nav-item teacher-only" onclick="navigate('session')"><span class="b-nav-icon">🎙️</span>تسميع</div>
+    <div class="b-nav-item teacher-only" onclick="navigate('dash')"><span class="b-nav-icon">📊</span>تحليل</div>
+    <div class="b-nav-item" onclick="navigate('portal')"><span class="b-nav-icon">👤</span>بوابتي</div>
+  </nav>
+
+</div> <!-- End App Container -->
+
+<!-- ════ TOAST ════ -->
+<div id="toast"></div>
+
+<!-- ════ HIDDEN ELEMENTS FOR COPY/PRINT ════ -->
+<input type="text" id="copy-helper" style="position:absolute; left:-9999px; opacity:0;">
+
+<div id="rep-layer" style="display:none;">
   <div class="rep-wrap">
     <div class="rep-hd">
       <h1>لوحة ألف لام ميم الأكاديمية</h1>
@@ -930,21 +774,10 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0;}
   </div>
 </div>
 
-<div id="toast"></div>
-
 <script>
 // ══════════════════════════════════════════════════════════
-// CONSTANTS & MOCK DATA STATE (بيانات افتراضية ذكية)
+// 1. STATE MANAGEMENT & MOCK DATA
 // ══════════════════════════════════════════════════════════
-const DAYS_5=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
-const DAYS_6=['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
-const DAYS_7=['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
-
-let S, curSt=null, sessScore=100, sessErrors=[], boardSort='points';
-let isStudentMode=false, loggedInStudentId=null;
-let sidebarCollapsed=false;
-
-// دوال مساعدة لإنشاء تواريخ افتراضية للبيانات
 const dToday = new Date();
 const dYesterday = new Date(dToday); dYesterday.setDate(dYesterday.getDate() - 1);
 const dBefore = new Date(dToday); dBefore.setDate(dBefore.getDate() - 3);
@@ -952,622 +785,96 @@ const strT = dToday.toLocaleDateString('ar-EG');
 const strY = dYesterday.toLocaleDateString('ar-EG');
 const strB = dBefore.toLocaleDateString('ar-EG');
 
-const GS_CODE=`// لوحة ألف لام ميم — Apps Script Backend v3
+let S = {
+  course: { teacher:'أ. هدى المحمدي', cname:'الزهراوين (البقرة وآل عمران)', pages:200, sdate:new Date().toISOString().split('T')[0], weeks:10, studyDays:5 },
+  students: [
+      { id:1, name:'فاطمة أحمد', score:100, stars:3, customFaces:null, days:[1,1,1,0,0], ok:3, total:3, sessions:[
+        {date:strB, ts:Date.now()-300000, att:'present', rev:'minor', revR:'البقرة 1-10', revG:'ممتاز', score:100, faces:5, from:'1', to:'5', errors:[], star:true, ok:true, grade:'ممتاز'},
+        {date:strY, ts:Date.now()-200000, att:'present', rev:'none', revR:'', revG:'', score:98, faces:5, from:'6', to:'10', errors:[{desc:'تنبيه تشكيل آية 12',pts:-2}], star:false, ok:true, grade:'ممتاز'},
+        {date:strT, ts:Date.now()-100000, att:'present', rev:'both', revR:'البقرة 1-20', revG:'جيد جداً', score:100, faces:6, from:'11', to:'16', errors:[], star:true, ok:true, grade:'ممتاز'}
+      ]},
+      { id:2, name:'لجين عبدالله', score:88, stars:0, customFaces:50, days:[1,0,0,0,0], ok:1, total:2, sessions:[
+        {date:strB, ts:Date.now()-300000, att:'unexcused', rev:'none', revR:'', revG:'', score:null, faces:0, from:'-', to:'-', errors:[], star:false, ok:false, grade:'-'},
+        {date:strY, ts:Date.now()-200000, att:'present', rev:'none', revR:'', revG:'', score:88, faces:2, from:'1', to:'2', errors:[{desc:'حفظ وتصحيح آية 5',pts:-2},{desc:'حفظ وتصحيح آية 8',pts:-2},{desc:'تردد',pts:-0.5}], star:false, ok:true, grade:'متوسط'}
+      ]},
+      { id:3, name:'منار خالد', score:94, stars:1, customFaces:null, days:[1,1,0,0,0], ok:2, total:2, sessions:[
+        {date:strB, ts:Date.now()-300000, att:'present', rev:'major', revR:'آل عمران 1-15', revG:'ممتاز', score:95, faces:5, from:'20', to:'24', errors:[{desc:'تنبيه حفظ',pts:-1}], star:false, ok:true, grade:'جيد جداً'},
+        {date:strY, ts:Date.now()-200000, att:'excused', rev:'none', revR:'', revG:'', score:null, faces:0, from:'-', to:'-', errors:[], star:false, ok:false, grade:'-'}
+      ]},
+      { id:4, name:'نور الهدى', score:96, stars:0, customFaces:200, days:[1,1,1,1,0], ok:4, total:4, sessions:[
+        {date:strY, ts:Date.now()-200000, att:'present', rev:'minor', revR:'البقرة 40-45', revG:'جيد', score:96, faces:10, from:'1', to:'10', errors:[{desc:'تنبيه تشكيل',pts:-2}], star:false, ok:true, grade:'ممتاز'}
+      ]}
+  ],
+  nextId: 5, sheetUrl: '', teacherCode: ''
+};
+
+let curSt=null, sessScore=100, sessErrors=[], boardSort='points';
+let isStudentMode=false, loggedInStudentId=null;
+
+const GS_CODE = `// لوحة ألف لام ميم — Apps Script Backend
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     const code = data.code;
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-
     if (data.action === 'save') {
-      const S = JSON.parse(data.payload);
       let db = ss.getSheetByName('DB_'+code) || ss.insertSheet('DB_'+code);
-      db.hideSheet();
-      db.getRange(1,1,1,2).setValues([['alm_data', data.payload]]);
-      
-      let st = ss.getSheetByName('طالبات_'+code) || ss.insertSheet('طالبات_'+code);
-      st.clear(); st.setRightToLeft(true);
-      const stH = ['رقم','الاسم','مقرر خاص','آخر درجة','نجوم','جلسات ناجحة','إجمالي الجلسات'];
-      const stR = [stH, ...(S.students||[]).map(s=>
-        [s.id, s.name, s.customFaces||'المقرر العام', s.score||'-', s.stars||0, s.ok||0, s.total||0])];
-      st.getRange(1,1,stR.length,stH.length).setValues(stR);
-      st.getRange(1,1,1,stH.length).setFontWeight('bold').setBackground('#F5E6C8');
-      
-      let sess = ss.getSheetByName('سجل_تسميع_'+code) || ss.insertSheet('سجل_تسميع_'+code);
-      sess.clear(); sess.setRightToLeft(true);
-      const sH = ['التاريخ','اسم الطالبة','الحضور','المراجعة','الدرجة','الأوجه','التقييم','الملاحظات'];
-      const sR = [sH];
-      (S.students||[]).forEach(s_t => {
-        (s_t.sessions||[]).forEach(s => {
-          const att = s.att==='excused'?'غائبة بعذر':s.att==='unexcused'?'غائبة بدون عذر':'حاضرة';
-          let revTxt = '-';
-          if(s.rev && s.rev !== 'none') revTxt = (s.rev==='minor'?'صغرى':s.rev==='major'?'كبرى':'شاملة') + ' ('+s.revG+')';
-          const errs = s.att==='present'?(s.errors&&s.errors.length?s.errors.map(e=>e.desc).join(' | '):'ممتاز'):'-';
-          sR.push([s.date, s_t.name, att, revTxt, s.score||'-', s.faces||'-', s.grade||'-', errs]);
-        });
-      });
-      if(sR.length>1) {
-        sess.getRange(1,1,sR.length,sH.length).setValues(sR);
-        sess.getRange(1,1,1,sH.length).setFontWeight('bold').setBackground('#D8F0E4');
-      }
-      return json({ok:true});
+      db.hideSheet(); db.getRange(1,1,1,2).setValues([['alm_data', data.payload]]);
+      return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
     }
     if (data.action === 'load') {
       const db = ss.getSheetByName('DB_'+code);
-      const val = db ? db.getRange(1,2).getValue() : null;
-      return json({ok:true, payload: val||null});
+      return ContentService.createTextOutput(JSON.stringify({ok:true, payload: db?db.getRange(1,2).getValue():null})).setMimeType(ContentService.MimeType.JSON);
     }
-    if (data.action === 'ping') return json({ok:true, msg:'pong'});
-    return json({ok:false, msg:'unknown action'});
-  } catch(err) { return json({ok:false, msg:err.toString()}); }
-}
-function doGet(e) { return ContentService.createTextOutput('ALM API running').setMimeType(ContentService.MimeType.TEXT); }
-function json(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }`;
-
-function defState(){
-  return{
-    course:{teacher:'أ. هدى المحمدي', cname:'الزهراوين (البقرة وآل عمران)', pages:100, sdate:new Date().toISOString().split('T')[0], weeks:10, studyDays:5},
-    students:[
-      { id:1, name:'فاطمة أحمد', score:100, stars:3, customFaces:null, days:[1,1,1,0,0], ok:3, total:3, sessions:[
-        {date:strB, ts:Date.now()-300000, att:'present', rev:'minor', revG:'ممتاز', score:100, faces:5, from:'1', to:'5', errors:[], star:true, ok:true, grade:'ممتاز ✓'},
-        {date:strY, ts:Date.now()-200000, att:'present', rev:'none', revG:'', score:98, faces:5, from:'6', to:'10', errors:[{desc:'تنبيه تشكيل آية 12',pts:-2}], star:false, ok:true, grade:'ممتاز ✓'},
-        {date:strT, ts:Date.now()-100000, att:'present', rev:'both', revG:'جيد جداً', score:100, faces:6, from:'11', to:'16', errors:[], star:true, ok:true, grade:'ممتاز ✓'}
-      ]}, // متفوقة
-      { id:2, name:'لجين عبدالله', score:88, stars:0, customFaces:50, days:[1,0,0,0,0], ok:1, total:2, sessions:[
-        {date:strB, ts:Date.now()-300000, att:'unexcused', rev:'none', revG:'', score:null, faces:0, from:'-', to:'-', errors:[], star:false, ok:false, grade:'-'},
-        {date:strY, ts:Date.now()-200000, att:'present', rev:'none', revG:'', score:88, faces:2, from:'1', to:'2', errors:[{desc:'حفظ وتصحيح مرتين',pts:-4},{desc:'تردد',pts:-0.5}], star:false, ok:true, grade:'متوسط'}
-      ]}, // مقرر خاص + غياب
-      { id:3, name:'منار خالد', score:94, stars:1, customFaces:null, days:[1,1,0,0,0], ok:2, total:2, sessions:[
-        {date:strB, ts:Date.now()-300000, att:'present', rev:'major', revG:'ممتاز', score:95, faces:5, from:'20', to:'24', errors:[{desc:'تنبيه حفظ',pts:-1}], star:false, ok:true, grade:'جيد جداً'},
-        {date:strY, ts:Date.now()-200000, att:'excused', rev:'none', revG:'', score:null, faces:0, from:'-', to:'-', errors:[], star:false, ok:false, grade:'-'}
-      ]}, // غياب بعذر
-      { id:4, name:'نور الهدى', score:96, stars:0, customFaces:200, days:[1,1,1,1,0], ok:4, total:4, sessions:[
-        {date:strY, ts:Date.now()-200000, att:'present', rev:'minor', revG:'جيد', score:96, faces:10, from:'1', to:'10', errors:[{desc:'تنبيه تشكيل',pts:-2}], star:false, ok:true, grade:'ممتاز ✓'}
-      ]} // متقدمة جداً
-    ],
-    nextId:5, sheetUrl:'', teacherCode:''
-  };
-}
+    if (data.action === 'ping') return ContentService.createTextOutput(JSON.stringify({ok:true, msg:'pong'})).setMimeType(ContentService.MimeType.JSON);
+  } catch(err) { return ContentService.createTextOutput(JSON.stringify({ok:false, msg:err.toString()})).setMimeType(ContentService.MimeType.JSON); }
+}`;
 
 function loadState(){
-  try{const d=localStorage.getItem('alm_v10');return d?JSON.parse(d):defState();}
-  catch{return defState();}
+  try { const d = localStorage.getItem('alm_pro_v2'); if(d) S = JSON.parse(d); } catch(e){}
 }
-function save(){
-  if(isStudentMode)return;
-  try{localStorage.setItem('alm_v10',JSON.stringify(S));setSyncDot('local');}catch{}
+function saveState(){
+  if(isStudentMode) return;
+  try { localStorage.setItem('alm_pro_v2', JSON.stringify(S)); setSyncDot('local'); } catch(e){}
 }
 
-S = loadState();
+// ══════════════════════════════════════════════════════════
+// 2. CORE LOGIC & HELPERS
+// ══════════════════════════════════════════════════════════
+function fmt(n) { return n%1===0 ? n : parseFloat(n.toFixed(1)); }
 
-// ══ HELPERS ══════════════════════════════════════════════
-function fmt(n){return n===null||n===undefined?'-':(n%1===0?n:parseFloat(n.toFixed(1)));}
-function getDayNames(n){return n===5?DAYS_5:n===7?DAYS_7:DAYS_6;}
-function gradeOf(s){
-  if(s===null) return {label:'—',cls:'bs',emoji:'—'};
-  if(s>=97) return{label:'ممتاز ✓',cls:'bx',emoji:'🌟'};
-  if(s>=95) return{label:'جيد جداً',cls:'bj',emoji:'✅'};
-  if(s>=92) return{label:'جيد',cls:'bj',emoji:'👍'};
-  if(s>=90) return{label:'متوسط',cls:'bs',emoji:'📘'};
-  return{label:'إعادة',cls:'br',emoji:'🔁'};
+function gradeOf(s) {
+  if(s === null) return {label:'—', cls:'status-neutral', emoji:'—'};
+  if(s >= 95) return {label:'ممتاز', cls:'status-excellent', emoji:'🌟'};
+  if(s >= 90) return {label:'جيد جداً', cls:'status-good', emoji:'✅'};
+  if(s >= 80) return {label:'جيد', cls:'status-good', emoji:'👍'};
+  return {label:'إعادة', cls:'status-poor', emoji:'🔁'};
 }
-// دالة حساب التواريخ الفعلية للأيام بناءً على تاريخ البدء
+
+function calcQuota(totalFaces, weeks, studyDays) {
+  const weeklyFaces = Math.ceil(totalFaces / weeks);
+  const sessionFaces = Math.ceil(weeklyFaces / 2); 
+  const baseDaily = Math.floor(weeklyFaces / studyDays);
+  const rem = weeklyFaces % studyDays;
+  const maxDaily = rem > 0 ? baseDaily + 1 : baseDaily;
+  const dailyText = baseDaily === maxDaily ? String(baseDaily) : `${baseDaily} إلى ${maxDaily}`;
+  return { weeklyFaces, sessionFaces, dailyText, totalFaces };
+}
+
 function getActualDateStr(startDateStr, weekNum, dayIdx, totalStudyDays) {
   if(!startDateStr) return '';
   let d = new Date(startDateStr);
   if(isNaN(d.getTime())) return '';
-  // حساب تقريبي يضيف الأيام بالتسلسل 
   let daysToAdd = ((weekNum - 1) * 7) + dayIdx;
-  // تعويض عن إجازة نهاية الأسبوع إذا كان النظام 5 أيام
   if (totalStudyDays === 5) {
-     let weeksPassed = Math.floor(daysToAdd / 5);
-     let remDays = daysToAdd % 5;
-     daysToAdd = (weeksPassed * 7) + remDays;
+     daysToAdd = (Math.floor(daysToAdd / 5) * 7) + (daysToAdd % 5);
   } else if (totalStudyDays === 6) {
-     let weeksPassed = Math.floor(daysToAdd / 6);
-     let remDays = daysToAdd % 6;
-     daysToAdd = (weeksPassed * 7) + remDays; // Assuming Friday off
+     daysToAdd = (Math.floor(daysToAdd / 6) * 7) + (daysToAdd % 6);
   }
   d.setDate(d.getDate() + daysToAdd);
   return d.toLocaleDateString('ar-EG', { month: 'short', day: 'numeric' });
 }
 
-// ══ THEME ════════════════════════════════════════════════
-function toggleTheme(){
-  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  document.documentElement.setAttribute('data-theme',isDark?'light':'dark');
-  localStorage.setItem('alm_theme',isDark?'light':'dark');
-  if(window.scoreChartInst) initCharts(); // تحديث ألوان الرسم البياني
-}
-(function initTheme(){
-  const t=localStorage.getItem('alm_theme');
-  if(t) document.documentElement.setAttribute('data-theme',t);
-  else if(window.matchMedia('(prefers-color-scheme: dark)').matches)
-    document.documentElement.setAttribute('data-theme','dark');
-})();
-
-// ══ SIDEBAR ══════════════════════════════════════════════
-function toggleSidebar(){
-  sidebarCollapsed=!sidebarCollapsed;
-  document.getElementById('sidebar').classList.toggle('collapsed',sidebarCollapsed);
-}
-function openSidebar(){
-  document.getElementById('sidebar').classList.add('mobile-open');
-  document.getElementById('sb-overlay').classList.add('visible');
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('mobile-open');
-  document.getElementById('sb-overlay').classList.remove('visible');
-}
-
-// Responsive
-function handleResize(){
-  const isMobile=window.innerWidth<=768;
-  document.getElementById('mobile-menu-btn').style.display=isMobile?'flex':'none';
-  document.querySelector('.collapse-btn').style.display=isMobile?'none':'flex';
-}
-window.addEventListener('resize',handleResize);
-handleResize();
-
-// ══ NAV ══════════════════════════════════════════════════
-const TOPBAR_DATA={
-  setup:['إعداد الدورة','بيانات الدورة والموزع الآلي'],
-  session:['جلسة التسميع','حضور، تقييم، ومراجعة'],
-  portal:['بوابة الطالبة','سجل شخصي خاص'],
-  dash:['لوحة التحليلات 📊','نظرة عامة على أداء الحلقة'],
-  board:['لوحة الصدارة','إحصائيات الدورة']
-};
-function showPage(id,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nv').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  if(btn) btn.classList.add('active');
-  const tb=TOPBAR_DATA[id]||['—',''];
-  document.getElementById('topbar-title').textContent=tb[0];
-  document.getElementById('topbar-sub').textContent=tb[1];
-  
-  if(id==='board') renderBoard();
-  if(id==='dash') initCharts();
-  if(id==='portal'&&isStudentMode){document.getElementById('sel-portal').value=loggedInStudentId;loadPortal();}
-  closeSidebar();
-}
-function mobileNav(id,btn){
-  document.querySelectorAll('.mnav-item').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  const sideBtn=document.querySelector(`.nv[onclick="showPage('${id}',this)"]`)||document.getElementById('nav-'+id);
-  showPage(id,sideBtn);
-}
-
-// ══ TOAST ════════════════════════════════════════════════
-let toastT;
-function toast(m){
-  const t=document.getElementById('toast');
-  t.textContent=m;t.classList.add('show');
-  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800);
-}
-
-// ══ SYNC DOT ═════════════════════════════════════════════
-function setSyncDot(s){
-  const dot=document.getElementById('sync-dot');
-  const lbl=document.getElementById('sync-lbl');
-  const sumDot=document.getElementById('sum-sync-dot');
-  const sumTxt=document.getElementById('sum-sync-txt');
-  const map={ok:['sok','متزامن ☁️'],err:['serr','خطأ'],sync:['spnd','جارٍ...'],local:['slocal','محلي']};
-  const[cls,txt]=map[s]||map.local;
-  if(dot){ dot.className='sync-dot '+cls; lbl.textContent=txt; }
-  if(sumDot){ sumDot.className='sync-dot '+cls; sumTxt.textContent=txt; }
-}
-
-// ══ QUOTA CALC ═══════════════════════════════════════════
-function calcQuota(totalFaces,weeks,studyDays){
-  const weeklyFaces=Math.ceil(totalFaces/weeks);
-  const sessionFaces=Math.ceil(weeklyFaces/2);
-  const baseDaily=Math.floor(weeklyFaces/studyDays);
-  const rem=weeklyFaces%studyDays;
-  const maxDaily=rem>0?baseDaily+1:baseDaily;
-  const dailyText=baseDaily===maxDaily?String(baseDaily)
-    :(baseDaily===0?`0 إلى ${maxDaily}`:`${baseDaily} إلى ${maxDaily}`);
-  return{weeklyFaces,sessionFaces,dailyText,totalFaces};
-}
-
-// ══ SETUP & ARCHIVE ══════════════════════════════════════
-function updateSbName(){
-  const n=document.getElementById('teacher').value||'المعلمة';
-  document.getElementById('sb-uname').textContent=n;
-  document.getElementById('sb-av').textContent=n[0]||'م';
-}
-
-function lockSetup(){
-  document.getElementById('setup-edit-view').style.display='none';
-  document.getElementById('setup-locked-view').style.display='block';
-  document.getElementById('sum-teacher').textContent = S.course.teacher || '—';
-  document.getElementById('sum-course').textContent = S.course.cname || '—';
-  const sdMap = {5:'الأحد-الخميس', 6:'السبت-الخميس', 7:'كامل الأسبوع'};
-  document.getElementById('sum-days').textContent = sdMap[S.course.studyDays] || '—';
-  setSyncDot(S.sheetUrl ? 'ok' : 'local');
-}
-
-function unlockSetup(){
-  document.getElementById('setup-edit-view').style.display='block';
-  document.getElementById('setup-locked-view').style.display='none';
-}
-
-function initSetup(){
-  const c=S.course;
-  document.getElementById('teacher').value=c.teacher||'';
-  document.getElementById('cname').value=c.cname||'';
-  document.getElementById('tpages').value=c.pages||200;
-  document.getElementById('sdate').value=c.sdate||'';
-  document.getElementById('tweeks').value=c.weeks||10;
-  document.getElementById('study-days').value=c.studyDays||5;
-  document.getElementById('sheet-url').value=S.sheetUrl||'';
-  document.getElementById('teacher-code').value=S.teacherCode||'';
-  document.getElementById('gs-code').value=GS_CODE;
-  
-  updateSbName();
-  calcPlan();
-  renderStudentList();
-
-  if(c.teacher && S.sheetUrl) {
-    lockSetup();
-  } else {
-    unlockSetup();
-  }
-}
-
-function calcPlan(){
-  const tF=parseInt(document.getElementById('tpages').value)||200;
-  const wks=parseInt(document.getElementById('tweeks').value)||10;
-  const sd=parseInt(document.getElementById('study-days').value)||5;
-  const q=calcQuota(tF,wks,sd);
-  document.getElementById('m-days').textContent=wks*sd;
-  document.getElementById('m-daily').textContent=q.dailyText;
-  document.getElementById('m-weeks').textContent=wks;
-  document.getElementById('m-quota').textContent=q.sessionFaces+' وجه';
-  window._quota=q;
-  let html='',sf=0;
-  for(let w=1;w<=wks;w++){
-    const wf=Math.min(q.weeklyFaces,tF-sf);if(wf<=0)break;
-    html+=`<div class="wk-row"><div class="wk-num">الأسبوع ${w}</div><div class="wk-pages">وجه ${sf+1} — ${sf+wf}</div><div class="wk-count">${wf} أوجه</div></div>`;
-    sf+=wf;
-  }
-  document.getElementById('week-plan').innerHTML=html;
-}
-
-async function saveCourse(){
-  S.course={
-    teacher:document.getElementById('teacher').value.trim(),
-    cname:document.getElementById('cname').value.trim(),
-    pages:parseInt(document.getElementById('tpages').value)||200,
-    sdate:document.getElementById('sdate').value,
-    weeks:parseInt(document.getElementById('tweeks').value)||10,
-    studyDays:parseInt(document.getElementById('study-days').value)||5
-  };
-  S.sheetUrl = document.getElementById('sheet-url').value.trim();
-  S.teacherCode = document.getElementById('teacher-code').value.trim();
-  
-  save(); calcPlan(); updateSbName(); lockSetup(); 
-  toast('✅ تم حفظ وتثبيت الإعدادات');
-  
-  if(S.sheetUrl && S.teacherCode) {
-     setSyncDot('sync');
-     const r = await sheetReq('ping');
-     if(r?.ok) { syncToSheet(true); } 
-     else { setSyncDot('err'); toast('⚠️ فشل الاتصال بقاعدة البيانات'); }
-  } else {
-     setSyncDot('local');
-  }
-}
-
-// 🗄️ الأرشفة الذكية
-function archiveCourse() {
-  if(!confirm('⚠️ تحذير: هل أنتِ متأكدة من أرشفة هذه الدورة؟ \nسيتم تصفير جميع درجات وسجلات الطالبات للبدء من جديد، مع الاحتفاظ بأسمائهن ومقرراتهن. \n(تأكدي من طباعة التقارير قبل الأرشفة)')) return;
-  
-  const sd = S.course.studyDays || 5;
-  S.students.forEach(st => {
-    st.score = 100;
-    st.stars = 0;
-    st.sessions = [];
-    st.days = Array(sd).fill(0);
-    st.ok = 0;
-    st.total = 0;
-  });
-  // Reset course start date to today
-  S.course.sdate = new Date().toISOString().split('T')[0];
-  
-  save(); initSetup(); toast('🗄️ تم تصفير الدورة بنجاح. عام جديد مبارك!');
-  if(S.sheetUrl) syncToSheet(true);
-}
-
-function sortedSts(){return[...S.students].sort((a,b)=>a.name.localeCompare(b.name,'ar'));}
-function renderStudentList(){
-  const ss=sortedSts();
-  document.getElementById('student-list').innerHTML=ss.length?ss.map(st=>{
-    const g=gradeOf(st.score);
-    const cTxt=st.customFaces?` · 🎯 مقرر خاص: ${st.customFaces} وجه`:'';
-    return`<div class="st-row">
-      <div class="av">${st.name[0]}</div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-size:14px;font-weight:700;">${st.name}</div>
-        <div style="font-size:12px;color:var(--ink-4);">درجة: ${fmt(st.score)} | ⭐${st.stars||0} | ${st.ok||0}/${st.total||0} جلسات${cTxt}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-        <span class="badge ${g.cls}">${g.label}</span>
-        <button class="btn btn-sky btn-sm" onclick="copyStudentLink(${st.id})">🔗 رابط</button>
-        <button class="btn btn-rose btn-sm" onclick="delSt(${st.id})">حذف</button>
-      </div>
-    </div>`;
-  }).join(''):'<div style="color:var(--ink-4);padding:12px 0;font-size:13px;">لا توجد طالبات بعد.</div>';
-  popSelects();
-}
-function addStudent(){
-  const n=document.getElementById('new-name').value.trim();
-  const cF=parseInt(document.getElementById('new-custom-faces').value);
-  if(!n){toast('⚠️ أدخلي اسم الطالبة');return;}
-  if(S.students.find(s=>s.name===n)){toast('⚠️ هذه الطالبة موجودة مسبقاً');return;}
-  const sd=S.course.studyDays||5;
-  const st={id:S.nextId++,name:n,score:100,stars:0,sessions:[],days:Array(sd).fill(0),ok:0,total:0};
-  if(cF&&cF>0) st.customFaces=cF;
-  S.students.push(st);save();
-  document.getElementById('new-name').value='';
-  document.getElementById('new-custom-faces').value='';
-  renderStudentList();toast('✅ تمت إضافة '+n);
-}
-function delSt(id){
-  if(!confirm('حذف الطالبة؟'))return;
-  S.students=S.students.filter(s=>s.id!==id);
-  save();renderStudentList();toast('🗑 تم الحذف');
-}
-function popSelects(){
-  if(isStudentMode)return;
-  const ss=sortedSts();
-  ['sel-st','sel-portal'].forEach(sid=>{
-    const el=document.getElementById(sid);if(!el)return;
-    const cur=el.value;
-    el.innerHTML='<option value="">— اختاري —</option>'+ss.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
-    el.value=cur;
-  });
-}
-function copyStudentLink(id){
-  if(!S.sheetUrl||!S.teacherCode){toast('⚠️ احفظي إعدادات الدورة والربط السحابي أولاً');return;}
-  const base=window.location.href.split('?')[0];
-  const link=`${base}?s=${id}&u=${btoa(S.sheetUrl)}&c=${btoa(S.teacherCode)}`;
-  const h=document.getElementById('copy-helper');h.value=link;h.select();
-  try{document.execCommand('copy');}catch{navigator.clipboard.writeText(link);}
-  toast('🔗 تم نسخ الرابط السري للطالبة!');
-}
-
-// ══ SESSION (WITH REVIEW & DEDUCT) ═══════════════════════
-function startSession(){
-  const id=document.getElementById('sel-st').value;
-  if(!id){document.getElementById('sess-body').style.display='none';return;}
-  const st=S.students.find(s=>s.id===parseInt(id));if(!st)return;
-  curSt=st.id;sessScore=100;sessErrors=[];
-  const tF=st.customFaces||S.course.pages||200;
-  const q=calcQuota(tF,S.course.weeks||10,S.course.studyDays||5);
-  window._activeSessQuota=q;
-  const si=document.getElementById('quota-info-sess');
-  if(si) si.textContent=st.customFaces?`🎯 مقرر خاص (${tF} وجه) — النصاب: ${q.sessionFaces} أوجه`:`📌 النصاب (المقرر العام): ${q.sessionFaces} أوجه`;
-  
-  document.getElementById('faces').value=q.sessionFaces;
-  document.getElementById('live-score').textContent='100';
-  document.getElementById('sess-att').value='present';
-  document.getElementById('rev-type').value='none';
-  document.getElementById('rev-range').value='';
-  
-  renderErrLog();toggleSessBody();
-  document.getElementById('sess-body').style.display='block';
-  updateGradeDisp();updateBadge();
-}
-function toggleSessBody(){
-  const att=document.getElementById('sess-att').value;
-  const isPresent=att==='present';
-  
-  const wrap=document.getElementById('evaluation-wrap');
-  if(wrap) wrap.style.display = isPresent ? 'block' : 'none';
-  document.getElementById('btn-copy-rep').style.display = isPresent ? 'inline-flex' : 'none';
-  
-  const sel = document.getElementById('sess-att');
-  sel.className = 'att-' + att;
-}
-function deduct(pts,label,ayId,kwId){
-  const aya=document.getElementById(ayId)?.value?.trim()||'';
-  const kw=document.getElementById(kwId)?.value?.trim()||'';
-  const desc=[aya?`آية ${aya}`:'',kw?`"${kw}"`:'',label].filter(Boolean).join(' · ');
-  sessScore=parseFloat(Math.max(0,Math.min(110,sessScore-pts)).toFixed(1));
-  sessErrors.push({desc,pts,id:Date.now()+Math.random()});
-  document.getElementById('live-score').textContent=fmt(sessScore);
-  if(ayId) document.getElementById(ayId).value='';
-  if(kwId) document.getElementById(kwId).value='';
-  renderErrLog();updateGradeDisp();
-}
-function undoLast(){
-  if(!sessErrors.length){toast('لا توجد عمليات للتراجع');return;}
-  const last=sessErrors.pop();
-  sessScore=parseFloat(Math.min(110,Math.max(0,sessScore+last.pts)).toFixed(1));
-  document.getElementById('live-score').textContent=fmt(sessScore);
-  renderErrLog();updateGradeDisp();
-  toast('↩️ تم التراجع: '+last.desc);
-}
-function renderErrLog(){
-  const el=document.getElementById('err-log');
-  if(!sessErrors.length){el.innerHTML='<span style="font-size:13px;color:var(--ink-4);">لا توجد ملاحظات بعد</span>';return;}
-  el.innerHTML=sessErrors.map((e,i)=>{
-    const plus=e.pts<0;
-    return`<div class="err-item">
-      <div style="font-size:11px;color:var(--ink-4);min-width:18px;">${i+1}</div>
-      <div class="err-txt">${e.desc}</div>
-      <div class="${plus?'err-p':'err-m'}">${plus?'+':'-'}${Math.abs(e.pts)}</div>
-    </div>`;
-  }).join('');
-}
-function updateGradeDisp(){
-  const g=gradeOf(sessScore);
-  document.getElementById('grade-badge').innerHTML=`<span class="badge ${g.cls}" style="font-size:14px;padding:5px 14px;">${g.emoji} ${g.label}</span>`;
-}
-function updateBadge(){
-  const f=parseInt(document.getElementById('faces').value)||0;
-  const q=window._activeSessQuota?.sessionFaces||10;
-  const el=document.getElementById('sess-badge');
-  if(f>q) el.innerHTML=`<span class="badge bx">⭐ تجاوزت النصاب (${f}/${q})</span>`;
-  else if(f>=q) el.innerHTML=`<span class="badge bj">🟢 نصاب مكتمل (${f}/${q})</span>`;
-  else el.innerHTML=`<span class="badge br">🔴 لم يكتمل (${f}/${q})</span>`;
-}
-function resetSess(){
-  if(!confirm('إعادة ضبط الجلسة؟'))return;
-  sessScore=100;sessErrors=[];
-  document.getElementById('live-score').textContent='100';
-  document.getElementById('from-a').value='';
-  document.getElementById('to-a').value='';
-  renderErrLog();updateGradeDisp();updateBadge();
-  toast('🔄 تمت إعادة الضبط');
-}
-function saveSession(){
-  if(!curSt){toast('اختاري طالبة أولاً');return;}
-  const st=S.students.find(s=>s.id===curSt);if(!st)return;
-  
-  const att=document.getElementById('sess-att').value;
-  const faces=parseInt(document.getElementById('faces').value)||0;
-  const q=window._activeSessQuota?.sessionFaces||10;
-  
-  // Review data
-  const revType=document.getElementById('rev-type').value;
-  const revG=document.getElementById('rev-grade').value;
-  
-  let isStar=false,isOk=false,finalScore=null,finalGrade='—';
-  if(att==='present'){
-    isStar=faces>q;isOk=faces>=q;
-    finalScore=sessScore;finalGrade=gradeOf(sessScore).label;
-    st.score=finalScore;
-    if(isStar) st.stars=(st.stars||0)+1;
-    if(isOk) st.ok=(st.ok||0)+1;
-  }
-  st.total=(st.total||0)+1;
-  
-  (st.sessions=st.sessions||[]).push({
-    date:new Date().toLocaleDateString('ar-EG'),ts:Date.now(),
-    att, 
-    rev: att==='present'?revType:'none',
-    revG: att==='present'?revG:'',
-    score:finalScore,
-    faces:att==='present'?faces:0,
-    from:att==='present'?(document.getElementById('from-a').value||'—'):'—',
-    to:att==='present'?(document.getElementById('to-a').value||'—'):'—',
-    errors:att==='present'?sessErrors.map(e=>({desc:e.desc,pts:e.pts})):[],
-    star:isStar,ok:isOk,grade:finalGrade,
-  });
-  
-  save();renderStudentList();
-  toast(att==='present'?`✅ تم حفظ جلسة ${st.name}`:`🗓️ تم تسجيل غياب ${st.name}`);
-  if(S.sheetUrl) syncToSheet(true);
-}
-function copyReport(){
-  const st=S.students.find(s=>s.id===curSt);
-  const name=st?st.name:'—';
-  const faces=document.getElementById('faces').value;
-  const from=document.getElementById('from-a').value||'—';
-  const to=document.getElementById('to-a').value||'—';
-  const g=gradeOf(sessScore);
-  const q=window._activeSessQuota?.sessionFaces||10;
-  const badge=parseInt(faces)>q?'⭐ تجاوزت النصاب':parseInt(faces)>=q?'🟢 مكتمل':'🔴 لم يكتمل';
-  const errLines=sessErrors.length?sessErrors.map((e,i)=>`  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n'):'  ممتاز — لا توجد ملاحظات';
-  
-  const revType=document.getElementById('rev-type').value;
-  const revR=document.getElementById('rev-range').value;
-  const revG=document.getElementById('rev-grade').value;
-  let rTxt = 'المراجعة : لا يوجد';
-  if(revType !== 'none') {
-      const typeStr = revType==='minor'?'صغرى':revType==='major'?'كبرى':'صغرى + كبرى';
-      rTxt = `المراجعة : ${typeStr} (${revR||'—'}) — التقييم: ${revG}`;
-  }
-
-  const rep=[
-    `📋 تقرير جلسة التسميع — ${S.course.cname||'حلقة التحفيظ'}`,
-    '━━━━━━━━━━━━━━━━━━━━━━',
-    `الطالبة  : ${name}`,`التاريخ  : ${new Date().toLocaleDateString('ar-EG')}`,
-    `من        : ${from}   إلى : ${to}`,`الأوجه   : ${faces} ${badge}`,
-    rTxt,
-    `الدرجة   : ${fmt(sessScore)} / 100`,`التقييم  : ${g.emoji} ${g.label}`,
-    '──────────────────────','الملاحظات الحفظ:',errLines,
-    '━━━━━━━━━━━━━━━━━━━━━━','وفّقكِ الله وبارك في جهدكِ 💜',
-  ].join('\n');
-  navigator.clipboard.writeText(rep).then(()=>toast('📋 تم نسخ التقرير')).catch(()=>{alert(rep);});
-}
-
-// ══ DASHBOARD (CHARTS) 📊 ════════════════════════════════
-window.scoreChartInst = null;
-window.attChartInst = null;
-
-function initCharts() {
-  if(!S.students || S.students.length === 0) return;
-  
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const textColor = isDark ? '#E0E0E0' : '#1A1714';
-  const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
-  const goldColor = isDark ? '#E0A83A' : '#C8922A';
-  const jadeColor = isDark ? '#3AA870' : '#2A7A50';
-  const roseColor = isDark ? '#E05570' : '#B03348';
-
-  let totalScore = 0, validScores = 0, totalStars = 0;
-  let attPres = 0, attEx = 0, attUnex = 0;
-  const names = []; const scores = [];
-
-  S.students.forEach(st => {
-    names.push(st.name.split(' ')[0]);
-    scores.push(st.score || 0);
-    totalStars += (st.stars || 0);
-    if(st.score) { totalScore += st.score; validScores++; }
-    if(st.sessions) {
-      st.sessions.forEach(sess => {
-        if(sess.att === 'present') attPres++;
-        else if(sess.att === 'excused') attEx++;
-        else if(sess.att === 'unexcused') attUnex++;
-      });
-    }
-  });
-
-  const avgScore = validScores > 0 ? (totalScore / validScores).toFixed(1) : 0;
-  const totalSess = attPres + attEx + attUnex;
-  const attRate = totalSess > 0 ? Math.round(((attPres + attEx) / totalSess) * 100) : 0;
-
-  document.getElementById('d-avg-score').textContent = avgScore;
-  document.getElementById('d-total-stars').textContent = totalStars;
-  document.getElementById('d-att-rate').textContent = attRate + '%';
-
-  const ctxScore = document.getElementById('scoreChart');
-  if(window.scoreChartInst) window.scoreChartInst.destroy();
-  window.scoreChartInst = new Chart(ctxScore, {
-    type: 'bar',
-    data: {
-      labels: names,
-      datasets: [{ label: 'آخر درجة إتقان', data: scores, backgroundColor: goldColor, borderRadius: 4 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: true, max: 100, ticks: { color: textColor }, grid: { color: gridColor } },
-        x: { ticks: { color: textColor }, grid: { display: false } }
-      }
-    }
-  });
-
-  const ctxAtt = document.getElementById('attChart');
-  if(window.attChartInst) window.attChartInst.destroy();
-  window.attChartInst = new Chart(ctxAtt, {
-    type: 'doughnut',
-    data: {
-      labels: ['حضور', 'غياب بعذر', 'غياب بدون عذر'],
-      datasets: [{ data: [attPres, attEx, attUnex], backgroundColor: [jadeColor, goldColor, roseColor], borderWidth: 0 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'left', labels: { color: textColor, font: {family: 'Cairo'} } } }
-    }
-  });
-}
-
-// ══ PORTAL & STREAKS 🔥 ══════════════════════════════════
 function calculateStreak(sessions) {
   if (!sessions || sessions.length === 0) return 0;
   let streak = 0;
@@ -1579,257 +886,614 @@ function calculateStreak(sessions) {
   return streak;
 }
 
-function loadPortal(){
-  const id=isStudentMode?loggedInStudentId:parseInt(document.getElementById('sel-portal').value);
-  const pb=document.getElementById('portal-body');
-  const pc=document.getElementById('btn-print-cert');
-  if(!id){pb.style.display='none';if(pc)pc.style.display='none';return;}
-  const st=S.students.find(s=>s.id===id);if(!st)return;
-  
-  pb.style.display='block';
-  if(pc)pc.style.display='inline-flex';
-  document.getElementById('p-av').textContent=st.name[0];
-  document.getElementById('p-name').textContent=st.name;
-  
-  const tF=st.customFaces||S.course.pages||200;
-  document.getElementById('p-course-info').textContent=st.customFaces?`سجل محمي · مقرر خاص (${tF} وجه)`:`سجل محمي · المقرر العام (${tF} وجه)`;
-  const g=gradeOf(st.score);
-  document.getElementById('p-score').textContent=fmt(st.score);
-  document.getElementById('p-stars').textContent=st.stars>0?'⭐'.repeat(Math.min(st.stars,7)):'0';
-  
-  const sess=st.sessions||[];
-  const pSess=sess.filter(s=>s.att==='present');
-  document.getElementById('p-sess-cnt').textContent=pSess.length;
-  document.getElementById('p-grade-badge').innerHTML=`<span class="badge ${g.cls}" style="font-size:14px;padding:5px 14px;">${g.emoji} ${g.label}</span>`;
-  
-  const avg=pSess.length?(pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1):'—';
-  document.getElementById('p-avg').textContent=avg;
-  
-  // Streaks 🔥
-  const currentStreak = calculateStreak(sess);
-  document.getElementById('p-streak').textContent = currentStreak + ' أيام';
-  
-  // Gamification Badges
-  const unex=sess.filter(s=>s.att==='unexcused').length;
-  document.getElementById('bdg-disc').className='gbadge'+(sess.length>=3&&unex===0?' earned':'');
-  document.getElementById('bdg-mast').className='gbadge'+(pSess.length>=2&&parseFloat(avg)>=95?' earned':'');
-  document.getElementById('bdg-fast').className='gbadge'+((st.stars||0)>=3?' earned':'');
-  
-  // Days & Smart Dates
-  const sd=S.course.studyDays||5;
-  const sq=calcQuota(tF,S.course.weeks||10,sd);
-  const days=st.days&&st.days.length===sd?st.days:Array(sd).fill(0);
-  const done=days.filter(Boolean).length;
-  const pct=Math.round(done/sd*100);
-  document.getElementById('p-prog').style.width=pct+'%';
-  document.getElementById('p-prog-txt').textContent=`${done} / ${sd} أيام`;
-  document.getElementById('p-prog-pct').textContent=pct+'%';
-  
-  const dn=getDayNames(sd);
-  document.getElementById('p-days').innerHTML=days.map((d,i)=>{
-    const actDate = getActualDateStr(S.course.sdate, 1, i, sd);
-    return `
-    <div class="day-row${d?' toggled':''}">
-      <div>
-        <div style="font-size:13px;font-weight:600;">${dn[i]||'يوم '+(i+1)}</div>
-        <div class="day-date">${actDate} — المطلوب: ${sq.dailyText} أوجه</div>
-      </div>
-      ${d
-        ?`<div class="day-done">✓ تم الإنجاز <button class="btn btn-ghost btn-sm" onclick="toggleDay(${id},${i})">إلغاء</button></div>`
-        :`<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">تأكيد الإنجاز ✓</button>`
-      }
-    </div>`
-  }).join('');
-  
-  // History (Including Review)
-  const sorted=[...sess].sort((a,b)=>b.ts-a.ts);
-  document.getElementById('p-hist').innerHTML=sorted.length?sorted.map(s=>{
-    if(s.att!=='present'){
-      const isEx=s.att==='excused';
-      return`<div class="hist hist-abs" style="border-right-color:${isEx?'var(--jade)':'var(--rose)'};">
-        <div class="hist-d">${s.date} · غياب</div>
-        <div class="hist-b" style="color:${isEx?'var(--jade)':'var(--rose)'};font-weight:700;">${isEx?'غياب بعذر (لا يؤثر على التقييم)':'غياب بدون عذر'}</div>
-      </div>`;
-    }
-    const errHtml=s.errors&&s.errors.length?'<div style="margin-top:6px;padding-right:8px;border-right:2px solid var(--rose-lt);">'+
-      s.errors.map(e=>`<div style="font-size:12px;color:var(--rose);">${e.desc} <strong>(${e.pts<0?'+':'-'}${Math.abs(e.pts)})</strong></div>`).join('')+'</div>':'';
-    
-    let revBadge = '';
-    if(s.rev && s.rev !== 'none') {
-        const t = s.rev==='minor'?'صغرى':s.rev==='major'?'كبرى':'شاملة';
-        revBadge = `<span class="rev-box">🔄 مراجعة ${t}: ${s.revG}</span>`;
-    }
+// ══════════════════════════════════════════════════════════
+// 3. UI & NAVIGATION
+// ══════════════════════════════════════════════════════════
+const TITLES = {
+  setup: ['إعداد الدورة', 'تخصيص البيانات والموزع الآلي'],
+  session: ['جلسة التسميع', 'حضور، تقييم، ومراجعة'],
+  dash: ['لوحة التحليلات', 'نظرة عامة على الأداء'],
+  portal: ['بوابة الطالبة', 'سجل شخصي وخاص'],
+  board: ['لوحة الصدارة', 'إحصائيات الحلقة'],
+  sheets: ['الربط السحابي', 'Google Sheets Integration']
+};
 
-    return`<div class="hist">
-      <div class="hist-d">${s.date} · حفظ جديد: ${s.faces} وجه ${s.star?'⭐':''} ${s.ok?'🟢':'🔴'}</div>
-      <div class="hist-b">
-        الدرجة: <strong>${fmt(s.score)}</strong> · ${gradeOf(s.score).emoji} ${gradeOf(s.score).label} · من ${s.from} إلى ${s.to}
-        ${revBadge ? '<br>'+revBadge : ''}
-        ${errHtml}
-      </div>
-    </div>`;
-  }).join(''):'<div style="color:var(--ink-4);font-size:13px;">لا توجد جلسات بعد.</div>';
+function navigate(pageId) {
+  document.querySelectorAll('.page-wrapper').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item, .b-nav-item').forEach(el => el.classList.remove('active'));
   
-  // Analysis
-  const allErr=pSess.flatMap(s=>s.errors||[]);
-  const pa=document.getElementById('p-analysis');
-  if(!allErr.length){pa.innerHTML='<span style="color:var(--ink-4);font-size:13px;">لا توجد بيانات كافية للتحليل بعد.</span>';return;}
-  const tc={};
-  allErr.forEach(e=>{const t=e.desc.split(' · ').pop()||e.desc;tc[t]=(tc[t]||0)+1;});
-  const tot=allErr.length;
-  pa.innerHTML=`<div style="font-size:12px;color:var(--ink-4);margin-bottom:10px;">إجمالي الملاحظات: <strong>${tot}</strong></div>`+
-    Object.entries(tc).sort((a,b)=>b[1]-a[1]).map(([type,cnt])=>{
-      const p=Math.round(cnt/tot*100);
-      return`<div style="margin-bottom:9px;">
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
-          <span>${type}</span><span><strong>${cnt}</strong> مرة (${p}%)</span>
+  document.getElementById('page-' + pageId).classList.add('active');
+  
+  document.querySelectorAll(`[onclick="navigate('${pageId}')"]`).forEach(el => el.classList.add('active'));
+  
+  if(TITLES[pageId]) {
+    document.getElementById('top-title').textContent = TITLES[pageId][0];
+    document.getElementById('top-sub').textContent = TITLES[pageId][1];
+  }
+
+  document.getElementById('sidebar').style.transform = '';
+  document.getElementById('sb-overlay').classList.remove('active');
+
+  if(pageId === 'dash') initDashboard();
+  if(pageId === 'board') renderBoard();
+  if(pageId === 'portal' && isStudentMode) {
+      document.getElementById('sel-portal').value = loggedInStudentId;
+      loadPortal();
+  }
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sb-overlay');
+  if (sb.style.transform === 'translateX(0px)') {
+    sb.style.transform = '';
+    ov.classList.remove('active');
+  } else {
+    sb.style.transform = 'translateX(0)';
+    ov.classList.add('active');
+  }
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  localStorage.setItem('alm_theme', isDark ? 'light' : 'dark');
+  if(document.getElementById('page-dash').classList.contains('active')) initDashboard();
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function updateUI() {
+  const tName = document.getElementById('teacher').value || 'المعلمة';
+  document.getElementById('sb-uname').textContent = tName;
+  document.getElementById('sb-avatar').textContent = tName[0] || 'م';
+}
+
+function setSyncDot(state) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-lbl');
+  dot.className = 'dot ' + state;
+  if(state === 'ok') lbl.textContent = 'متزامن';
+  if(state === 'err') lbl.textContent = 'خطأ';
+  if(state === 'sync') lbl.textContent = 'جارٍ...';
+  if(state === 'local') lbl.textContent = 'محلي';
+}
+
+// ══════════════════════════════════════════════════════════
+// 4. SETUP & DATA MANAGEMENT
+// ══════════════════════════════════════════════════════════
+function initSetup() {
+  document.getElementById('teacher').value = S.course.teacher;
+  document.getElementById('cname').value = S.course.cname;
+  document.getElementById('tpages').value = S.course.pages;
+  document.getElementById('sdate').value = S.course.sdate;
+  document.getElementById('tweeks').value = S.course.weeks;
+  document.getElementById('study-days').value = S.course.studyDays;
+  document.getElementById('sheet-url').value = S.sheetUrl;
+  document.getElementById('teacher-code').value = S.teacherCode;
+  document.getElementById('gs-code').value = GS_CODE;
+  
+  updateUI(); calcPlan(); renderStudentList();
+}
+
+function calcPlan() {
+  const tF = parseInt(document.getElementById('tpages').value) || 200;
+  const wks = parseInt(document.getElementById('tweeks').value) || 10;
+  const sd = parseInt(document.getElementById('study-days').value) || 5;
+  const q = calcQuota(tF, wks, sd);
+  
+  document.getElementById('m-days').textContent = wks * sd;
+  document.getElementById('m-daily').textContent = q.dailyText;
+  document.getElementById('m-weeks').textContent = wks;
+  document.getElementById('m-quota').textContent = q.sessionFaces;
+  
+  window._quota = q;
+  
+  let html = '', sf = 0;
+  for(let w = 1; w <= wks; w++){
+    const wf = Math.min(q.weeklyFaces, tF - sf); 
+    if(wf <= 0) break;
+    html += `<div class="list-row" style="padding:10px 16px;"><div style="font-weight:700;color:var(--primary);">الأسبوع ${w}</div><div>وجه ${sf+1} — ${sf+wf}</div><div style="color:var(--text-muted);font-size:12px;">${wf} أوجه</div></div>`;
+    sf += wf;
+  }
+  document.getElementById('week-plan').innerHTML = html;
+}
+
+function saveCourse() {
+  S.course.teacher = document.getElementById('teacher').value.trim();
+  S.course.cname = document.getElementById('cname').value.trim();
+  S.course.pages = parseInt(document.getElementById('tpages').value) || 200;
+  S.course.sdate = document.getElementById('sdate').value;
+  S.course.weeks = parseInt(document.getElementById('tweeks').value) || 10;
+  S.course.studyDays = parseInt(document.getElementById('study-days').value) || 5;
+  
+  saveState(); calcPlan(); updateUI(); toast('✅ تم حفظ إعدادات الدورة');
+  if(S.sheetUrl) syncToSheet();
+}
+
+function archiveCourse() {
+  if(!confirm('⚠️ هل أنتِ متأكدة من أرشفة هذه الدورة؟ سيتم تصفير جميع درجات الطالبات مع الاحتفاظ بأسمائهن.')) return;
+  const sd = S.course.studyDays || 5;
+  S.students.forEach(st => {
+    st.score = 100; st.stars = 0; st.sessions = []; st.days = Array(sd).fill(0); st.ok = 0; st.total = 0;
+  });
+  S.course.sdate = new Date().toISOString().split('T')[0];
+  saveState(); initSetup(); toast('🗄️ تم بدء دورة جديدة!');
+  if(S.sheetUrl) syncToSheet();
+}
+
+// Students
+function sortedSts() { return [...S.students].sort((a,b) => a.name.localeCompare(b.name, 'ar')); }
+
+function renderStudentList() {
+  const ss = sortedSts();
+  const list = document.getElementById('student-list');
+  
+  if(ss.length === 0) {
+    list.innerHTML = '<div class="alert alert-warning">لا توجد طالبات بعد. الرجاء إدخال أسماء الطالبات في الأعلى للبدء.</div>';
+  } else {
+    list.innerHTML = ss.map(st => {
+      const customTxt = st.customFaces ? `<span style="color:var(--gold); font-size:11px;">مقرر خاص: ${st.customFaces}</span>` : '';
+      return `
+      <div class="list-row">
+        <div class="list-content">
+          <div class="user-avatar" style="width:36px; height:36px; font-size:14px;">${st.name[0]}</div>
+          <div>
+            <div style="font-weight:700; font-size:14px;">${st.name} ${customTxt}</div>
+            <div style="font-size:12px; color:var(--text-muted);">المعدل: ${fmt(st.score)} | ⭐ ${st.stars||0}</div>
+          </div>
         </div>
-        <div class="prog"><div class="prog-fill" style="width:${p}%;background:var(--rose);"></div></div>
+        <div class="list-actions">
+          <button class="btn btn-outline" style="padding:6px 12px; font-size:12px;" onclick="copyStudentLink(${st.id})">🔗 الرابط</button>
+          <button class="btn btn-danger" style="padding:6px 12px; font-size:12px;" onclick="delSt(${st.id})">حذف</button>
+        </div>
       </div>`;
     }).join('');
+  }
+  popSelects();
 }
-function toggleDay(stId,dayIdx){
-  const st=S.students.find(s=>s.id===stId);if(!st)return;
-  const sd=S.course.studyDays||5;
-  if(!st.days||st.days.length!==sd) st.days=Array(sd).fill(0);
-  st.days[dayIdx]=st.days[dayIdx]?0:1;
-  if(!isStudentMode) save();
-  loadPortal();
-  const dn=getDayNames(sd);
-  toast(`${st.days[dayIdx]?'✅ تم تسجيل':'↩️ تم إلغاء'} إنجازك لـ ${dn[dayIdx]||''}`);
-  if(S.sheetUrl) syncToSheet(true,true); // Force sync even if student
+
+function addStudent() {
+  const name = document.getElementById('new-name').value.trim();
+  const cf = parseInt(document.getElementById('new-custom-faces').value);
+  if(!name) { toast('⚠️ الرجاء إدخال اسم الطالبة'); return; }
+  if(S.students.find(s => s.name === name)) { toast('⚠️ هذا الاسم موجود مسبقاً'); return; }
+  
+  const sd = S.course.studyDays || 5;
+  const st = { id: S.nextId++, name, score: 100, stars: 0, sessions: [], days: Array(sd).fill(0), ok: 0, total: 0 };
+  if(cf && cf > 0) st.customFaces = cf;
+  
+  S.students.push(st); saveState();
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-custom-faces').value = '';
+  renderStudentList(); toast('✅ تمت إضافة ' + name);
 }
-function printReport(){
-  const id=isStudentMode?loggedInStudentId:parseInt(document.getElementById('sel-portal').value);
-  const st=S.students.find(s=>s.id===id);if(!st)return;
-  const sess=st.sessions||[];
-  const pSess=sess.filter(s=>s.att==='present');
-  const avg=pSess.length?(pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1):'—';
-  const cF=st.customFaces?`مقرر خاص (${st.customFaces} وجه)`:`المقرر العام (${S.course.pages||200} وجه)`;
-  document.getElementById('rep-t-name').textContent=S.course.teacher||'—';
-  document.getElementById('rep-s-name').textContent=st.name;
-  document.getElementById('rep-c-name').textContent=(S.course.cname||'')+(S.course.cname?` · ${cF}`:cF);
-  document.getElementById('rep-score').textContent=avg;
-  document.getElementById('rep-stars').textContent=st.stars||0;
-  document.getElementById('rep-sessions').textContent=pSess.length;
-  document.getElementById('rep-date').textContent=new Date().toLocaleDateString('ar-EG');
-  const sorted=[...sess].sort((a,b)=>a.ts-b.ts);
-  document.getElementById('rep-tbody').innerHTML=sorted.length?sorted.map(s=>{
+
+function delSt(id) {
+  if(!confirm('تأكيد حذف الطالبة؟')) return;
+  S.students = S.students.filter(s => s.id !== id);
+  saveState(); renderStudentList();
+}
+
+function popSelects() {
+  if(isStudentMode) return;
+  const ss = sortedSts();
+  const options = '<option value="">— اختاري الطالبة —</option>' + ss.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+  ['sel-st', 'sel-portal'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) { const val = el.value; el.innerHTML = options; el.value = val; }
+  });
+}
+
+function copyStudentLink(id) {
+  if(!S.sheetUrl || !S.teacherCode) { toast('⚠️ احفظي إعدادات الربط السحابي أولاً من شاشة الإعدادات'); return; }
+  const base = window.location.href.split('?')[0];
+  const link = `${base}?s=${id}&u=${btoa(S.sheetUrl)}&c=${btoa(S.teacherCode)}`;
+  
+  if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(link).then(() => {
+          toast('🔗 تم نسخ الرابط السري بنجاح!');
+      }).catch(() => fallbackCopy(link));
+  } else {
+      fallbackCopy(link);
+  }
+}
+
+function fallbackCopy(text) {
+  const el = document.getElementById('copy-helper');
+  el.value = text; el.select();
+  try { document.execCommand('copy'); toast('🔗 تم نسخ الرابط السري!'); } 
+  catch(e) { toast('❌ فشل النسخ التلقائي'); }
+}
+
+// ══════════════════════════════════════════════════════════
+// 5. SESSION MODULE
+// ══════════════════════════════════════════════════════════
+function startSession() {
+  const id = document.getElementById('sel-st').value;
+  if(!id) { document.getElementById('sess-body').style.display = 'none'; return; }
+  
+  const st = S.students.find(s => s.id === parseInt(id));
+  curSt = st.id; sessScore = 100; sessErrors = [];
+  
+  const tf = st.customFaces || S.course.pages || 200;
+  const q = calcQuota(tf, S.course.weeks||10, S.course.studyDays||5);
+  window._activeSessQuota = q;
+  
+  document.getElementById('quota-info-sess').textContent = `🎯 النصاب المستهدف: ${q.sessionFaces} أوجه`;
+  document.getElementById('faces').value = q.sessionFaces;
+  document.getElementById('live-score').textContent = '100';
+  document.getElementById('sess-att').value = 'present';
+  
+  renderErrLog(); toggleSessBody(); updateGradeDisp();
+  document.getElementById('sess-body').style.display = 'block';
+}
+
+function toggleSessBody() {
+  const att = document.getElementById('sess-att').value;
+  document.getElementById('evaluation-wrap').style.display = att === 'present' ? 'block' : 'none';
+}
+
+function deduct(pts, label, ayId, kwId) {
+  const aya = ayId ? document.getElementById(ayId).value.trim() : '';
+  const kw = kwId ? document.getElementById(kwId).value.trim() : '';
+  const desc = [aya?`آية ${aya}`:'', kw?`"${kw}"`:'', label].filter(Boolean).join(' · ');
+  
+  sessScore = parseFloat(Math.max(0, Math.min(110, sessScore - pts)).toFixed(1));
+  sessErrors.push({desc, pts, id: Date.now()});
+  
+  document.getElementById('live-score').textContent = fmt(sessScore);
+  if(ayId) document.getElementById(ayId).value = '';
+  if(kwId) document.getElementById(kwId).value = '';
+  renderErrLog(); updateGradeDisp();
+}
+
+function undoLast() {
+  if(!sessErrors.length) return;
+  const last = sessErrors.pop();
+  sessScore = parseFloat(Math.min(110, Math.max(0, sessScore + last.pts)).toFixed(1));
+  document.getElementById('live-score').textContent = fmt(sessScore);
+  renderErrLog(); updateGradeDisp();
+}
+
+function renderErrLog() {
+  const log = document.getElementById('err-log');
+  if(!sessErrors.length) { log.innerHTML = 'لا توجد ملاحظات.'; return; }
+  log.innerHTML = sessErrors.map(e => `
+    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed var(--border);">
+      <span>${e.desc}</span><span style="color:var(--danger); font-weight:700;">${e.pts}</span>
+    </div>
+  `).join('');
+}
+
+function updateGradeDisp() {
+  const g = gradeOf(sessScore);
+  document.getElementById('grade-badge').innerHTML = `<span class="status-badge ${g.cls}">${g.label}</span>`;
+}
+
+function resetSess() {
+  if(!confirm('مسح التقسيم؟')) return;
+  startSession();
+}
+
+function saveSession() {
+  if(!curSt) return;
+  const st = S.students.find(s => s.id === curSt);
+  const att = document.getElementById('sess-att').value;
+  const faces = parseInt(document.getElementById('faces').value) || 0;
+  const q = window._activeSessQuota?.sessionFaces || 10;
+  
+  const revType = document.getElementById('rev-type').value;
+  const revRange = document.getElementById('rev-range').value;
+  const revG = document.getElementById('rev-grade').value;
+  
+  let finalScore = null, isOk = false;
+  if(att === 'present') {
+    finalScore = sessScore;
+    st.score = sessScore;
+    isOk = faces >= q;
+    if(faces > q) st.stars = (st.stars||0) + 1;
+    if(isOk) st.ok = (st.ok||0) + 1;
+  }
+  st.total = (st.total||0) + 1;
+  
+  (st.sessions = st.sessions || []).push({
+    date: new Date().toLocaleDateString('ar-EG'), ts: Date.now(), att,
+    rev: att==='present'?revType:'none', revR: revRange, revG: revG,
+    score: finalScore, faces: att==='present'?faces:0,
+    from: document.getElementById('from-a').value||'—', to: document.getElementById('to-a').value||'—',
+    errors: att==='present' ? sessErrors.slice() : [],
+    ok: isOk, grade: gradeOf(finalScore).label
+  });
+  
+  saveState(); renderStudentList();
+  toast('✅ تم اعتماد الجلسة');
+  if(S.sheetUrl) syncToSheet();
+}
+
+// ══════════════════════════════════════════════════════════
+// 6. DASHBOARD & ANALYTICS 📊
+// ══════════════════════════════════════════════════════════
+let charts = {};
+
+function initDashboard() {
+  const emptyState = document.getElementById('dash-empty-state');
+  const content = document.getElementById('dash-content');
+  
+  if(!S.students || S.students.length === 0 || !S.students.some(s => s.sessions && s.sessions.length > 0)) {
+    emptyState.style.display = 'block';
+    content.style.display = 'none';
+    return;
+  }
+  
+  emptyState.style.display = 'none';
+  content.style.display = 'block';
+
+  const root = getComputedStyle(document.documentElement);
+  const colorPrimary = root.getPropertyValue('--primary').trim();
+  const colorGold = root.getPropertyValue('--gold').trim();
+  const colorText = root.getPropertyValue('--text-main').trim();
+  const colorGrid = root.getPropertyValue('--border-strong').trim();
+  const colorSuccess = root.getPropertyValue('--success').trim();
+  const colorDanger = root.getPropertyValue('--danger').trim();
+
+  Chart.defaults.color = colorText;
+  Chart.defaults.font.family = 'Cairo';
+
+  let tScore=0, vCount=0, tSess=0, pSess=0, eSess=0;
+  const names = [], scores = [];
+  const errMap = { 'حفظ': 0, 'تشكيل': 0, 'تردد': 0, 'أخرى': 0 };
+  const trendData = {}; 
+
+  S.students.forEach(st => {
+    names.push(st.name.split(' ')[0]);
+    scores.push(st.score || 0);
+    if(st.score) { tScore += st.score; vCount++; }
+    
+    (st.sessions||[]).forEach(s => {
+      tSess++;
+      if(s.att === 'present') {
+        pSess++;
+        if(!trendData[s.date]) trendData[s.date] = {sum:0, cnt:0};
+        trendData[s.date].sum += s.score;
+        trendData[s.date].cnt++;
+        (s.errors||[]).forEach(e => {
+          if(e.desc.includes('حفظ')) errMap['حفظ']++;
+          else if(e.desc.includes('تشكيل')) errMap['تشكيل']++;
+          else if(e.desc.includes('تردد')) errMap['تردد']++;
+          else errMap['أخرى']++;
+        });
+      } else if (s.att === 'excused') {
+        eSess++;
+      }
+    });
+  });
+
+  document.getElementById('d-avg-score').textContent = vCount ? (tScore/vCount).toFixed(1) : 0;
+  document.getElementById('d-total-sess').textContent = tSess;
+  document.getElementById('d-att-rate').textContent = tSess ? Math.round(((pSess+eSess)/tSess)*100)+'%' : 0;
+
+  if(charts.bar) charts.bar.destroy();
+  charts.bar = new Chart(document.getElementById('scoreBarChart'), {
+    type: 'bar',
+    data: { labels: names, datasets: [{ label: 'معدل الطالبة', data: scores, backgroundColor: colorPrimary, borderRadius: 6 }] },
+    options: { scales: { y: { min: 60, max: 100, grid: { color: colorGrid } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+  });
+
+  if(charts.radar) charts.radar.destroy();
+  charts.radar = new Chart(document.getElementById('errorRadarChart'), {
+    type: 'radar',
+    data: { labels: Object.keys(errMap), datasets: [{ label: 'تكرار الخطأ', data: Object.values(errMap), backgroundColor: 'rgba(212, 175, 55, 0.4)', borderColor: colorGold, pointBackgroundColor: colorGold }] },
+    options: { scales: { r: { grid: { color: colorGrid }, angleLines: { color: colorGrid }, pointLabels: { font: { size: 13 } } } }, plugins: { legend: { display: false } } }
+  });
+
+  const sortedDates = Object.keys(trendData).sort((a,b) => new Date(a.split('/').reverse().join('-')) - new Date(b.split('/').reverse().join('-')));
+  const trendAvg = sortedDates.map(d => trendData[d].sum / trendData[d].cnt);
+  
+  if(charts.line) charts.line.destroy();
+  charts.line = new Chart(document.getElementById('trendLineChart'), {
+    type: 'line',
+    data: { labels: sortedDates, datasets: [{ label: 'المتوسط اليومي للحلقة', data: trendAvg, borderColor: colorPrimary, backgroundColor: colorPrimary, tension: 0.4, borderWidth: 3 }] },
+    options: { maintainAspectRatio: false, scales: { y: { min: 70, max: 100, grid: { color: colorGrid } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// 7. PORTAL & STUDENT VIEW
+// ══════════════════════════════════════════════════════════
+function loadPortal() {
+  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const pb = document.getElementById('portal-body');
+  if(!id) { pb.style.display = 'none'; return; }
+  
+  const st = S.students.find(s => s.id === id); if(!st) return;
+  pb.style.display = 'block';
+  
+  document.getElementById('p-av').textContent = st.name[0];
+  document.getElementById('p-name').textContent = st.name;
+  
+  const tF = st.customFaces || S.course.pages || 200;
+  const q = calcQuota(tF, S.course.weeks||10, S.course.studyDays||5);
+  
+  document.getElementById('p-score').textContent = fmt(st.score);
+  document.getElementById('p-streak').textContent = calculateStreak(st.sessions);
+  document.getElementById('p-stars').textContent = st.stars || 0;
+  
+  const pSess = (st.sessions||[]).filter(s => s.att === 'present');
+  const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : 0;
+  
+  const sd = S.course.studyDays || 5;
+  const days = st.days && st.days.length === sd ? st.days : Array(sd).fill(0);
+  const dn = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; // Generic fallback
+  
+  document.getElementById('p-prog').style.width = (days.filter(Boolean).length / sd * 100) + '%';
+  document.getElementById('p-days').innerHTML = days.map((d, i) => `
+    <div class="list-row" style="margin-bottom:8px; padding:12px 16px;">
+      <div>
+        <div style="font-weight:700;">${getDayNames(sd)[i] || 'يوم '+(i+1)}</div>
+        <div style="font-size:11px; color:var(--text-muted);">${getActualDateStr(S.course.sdate, 1, i, sd)} | المطلوب: ${q.dailyText} أوجه</div>
+      </div>
+      ${d ? `<button class="btn btn-outline btn-sm" onclick="toggleDay(${id},${i})">تم ✓ (تراجع)</button>`
+          : `<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">تأكيد الإنجاز</button>`}
+    </div>
+  `).join('');
+
+  const hist = document.getElementById('p-hist');
+  const sorted = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts);
+  hist.innerHTML = sorted.map(s => {
+    if(s.att !== 'present') return `<div class="list-row"><div style="color:var(--danger); font-weight:700;">${s.date} - غياب</div></div>`;
+    let revHtml = (s.rev && s.rev !== 'none') ? `<span style="font-size:11px; background:var(--bg-elevated); padding:2px 6px; border-radius:4px; color:var(--primary);">مراجعة: ${s.revG}</span>` : '';
+    return `
+      <div class="list-row" style="align-items:flex-start;">
+        <div>
+          <div style="font-weight:700;">${s.date} ${s.star?'⭐':''}</div>
+          <div style="font-size:12px; color:var(--text-muted);">حفظ: ${s.faces} أوجه (${s.from}-${s.to})</div>
+          ${revHtml}
+        </div>
+        <div style="font-size:20px; font-weight:800; font-family:'Amiri',serif; color:var(--primary);">${fmt(s.score)}</div>
+      </div>`;
+  }).join('') || '<div class="alert alert-info">لا توجد جلسات مسجلة بعد.</div>';
+}
+
+function toggleDay(id, idx) {
+  const st = S.students.find(s => s.id === id); if(!st) return;
+  st.days[idx] = st.days[idx] ? 0 : 1;
+  saveState(); loadPortal();
+  if(S.sheetUrl) syncToSheet();
+}
+
+function printReport() {
+  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const st = S.students.find(s=>s.id===id); if(!st) return;
+
+  const sess = st.sessions||[];
+  const pSess = sess.filter(s => s.att === 'present');
+  const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
+  
+  document.getElementById('rep-t-name').textContent = S.course.teacher || '—';
+  document.getElementById('rep-s-name').textContent = st.name;
+  document.getElementById('rep-c-name').textContent = S.course.cname || '—';
+  document.getElementById('rep-score').textContent = avg;
+  document.getElementById('rep-stars').textContent = st.stars || 0;
+  document.getElementById('rep-sessions').textContent = pSess.length;
+  document.getElementById('rep-date').textContent = new Date().toLocaleDateString('ar-EG');
+
+  const sorted = [...sess].sort((a,b)=>a.ts-b.ts);
+  document.getElementById('rep-tbody').innerHTML = sorted.map(s => {
     if(s.att!=='present'){
-      const at=s.att==='excused'?'غائبة بعذر':'غائبة بدون عذر';
-      return`<tr><td>${s.date}<br><small style="color:#A83240;">${at}</small></td><td colspan="3" style="text-align:center;color:#A83240;">-</td></tr>`;
+      const at = s.att==='excused'?'غائبة بعذر':'غائبة بدون عذر';
+      return `<tr><td>${s.date}<br><small style="color:#C0392B;">${at}</small></td><td colspan="3" style="text-align:center;color:#C0392B;">-</td></tr>`;
     }
-    const errs=s.errors&&s.errors.length?s.errors.map(e=>e.desc).join(' | '):'ممتاز - لا توجد ملاحظات';
+    const errs = s.errors&&s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات';
     let revStr = '-';
-    if(s.rev && s.rev !== 'none') {
-        const t = s.rev==='minor'?'صغرى':s.rev==='major'?'كبرى':'صغرى+كبرى';
-        revStr = `<span style="color:#2A7A50;font-weight:bold;">${t} (${s.revG})</span>`;
-    }
-    return`<tr><td>${s.date}</td><td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#C8922A">${fmt(s.score)}</b></td><td>${revStr}</td><td>${errs}</td></tr>`;
-  }).join(''):'<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
+    if(s.rev && s.rev !== 'none') revStr = `<span style="color:#2E7D52;font-weight:bold;">${s.rev==='minor'?'صغرى':s.rev==='major'?'كبرى':'صغرى+كبرى'} (${s.revG})</span>`;
+    
+    return `<tr><td>${s.date}</td><td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td><td>${revStr}</td><td>${errs}</td></tr>`;
+  }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
+  
   window.print();
 }
 
-// ══ BOARD ════════════════════════════════════════════════
-function setBoardSort(s){
-  boardSort=s;
-  document.getElementById('sort-alpha-btn').className=s==='alpha'?'btn btn-sm btn-gold':'btn btn-sm btn-ghost';
-  document.getElementById('sort-pts-btn').className=s==='points'?'btn btn-sm btn-gold':'btn btn-sm btn-ghost';
+function setBoardSort(s) {
+  boardSort = s;
+  document.getElementById('sort-alpha-btn').className = s==='alpha'?'btn btn-outline btn-sm':'btn btn-primary btn-sm';
+  document.getElementById('sort-pts-btn').className = s==='points'?'btn btn-outline btn-sm':'btn btn-primary btn-sm';
   renderBoard();
 }
-function renderBoard(){
-  const exc=S.students.filter(s=>s.score>=97).length;
-  const stars=S.students.reduce((a,s)=>a+(s.stars||0),0);
-  let totalValidScores = 0, validStCount = 0;
-  S.students.forEach(st => { if(st.score !== null && st.score !== undefined) { totalValidScores += st.score; validStCount++; } });
-  const avg = validStCount > 0 ? (totalValidScores / validStCount).toFixed(1) : '—';
+
+function renderBoard() {
+  const sorted = boardSort==='alpha' ? [...S.students].sort((a,b)=>a.name.localeCompare(b.name,'ar')) 
+               : [...S.students].sort((a,b)=>((b.score||0)+(b.stars||0)*2)-((a.score||0)+(a.stars||0)*2));
   
-  document.getElementById('bs-cnt').textContent=S.students.length;
-  document.getElementById('bs-exc').textContent=exc;
-  document.getElementById('bs-stars').textContent=stars;
-  document.getElementById('bs-avg').textContent=avg;
-  
-  const sorted=boardSort==='alpha'?[...S.students].sort((a,b)=>a.name.localeCompare(b.name,'ar'))
-    :[...S.students].sort((a,b)=>((b.score||0)+(b.stars||0)*2)-((a.score||0)+(a.stars||0)*2));
-  const medals=['🥇','🥈','🥉'],rnks=['r1','r2','r3'];
-  
-  document.getElementById('board-list').innerHTML=sorted.map((st,i)=>{
-    const total=(st.score||0)+(st.stars||0)*2;
-    const isOk=(st.ok||0)>=(st.total||1)&&st.total>0;
-    const g=gradeOf(st.score);
-    const rank=boardSort==='points'?(medals[i]||(i+1)):(i+1);
-    const cls=boardSort==='points'?(rnks[i]||''):'';
-    const isMe=isStudentMode&&st.id===loggedInStudentId;
-    return`<div class="rk ${cls}${isMe?' me':''}">
-      <div class="rm">${rank}</div>
-      <div class="rname">${st.name}${isMe?' <span class="badge bj" style="font-size:10px;">أنتِ</span>':''}</div>
-      <div class="rmeta">
-        <div class="rpts">${fmt(total)}</div>
-        ${(st.stars||0)>0?`<span class="badge bx">${'⭐'.repeat(Math.min(st.stars,5))}</span>`:''}
-        <span class="badge ${g.cls}">${g.label}</span>
-        <span style="font-size:19px;">${isOk?'🟢':'🔴'}</span>
+  document.getElementById('board-list').innerHTML = sorted.map((st,i) => {
+    const isMe = isStudentMode && st.id === loggedInStudentId;
+    const rank = boardSort==='points' ? (i+1) : '-';
+    return `
+      <div class="list-row" style="${isMe?'border-color:var(--gold); background:var(--gold-pale);':''}">
+        <div class="list-content">
+          <div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">${rank}</div>
+          <div>
+            <div style="font-weight:700; font-size:14px;">${st.name} ${isMe?'(أنتِ)':''}</div>
+            <div style="font-size:12px; color:var(--text-muted);">إتقان: ${fmt(st.score)} | ⭐ ${st.stars||0}</div>
+          </div>
+        </div>
       </div>
-    </div>`;
-  }).join('')||'<div style="color:var(--ink-4);font-size:13px;">لا توجد طالبات.</div>';
+    `;
+  }).join('');
 }
 
-// ══ GOOGLE SHEETS ═════════════════════════════════════════
-async function sheetReq(action,extra={}){
-  const url=S.sheetUrl||document.getElementById('sheet-url')?.value?.trim();
-  const code=S.teacherCode||document.getElementById('teacher-code')?.value?.trim();
-  if(!url||!code){toast('⚠️ الإعدادات غير مكتملة');return null;}
+// ══════════════════════════════════════════════════════════
+// 8. GOOGLE SHEETS
+// ══════════════════════════════════════════════════════════
+function saveSheetCfg() {
+  S.sheetUrl = document.getElementById('sheet-url').value.trim();
+  S.teacherCode = document.getElementById('teacher-code').value.trim();
+  saveState(); toast('✅ تم حفظ إعدادات الربط');
+}
+
+function copyGsCode() {
+  navigator.clipboard.writeText(GS_CODE).then(()=>toast('✅ تم النسخ'));
+}
+
+async function sheetReq(action) {
+  if(!S.sheetUrl || !S.teacherCode) { toast('⚠️ أدخلي الرابط والرمز'); return null; }
   setSyncDot('sync');
-  try{
-    const r=await fetch(url,{method:'POST',body:JSON.stringify({action,code,...extra})});
-    return await r.json();
-  }catch(e){setSyncDot('err');toast('❌ خطأ في الاتصال — تأكدي من الرابط');return null;}
+  try {
+    const res = await fetch(S.sheetUrl, { method: 'POST', body: JSON.stringify({action, code: S.teacherCode, payload: JSON.stringify(S)})});
+    return await res.json();
+  } catch(e) { setSyncDot('err'); return null; }
 }
-async function testSheet(){
-  const r=await sheetReq('ping');
-  if(r?.ok){setSyncDot('ok');toast('✅ الاتصال يعمل بنجاح!');}
-  else if(r){setSyncDot('err');toast('⚠️ فشل: '+(r.msg||''));}
-}
-async function syncToSheet(silent=false,force=false){
-  if(isStudentMode&&!force)return;
-  const r=await sheetReq('save',{payload:JSON.stringify(S)});
-  if(r?.ok){setSyncDot('ok');if(!silent)toast('☁️ تم رفع البيانات بنجاح');}
-  else if(r){setSyncDot('err');if(!silent)toast('❌ فشل الرفع: '+(r.msg||''));}
-}
-async function loadFromSheet(isInit=false){
-  const r=await sheetReq('load');
-  if(r?.ok&&r.payload){
-    try{
-      S=JSON.parse(r.payload);
-      if(!isStudentMode)save();
-      if(isStudentMode){showPage('portal',document.getElementById('nav-portal'));setSyncDot('ok');toast('☁️ تم التحديث');}
-      else{initSetup();popSelects();toast('✅ تم تحميل البيانات');setSyncDot('ok');}
-    }catch{toast('❌ خطأ في قراءة البيانات');setSyncDot('err');}
-  }else if(r?.ok&&isStudentMode){toast('⚠️ لم تقم المعلمة برفع البيانات بعد');}
-  else if(r?.ok){toast('⚠️ لا توجد بيانات بعد');setSyncDot('ok');}
-}
-function copyGsCode(){navigator.clipboard.writeText(GS_CODE).then(()=>toast('✅ تم نسخ الكود')).catch(()=>{});}
 
-// ══ BOOTSTRAP ════════════════════════════════════════════
-function initApp(){
-  const p=new URLSearchParams(window.location.search);
-  const sP=p.get('s'),uP=p.get('u'),cP=p.get('c');
-  if(sP&&uP&&cP){
-    isStudentMode=true;loggedInStudentId=parseInt(sP);
-    document.body.classList.add('student-mode');
-    try{S.sheetUrl=atob(uP);S.teacherCode=atob(cP);}catch{toast('⚠️ رابط غير صالح');}
-    document.getElementById('portal-nav-txt').textContent='بوابتي';
-    document.getElementById('portal-title').textContent='بوابتي الأكاديمية';
-    document.getElementById('sb-uname').textContent='طالبة';
-    document.getElementById('sb-urole').textContent='وضع الطالبة';
-    document.getElementById('sb-av').textContent='ط';
-    toast('جارٍ الاتصال...');
-    loadFromSheet(true);
-  }else{
-    initSetup();popSelects();
-    showPage('setup',document.getElementById('nav-setup'));
+async function syncToSheet() {
+  if(isStudentMode) return; 
+  const r = await sheetReq('save');
+  if(r?.ok) { setSyncDot('ok'); toast('☁️ تمت المزامنة بنجاح'); }
+  else { setSyncDot('err'); toast('❌ فشل الاتصال بقاعدة البيانات'); }
+}
+
+async function testSheet() {
+  const r = await sheetReq('ping');
+  if(r?.ok) { setSyncDot('ok'); toast('✅ الاتصال يعمل بنجاح!'); }
+  else { setSyncDot('err'); toast('⚠️ فشل اختبار الاتصال'); }
+}
+
+async function loadFromSheet(force = false) {
+  const r = await sheetReq('load');
+  if(r?.ok && r.payload) {
+    S = JSON.parse(r.payload);
+    saveState(); initSetup(); toast('✅ تم استرجاع البيانات!');
+    if(isStudentMode) navigate('portal');
   }
 }
-initApp();
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+(function init() {
+  const p = new URLSearchParams(window.location.search);
+  const sP = p.get('s'), uP = p.get('u'), cP = p.get('c');
+  
+  if(sP && uP && cP) {
+    isStudentMode = true; loggedInStudentId = parseInt(sP);
+    document.body.classList.add('student-mode');
+    try { S.sheetUrl = atob(uP); S.teacherCode = atob(cP); } catch(e){}
+    toast('جارٍ الاتصال بالمنصة...');
+    sheetReq('load').then(r => {
+      if(r?.ok && r.payload) S = JSON.parse(r.payload);
+      navigate('portal');
+    });
+  } else {
+    loadState();
+    initSetup();
+    navigate('setup');
+  }
+})();
 </script>
 </body>
 </html>
