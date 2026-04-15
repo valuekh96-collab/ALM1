@@ -8,14 +8,15 @@
 <!-- مكتبة الرسوم البيانية -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-/* ══════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    LUXURY DESIGN TOKENS (PURPLE & GOLD)
-══════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════════ */
 :root {
-  /* Brand Colors */
-  --primary: #3B1C40; /* Dark Purple */
+  /* Brand Colors - Purple & Gold */
+  --primary: #3B1C40; 
   --primary-lt: #562B5C;
   --primary-pale: #F3EAF4;
+  
   --gold: #D4AF37;
   --gold-lt: #F1DFA6;
   --gold-pale: #FCF9F1;
@@ -54,9 +55,10 @@
 
 [data-theme="dark"] {
   /* Neutrals - Dark Mode */
-  --primary: #C59BCC; /* Lighter purple for dark mode text/accents */
+  --primary: #C59BCC; 
   --primary-lt: #9B6C9E;
   --primary-pale: #2C1830;
+  
   --gold: #D4AF37;
   --gold-pale: #2B2312;
   
@@ -74,120 +76,369 @@
   color-scheme: dark;
 }
 
-/* ══ BASE ══ */
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { 
-  font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(--text-main); 
-  min-height: 100vh; overflow-x: hidden; transition: background var(--trans), color var(--trans);
+/* ══════════════════════════════════════════════════════════════════
+   BASE & RESET
+══════════════════════════════════════════════════════════════════ */
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+  -webkit-tap-highlight-color: transparent; 
 }
-h1, h2, h3, h4 { font-family: 'Amiri', serif; font-weight: 700; color: var(--primary); }
-[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 { color: var(--gold); }
-a { color: var(--gold); text-decoration: none; }
-button { cursor: pointer; font-family: 'Cairo', sans-serif; border: none; outline: none; }
-input, select, textarea { font-family: 'Cairo', sans-serif; }
 
-/* ══ SCROLLBAR ══ */
+body { 
+  font-family: 'Cairo', sans-serif; 
+  background: var(--bg-app); 
+  color: var(--text-main); 
+  min-height: 100vh; 
+  overflow-x: hidden; 
+  transition: background var(--trans), color var(--trans);
+}
+
+h1, h2, h3, h4 { 
+  font-family: 'Amiri', serif; 
+  font-weight: 700; 
+  color: var(--primary); 
+}
+
+[data-theme="dark"] h1, 
+[data-theme="dark"] h2, 
+[data-theme="dark"] h3, 
+[data-theme="dark"] h4 { 
+  color: var(--gold); 
+}
+
+a { 
+  color: var(--gold); 
+  text-decoration: none; 
+}
+
+button { 
+  cursor: pointer; 
+  font-family: 'Cairo', sans-serif; 
+  border: none; 
+  outline: none; 
+  background: transparent;
+}
+
+input, select, textarea { 
+  font-family: 'Cairo', sans-serif; 
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
 
-/* ══ LAYOUT ══ */
-.app-container { display: flex; min-height: 100vh; }
+/* ══════════════════════════════════════════════════════════════════
+   LAYOUT COMPONENTS
+══════════════════════════════════════════════════════════════════ */
+.app-container { 
+  display: flex; 
+  min-height: 100vh; 
+}
 
 /* ══ SIDEBAR ══ */
 .sidebar {
-  width: var(--sidebar-w); background: var(--bg-surface); border-left: 1px solid var(--border);
-  display: flex; flex-direction: column; position: fixed; right: 0; top: 0; height: 100vh;
-  z-index: 200; transition: transform var(--trans);
+  width: var(--sidebar-w); 
+  background: var(--bg-surface); 
+  border-left: 1px solid var(--border);
+  display: flex; 
+  flex-direction: column; 
+  position: fixed; 
+  right: 0; 
+  top: 0; 
+  height: 100vh;
+  z-index: 200; 
+  transition: transform var(--trans);
 }
+
 .sidebar-header {
-  padding: 30px 24px 20px; border-bottom: 1px solid var(--border-strong);
-  display: flex; align-items: center; gap: 14px;
+  padding: 30px 24px 20px; 
+  border-bottom: 1px solid var(--border-strong);
+  display: flex; 
+  align-items: center; 
+  gap: 14px;
 }
+
 .logo-container {
-  width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-lt));
-  display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(59, 28, 64, 0.2);
+  width: 48px; 
+  height: 48px; 
+  border-radius: 14px; 
+  background: linear-gradient(135deg, var(--primary), var(--primary-lt));
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  box-shadow: 0 4px 15px rgba(59, 28, 64, 0.2);
 }
-.logo-container img { width: 100%; height: 100%; object-fit: contain; border-radius: 14px; }
-.logo-fallback { font-family: 'Amiri', serif; font-size: 20px; color: var(--gold); font-weight: 700; }
-.brand-text h1 { font-size: 18px; margin-bottom: 2px; }
-.brand-text p { font-size: 12px; color: var(--text-muted); font-weight: 600; }
 
-.nav-menu { flex: 1; padding: 20px 14px; overflow-y: auto; }
+.logo-container img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain; 
+  border-radius: 14px; 
+}
+
+.logo-fallback { 
+  font-family: 'Amiri', serif; 
+  font-size: 20px; 
+  color: var(--gold); 
+  font-weight: 700; 
+}
+
+.brand-text h1 { 
+  font-size: 18px; 
+  margin-bottom: 2px; 
+}
+
+.brand-text p { 
+  font-size: 12px; 
+  color: var(--text-muted); 
+  font-weight: 600; 
+}
+
+.nav-menu { 
+  flex: 1; 
+  padding: 20px 14px; 
+  overflow-y: auto; 
+}
+
 .nav-item {
-  display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: var(--r-md);
-  color: var(--text-muted); font-size: 15px; font-weight: 600; margin-bottom: 8px;
-  transition: all var(--trans); background: transparent; width: 100%; text-align: right;
+  display: flex; 
+  align-items: center; 
+  gap: 14px; 
+  padding: 14px 18px; 
+  border-radius: var(--r-md);
+  color: var(--text-muted); 
+  font-size: 15px; 
+  font-weight: 600; 
+  margin-bottom: 8px;
+  transition: all var(--trans); 
+  width: 100%; 
+  text-align: right;
 }
-.nav-item:hover { background: var(--bg-elevated); color: var(--text-main); }
-.nav-item.active { background: var(--primary-pale); color: var(--primary); }
-[data-theme="dark"] .nav-item.active { background: var(--primary-pale); color: var(--gold); }
-.nav-icon { font-size: 20px; }
 
-.sidebar-footer { padding: 20px; border-top: 1px solid var(--border); }
-.user-profile { display: flex; align-items: center; gap: 12px; }
-.user-avatar {
-  width: 40px; height: 40px; border-radius: 50%; background: var(--gold-pale);
-  border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center;
-  font-family: 'Amiri', serif; font-weight: 700; color: var(--gold-dk); font-size: 16px;
+.nav-item:hover { 
+  background: var(--bg-elevated); 
+  color: var(--text-main); 
 }
-.user-info h4 { font-family: 'Cairo', sans-serif; font-size: 14px; color: var(--text-main); }
-.user-info p { font-size: 11px; color: var(--text-muted); }
+
+.nav-item.active { 
+  background: var(--primary-pale); 
+  color: var(--primary); 
+}
+
+[data-theme="dark"] .nav-item.active { 
+  background: var(--primary-pale); 
+  color: var(--gold); 
+}
+
+.nav-icon { 
+  font-size: 20px; 
+}
+
+.sidebar-footer { 
+  padding: 20px; 
+  border-top: 1px solid var(--border); 
+}
+
+.user-profile { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+}
+
+.user-avatar {
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%; 
+  background: var(--gold-pale);
+  border: 2px solid var(--gold); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-family: 'Amiri', serif; 
+  font-weight: 700; 
+  color: var(--gold-dk); 
+  font-size: 16px;
+}
+
+.user-info h4 { 
+  font-family: 'Cairo', sans-serif; 
+  font-size: 14px; 
+  color: var(--text-main); 
+}
+
+.user-info p { 
+  font-size: 11px; 
+  color: var(--text-muted); 
+}
 
 /* ══ MAIN CONTENT ══ */
 .main-content {
-  flex: 1; margin-right: var(--sidebar-w); display: flex; flex-direction: column;
+  flex: 1; 
+  margin-right: var(--sidebar-w); 
+  display: flex; 
+  flex-direction: column;
   min-height: 100vh;
 }
-.top-header {
-  height: 76px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;
-  padding: 0 32px; position: sticky; top: 0; z-index: 100;
-}
-[data-theme="dark"] .top-header { background: rgba(28, 23, 30, 0.8); }
-.header-titles h2 { font-size: 22px; margin-bottom: 2px; }
-.header-titles p { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-.header-actions { display: flex; align-items: center; gap: 12px; }
 
-/* Sync Pill */
-.sync-indicator {
-  display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 30px;
-  background: var(--bg-elevated); border: 1px solid var(--border-strong);
-  font-size: 12px; font-weight: 700; cursor: pointer; transition: all var(--trans);
+.top-header {
+  height: 76px; 
+  background: rgba(255, 255, 255, 0.8); 
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border); 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  padding: 0 32px; 
+  position: sticky; 
+  top: 0; 
+  z-index: 100;
 }
-.sync-indicator:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
-.dot { width: 8px; height: 8px; border-radius: 50%; }
+
+[data-theme="dark"] .top-header { 
+  background: rgba(28, 23, 30, 0.8); 
+}
+
+.header-titles h2 { 
+  font-size: 22px; 
+  margin-bottom: 2px; 
+}
+
+.header-titles p { 
+  font-size: 13px; 
+  color: var(--text-muted); 
+  font-weight: 500; 
+}
+
+.header-actions { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+}
+
+/* Sync Indicator Pill */
+.sync-indicator {
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  padding: 8px 16px; 
+  border-radius: 30px;
+  background: var(--bg-elevated); 
+  border: 1px solid var(--border-strong);
+  font-size: 12px; 
+  font-weight: 700; 
+  cursor: pointer; 
+  transition: all var(--trans);
+}
+
+.sync-indicator:hover { 
+  transform: translateY(-2px); 
+  box-shadow: var(--shadow-sm); 
+}
+
+.dot { 
+  width: 8px; 
+  height: 8px; 
+  border-radius: 50%; 
+}
+
 .dot.ok { background: var(--success); box-shadow: 0 0 8px var(--success); }
 .dot.err { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
 .dot.sync { background: var(--gold); animation: pulse 1s infinite; }
 .dot.local { background: var(--text-muted); }
 
-/* Theme Toggle */
+/* Theme Toggle Button */
 .btn-icon {
-  width: 42px; height: 42px; border-radius: 50%; background: var(--bg-elevated);
-  display: flex; align-items: center; justify-content: center; font-size: 18px;
-  border: 1px solid var(--border); transition: all var(--trans); color: var(--text-main);
+  width: 42px; 
+  height: 42px; 
+  border-radius: 50%; 
+  background: var(--bg-elevated);
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 18px;
+  border: 1px solid var(--border); 
+  transition: all var(--trans); 
+  color: var(--text-main);
 }
-.btn-icon:hover { background: var(--primary-pale); color: var(--primary); transform: rotate(15deg); }
-[data-theme="dark"] .btn-icon:hover { color: var(--gold); }
+
+.btn-icon:hover { 
+  background: var(--primary-pale); 
+  color: var(--primary); 
+  transform: rotate(15deg); 
+}
+
+[data-theme="dark"] .btn-icon:hover { 
+  color: var(--gold); 
+}
 
 /* ══ PAGE STRUCTURE ══ */
-.page-wrapper { padding: 32px; max-width: 1100px; margin: 0 auto; width: 100%; display: none; animation: fadeUp 0.4s ease; }
-.page-wrapper.active { display: block; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.page-wrapper { 
+  padding: 32px; 
+  max-width: 1100px; 
+  margin: 0 auto; 
+  width: 100%; 
+  display: none; 
+  animation: fadeUp 0.4s ease; 
+}
 
-/* ══ UI COMPONENTS ══ */
+.page-wrapper.active { 
+  display: block; 
+}
+
+@keyframes fadeUp { 
+  from { opacity: 0; transform: translateY(10px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   UI COMPONENTS (CARDS, GRIDS, FORMS)
+══════════════════════════════════════════════════════════════════ */
 /* Cards */
 .card {
-  background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--r-lg);
-  padding: 28px; margin-bottom: 24px; box-shadow: var(--shadow-sm);
+  background: var(--bg-surface); 
+  border: 1px solid var(--border); 
+  border-radius: var(--r-lg);
+  padding: 28px; 
+  margin-bottom: 24px; 
+  box-shadow: var(--shadow-sm);
   transition: box-shadow var(--trans), transform var(--trans);
 }
-.card:hover { box-shadow: var(--shadow-md); }
-.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-.card-title { font-size: 18px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
-[data-theme="dark"] .card-title { color: var(--gold); }
-.card-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--gold); border-radius: 4px; }
+
+.card:hover { 
+  box-shadow: var(--shadow-md); 
+}
+
+.card-header { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  margin-bottom: 24px; 
+}
+
+.card-title { 
+  font-size: 18px; 
+  font-weight: 800; 
+  color: var(--primary); 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+}
+
+[data-theme="dark"] .card-title { 
+  color: var(--gold); 
+}
+
+.card-title::before { 
+  content: ''; 
+  display: block; 
+  width: 4px; 
+  height: 18px; 
+  background: var(--gold); 
+  border-radius: 4px; 
+}
 
 /* Grid Layouts */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -195,59 +446,207 @@ input, select, textarea { font-family: 'Cairo', sans-serif; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 
 /* Forms */
-.form-group { margin-bottom: 16px; }
-.form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+.form-group { 
+  margin-bottom: 16px; 
+}
+
+.form-group label { 
+  display: block; 
+  font-size: 13px; 
+  font-weight: 700; 
+  color: var(--text-muted); 
+  margin-bottom: 8px; 
+}
+
 .form-control {
-  width: 100%; padding: 14px 16px; border: 2px solid var(--border-strong); border-radius: var(--r-md);
-  font-size: 15px; font-weight: 600; background: var(--bg-app); color: var(--text-main);
+  width: 100%; 
+  padding: 14px 16px; 
+  border: 2px solid var(--border-strong); 
+  border-radius: var(--r-md);
+  font-size: 15px; 
+  font-weight: 600; 
+  background: var(--bg-app); 
+  color: var(--text-main);
   transition: all var(--trans);
 }
-.form-control:focus { border-color: var(--gold); background: var(--bg-surface); box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1); }
-select.form-control { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 16px center; background-size: 16px; }
+
+.form-control:focus { 
+  border-color: var(--gold); 
+  background: var(--bg-surface); 
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1); 
+}
+
+select.form-control { 
+  cursor: pointer; 
+  appearance: none; 
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
+  background-repeat: no-repeat; 
+  background-position: left 16px center; 
+  background-size: 16px; 
+}
 
 /* Buttons */
 .btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 14px 24px; border-radius: var(--r-md); font-size: 15px; font-weight: 700;
-  transition: all var(--trans); cursor: pointer; border: 2px solid transparent;
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px;
+  padding: 14px 24px; 
+  border-radius: var(--r-md); 
+  font-size: 15px; 
+  font-weight: 700;
+  transition: all var(--trans); 
+  cursor: pointer; 
+  border: 2px solid transparent;
 }
-.btn:active { transform: scale(0.97); }
-.btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 15px rgba(59, 28, 64, 0.2); }
-.btn-primary:hover { background: var(--primary-lt); box-shadow: 0 6px 20px rgba(59, 28, 64, 0.3); transform: translateY(-2px); }
-.btn-gold { background: var(--gold); color: #fff; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
-.btn-gold:hover { background: var(--gold-dk); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); transform: translateY(-2px); }
-.btn-outline { background: transparent; border-color: var(--border-strong); color: var(--text-main); }
-.btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-pale); }
-[data-theme="dark"] .btn-outline:hover { border-color: var(--gold); color: var(--gold); background: var(--primary-pale); }
-.btn-danger { background: var(--danger-lt); color: var(--danger); border-color: rgba(192, 57, 43, 0.2); }
+
+.btn:active { 
+  transform: scale(0.97); 
+}
+
+.btn-primary { 
+  background: var(--primary); 
+  color: #fff; 
+  box-shadow: 0 4px 15px rgba(59, 28, 64, 0.2); 
+}
+
+.btn-primary:hover { 
+  background: var(--primary-lt); 
+  box-shadow: 0 6px 20px rgba(59, 28, 64, 0.3); 
+  transform: translateY(-2px); 
+}
+
+.btn-gold { 
+  background: var(--gold); 
+  color: #fff; 
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); 
+}
+
+.btn-gold:hover { 
+  background: var(--gold-dk); 
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); 
+  transform: translateY(-2px); 
+}
+
+.btn-outline { 
+  background: transparent; 
+  border-color: var(--border-strong); 
+  color: var(--text-main); 
+}
+
+.btn-outline:hover { 
+  border-color: var(--primary); 
+  color: var(--primary); 
+  background: var(--primary-pale); 
+}
+
+[data-theme="dark"] .btn-outline:hover { 
+  border-color: var(--gold); 
+  color: var(--gold); 
+  background: var(--primary-pale); 
+}
+
+.btn-danger { 
+  background: var(--danger-lt); 
+  color: var(--danger); 
+  border-color: rgba(192, 57, 43, 0.2); 
+}
+
 .btn-block { width: 100%; }
 
 /* Stat Cards (KPIs) */
 .kpi-card {
-  background: var(--bg-app); border: 1px solid var(--border); border-radius: var(--r-md);
-  padding: 24px; display: flex; flex-direction: column; justify-content: center;
-  transition: all var(--trans); position: relative; overflow: hidden;
+  background: var(--bg-app); 
+  border: 1px solid var(--border); 
+  border-radius: var(--r-md);
+  padding: 24px; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center;
+  transition: all var(--trans); 
+  position: relative; 
+  overflow: hidden;
 }
-.kpi-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 100%; height: 4px; background: var(--gold); transform: scaleX(0); transform-origin: right; transition: transform var(--trans); }
-.kpi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--gold); }
-.kpi-card:hover::after { transform: scaleX(1); }
-.kpi-value { font-family: 'Amiri', serif; font-size: 36px; font-weight: 700; color: var(--primary); line-height: 1.2; }
-[data-theme="dark"] .kpi-value { color: var(--gold); }
-.kpi-label { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.kpi-card::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: 0; 
+  right: 0; 
+  width: 100%; 
+  height: 4px; 
+  background: var(--gold); 
+  transform: scaleX(0); 
+  transform-origin: right; 
+  transition: transform var(--trans); 
+}
+
+.kpi-card:hover { 
+  transform: translateY(-4px); 
+  box-shadow: var(--shadow-md); 
+  border-color: var(--gold); 
+}
+
+.kpi-card:hover::after { 
+  transform: scaleX(1); 
+}
+
+.kpi-value { 
+  font-family: 'Amiri', serif; 
+  font-size: 36px; 
+  font-weight: 700; 
+  color: var(--primary); 
+  line-height: 1.2; 
+}
+
+[data-theme="dark"] .kpi-value { 
+  color: var(--gold); 
+}
+
+.kpi-label { 
+  font-size: 13px; 
+  font-weight: 700; 
+  color: var(--text-muted); 
+  margin-top: 8px; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+}
 
 /* Alerts / Info Boxes */
 .alert {
-  padding: 16px 20px; border-radius: var(--r-md); margin-bottom: 20px;
-  font-size: 14px; font-weight: 600; display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px 20px; 
+  border-radius: var(--r-md); 
+  margin-bottom: 20px;
+  font-size: 14px; 
+  font-weight: 600; 
+  display: flex; 
+  align-items: flex-start; 
+  gap: 12px;
 }
-.alert-info { background: var(--info-lt); color: var(--info); border: 1px solid rgba(41, 128, 185, 0.2); }
-.alert-warning { background: var(--gold-pale); color: var(--gold-dk); border: 1px solid rgba(212, 175, 55, 0.2); }
+
+.alert-info { 
+  background: var(--info-lt); 
+  color: var(--info); 
+  border: 1px solid rgba(41, 128, 185, 0.2); 
+}
+
+.alert-warning { 
+  background: var(--gold-pale); 
+  color: var(--gold-dk); 
+  border: 1px solid rgba(212, 175, 55, 0.2); 
+}
 
 /* Badges */
 .status-badge {
-  display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
-  border-radius: 30px; font-size: 12px; font-weight: 700;
+  display: inline-flex; 
+  align-items: center; 
+  gap: 6px; 
+  padding: 6px 12px;
+  border-radius: 30px; 
+  font-size: 12px; 
+  font-weight: 700;
 }
+
 .status-excellent { background: var(--gold-pale); color: var(--gold-dk); border: 1px solid rgba(212, 175, 55, 0.3); }
 .status-good { background: var(--success-lt); color: var(--success); }
 .status-poor { background: var(--danger-lt); color: var(--danger); }
@@ -255,50 +654,138 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 
 /* Lists & Rows */
 .list-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px; border: 1px solid var(--border-strong); border-radius: var(--r-md);
-  margin-bottom: 12px; background: var(--bg-surface); transition: all var(--trans);
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  padding: 16px; 
+  border: 1px solid var(--border-strong); 
+  border-radius: var(--r-md);
+  margin-bottom: 12px; 
+  background: var(--bg-surface); 
+  transition: all var(--trans);
 }
-.list-row:hover { border-color: var(--primary); box-shadow: var(--shadow-sm); }
-[data-theme="dark"] .list-row:hover { border-color: var(--gold); }
-.list-content { display: flex; align-items: center; gap: 16px; }
-.list-actions { display: flex; gap: 8px; }
+
+.list-row:hover { 
+  border-color: var(--primary); 
+  box-shadow: var(--shadow-sm); 
+}
+
+[data-theme="dark"] .list-row:hover { 
+  border-color: var(--gold); 
+}
+
+.list-content { 
+  display: flex; 
+  align-items: center; 
+  gap: 16px; 
+}
+
+.list-actions { 
+  display: flex; 
+  gap: 8px; 
+  flex-wrap: wrap; 
+}
 
 /* Large Score Display */
-.score-display { text-align: center; padding: 30px 0; }
-.score-number {
-  font-family: 'Amiri', serif; font-size: 96px; font-weight: 700; line-height: 1;
-  background: linear-gradient(135deg, var(--primary), var(--gold));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;
+.score-display { 
+  text-align: center; 
+  padding: 30px 0; 
 }
-[data-theme="dark"] .score-number { background: linear-gradient(135deg, var(--gold-lt), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
 
-/* Deduct Buttons */
-.deduct-grid { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-strong); }
-.deduct-grid:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.deduct-inputs { display: flex; gap: 8px; }
-.btn-deduct {
-  padding: 12px 20px; border-radius: var(--r-md); border: 2px solid;
-  text-align: center; font-weight: 800; min-width: 130px; display: flex; flex-direction: column; align-items: center;
+.score-number {
+  font-family: 'Amiri', serif; 
+  font-size: 96px; 
+  font-weight: 700; 
+  line-height: 1;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  margin-bottom: 10px;
 }
+
+[data-theme="dark"] .score-number { 
+  background: linear-gradient(135deg, var(--gold-lt), var(--gold)); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
+}
+
+/* Deduct Buttons Section */
+.deduct-grid { 
+  display: grid; 
+  grid-template-columns: 1fr auto; 
+  gap: 12px; 
+  align-items: center; 
+  margin-bottom: 16px; 
+  padding-bottom: 16px; 
+  border-bottom: 1px dashed var(--border-strong); 
+}
+
+.deduct-grid:last-child { 
+  border-bottom: none; 
+  margin-bottom: 0; 
+  padding-bottom: 0; 
+}
+
+.deduct-inputs { 
+  display: flex; 
+  gap: 8px; 
+}
+
+.btn-deduct {
+  padding: 12px 20px; 
+  border-radius: var(--r-md); 
+  border: 2px solid;
+  text-align: center; 
+  font-weight: 800; 
+  min-width: 130px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+}
+
 .d-warn { background: var(--gold-pale); color: var(--gold-dk); border-color: rgba(212,175,55,0.3); }
 .d-err { background: var(--danger-lt); color: var(--danger); border-color: rgba(192,57,43,0.3); }
 .d-pos { background: var(--success-lt); color: var(--success); border-color: rgba(46,125,82,0.3); }
 
 /* Dashboard Charts */
-.chart-wrapper { position: relative; height: 300px; width: 100%; margin-top: 20px; }
-.chart-wrapper.large { height: 400px; }
-
-/* Toast */
-#toast {
-  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
-  background: var(--text-main); color: var(--bg-surface); padding: 14px 28px;
-  border-radius: 30px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow-lg);
-  opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; pointer-events: none;
+.chart-wrapper { 
+  position: relative; 
+  height: 300px; 
+  width: 100%; 
+  margin-top: 20px; 
 }
-#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* ══ RESPONSIVE & MOBILE ══ */
+.chart-wrapper.large { 
+  height: 400px; 
+}
+
+/* Toast Notifications */
+#toast {
+  position: fixed; 
+  bottom: 32px; 
+  left: 50%; 
+  transform: translateX(-50%) translateY(100px);
+  background: var(--text-main); 
+  color: var(--bg-surface); 
+  padding: 14px 28px;
+  border-radius: 30px; 
+  font-size: 14px; 
+  font-weight: 700; 
+  box-shadow: var(--shadow-lg);
+  opacity: 0; 
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+  z-index: 9999; 
+  pointer-events: none;
+}
+
+#toast.show { 
+  transform: translateX(-50%) translateY(0); 
+  opacity: 1; 
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RESPONSIVE & MOBILE DESIGN
+══════════════════════════════════════════════════════════════════ */
 .mobile-header-btn { display: none; }
 .bottom-nav { display: none; }
 
@@ -309,68 +796,259 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 
 @media (max-width: 768px) {
   :root { --sidebar-w: 280px; }
-  .sidebar { transform: translateX(100%); box-shadow: var(--shadow-lg); }
-  .sidebar.open { transform: translateX(0); }
-  .main-content { margin-right: 0 !important; padding-bottom: 80px; } /* Space for bottom nav */
-  .top-header { padding: 0 20px; }
-  .mobile-header-btn { display: flex; }
-  .hide-mobile { display: none !important; }
-  .page-wrapper { padding: 20px 16px; }
-  .grid-2, .grid-4 { grid-template-columns: 1fr; }
   
-  /* Bottom App Bar */
+  .sidebar { 
+    transform: translateX(100%); 
+    box-shadow: var(--shadow-lg); 
+  }
+  
+  .sidebar.open { 
+    transform: translateX(0); 
+  }
+  
+  .main-content { 
+    margin-right: 0 !important; 
+    padding-bottom: 80px; 
+  }
+  
+  .top-header { 
+    padding: 0 20px; 
+  }
+  
+  .mobile-header-btn { 
+    display: flex; 
+  }
+  
+  .hide-mobile { 
+    display: none !important; 
+  }
+  
+  .page-wrapper { 
+    padding: 20px 16px; 
+  }
+  
+  .grid-2, .grid-4 { 
+    grid-template-columns: 1fr; 
+  }
+  
+  /* Bottom App Bar for Mobile */
   .bottom-nav {
-    display: flex; position: fixed; bottom: 0; left: 0; right: 0;
-    background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-top: 1px solid var(--border);
-    z-index: 150; padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
-    justify-content: space-between; box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    display: flex; 
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    right: 0;
+    background: rgba(255, 255, 255, 0.9); 
+    backdrop-filter: blur(20px); 
+    border-top: 1px solid var(--border);
+    z-index: 150; 
+    padding: 8px 16px; 
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    justify-content: space-between; 
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
   }
-  [data-theme="dark"] .bottom-nav { background: rgba(28, 23, 30, 0.9); }
+  
+  [data-theme="dark"] .bottom-nav { 
+    background: rgba(28, 23, 30, 0.9); 
+  }
+  
   .b-nav-item {
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    color: var(--text-muted); font-size: 11px; font-weight: 700; flex: 1;
-    padding: 8px 0; border-radius: var(--r-md); transition: all var(--trans); cursor: pointer;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 4px;
+    color: var(--text-muted); 
+    font-size: 11px; 
+    font-weight: 700; 
+    flex: 1;
+    padding: 8px 0; 
+    border-radius: var(--r-md); 
+    transition: all var(--trans); 
+    cursor: pointer;
   }
-  .b-nav-item.active { color: var(--primary); }
-  [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
-  .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
-  .deduct-grid { grid-template-columns: 1fr; }
-  .btn-deduct { width: 100%; }
+  
+  .b-nav-item.active { 
+    color: var(--primary); 
+  }
+  
+  [data-theme="dark"] .b-nav-item.active { 
+    color: var(--gold); 
+  }
+  
+  .b-nav-icon { 
+    font-size: 22px; 
+    margin-bottom: 2px; 
+  }
+  
+  .deduct-grid { 
+    grid-template-columns: 1fr; 
+  }
+  
+  .btn-deduct { 
+    width: 100%; 
+  }
 }
 
 /* Sidebar Overlay */
 .sidebar-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 190;
-  backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity var(--trans);
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0,0,0,0.6); 
+  z-index: 190;
+  backdrop-filter: blur(4px); 
+  opacity: 0; 
+  pointer-events: none; 
+  transition: opacity var(--trans);
 }
-.sidebar-overlay.active { opacity: 1; pointer-events: all; }
 
-/* Print Layer */
+.sidebar-overlay.active { 
+  opacity: 1; 
+  pointer-events: all; 
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   PRINT STYLES FOR PROGRESS REPORT
+══════════════════════════════════════════════════════════════════ */
 @media print {
-  body * { visibility: hidden; }
-  .app-container { display: none !important; margin:0; padding:0; height:0; overflow:hidden;}
-  #rep-layer { 
-    display: block !important; visibility: visible !important; 
-    position: absolute; left: 0; top: 0; width: 100vw; background: #fff; z-index: 99999; color: #1A1714;
+  body * { 
+    visibility: hidden; 
   }
-  #rep-layer * { visibility: visible; }
-  @page { margin: 15mm; size: A4 portrait; }
+  
+  .app-container { 
+    display: none !important; 
+    margin: 0; 
+    padding: 0; 
+    height: 0; 
+    overflow: hidden;
+  }
+  
+  #rep-layer { 
+    display: block !important; 
+    visibility: visible !important; 
+    position: absolute; 
+    left: 0; 
+    top: 0; 
+    width: 100vw; 
+    background: #fff; 
+    z-index: 99999; 
+    color: #1A1714;
+  }
+  
+  #rep-layer * { 
+    visibility: visible; 
+  }
+  
+  @page { 
+    margin: 15mm; 
+    size: A4 portrait; 
+  }
 }
 
-.rep-wrap{width:100%;max-width:780px;margin:0 auto;font-family:'Cairo',sans-serif;color:#1A1714;}
-.rep-hd{text-align:center;border-bottom:3px solid #D4AF37;padding-bottom:18px;margin-bottom:26px;}
-.rep-hd h1{font-family:'Amiri',serif;font-size:32px;color:#3B1C40;margin-bottom:4px;}
-.rep-hd p{font-size:14px;color:#6B626D;}
-.rep-info{display:flex;justify-content:space-between;background:#FCF9F1;border:1px solid rgba(212,175,55,.3);padding:13px 18px;border-radius:10px;margin-bottom:24px;font-size:14px;font-weight:600;}
-.rep-stats{display:flex;gap:12px;margin-bottom:24px;}
-.rep-stat{flex:1;text-align:center;background:#F8F7F9;border:1px solid #E4DED4;padding:13px;border-radius:10px;}
-.rep-sv{font-family:'Amiri',serif;font-size:26px;font-weight:700;color:#3B1C40;display:block;}
-.rep-sl{font-size:12px;color:#6B626D;}
-.rep-title{font-size:16px;font-weight:700;margin-bottom:12px;border-right:4px solid #D4AF37;padding-right:10px;color:#3B1C40;}
-.rep-table{width:100%;border-collapse:collapse;font-size:12px; color:#1A1714;}
-.rep-table th{background:#F3EAF4;color:#3B1C40;padding:9px;text-align:right;border-bottom:2px solid #E4DED4;}
-.rep-table td{padding:9px;border-bottom:1px solid #E4DED4;}
-.rep-foot{text-align:center;font-size:12px;color:#6B626D;margin-top:30px;border-top:1px dashed #E4DED4;padding-top:16px;}
+/* Print Layout Classes */
+.rep-wrap {
+  width: 100%; 
+  max-width: 780px; 
+  margin: 0 auto; 
+  font-family: 'Cairo', sans-serif; 
+  color: #1A1714;
+}
+
+.rep-hd {
+  text-align: center; 
+  border-bottom: 3px solid #D4AF37; 
+  padding-bottom: 18px; 
+  margin-bottom: 26px;
+}
+
+.rep-hd h1 {
+  font-family: 'Amiri', serif; 
+  font-size: 32px; 
+  color: #3B1C40; 
+  margin-bottom: 4px;
+}
+
+.rep-hd p {
+  font-size: 14px; 
+  color: #6B626D;
+}
+
+.rep-info {
+  display: flex; 
+  justify-content: space-between; 
+  background: #FCF9F1; 
+  border: 1px solid rgba(212,175,55,.3); 
+  padding: 13px 18px; 
+  border-radius: 10px; 
+  margin-bottom: 24px; 
+  font-size: 14px; 
+  font-weight: 600;
+}
+
+.rep-stats {
+  display: flex; 
+  gap: 12px; 
+  margin-bottom: 24px;
+}
+
+.rep-stat {
+  flex: 1; 
+  text-align: center; 
+  background: #F8F7F9; 
+  border: 1px solid #E4DED4; 
+  padding: 13px; 
+  border-radius: 10px;
+}
+
+.rep-sv {
+  font-family: 'Amiri', serif; 
+  font-size: 26px; 
+  font-weight: 700; 
+  color: #3B1C40; 
+  display: block;
+}
+
+.rep-sl {
+  font-size: 12px; 
+  color: #6B626D;
+}
+
+.rep-title {
+  font-size: 16px; 
+  font-weight: 700; 
+  margin-bottom: 12px; 
+  border-right: 4px solid #D4AF37; 
+  padding-right: 10px; 
+  color: #3B1C40;
+}
+
+.rep-table {
+  width: 100%; 
+  border-collapse: collapse; 
+  font-size: 12px; 
+  color: #1A1714;
+}
+
+.rep-table th {
+  background: #F3EAF4; 
+  color: #3B1C40; 
+  padding: 9px; 
+  text-align: right; 
+  border-bottom: 2px solid #E4DED4;
+}
+
+.rep-table td {
+  padding: 9px; 
+  border-bottom: 1px solid #E4DED4;
+}
+
+.rep-foot {
+  text-align: center; 
+  font-size: 12px; 
+  color: #6B626D; 
+  margin-top: 30px; 
+  border-top: 1px dashed #E4DED4; 
+  padding-top: 16px;
+}
 
 </style>
 </head>
@@ -408,10 +1086,6 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
       <button class="nav-item teacher-only" onclick="navigate('board')">
         <span class="nav-icon">🏆</span> لوحة الصدارة
       </button>
-      <hr style="margin:16px 0; border:none; border-top:1px solid var(--border);">
-      <button class="nav-item teacher-only" onclick="navigate('sheets')">
-        <span class="nav-icon">☁️</span> الربط السحابي
-      </button>
     </nav>
 
     <div class="sidebar-footer">
@@ -434,11 +1108,11 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
         <button class="btn-icon mobile-header-btn" onclick="toggleSidebar()">☰</button>
         <div class="header-titles">
           <h2 id="top-title">إعداد الدورة</h2>
-          <p id="top-sub" class="hide-mobile">تخصيص البيانات والموزع الآلي</p>
+          <p id="top-sub" class="hide-mobile">تخصيص البيانات والربط السحابي</p>
         </div>
       </div>
       <div class="header-actions">
-        <div class="sync-indicator teacher-only" onclick="syncToSheet()" title="مزامنة البيانات">
+        <div class="sync-indicator teacher-only" onclick="syncToSheet()" title="مزامنة البيانات يدوياً">
           <div class="dot local" id="sync-dot"></div>
           <span class="hide-mobile" id="sync-lbl">محلي</span>
         </div>
@@ -446,69 +1120,144 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
       </div>
     </header>
 
-    <!-- ════ PAGE: SETUP ════ -->
+    <!-- ════ PAGE: SETUP (MERGED WITH SHEETS) ════ -->
     <div id="page-setup" class="page-wrapper active teacher-only">
       
       <div class="alert alert-info">
         <span>💡</span>
-        <div><strong>مرحباً بكِ في منصة ألف لام ميم!</strong> لقد قمنا بوضع (بيانات تجريبية) لتتمكني من تجربة لوحة التحليلات فوراً. يمكنك أرشفة الدورة متى شئتِ للبدء بسجل نظيف.</div>
+        <div><strong>مرحباً بكِ في منصة ألف لام ميم!</strong> لقد قمنا بوضع (بيانات افتراضية) لتتمكني من معاينة النظام. يمكنك أرشفة الدورة متى شئتِ لبدء سجل نظيف خاص بكِ.</div>
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">البيانات الأساسية للحلقة</h3>
-          <button class="btn btn-outline" style="padding:8px 16px; font-size:12px;" onclick="archiveCourse()">🗄️ بدء دورة جديدة</button>
-        </div>
-        <div class="grid-2">
-          <div class="form-group">
-            <label>اسم المعلمة</label>
-            <input type="text" class="form-control" id="teacher" placeholder="مثال: أ. فاطمة" oninput="updateUI()">
+      <!-- LOCKED SUMMARY VIEW (يظهر بعد حفظ الإعدادات) -->
+      <div id="setup-locked-view" class="card" style="display:none; position:relative; border-color:var(--gold);">
+        <button class="btn btn-outline" onclick="unlockSetup()" style="position:absolute; top:24px; left:24px; font-size:12px; padding:6px 12px; color:var(--gold); border-color:var(--gold);">✏️ تعديل الإعدادات</button>
+        <h3 class="card-title">إعدادات الدورة الحالية والربط</h3>
+        <div class="grid-4" style="margin-top:20px;">
+          <div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">المعلمة</div>
+            <div style="font-weight:700; font-size:16px; color:var(--primary);" id="sum-teacher">—</div>
           </div>
-          <div class="form-group">
-            <label>اسم المقرر العام</label>
-            <input type="text" class="form-control" id="cname" placeholder="مثال: الزهراوين">
+          <div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">المقرر</div>
+            <div style="font-weight:700; font-size:16px; color:var(--primary);" id="sum-course">—</div>
           </div>
-          <div class="form-group">
-            <label>إجمالي أوجه المقرر</label>
-            <input type="number" class="form-control" id="tpages" value="200" oninput="calcPlan()">
+          <div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">أيام الورد اليومي</div>
+            <div style="font-weight:700; font-size:16px; color:var(--primary);" id="sum-days">—</div>
           </div>
-          <div class="form-group">
-            <label>تاريخ بدء الدورة</label>
-            <input type="date" class="form-control" id="sdate" onchange="calcPlan()">
-          </div>
-          <div class="form-group">
-            <label>مدة الدورة (بالأسابيع)</label>
-            <input type="number" class="form-control" id="tweeks" value="10" oninput="calcPlan()">
-          </div>
-          <div class="form-group">
-            <label>أيام الورد اليومي (للحفظ)</label>
-            <select class="form-control" id="study-days" onchange="calcPlan()">
-              <option value="5" selected>5 أيام (الأحد — الخميس)</option>
-              <option value="6">6 أيام (السبت — الخميس)</option>
-              <option value="7">7 أيام (بدون راحة)</option>
-            </select>
+          <div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">الربط السحابي</div>
+            <div style="font-weight:700; font-size:16px; color:var(--success);">متصل بالـ Sheets ✓</div>
           </div>
         </div>
-        <button class="btn btn-primary btn-block" style="margin-top:16px;" onclick="saveCourse()">حفظ وتحديث الموزع الآلي</button>
       </div>
+
+      <!-- EDIT VIEW (واجهة الإدخال والتعديل) -->
+      <div id="setup-edit-view">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">البيانات الأساسية والربط السحابي</h3>
+            <button class="btn btn-outline" style="padding:8px 16px; font-size:12px; color:var(--danger); border-color:rgba(192,57,43,0.3);" onclick="archiveCourse()">🗄️ أرشفة وتصفير الدورة</button>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>اسم المعلمة</label>
+              <input type="text" class="form-control" id="teacher" placeholder="مثال: أ. فاطمة" oninput="updateUI()">
+            </div>
+            <div class="form-group">
+              <label>اسم المقرر العام</label>
+              <input type="text" class="form-control" id="cname" placeholder="مثال: الزهراوين">
+            </div>
+            <div class="form-group">
+              <label>إجمالي أوجه المقرر</label>
+              <input type="number" class="form-control" id="tpages" value="200" oninput="calcPlan()">
+            </div>
+            <div class="form-group">
+              <label>تاريخ بدء الدورة</label>
+              <input type="date" class="form-control" id="sdate" onchange="calcPlan()">
+            </div>
+            <div class="form-group">
+              <label>مدة الدورة (بالأسابيع)</label>
+              <input type="number" class="form-control" id="tweeks" value="10" oninput="calcPlan()">
+            </div>
+            <div class="form-group">
+              <label>أيام الورد اليومي</label>
+              <select class="form-control" id="study-days" onchange="calcPlan()">
+                <option value="5" selected>5 أيام (الأحد — الخميس)</option>
+                <option value="6">6 أيام (السبت — الخميس)</option>
+                <option value="7">7 أيام (بدون راحة)</option>
+              </select>
+            </div>
+            
+            <div style="grid-column: 1 / -1; margin-top:16px; padding-top:20px; border-top:1px dashed var(--border-strong);">
+              <h4 style="font-size:14px; color:var(--primary); margin-bottom:12px;">إعدادات قاعدة البيانات (Google Sheets)</h4>
+            </div>
+            <div class="form-group">
+              <label>رابط التطبيق (Web App URL)</label>
+              <input type="text" class="form-control" id="sheet-url" placeholder="https://script.google.com/...">
+            </div>
+            <div class="form-group">
+              <label>رمزك السري (لحماية وتخصيص ملفك)</label>
+              <input type="text" class="form-control" id="teacher-code" placeholder="مثال: fatima2025" autocomplete="off">
+            </div>
+            
+            <div style="grid-column: 1 / -1;">
+              <details style="margin-bottom:16px; background:var(--gold-pale); border:1px solid rgba(212,175,55,0.3); border-radius:var(--r-sm); padding:12px; color:var(--gold-dk); font-size:13px; cursor:pointer;">
+                <summary style="font-weight:700;">كيف أربط المنصة بـ Google Sheets؟ (اضغطي لعرض الكود)</summary>
+                <div style="margin-top:12px; color:var(--text-muted); line-height:1.8;">
+                  1. افتحي Google Sheets وأنشئي ملفاً جديداً.<br>
+                  2. من القائمة اختاري: Extensions ← Apps Script<br>
+                  3. الصقي هذا الكود (بعد حذف القديم):<br>
+                  <div style="position:relative; margin-top:8px;">
+                    <textarea id="gs-code" class="form-control" style="font-family:monospace; font-size:11px; height:150px; direction:ltr; background:#1C171E; color:#E0E0E0;" readonly></textarea>
+                    <button class="btn btn-gold btn-sm" style="position:absolute; top:8px; right:8px;" onclick="copyGsCode(event)">نسخ الكود</button>
+                  </div>
+                  4. اضغطي Deploy ← New deployment ← Web app.<br>
+                  5. Who has access: Anyone ← Deploy.<br>
+                  6. انسخي الرابط وضعيه في الحقل المخصص أعلاه.
+                </div>
+              </details>
+              <button class="btn btn-primary btn-block" onclick="saveCourse()">💾 حفظ وتثبيت الإعدادات</button>
+            </div>
+          </div>
+        </div>
+      </div> <!-- End Edit View -->
 
       <div class="card">
         <div class="card-header"><h3 class="card-title">خطة الموزع الآلي (Smart Planner)</h3></div>
         <div class="grid-4" style="margin-bottom:24px;">
-          <div class="kpi-card"><div class="kpi-value" id="m-days">50</div><div class="kpi-label">أيام الورد</div></div>
-          <div class="kpi-card"><div class="kpi-value" id="m-daily">4</div><div class="kpi-label">أوجه يومياً</div></div>
-          <div class="kpi-card"><div class="kpi-value" id="m-weeks">10</div><div class="kpi-label">أسابيع</div></div>
-          <div class="kpi-card"><div class="kpi-value" id="m-quota">10</div><div class="kpi-label">نصاب الجلسة</div></div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="m-days">50</div>
+            <div class="kpi-label">أيام الورد</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="m-daily">4</div>
+            <div class="kpi-label">أوجه يومياً</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="m-weeks">10</div>
+            <div class="kpi-label">أسابيع</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="m-quota">10</div>
+            <div class="kpi-label">نصاب الجلسة</div>
+          </div>
         </div>
         <h4 style="font-size:14px; margin-bottom:12px; color:var(--text-muted);">التوزيع الموصى به للمقرر العام:</h4>
         <div id="week-plan" style="max-height:200px; overflow-y:auto; padding-right:10px; border-right:2px solid var(--border-strong);"></div>
       </div>
 
       <div class="card">
-        <div class="card-header"><h3 class="card-title">إدارة الطالبات والمقررات الخاصة</h3></div>
+        <div class="card-header"><h3 class="card-title">إدارة الطالبات والمقررات الفردية</h3></div>
         <div class="grid-2" style="align-items:end; margin-bottom:24px; background:var(--bg-elevated); padding:20px; border-radius:var(--r-md);">
-          <div class="form-group" style="margin:0;"><label>اسم الطالبة الجديدة</label><input type="text" class="form-control" id="new-name" placeholder="الاسم الثلاثي"></div>
-          <div class="form-group" style="margin:0;"><label>مقرر مخصص (اختياري - بالأوجه)</label><input type="number" class="form-control" id="new-custom-faces" placeholder="يترك فارغاً للمقرر العام"></div>
+          <div class="form-group" style="margin:0;">
+            <label>اسم الطالبة الجديدة</label>
+            <input type="text" class="form-control" id="new-name" placeholder="الاسم الثلاثي">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label>مقرر مخصص (اختياري - بالأوجه)</label>
+            <input type="number" class="form-control" id="new-custom-faces" placeholder="يترك فارغاً للمقرر العام">
+          </div>
           <button class="btn btn-gold" style="grid-column: span 2;" onclick="addStudent()">إضافة للطالبة للمنصة ➕</button>
         </div>
         <div id="student-list">
@@ -519,32 +1268,46 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 
     <!-- ════ PAGE: DASHBOARD 📊 ════ -->
     <div id="page-dash" class="page-wrapper teacher-only">
-      
       <div id="dash-empty-state" class="alert alert-warning" style="display:none;">
         ⚠️ لا توجد بيانات كافية لعرض التحليلات. أضيفي طالبات وقومي بتقييمهن في "جلسة التسميع" لتفعيل هذه اللوحة.
       </div>
-
+      
       <div id="dash-content">
         <div class="grid-3" style="margin-bottom:24px;">
-          <div class="kpi-card"><div class="kpi-value" id="d-avg-score">—</div><div class="kpi-label">المتوسط العام للإتقان</div></div>
-          <div class="kpi-card"><div class="kpi-value" id="d-att-rate">—</div><div class="kpi-label">معدل الانضباط والحضور</div></div>
-          <div class="kpi-card"><div class="kpi-value" id="d-total-sess">0</div><div class="kpi-label">إجمالي جلسات التسميع</div></div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="d-avg-score">—</div>
+            <div class="kpi-label">المتوسط العام للإتقان</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="d-att-rate">—</div>
+            <div class="kpi-label">معدل الانضباط والحضور</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="d-total-sess">0</div>
+            <div class="kpi-label">إجمالي جلسات التسميع</div>
+          </div>
         </div>
 
         <div class="grid-2">
           <div class="card">
-            <h3 class="card-title">متوسط إتقان الطالبات (المقارنة)</h3>
-            <div class="chart-wrapper"><canvas id="scoreBarChart"></canvas></div>
+            <h3 class="card-title">متوسط إتقان الطالبات (مقارنة)</h3>
+            <div class="chart-wrapper">
+              <canvas id="scoreBarChart"></canvas>
+            </div>
           </div>
           <div class="card">
             <h3 class="card-title">تحليل الأخطاء التجويدية والحفظ</h3>
-            <div class="chart-wrapper"><canvas id="errorRadarChart"></canvas></div>
+            <div class="chart-wrapper">
+              <canvas id="errorRadarChart"></canvas>
+            </div>
           </div>
         </div>
 
         <div class="card">
           <h3 class="card-title">التقدم الزمني لمتوسط الحلقة</h3>
-          <div class="chart-wrapper large"><canvas id="trendLineChart"></canvas></div>
+          <div class="chart-wrapper large">
+            <canvas id="trendLineChart"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -556,14 +1319,16 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
         <div class="grid-2">
           <div class="form-group">
             <label>اختيار الطالبة</label>
-            <select class="form-control" id="sel-st" onchange="startSession()"><option value="">— حددي الطالبة —</option></select>
+            <select class="form-control" id="sel-st" onchange="startSession()">
+              <option value="">— حددي الطالبة —</option>
+            </select>
           </div>
           <div class="form-group">
             <label>تسجيل الحضور</label>
             <select class="form-control" id="sess-att" onchange="toggleSessBody()">
-              <option value="present">حاضرة (تقييم شامل)</option>
-              <option value="excused">غائبة بعذر (لا يُحسب في المتوسط)</option>
-              <option value="unexcused">غائبة بدون عذر (يؤثر على الانضباط)</option>
+              <option value="present">✅ حاضرة (تقييم شامل)</option>
+              <option value="excused">🟡 غائبة بعذر (لا يُحسب في المتوسط)</option>
+              <option value="unexcused">🔴 غائبة بدون عذر (يؤثر على الانضباط)</option>
             </select>
           </div>
         </div>
@@ -572,23 +1337,52 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 
       <div id="sess-body" style="display:none;">
         <div id="evaluation-wrap">
-          <!-- المراجعة -->
+          
+          <!-- المراجعة المستقلة -->
           <div class="card">
-            <h3 class="card-title">قسم المراجعة المستقل 🔄</h3>
+            <h3 class="card-title">سجل المراجعة المستقل 🔄</h3>
             <div class="grid-3">
-              <div class="form-group"><label>نوع المراجعة</label><select class="form-control" id="rev-type"><option value="none">بدون مراجعة اليوم</option><option value="minor">مراجعة صغرى</option><option value="major">مراجعة كبرى</option><option value="both">صغرى + كبرى</option></select></div>
-              <div class="form-group"><label>النطاق</label><input type="text" class="form-control" id="rev-range" placeholder="مثال: البقرة 1-5"></div>
-              <div class="form-group"><label>التقييم</label><select class="form-control" id="rev-grade"><option value="ممتاز">🌟 ممتاز</option><option value="جيد جداً">✅ جيد جداً</option><option value="جيد">👍 جيد</option><option value="إعادة">🔁 يحتاج إعادة</option></select></div>
+              <div class="form-group">
+                <label>نوع المراجعة</label>
+                <select class="form-control" id="rev-type">
+                  <option value="none">بدون مراجعة اليوم</option>
+                  <option value="minor">مراجعة صغرى</option>
+                  <option value="major">مراجعة كبرى</option>
+                  <option value="both">صغرى + كبرى</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>النطاق المسموع</label>
+                <input type="text" class="form-control" id="rev-range" placeholder="مثال: البقرة 1-5">
+              </div>
+              <div class="form-group">
+                <label>تقييم المراجعة</label>
+                <select class="form-control" id="rev-grade">
+                  <option value="ممتاز">🌟 ممتاز</option>
+                  <option value="جيد جداً">✅ جيد جداً</option>
+                  <option value="جيد">👍 جيد</option>
+                  <option value="إعادة">🔁 يحتاج إعادة</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          <!-- الحفظ الجديد -->
+          <!-- تقييم الحفظ الجديد -->
           <div class="card">
             <div class="card-header"><h3 class="card-title">تقييم الحفظ الجديد (المقرر)</h3></div>
             <div class="grid-3" style="margin-bottom:24px;">
-              <div class="form-group"><label>الأوجه المسموعة</label><input type="number" class="form-control" id="faces" oninput="updateBadge()"></div>
-              <div class="form-group"><label>من (رقم الصفحة/الآية)</label><input type="text" class="form-control" id="from-a"></div>
-              <div class="form-group"><label>إلى (رقم الصفحة/الآية)</label><input type="text" class="form-control" id="to-a"></div>
+              <div class="form-group">
+                <label>الأوجه المسموعة</label>
+                <input type="number" class="form-control" id="faces" oninput="updateBadge()">
+              </div>
+              <div class="form-group">
+                <label>من (رقم الوجه/الآية)</label>
+                <input type="text" class="form-control" id="from-a">
+              </div>
+              <div class="form-group">
+                <label>إلى (رقم الوجه/الآية)</label>
+                <input type="text" class="form-control" id="to-a">
+              </div>
             </div>
 
             <div class="grid-2">
@@ -602,31 +1396,48 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
               <div>
                 <h4 style="font-size:14px; margin-bottom:16px;">أزرار الخصم السريع:</h4>
                 <div class="deduct-grid">
-                  <div class="deduct-inputs"><input type="number" id="ay1" class="form-control" placeholder="آية" style="width:80px;"><input type="text" id="kw1" class="form-control" placeholder="الكلمة"></div>
-                  <button class="btn btn-deduct d-warn" onclick="deduct(1,'تنبيه حفظ','ay1','kw1')"><span class="d-pt">-1</span><span class="d-lb">تنبيه حفظ</span></button>
+                  <div class="deduct-inputs">
+                    <input type="number" id="ay1" class="form-control" placeholder="آية" style="width:80px;">
+                    <input type="text" id="kw1" class="form-control" placeholder="الكلمة">
+                  </div>
+                  <button class="btn btn-deduct d-warn" onclick="deduct(1,'تنبيه حفظ','ay1','kw1')">
+                    <span class="d-pt">-1</span><span class="d-lb">تنبيه حفظ</span>
+                  </button>
                 </div>
                 <div class="deduct-grid">
-                  <div class="deduct-inputs"><input type="number" id="ay2" class="form-control" placeholder="آية" style="width:80px;"><input type="text" id="kw2" class="form-control" placeholder="الكلمة"></div>
-                  <button class="btn btn-deduct d-err" onclick="deduct(2,'حفظ وتصحيح','ay2','kw2')"><span class="d-pt">-2</span><span class="d-lb">حفظ وتصحيح</span></button>
+                  <div class="deduct-inputs">
+                    <input type="number" id="ay2" class="form-control" placeholder="آية" style="width:80px;">
+                    <input type="text" id="kw2" class="form-control" placeholder="الكلمة">
+                  </div>
+                  <button class="btn btn-deduct d-err" onclick="deduct(2,'حفظ وتصحيح','ay2','kw2')">
+                    <span class="d-pt">-2</span><span class="d-lb">حفظ وتصحيح</span>
+                  </button>
                 </div>
                 <div class="deduct-grid">
-                  <div class="deduct-inputs"><input type="number" id="ay3" class="form-control" placeholder="آية" style="width:80px;"><input type="text" id="kw3" class="form-control" placeholder="الكلمة"></div>
-                  <button class="btn btn-deduct d-warn" onclick="deduct(2,'خطأ تشكيل','ay3','kw3')"><span class="d-pt">-2</span><span class="d-lb">تنبيه تشكيل</span></button>
+                  <div class="deduct-inputs">
+                    <input type="number" id="ay3" class="form-control" placeholder="آية" style="width:80px;">
+                    <input type="text" id="kw3" class="form-control" placeholder="الكلمة">
+                  </div>
+                  <button class="btn btn-deduct d-warn" onclick="deduct(2,'خطأ تشكيل','ay3','kw3')">
+                    <span class="d-pt">-2</span><span class="d-lb">تنبيه تشكيل</span>
+                  </button>
                 </div>
                 <div class="deduct-grid">
-                  <div class="deduct-inputs"><input type="text" id="kw5" class="form-control" placeholder="ملاحظة المتردد"></div>
-                  <button class="btn btn-deduct" style="background:var(--bg-elevated); border-color:var(--border-strong);" onclick="deduct(0.5,'تردد','','kw5')"><span class="d-pt">-0.5</span><span class="d-lb">تردد</span></button>
-                </div>
-                <div class="deduct-grid">
-                  <div class="deduct-inputs"><input type="text" id="kw6" class="form-control" placeholder="سبب التميز"></div>
-                  <button class="btn btn-deduct d-pos" onclick="deduct(-2,'نجمة تميز','','kw6')"><span class="d-pt">+2</span><span class="d-lb">نجمة تميز</span></button>
+                  <div class="deduct-inputs">
+                    <input type="text" id="kw5" class="form-control" placeholder="ملاحظة المتردد">
+                  </div>
+                  <button class="btn btn-deduct" style="background:var(--bg-elevated); border-color:var(--border-strong);" onclick="deduct(0.5,'تردد','','kw5')">
+                    <span class="d-pt">-0.5</span><span class="d-lb">تردد</span>
+                  </button>
                 </div>
               </div>
             </div>
             
             <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--border);">
               <h4 style="font-size:14px; margin-bottom:12px;">سجل الخصومات:</h4>
-              <div id="err-log" style="font-size:13px; color:var(--text-muted); background:var(--bg-app); padding:12px; border-radius:var(--r-sm);">لا توجد ملاحظات.</div>
+              <div id="err-log" style="font-size:13px; color:var(--text-muted); background:var(--bg-app); padding:12px; border-radius:var(--r-sm);">
+                لا توجد ملاحظات.
+              </div>
               <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="undoLast()">↩ تراجع عن الخصم الأخير</button>
             </div>
           </div>
@@ -644,7 +1455,9 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
       <div class="card teacher-only">
         <div class="form-group" style="margin:0;">
           <label>معاينة بوابة الطالبة:</label>
-          <select class="form-control" id="sel-portal" onchange="loadPortal()"><option value="">— اختاري الطالبة —</option></select>
+          <select class="form-control" id="sel-portal" onchange="loadPortal()">
+            <option value="">— اختاري الطالبة —</option>
+          </select>
         </div>
       </div>
 
@@ -661,15 +1474,27 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
         </div>
 
         <div class="grid-3">
-          <div class="kpi-card"><div class="kpi-value" id="p-score">—</div><div class="kpi-label">معدل الإتقان</div></div>
-          <div class="kpi-card"><div class="kpi-value" id="p-streak">0</div><div class="kpi-label">شعلة الحماس 🔥</div></div>
-          <div class="kpi-card"><div class="kpi-value" id="p-stars">0</div><div class="kpi-label">أوسمة التميز 🌟</div></div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="p-score">—</div>
+            <div class="kpi-label">معدل الإتقان</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="p-streak">0</div>
+            <div class="kpi-label">شعلة الحماس 🔥</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="p-stars">0</div>
+            <div class="kpi-label">أوسمة التميز 🌟</div>
+          </div>
         </div>
 
         <div class="card">
           <h3 class="card-title">تأكيد الورد اليومي (المنزل)</h3>
-          <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">تم حساب أيام الورد بناءً على خطة الدورة. اضغطي لتأكيد إتمامك للحفظ.</p>
-          <div class="prog" style="margin-bottom:16px;"><div class="prog-fill" id="p-prog"></div></div>
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">اضغطي "تأكيد" عند إتمام حفظكِ في المنزل لليوم المحدد لتتابعه المعلمة.</p>
+          
+          <div class="prog" style="margin-bottom:16px;">
+            <div class="prog-fill" id="p-prog"></div>
+          </div>
           <div id="p-days"></div>
         </div>
 
@@ -688,46 +1513,10 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
           <h3 class="card-title">لوحة الشرف والصدارة</h3>
           <div style="display:flex; gap:8px;">
             <button class="btn btn-outline btn-sm" id="sort-alpha-btn" onclick="setBoardSort('alpha')">أبجدي</button>
-            <button class="btn btn-gold btn-sm" id="sort-pts-btn" onclick="setBoardSort('points')">بالنقاط</button>
+            <button class="btn btn-primary btn-sm" id="sort-pts-btn" onclick="setBoardSort('points')">النقاط</button>
           </div>
         </div>
         <div id="board-list"></div>
-      </div>
-    </div>
-
-    <!-- ════ PAGE: SHEETS ════ -->
-    <div id="page-sheets" class="page-wrapper teacher-only">
-      <div class="card">
-        <h3 class="card-title">الربط السحابي (Google Sheets)</h3>
-        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px; line-height:1.6;">
-          الربط السحابي يضمن حفظ بياناتك للأبد، ويتيح لك الوصول إليها من أي جهاز عبر الإنترنت. كما أنه يولد الروابط السرية لتدخل كل طالبة لبوابتها بأمان.
-        </p>
-        
-        <div class="grid-2">
-          <div class="form-group">
-            <label>رابط التطبيق (Web App URL)</label>
-            <input type="text" class="form-control" id="sheet-url" placeholder="https://script.google.com/...">
-          </div>
-          <div class="form-group">
-            <label>رمزك السري (لحماية ملفك)</label>
-            <input type="text" class="form-control" id="teacher-code" placeholder="أدخلي رمزاً فريداً">
-          </div>
-        </div>
-        
-        <div style="display:flex; gap:12px; margin-top:16px;">
-          <button class="btn btn-primary" onclick="saveSheetCfg()">حفظ وإعداد</button>
-          <button class="btn btn-outline" onclick="testSheet()">اختبار الاتصال</button>
-          <button class="btn btn-outline" onclick="loadFromSheet(true)">⬇️ تحميل سحابي</button>
-        </div>
-      </div>
-
-      <div class="card" style="background: var(--bg-elevated);">
-        <h3 class="card-title" style="color:var(--text-main);">كود التفعيل (Apps Script)</h3>
-        <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">انسخي هذا الكود والصقيه في مشروع Google Apps Script الخاص بكِ لتفعيل قاعدة البيانات.</p>
-        <div style="position:relative;">
-          <textarea id="gs-code" class="form-control" style="font-family:monospace; font-size:12px; height:200px; direction:ltr; background:#1C171E; color:#E0E0E0;" readonly></textarea>
-          <button class="btn btn-gold btn-sm" style="position:absolute; top:12px; right:12px;" onclick="copyGsCode()">نسخ الكود</button>
-        </div>
       </div>
     </div>
 
@@ -735,10 +1524,22 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 
   <!-- ════ MOBILE BOTTOM NAV ════ -->
   <nav class="bottom-nav hide-mobile">
-    <div class="b-nav-item active teacher-only" onclick="navigate('setup')"><span class="b-nav-icon">⚙️</span>إعداد</div>
-    <div class="b-nav-item teacher-only" onclick="navigate('session')"><span class="b-nav-icon">🎙️</span>تسميع</div>
-    <div class="b-nav-item teacher-only" onclick="navigate('dash')"><span class="b-nav-icon">📊</span>تحليل</div>
-    <div class="b-nav-item" onclick="navigate('portal')"><span class="b-nav-icon">👤</span>بوابتي</div>
+    <div class="b-nav-item active teacher-only" onclick="navigate('setup')">
+      <span class="b-nav-icon">⚙️</span>
+      إعداد
+    </div>
+    <div class="b-nav-item teacher-only" onclick="navigate('session')">
+      <span class="b-nav-icon">🎙️</span>
+      تسميع
+    </div>
+    <div class="b-nav-item teacher-only" onclick="navigate('dash')">
+      <span class="b-nav-icon">📊</span>
+      تحليل
+    </div>
+    <div class="b-nav-item" onclick="navigate('portal')">
+      <span class="b-nav-icon">👤</span>
+      بوابتي
+    </div>
   </nav>
 
 </div> <!-- End App Container -->
@@ -746,13 +1547,11 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 <!-- ════ TOAST ════ -->
 <div id="toast"></div>
 
-<!-- ════ HIDDEN ELEMENTS FOR COPY/PRINT ════ -->
-<input type="text" id="copy-helper" style="position:absolute; left:-9999px; opacity:0;">
-
+<!-- ════ PRINT LAYER ════ -->
 <div id="rep-layer" style="display:none;">
   <div class="rep-wrap">
     <div class="rep-hd">
-      <h1>لوحة ألف لام ميم الأكاديمية</h1>
+      <h1>منصة ألف لام ميم الأكاديمية</h1>
       <p>تقرير رحلة الحفظ الأكاديمي · <span id="rep-date"></span></p>
     </div>
     <div class="rep-info">
@@ -761,16 +1560,35 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
       <div>المقرر: <span id="rep-c-name">—</span></div>
     </div>
     <div class="rep-stats">
-      <div class="rep-stat"><span class="rep-sv" id="rep-score">—</span><span class="rep-sl">المتوسط العام للحفظ</span></div>
-      <div class="rep-stat"><span class="rep-sv" id="rep-stars">0</span><span class="rep-sl">نجوم التميز</span></div>
-      <div class="rep-stat"><span class="rep-sv" id="rep-sessions">0</span><span class="rep-sl">حضور منضبط</span></div>
+      <div class="rep-stat">
+        <span class="rep-sv" id="rep-score">—</span>
+        <span class="rep-sl">المتوسط العام للحفظ</span>
+      </div>
+      <div class="rep-stat">
+        <span class="rep-sv" id="rep-stars">0</span>
+        <span class="rep-sl">نجوم التميز</span>
+      </div>
+      <div class="rep-stat">
+        <span class="rep-sv" id="rep-sessions">0</span>
+        <span class="rep-sl">حضور منضبط</span>
+      </div>
     </div>
     <div class="rep-title">السجل التفصيلي (حفظ ومراجعة)</div>
     <table class="rep-table">
-      <thead><tr><th>التاريخ / الحضور</th><th>الحفظ (أوجه) والدرجة</th><th>المراجعة</th><th>الملاحظات التجويدية</th></tr></thead>
+      <thead>
+        <tr>
+          <th>التاريخ / الحضور</th>
+          <th>الحفظ والدرجة</th>
+          <th>المراجعة</th>
+          <th>الملاحظات التجويدية</th>
+        </tr>
+      </thead>
       <tbody id="rep-tbody"></tbody>
     </table>
-    <div class="rep-foot">وفّقكِ الله وبارك في مسيرتكِ مع القرآن الكريم 💜<br>تم استخراج التقرير آلياً من منصة ألف لام ميم</div>
+    <div class="rep-foot">
+      وفّقكِ الله وبارك في مسيرتكِ مع القرآن الكريم 💜<br>
+      استخراج آلي من نظام ألف لام ميم
+    </div>
   </div>
 </div>
 
@@ -779,76 +1597,228 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 // 1. STATE MANAGEMENT & MOCK DATA
 // ══════════════════════════════════════════════════════════
 const dToday = new Date();
-const dYesterday = new Date(dToday); dYesterday.setDate(dYesterday.getDate() - 1);
-const dBefore = new Date(dToday); dBefore.setDate(dBefore.getDate() - 3);
+const dYest = new Date(dToday); 
+dYest.setDate(dYest.getDate() - 1);
+const dBefore = new Date(dToday); 
+dBefore.setDate(dBefore.getDate() - 3);
+
 const strT = dToday.toLocaleDateString('ar-EG');
-const strY = dYesterday.toLocaleDateString('ar-EG');
+const strY = dYest.toLocaleDateString('ar-EG');
 const strB = dBefore.toLocaleDateString('ar-EG');
 
 let S = {
-  course: { teacher:'أ. هدى المحمدي', cname:'الزهراوين (البقرة وآل عمران)', pages:200, sdate:new Date().toISOString().split('T')[0], weeks:10, studyDays:5 },
+  course: { 
+    teacher: 'أ. فاطمة', 
+    cname: 'الزهراوين', 
+    pages: 200, 
+    sdate: new Date().toISOString().split('T')[0], 
+    weeks: 10, 
+    studyDays: 5 
+  },
   students: [
-      { id:1, name:'فاطمة أحمد', score:100, stars:3, customFaces:null, days:[1,1,1,0,0], ok:3, total:3, sessions:[
-        {date:strB, ts:Date.now()-300000, att:'present', rev:'minor', revR:'البقرة 1-10', revG:'ممتاز', score:100, faces:5, from:'1', to:'5', errors:[], star:true, ok:true, grade:'ممتاز'},
-        {date:strY, ts:Date.now()-200000, att:'present', rev:'none', revR:'', revG:'', score:98, faces:5, from:'6', to:'10', errors:[{desc:'تنبيه تشكيل آية 12',pts:-2}], star:false, ok:true, grade:'ممتاز'},
-        {date:strT, ts:Date.now()-100000, att:'present', rev:'both', revR:'البقرة 1-20', revG:'جيد جداً', score:100, faces:6, from:'11', to:'16', errors:[], star:true, ok:true, grade:'ممتاز'}
-      ]},
-      { id:2, name:'لجين عبدالله', score:88, stars:0, customFaces:50, days:[1,0,0,0,0], ok:1, total:2, sessions:[
-        {date:strB, ts:Date.now()-300000, att:'unexcused', rev:'none', revR:'', revG:'', score:null, faces:0, from:'-', to:'-', errors:[], star:false, ok:false, grade:'-'},
-        {date:strY, ts:Date.now()-200000, att:'present', rev:'none', revR:'', revG:'', score:88, faces:2, from:'1', to:'2', errors:[{desc:'حفظ وتصحيح آية 5',pts:-2},{desc:'حفظ وتصحيح آية 8',pts:-2},{desc:'تردد',pts:-0.5}], star:false, ok:true, grade:'متوسط'}
-      ]},
-      { id:3, name:'منار خالد', score:94, stars:1, customFaces:null, days:[1,1,0,0,0], ok:2, total:2, sessions:[
-        {date:strB, ts:Date.now()-300000, att:'present', rev:'major', revR:'آل عمران 1-15', revG:'ممتاز', score:95, faces:5, from:'20', to:'24', errors:[{desc:'تنبيه حفظ',pts:-1}], star:false, ok:true, grade:'جيد جداً'},
-        {date:strY, ts:Date.now()-200000, att:'excused', rev:'none', revR:'', revG:'', score:null, faces:0, from:'-', to:'-', errors:[], star:false, ok:false, grade:'-'}
-      ]},
-      { id:4, name:'نور الهدى', score:96, stars:0, customFaces:200, days:[1,1,1,1,0], ok:4, total:4, sessions:[
-        {date:strY, ts:Date.now()-200000, att:'present', rev:'minor', revR:'البقرة 40-45', revG:'جيد', score:96, faces:10, from:'1', to:'10', errors:[{desc:'تنبيه تشكيل',pts:-2}], star:false, ok:true, grade:'ممتاز'}
-      ]}
+      { 
+        id: 1, 
+        name: 'عائشة محمد', 
+        score: 100, 
+        stars: 3, 
+        customFaces: null, 
+        days: [1,1,1,0,0], 
+        ok: 3, 
+        total: 3, 
+        sessions: [
+          {date: strB, ts: Date.now() - 300000, att: 'present', rev: 'minor', revR: 'البقرة 1-10', revG: 'ممتاز', score: 100, faces: 5, from: '1', to: '5', errors: [], star: true, ok: true, grade: 'ممتاز'},
+          {date: strY, ts: Date.now() - 200000, att: 'present', rev: 'none', revR: '', revG: '', score: 98, faces: 5, from: '6', to: '10', errors: [{desc: 'تنبيه تشكيل', pts: -2}], star: false, ok: true, grade: 'ممتاز'},
+          {date: strT, ts: Date.now() - 100000, att: 'present', rev: 'both', revR: 'البقرة 1-20', revG: 'جيد جداً', score: 100, faces: 6, from: '11', to: '16', errors: [], star: true, ok: true, grade: 'ممتاز'}
+        ]
+      },
+      { 
+        id: 2, 
+        name: 'مريم خالد', 
+        score: 88, 
+        stars: 0, 
+        customFaces: 50, 
+        days: [1,0,0,0,0], 
+        ok: 1, 
+        total: 2, 
+        sessions: [
+          {date: strB, ts: Date.now() - 300000, att: 'unexcused', rev: 'none', revR: '', revG: '', score: null, faces: 0, from: '-', to: '-', errors: [], star: false, ok: false, grade: '-'},
+          {date: strY, ts: Date.now() - 200000, att: 'present', rev: 'none', revR: '', revG: '', score: 88, faces: 2, from: '1', to: '2', errors: [{desc: 'حفظ وتصحيح', pts: -2}, {desc: 'تردد', pts: -0.5}], star: false, ok: true, grade: 'متوسط'}
+        ]
+      },
+      { 
+        id: 3, 
+        name: 'سارة أحمد', 
+        score: 95, 
+        stars: 1, 
+        customFaces: null, 
+        days: [1,1,0,0,0], 
+        ok: 2, 
+        total: 2, 
+        sessions: [
+          {date: strB, ts: Date.now() - 300000, att: 'present', rev: 'major', revR: 'آل عمران 1-15', revG: 'ممتاز', score: 95, faces: 5, from: '20', to: '24', errors: [{desc: 'تنبيه حفظ', pts: -1}], star: false, ok: true, grade: 'جيد جداً'},
+          {date: strY, ts: Date.now() - 200000, att: 'excused', rev: 'none', revR: '', revG: '', score: null, faces: 0, from: '-', to: '-', errors: [], star: false, ok: false, grade: '-'}
+        ]
+      }
   ],
-  nextId: 5, sheetUrl: '', teacherCode: ''
+  nextId: 4, 
+  sheetUrl: '', 
+  teacherCode: ''
 };
 
-let curSt=null, sessScore=100, sessErrors=[], boardSort='points';
-let isStudentMode=false, loggedInStudentId=null;
+let curSt = null;
+let sessScore = 100;
+let sessErrors = [];
+let boardSort = 'points';
+let isStudentMode = false;
+let loggedInStudentId = null;
 
-const GS_CODE = `// لوحة ألف لام ميم — Apps Script Backend
+// الكود البرمجي الكامل لـ Apps Script
+const GS_CODE = `// لوحة ألف لام ميم — الإصدار الأكاديمي الشامل (قاعدة البيانات الذكية)
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
-    const code = data.code;
+    const action = data.action;
+    const code = data.code; 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    if (data.action === 'save') {
-      let db = ss.getSheetByName('DB_'+code) || ss.insertSheet('DB_'+code);
-      db.hideSheet(); db.getRange(1,1,1,2).setValues([['alm_data', data.payload]]);
-      return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+    
+    if (action === 'save') {
+      const payloadStr = data.payload;
+      const S = JSON.parse(payloadStr); 
+      
+      let dbSheet = ss.getSheetByName('DB_' + code) || ss.insertSheet('DB_' + code);
+      dbSheet.hideSheet(); 
+      dbSheet.getRange(1, 1, 1, 2).setValues([['alm_data', payloadStr]]);
+      
+      let stSheet = ss.getSheetByName('طالبات_' + code);
+      if (!stSheet) { 
+        stSheet = ss.insertSheet('طالبات_' + code); 
+        stSheet.setRightToLeft(true); 
+      }
+      stSheet.clear();
+      const stHeader = ['رقم الطالبة', 'اسم الطالبة', 'المقرر', 'آخر درجة إتقان', 'نجوم التميز', 'جلسات ناجحة', 'إجمالي الجلسات'];
+      const stRows = [stHeader];
+      
+      if (S.students) {
+        S.students.forEach(st => {
+          stRows.push([
+            st.id, 
+            st.name, 
+            st.customFaces ? \`مقرر خاص (\${st.customFaces} وجه)\` : 'المقرر العام', 
+            st.score !== null ? st.score : '-', 
+            st.stars || 0, 
+            st.ok || 0, 
+            st.total || 0
+          ]);
+        });
+      }
+      
+      stSheet.getRange(1, 1, stRows.length, stHeader.length).setValues(stRows);
+      stSheet.getRange(1, 1, 1, stHeader.length).setFontWeight("bold").setBackground("#F1DFA6");
+
+      let sessSheet = ss.getSheetByName('سجل_تسميع_' + code);
+      if (!sessSheet) { 
+        sessSheet = ss.insertSheet('سجل_تسميع_' + code); 
+        sessSheet.setRightToLeft(true); 
+      }
+      sessSheet.clear();
+      const sessHeader = ['التاريخ', 'اسم الطالبة', 'حالة الحضور', 'سجل المراجعة', 'الدرجة', 'الأوجه المسموعة', 'التقييم', 'الملاحظات التجويدية'];
+      const sessRows = [sessHeader];
+      
+      if (S.students) {
+        S.students.forEach(st => {
+          if(st.sessions) {
+            st.sessions.forEach(sess => {
+              let attText = sess.att === 'excused' ? 'غائبة (بعذر)' : (sess.att === 'unexcused' ? 'غائبة (بدون عذر)' : 'حاضرة');
+              let revText = '-';
+              
+              if (sess.rev && sess.rev !== 'none') {
+                if (sess.rev === 'minor') revText = 'مراجعة صغرى';
+                else if (sess.rev === 'major') revText = 'مراجعة كبرى';
+                else if (sess.rev === 'both') revText = 'صغرى + كبرى';
+                if (sess.revG) revText += \` (\${sess.revG})\`;
+              }
+              
+              let errs = '-';
+              if(sess.att === 'present') { 
+                errs = sess.errors && sess.errors.length > 0 ? sess.errors.map(e => e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات'; 
+              }
+              
+              sessRows.push([
+                sess.date, 
+                st.name, 
+                attText, 
+                revText, 
+                sess.score !== null ? sess.score : '-', 
+                sess.faces || '-', 
+                sess.grade || '-', 
+                errs
+              ]);
+            });
+          }
+        });
+      }
+      
+      if(sessRows.length > 1) {
+        sessSheet.getRange(1, 1, sessRows.length, sessHeader.length).setValues(sessRows);
+        sessSheet.getRange(1, 1, 1, sessHeader.length).setFontWeight("bold").setBackground("#EAF4FB");
+      }
+      
+      return json({ok:true});
     }
-    if (data.action === 'load') {
-      const db = ss.getSheetByName('DB_'+code);
-      return ContentService.createTextOutput(JSON.stringify({ok:true, payload: db?db.getRange(1,2).getValue():null})).setMimeType(ContentService.MimeType.JSON);
+    
+    if (action === 'load') {
+      let dbSheet = ss.getSheetByName('DB_' + code);
+      return json({ok:true, payload: dbSheet ? dbSheet.getRange(1, 2).getValue() : null});
     }
-    if (data.action === 'ping') return ContentService.createTextOutput(JSON.stringify({ok:true, msg:'pong'})).setMimeType(ContentService.MimeType.JSON);
-  } catch(err) { return ContentService.createTextOutput(JSON.stringify({ok:false, msg:err.toString()})).setMimeType(ContentService.MimeType.JSON); }
+    
+    if (action === 'ping') return json({ok:true, msg:'pong'});
+    
+    return json({ok:false, msg:'unknown action'});
+  } catch(err) { 
+    return json({ok:false, msg:err.toString()}); 
+  }
+}
+
+function doGet(e) { 
+  return ContentService.createTextOutput("ALM API is running...").setMimeType(ContentService.MimeType.TEXT); 
+}
+
+function json(obj) { 
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON); 
 }`;
 
-function loadState(){
-  try { const d = localStorage.getItem('alm_pro_v2'); if(d) S = JSON.parse(d); } catch(e){}
+function loadState() { 
+  try { 
+    const d = localStorage.getItem('alm_pro_v3'); 
+    if(d) S = JSON.parse(d); 
+  } catch(e) {
+    // Fallback to default state on error
+  } 
 }
-function saveState(){
-  if(isStudentMode) return;
-  try { localStorage.setItem('alm_pro_v2', JSON.stringify(S)); setSyncDot('local'); } catch(e){}
+
+function saveState() { 
+  if(isStudentMode) return; 
+  try { 
+    localStorage.setItem('alm_pro_v3', JSON.stringify(S)); 
+    setSyncDot('local'); 
+  } catch(e) {
+    // Handle quota errors silently
+  } 
 }
 
 // ══════════════════════════════════════════════════════════
 // 2. CORE LOGIC & HELPERS
 // ══════════════════════════════════════════════════════════
-function fmt(n) { return n%1===0 ? n : parseFloat(n.toFixed(1)); }
+function fmt(n) { 
+  return n % 1 === 0 ? n : parseFloat(n.toFixed(1)); 
+}
 
 function gradeOf(s) {
-  if(s === null) return {label:'—', cls:'status-neutral', emoji:'—'};
-  if(s >= 95) return {label:'ممتاز', cls:'status-excellent', emoji:'🌟'};
-  if(s >= 90) return {label:'جيد جداً', cls:'status-good', emoji:'✅'};
-  if(s >= 80) return {label:'جيد', cls:'status-good', emoji:'👍'};
-  return {label:'إعادة', cls:'status-poor', emoji:'🔁'};
+  if(s === null) return { label: '—', cls: 'status-neutral', emoji: '—' };
+  if(s >= 95) return { label: 'ممتاز', cls: 'status-excellent', emoji: '🌟' };
+  if(s >= 90) return { label: 'جيد جداً', cls: 'status-good', emoji: '✅' };
+  if(s >= 80) return { label: 'جيد', cls: 'status-good', emoji: '👍' };
+  return { label: 'إعادة', cls: 'status-poor', emoji: '🔁' };
 }
 
 function calcQuota(totalFaces, weeks, studyDays) {
@@ -857,7 +1827,9 @@ function calcQuota(totalFaces, weeks, studyDays) {
   const baseDaily = Math.floor(weeklyFaces / studyDays);
   const rem = weeklyFaces % studyDays;
   const maxDaily = rem > 0 ? baseDaily + 1 : baseDaily;
+  
   const dailyText = baseDaily === maxDaily ? String(baseDaily) : `${baseDaily} إلى ${maxDaily}`;
+  
   return { weeklyFaces, sessionFaces, dailyText, totalFaces };
 }
 
@@ -865,24 +1837,33 @@ function getActualDateStr(startDateStr, weekNum, dayIdx, totalStudyDays) {
   if(!startDateStr) return '';
   let d = new Date(startDateStr);
   if(isNaN(d.getTime())) return '';
+  
   let daysToAdd = ((weekNum - 1) * 7) + dayIdx;
-  if (totalStudyDays === 5) {
-     daysToAdd = (Math.floor(daysToAdd / 5) * 7) + (daysToAdd % 5);
-  } else if (totalStudyDays === 6) {
-     daysToAdd = (Math.floor(daysToAdd / 6) * 7) + (daysToAdd % 6);
+  
+  if (totalStudyDays === 5) { 
+    daysToAdd = (Math.floor(daysToAdd / 5) * 7) + (daysToAdd % 5); 
+  } else if (totalStudyDays === 6) { 
+    daysToAdd = (Math.floor(daysToAdd / 6) * 7) + (daysToAdd % 6); 
   }
+  
   d.setDate(d.getDate() + daysToAdd);
   return d.toLocaleDateString('ar-EG', { month: 'short', day: 'numeric' });
 }
 
 function calculateStreak(sessions) {
   if (!sessions || sessions.length === 0) return 0;
+  
   let streak = 0;
   const sorted = [...sessions].sort((a,b) => b.ts - a.ts);
+  
   for (let i = 0; i < sorted.length; i++) {
-    if (sorted[i].att === 'present') streak++;
-    else if (sorted[i].att === 'unexcused') break; 
+    if (sorted[i].att === 'present') {
+      streak++;
+    } else if (sorted[i].att === 'unexcused') {
+      break; 
+    }
   }
+  
   return streak;
 }
 
@@ -890,61 +1871,71 @@ function calculateStreak(sessions) {
 // 3. UI & NAVIGATION
 // ══════════════════════════════════════════════════════════
 const TITLES = {
-  setup: ['إعداد الدورة', 'تخصيص البيانات والموزع الآلي'],
+  setup: ['إعداد الدورة', 'تخصيص البيانات والربط السحابي'],
   session: ['جلسة التسميع', 'حضور، تقييم، ومراجعة'],
   dash: ['لوحة التحليلات', 'نظرة عامة على الأداء'],
   portal: ['بوابة الطالبة', 'سجل شخصي وخاص'],
-  board: ['لوحة الصدارة', 'إحصائيات الحلقة'],
-  sheets: ['الربط السحابي', 'Google Sheets Integration']
+  board: ['لوحة الصدارة', 'إحصائيات الحلقة']
 };
 
 function navigate(pageId) {
+  // Hide all pages and nav items
   document.querySelectorAll('.page-wrapper').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item, .b-nav-item').forEach(el => el.classList.remove('active'));
   
+  // Show target page
   document.getElementById('page-' + pageId).classList.add('active');
   
+  // Activate correct nav items
   document.querySelectorAll(`[onclick="navigate('${pageId}')"]`).forEach(el => el.classList.add('active'));
   
+  // Update header text
   if(TITLES[pageId]) {
     document.getElementById('top-title').textContent = TITLES[pageId][0];
     document.getElementById('top-sub').textContent = TITLES[pageId][1];
   }
-
+  
+  // Close mobile sidebar if open
   document.getElementById('sidebar').style.transform = '';
   document.getElementById('sb-overlay').classList.remove('active');
-
+  
+  // Execute page specific init logic
   if(pageId === 'dash') initDashboard();
   if(pageId === 'board') renderBoard();
-  if(pageId === 'portal' && isStudentMode) {
-      document.getElementById('sel-portal').value = loggedInStudentId;
-      loadPortal();
+  if(pageId === 'portal' && isStudentMode) { 
+    document.getElementById('sel-portal').value = loggedInStudentId; 
+    loadPortal(); 
   }
 }
 
 function toggleSidebar() {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('sb-overlay');
-  if (sb.style.transform === 'translateX(0px)') {
-    sb.style.transform = '';
-    ov.classList.remove('active');
-  } else {
-    sb.style.transform = 'translateX(0)';
-    ov.classList.add('active');
+  
+  if (sb.style.transform === 'translateX(0px)') { 
+    sb.style.transform = ''; 
+    ov.classList.remove('active'); 
+  } else { 
+    sb.style.transform = 'translateX(0)'; 
+    ov.classList.add('active'); 
   }
 }
 
 function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.getAttribute('data-theme') === 'dark';
+  
   html.setAttribute('data-theme', isDark ? 'light' : 'dark');
   localStorage.setItem('alm_theme', isDark ? 'light' : 'dark');
-  if(document.getElementById('page-dash').classList.contains('active')) initDashboard();
+  
+  if(document.getElementById('page-dash').classList.contains('active')) {
+    initDashboard();
+  }
 }
 
 function toast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
+  el.textContent = msg; 
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 3000);
 }
@@ -958,16 +1949,33 @@ function updateUI() {
 function setSyncDot(state) {
   const dot = document.getElementById('sync-dot');
   const lbl = document.getElementById('sync-lbl');
-  dot.className = 'dot ' + state;
-  if(state === 'ok') lbl.textContent = 'متزامن';
-  if(state === 'err') lbl.textContent = 'خطأ';
-  if(state === 'sync') lbl.textContent = 'جارٍ...';
-  if(state === 'local') lbl.textContent = 'محلي';
+  
+  if(dot) dot.className = 'dot ' + state;
+  if(state === 'ok' && lbl) lbl.textContent = 'متصل بالمنصة';
+  if(state === 'err' && lbl) lbl.textContent = 'خطأ اتصال';
+  if(state === 'sync' && lbl) lbl.textContent = 'جارٍ...';
+  if(state === 'local' && lbl) lbl.textContent = 'تخزين محلي';
 }
 
 // ══════════════════════════════════════════════════════════
 // 4. SETUP & DATA MANAGEMENT
 // ══════════════════════════════════════════════════════════
+function lockSetup() {
+  document.getElementById('setup-edit-view').style.display = 'none';
+  document.getElementById('setup-locked-view').style.display = 'block';
+  
+  document.getElementById('sum-teacher').textContent = S.course.teacher || '—';
+  document.getElementById('sum-course').textContent = S.course.cname || '—';
+  
+  const sdMap = { 5: 'الأحد-الخميس', 6: 'السبت-الخميس', 7: 'كامل الأسبوع' };
+  document.getElementById('sum-days').textContent = sdMap[S.course.studyDays] || '—';
+}
+
+function unlockSetup() {
+  document.getElementById('setup-edit-view').style.display = 'block';
+  document.getElementById('setup-locked-view').style.display = 'none';
+}
+
 function initSetup() {
   document.getElementById('teacher').value = S.course.teacher;
   document.getElementById('cname').value = S.course.cname;
@@ -975,11 +1983,19 @@ function initSetup() {
   document.getElementById('sdate').value = S.course.sdate;
   document.getElementById('tweeks').value = S.course.weeks;
   document.getElementById('study-days').value = S.course.studyDays;
-  document.getElementById('sheet-url').value = S.sheetUrl;
-  document.getElementById('teacher-code').value = S.teacherCode;
+  document.getElementById('sheet-url').value = S.sheetUrl || '';
+  document.getElementById('teacher-code').value = S.teacherCode || '';
   document.getElementById('gs-code').value = GS_CODE;
   
-  updateUI(); calcPlan(); renderStudentList();
+  updateUI(); 
+  calcPlan(); 
+  renderStudentList();
+  
+  if(S.sheetUrl && S.teacherCode && S.course.teacher) { 
+    lockSetup(); 
+  } else { 
+    unlockSetup(); 
+  }
 }
 
 function calcPlan() {
@@ -995,13 +2011,23 @@ function calcPlan() {
   
   window._quota = q;
   
-  let html = '', sf = 0;
-  for(let w = 1; w <= wks; w++){
+  let html = '';
+  let sf = 0;
+  
+  for(let w = 1; w <= wks; w++) {
     const wf = Math.min(q.weeklyFaces, tF - sf); 
     if(wf <= 0) break;
-    html += `<div class="list-row" style="padding:10px 16px;"><div style="font-weight:700;color:var(--primary);">الأسبوع ${w}</div><div>وجه ${sf+1} — ${sf+wf}</div><div style="color:var(--text-muted);font-size:12px;">${wf} أوجه</div></div>`;
+    
+    html += `
+      <div class="list-row" style="padding:10px 16px;">
+        <div style="font-weight:700; color:var(--primary);">الأسبوع ${w}</div>
+        <div>وجه ${sf+1} — ${sf+wf}</div>
+        <div style="color:var(--text-muted); font-size:12px;">${wf} أوجه</div>
+      </div>
+    `;
     sf += wf;
   }
+  
   document.getElementById('week-plan').innerHTML = html;
 }
 
@@ -1012,31 +2038,55 @@ function saveCourse() {
   S.course.sdate = document.getElementById('sdate').value;
   S.course.weeks = parseInt(document.getElementById('tweeks').value) || 10;
   S.course.studyDays = parseInt(document.getElementById('study-days').value) || 5;
+  S.sheetUrl = document.getElementById('sheet-url').value.trim();
+  S.teacherCode = document.getElementById('teacher-code').value.trim();
   
-  saveState(); calcPlan(); updateUI(); toast('✅ تم حفظ إعدادات الدورة');
-  if(S.sheetUrl) syncToSheet();
+  saveState(); 
+  calcPlan(); 
+  updateUI(); 
+  lockSetup(); 
+  toast('✅ تم حفظ الإعدادات بنجاح');
+  
+  if(S.sheetUrl) {
+    syncToSheet();
+  }
 }
 
 function archiveCourse() {
-  if(!confirm('⚠️ هل أنتِ متأكدة من أرشفة هذه الدورة؟ سيتم تصفير جميع درجات الطالبات مع الاحتفاظ بأسمائهن.')) return;
+  if(!confirm('⚠️ هل أنتِ متأكدة من أرشفة هذه الدورة؟ سيتم تصفير درجات وسجلات الطالبات لبدء دورة جديدة.')) return;
+  
   const sd = S.course.studyDays || 5;
+  
   S.students.forEach(st => {
-    st.score = 100; st.stars = 0; st.sessions = []; st.days = Array(sd).fill(0); st.ok = 0; st.total = 0;
+    st.score = 100; 
+    st.stars = 0; 
+    st.sessions = []; 
+    st.days = Array(sd).fill(0); 
+    st.ok = 0; 
+    st.total = 0;
   });
+  
   S.course.sdate = new Date().toISOString().split('T')[0];
-  saveState(); initSetup(); toast('🗄️ تم بدء دورة جديدة!');
-  if(S.sheetUrl) syncToSheet();
+  
+  saveState(); 
+  initSetup(); 
+  toast('🗄️ تم أرشفة الدورة للبدء من جديد!');
+  
+  if(S.sheetUrl) {
+    syncToSheet();
+  }
 }
 
-// Students
-function sortedSts() { return [...S.students].sort((a,b) => a.name.localeCompare(b.name, 'ar')); }
+function sortedSts() { 
+  return [...S.students].sort((a,b) => a.name.localeCompare(b.name, 'ar')); 
+}
 
 function renderStudentList() {
   const ss = sortedSts();
   const list = document.getElementById('student-list');
   
-  if(ss.length === 0) {
-    list.innerHTML = '<div class="alert alert-warning">لا توجد طالبات بعد. الرجاء إدخال أسماء الطالبات في الأعلى للبدء.</div>';
+  if(ss.length === 0) { 
+    list.innerHTML = '<div class="alert alert-warning">لا توجد طالبات بعد. الرجاء إدخال أسماء الطالبات في الأعلى للبدء.</div>'; 
   } else {
     list.innerHTML = ss.map(st => {
       const customTxt = st.customFaces ? `<span style="color:var(--gold); font-size:11px;">مقرر خاص: ${st.customFaces}</span>` : '';
@@ -1056,60 +2106,105 @@ function renderStudentList() {
       </div>`;
     }).join('');
   }
-  popSelects();
+  
+  if(!isStudentMode) {
+    const opts = '<option value="">— اختاري الطالبة —</option>' + ss.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    ['sel-st', 'sel-portal'].forEach(id => { 
+      const el = document.getElementById(id); 
+      if(el) { 
+        const val = el.value; 
+        el.innerHTML = opts; 
+        el.value = val; 
+      } 
+    });
+  }
 }
 
 function addStudent() {
   const name = document.getElementById('new-name').value.trim();
   const cf = parseInt(document.getElementById('new-custom-faces').value);
-  if(!name) { toast('⚠️ الرجاء إدخال اسم الطالبة'); return; }
-  if(S.students.find(s => s.name === name)) { toast('⚠️ هذا الاسم موجود مسبقاً'); return; }
+  
+  if(!name) { 
+    toast('⚠️ الرجاء إدخال اسم الطالبة'); 
+    return; 
+  }
+  
+  if(S.students.find(s => s.name === name)) { 
+    toast('⚠️ هذا الاسم موجود مسبقاً'); 
+    return; 
+  }
   
   const sd = S.course.studyDays || 5;
-  const st = { id: S.nextId++, name, score: 100, stars: 0, sessions: [], days: Array(sd).fill(0), ok: 0, total: 0 };
+  const st = { 
+    id: S.nextId++, 
+    name, 
+    score: 100, 
+    stars: 0, 
+    sessions: [], 
+    days: Array(sd).fill(0), 
+    ok: 0, 
+    total: 0 
+  };
+  
   if(cf && cf > 0) st.customFaces = cf;
   
-  S.students.push(st); saveState();
-  document.getElementById('new-name').value = '';
+  S.students.push(st); 
+  saveState();
+  
+  document.getElementById('new-name').value = ''; 
   document.getElementById('new-custom-faces').value = '';
-  renderStudentList(); toast('✅ تمت إضافة ' + name);
+  
+  renderStudentList(); 
+  toast('✅ تمت إضافة ' + name);
 }
 
 function delSt(id) {
   if(!confirm('تأكيد حذف الطالبة؟')) return;
   S.students = S.students.filter(s => s.id !== id);
-  saveState(); renderStudentList();
-}
-
-function popSelects() {
-  if(isStudentMode) return;
-  const ss = sortedSts();
-  const options = '<option value="">— اختاري الطالبة —</option>' + ss.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-  ['sel-st', 'sel-portal'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) { const val = el.value; el.innerHTML = options; el.value = val; }
-  });
+  saveState(); 
+  renderStudentList();
 }
 
 function copyStudentLink(id) {
-  if(!S.sheetUrl || !S.teacherCode) { toast('⚠️ احفظي إعدادات الربط السحابي أولاً من شاشة الإعدادات'); return; }
+  if(!S.sheetUrl || !S.teacherCode) { 
+    toast('⚠️ اكتبي رابط Google Sheet واحفظي الإعدادات أولاً'); 
+    return; 
+  }
+  
   const base = window.location.href.split('?')[0];
   const link = `${base}?s=${id}&u=${btoa(S.sheetUrl)}&c=${btoa(S.teacherCode)}`;
   
-  if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(link).then(() => {
-          toast('🔗 تم نسخ الرابط السري بنجاح!');
-      }).catch(() => fallbackCopy(link));
-  } else {
-      fallbackCopy(link);
+  // Use a fallback text area for universal mobile support
+  const textarea = document.createElement('textarea');
+  textarea.value = link;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  
+  try {
+    document.execCommand('copy');
+    toast('🔗 تم نسخ الرابط السري للطالبة بنجاح!');
+  } catch (err) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(link).then(() => toast('🔗 تم نسخ الرابط!')).catch(()=>toast('❌ فشل النسخ'));
+    } else {
+        toast('❌ جهازك لا يدعم النسخ التلقائي');
+    }
   }
+  document.body.removeChild(textarea);
 }
 
-function fallbackCopy(text) {
-  const el = document.getElementById('copy-helper');
-  el.value = text; el.select();
-  try { document.execCommand('copy'); toast('🔗 تم نسخ الرابط السري!'); } 
-  catch(e) { toast('❌ فشل النسخ التلقائي'); }
+function copyGsCode(e) {
+  e.preventDefault();
+  const textarea = document.createElement('textarea');
+  textarea.value = GS_CODE;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+  toast('✅ تم نسخ كود Apps Script');
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1117,10 +2212,15 @@ function fallbackCopy(text) {
 // ══════════════════════════════════════════════════════════
 function startSession() {
   const id = document.getElementById('sel-st').value;
-  if(!id) { document.getElementById('sess-body').style.display = 'none'; return; }
+  if(!id) { 
+    document.getElementById('sess-body').style.display = 'none'; 
+    return; 
+  }
   
   const st = S.students.find(s => s.id === parseInt(id));
-  curSt = st.id; sessScore = 100; sessErrors = [];
+  curSt = st.id; 
+  sessScore = 100; 
+  sessErrors = [];
   
   const tf = st.customFaces || S.course.pages || 200;
   const q = calcQuota(tf, S.course.weeks||10, S.course.studyDays||5);
@@ -1131,7 +2231,10 @@ function startSession() {
   document.getElementById('live-score').textContent = '100';
   document.getElementById('sess-att').value = 'present';
   
-  renderErrLog(); toggleSessBody(); updateGradeDisp();
+  renderErrLog(); 
+  toggleSessBody(); 
+  updateGradeDisp();
+  
   document.getElementById('sess-body').style.display = 'block';
 }
 
@@ -1143,31 +2246,41 @@ function toggleSessBody() {
 function deduct(pts, label, ayId, kwId) {
   const aya = ayId ? document.getElementById(ayId).value.trim() : '';
   const kw = kwId ? document.getElementById(kwId).value.trim() : '';
-  const desc = [aya?`آية ${aya}`:'', kw?`"${kw}"`:'', label].filter(Boolean).join(' · ');
+  const desc = [aya ? `آية ${aya}` : '', kw ? `"${kw}"` : '', label].filter(Boolean).join(' · ');
   
   sessScore = parseFloat(Math.max(0, Math.min(110, sessScore - pts)).toFixed(1));
   sessErrors.push({desc, pts, id: Date.now()});
   
   document.getElementById('live-score').textContent = fmt(sessScore);
+  
   if(ayId) document.getElementById(ayId).value = '';
   if(kwId) document.getElementById(kwId).value = '';
-  renderErrLog(); updateGradeDisp();
+  
+  renderErrLog(); 
+  updateGradeDisp();
 }
 
 function undoLast() {
   if(!sessErrors.length) return;
   const last = sessErrors.pop();
   sessScore = parseFloat(Math.min(110, Math.max(0, sessScore + last.pts)).toFixed(1));
+  
   document.getElementById('live-score').textContent = fmt(sessScore);
-  renderErrLog(); updateGradeDisp();
+  renderErrLog(); 
+  updateGradeDisp();
 }
 
 function renderErrLog() {
   const log = document.getElementById('err-log');
-  if(!sessErrors.length) { log.innerHTML = 'لا توجد ملاحظات.'; return; }
+  if(!sessErrors.length) { 
+    log.innerHTML = 'لا توجد ملاحظات.'; 
+    return; 
+  }
+  
   log.innerHTML = sessErrors.map(e => `
-    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed var(--border);">
-      <span>${e.desc}</span><span style="color:var(--danger); font-weight:700;">${e.pts}</span>
+    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed var(--border-strong);">
+      <span>${e.desc}</span>
+      <span style="color:var(--danger); font-weight:700;">${e.pts}</span>
     </div>
   `).join('');
 }
@@ -1177,13 +2290,15 @@ function updateGradeDisp() {
   document.getElementById('grade-badge').innerHTML = `<span class="status-badge ${g.cls}">${g.label}</span>`;
 }
 
-function resetSess() {
-  if(!confirm('مسح التقسيم؟')) return;
-  startSession();
+function resetSess() { 
+  if(confirm('إعادة ضبط الجلسة؟')) {
+    startSession();
+  } 
 }
 
 function saveSession() {
   if(!curSt) return;
+  
   const st = S.students.find(s => s.id === curSt);
   const att = document.getElementById('sess-att').value;
   const faces = parseInt(document.getElementById('faces').value) || 0;
@@ -1193,28 +2308,104 @@ function saveSession() {
   const revRange = document.getElementById('rev-range').value;
   const revG = document.getElementById('rev-grade').value;
   
-  let finalScore = null, isOk = false;
+  let finalScore = null;
+  let isOk = false;
+  
   if(att === 'present') {
-    finalScore = sessScore;
-    st.score = sessScore;
+    finalScore = sessScore; 
+    st.score = sessScore; 
     isOk = faces >= q;
+    
     if(faces > q) st.stars = (st.stars||0) + 1;
     if(isOk) st.ok = (st.ok||0) + 1;
   }
+  
   st.total = (st.total||0) + 1;
   
-  (st.sessions = st.sessions || []).push({
-    date: new Date().toLocaleDateString('ar-EG'), ts: Date.now(), att,
-    rev: att==='present'?revType:'none', revR: revRange, revG: revG,
-    score: finalScore, faces: att==='present'?faces:0,
-    from: document.getElementById('from-a').value||'—', to: document.getElementById('to-a').value||'—',
-    errors: att==='present' ? sessErrors.slice() : [],
-    ok: isOk, grade: gradeOf(finalScore).label
+  if (!st.sessions) st.sessions = [];
+  
+  st.sessions.push({
+    date: new Date().toLocaleDateString('ar-EG'), 
+    ts: Date.now(), 
+    att: att,
+    rev: att === 'present' ? revType : 'none', 
+    revR: revRange, 
+    revG: revG,
+    score: finalScore, 
+    faces: att === 'present' ? faces : 0,
+    from: document.getElementById('from-a').value || '—', 
+    to: document.getElementById('to-a').value || '—',
+    errors: att === 'present' ? sessErrors.slice() : [],
+    ok: isOk, 
+    grade: gradeOf(finalScore).label
   });
   
-  saveState(); renderStudentList();
+  saveState(); 
+  renderStudentList(); 
   toast('✅ تم اعتماد الجلسة');
-  if(S.sheetUrl) syncToSheet();
+  
+  if(S.sheetUrl) {
+    syncToSheet();
+  }
+}
+
+function copyReport() {
+  const st = S.students.find(s => s.id === curSt); 
+  const name = st ? st.name : '—';
+  
+  const faces = document.getElementById('faces').value;
+  const from = document.getElementById('from-a').value || '—';
+  const to = document.getElementById('to-a').value || '—';
+  
+  const g = gradeOf(sessScore);
+  const q = window._activeSessQuota?.sessionFaces || 10;
+  
+  const badge = parseInt(faces) > q ? '⭐ تجاوزت النصاب' : (parseInt(faces) >= q ? '🟢 مكتمل' : '🔴 لم يكتمل');
+  
+  const errLines = sessErrors.length 
+    ? sessErrors.map((e,i) => `  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n')
+    : '  ممتاز — لا توجد ملاحظات';
+  
+  const revType = document.getElementById('rev-type').value;
+  const revR = document.getElementById('rev-range').value;
+  const revG = document.getElementById('rev-grade').value;
+  
+  let rTxt = 'المراجعة : لا يوجد';
+  if(revType !== 'none') {
+      const typeStr = revType === 'minor' ? 'صغرى' : (revType === 'major' ? 'كبرى' : 'صغرى + كبرى');
+      rTxt = `المراجعة : ${typeStr} (${revR||'—'}) — التقييم: ${revG}`;
+  }
+
+  const rep = [
+    `📋 تقرير جلسة التسميع — ${S.course.cname||'حلقة التحفيظ'}`,
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    `الطالبة  : ${name}`,
+    `التاريخ  : ${new Date().toLocaleDateString('ar-EG')}`,
+    `من        : ${from}   إلى : ${to}`,
+    `الأوجه   : ${faces} ${badge}`, 
+    rTxt,
+    `الدرجة   : ${fmt(sessScore)} / 100`,
+    `التقييم  : ${g.emoji} ${g.label}`,
+    '──────────────────────',
+    'الملاحظات الحفظ:',
+    errLines,
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    'وفّقكِ الله وبارك في جهدكِ 💜'
+  ].join('\n');
+  
+  const ta = document.createElement('textarea'); 
+  ta.value = rep; 
+  document.body.appendChild(ta); 
+  ta.select();
+  
+  try { 
+    document.execCommand('copy'); 
+    toast('📋 تم نسخ التقرير'); 
+  } catch(e) { 
+    toast('❌ لم يتم النسخ'); 
+  } 
+  
+  document.body.removeChild(ta);
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1227,12 +2418,12 @@ function initDashboard() {
   const content = document.getElementById('dash-content');
   
   if(!S.students || S.students.length === 0 || !S.students.some(s => s.sessions && s.sessions.length > 0)) {
-    emptyState.style.display = 'block';
-    content.style.display = 'none';
+    emptyState.style.display = 'block'; 
+    content.style.display = 'none'; 
     return;
   }
   
-  emptyState.style.display = 'none';
+  emptyState.style.display = 'none'; 
   content.style.display = 'block';
 
   const root = getComputedStyle(document.documentElement);
@@ -1240,37 +2431,51 @@ function initDashboard() {
   const colorGold = root.getPropertyValue('--gold').trim();
   const colorText = root.getPropertyValue('--text-main').trim();
   const colorGrid = root.getPropertyValue('--border-strong').trim();
-  const colorSuccess = root.getPropertyValue('--success').trim();
-  const colorDanger = root.getPropertyValue('--danger').trim();
 
-  Chart.defaults.color = colorText;
+  Chart.defaults.color = colorText; 
   Chart.defaults.font.family = 'Cairo';
 
-  let tScore=0, vCount=0, tSess=0, pSess=0, eSess=0;
-  const names = [], scores = [];
+  let tScore = 0;
+  let vCount = 0;
+  let tSess = 0;
+  let pSess = 0;
+  let eSess = 0;
+  
+  const names = [];
+  const scores = [];
   const errMap = { 'حفظ': 0, 'تشكيل': 0, 'تردد': 0, 'أخرى': 0 };
   const trendData = {}; 
 
   S.students.forEach(st => {
-    names.push(st.name.split(' ')[0]);
+    names.push(st.name.split(' ')[0]); 
     scores.push(st.score || 0);
-    if(st.score) { tScore += st.score; vCount++; }
+    
+    if(st.score) { 
+      tScore += st.score; 
+      vCount++; 
+    }
     
     (st.sessions||[]).forEach(s => {
       tSess++;
+      
       if(s.att === 'present') {
         pSess++;
-        if(!trendData[s.date]) trendData[s.date] = {sum:0, cnt:0};
-        trendData[s.date].sum += s.score;
+        
+        if(!trendData[s.date]) {
+          trendData[s.date] = { sum: 0, cnt: 0 };
+        }
+        
+        trendData[s.date].sum += s.score; 
         trendData[s.date].cnt++;
+        
         (s.errors||[]).forEach(e => {
-          if(e.desc.includes('حفظ')) errMap['حفظ']++;
-          else if(e.desc.includes('تشكيل')) errMap['تشكيل']++;
-          else if(e.desc.includes('تردد')) errMap['تردد']++;
+          if(e.desc.includes('حفظ')) errMap['حفظ']++; 
+          else if(e.desc.includes('تشكيل')) errMap['تشكيل']++; 
+          else if(e.desc.includes('تردد')) errMap['تردد']++; 
           else errMap['أخرى']++;
         });
-      } else if (s.att === 'excused') {
-        eSess++;
+      } else if (s.att === 'excused') { 
+        eSess++; 
       }
     });
   });
@@ -1281,16 +2486,33 @@ function initDashboard() {
 
   if(charts.bar) charts.bar.destroy();
   charts.bar = new Chart(document.getElementById('scoreBarChart'), {
-    type: 'bar',
-    data: { labels: names, datasets: [{ label: 'معدل الطالبة', data: scores, backgroundColor: colorPrimary, borderRadius: 6 }] },
-    options: { scales: { y: { min: 60, max: 100, grid: { color: colorGrid } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+    type: 'bar', 
+    data: { 
+      labels: names, 
+      datasets: [{ label: 'الإتقان', data: scores, backgroundColor: colorPrimary, borderRadius: 6 }] 
+    },
+    options: { 
+      scales: { 
+        y: { min: 60, max: 100, grid: { color: colorGrid } }, 
+        x: { grid: { display: false } } 
+      }, 
+      plugins: { legend: { display: false } } 
+    }
   });
 
   if(charts.radar) charts.radar.destroy();
   charts.radar = new Chart(document.getElementById('errorRadarChart'), {
-    type: 'radar',
-    data: { labels: Object.keys(errMap), datasets: [{ label: 'تكرار الخطأ', data: Object.values(errMap), backgroundColor: 'rgba(212, 175, 55, 0.4)', borderColor: colorGold, pointBackgroundColor: colorGold }] },
-    options: { scales: { r: { grid: { color: colorGrid }, angleLines: { color: colorGrid }, pointLabels: { font: { size: 13 } } } }, plugins: { legend: { display: false } } }
+    type: 'radar', 
+    data: { 
+      labels: Object.keys(errMap), 
+      datasets: [{ label: 'التكرار', data: Object.values(errMap), backgroundColor: 'rgba(212, 175, 55, 0.4)', borderColor: colorGold, pointBackgroundColor: colorGold }] 
+    },
+    options: { 
+      scales: { 
+        r: { grid: { color: colorGrid }, angleLines: { color: colorGrid }, pointLabels: { font: { size: 13 } } } 
+      }, 
+      plugins: { legend: { display: false } } 
+    }
   });
 
   const sortedDates = Object.keys(trendData).sort((a,b) => new Date(a.split('/').reverse().join('-')) - new Date(b.split('/').reverse().join('-')));
@@ -1298,9 +2520,19 @@ function initDashboard() {
   
   if(charts.line) charts.line.destroy();
   charts.line = new Chart(document.getElementById('trendLineChart'), {
-    type: 'line',
-    data: { labels: sortedDates, datasets: [{ label: 'المتوسط اليومي للحلقة', data: trendAvg, borderColor: colorPrimary, backgroundColor: colorPrimary, tension: 0.4, borderWidth: 3 }] },
-    options: { maintainAspectRatio: false, scales: { y: { min: 70, max: 100, grid: { color: colorGrid } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+    type: 'line', 
+    data: { 
+      labels: sortedDates, 
+      datasets: [{ label: 'المتوسط اليومي', data: trendAvg, borderColor: colorPrimary, backgroundColor: colorPrimary, tension: 0.4, borderWidth: 3 }] 
+    },
+    options: { 
+      maintainAspectRatio: false, 
+      scales: { 
+        y: { min: 70, max: 100, grid: { color: colorGrid } }, 
+        x: { grid: { display: false } } 
+      }, 
+      plugins: { legend: { display: false } } 
+    }
   });
 }
 
@@ -1310,45 +2542,54 @@ function initDashboard() {
 function loadPortal() {
   const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
   const pb = document.getElementById('portal-body');
-  if(!id) { pb.style.display = 'none'; return; }
   
-  const st = S.students.find(s => s.id === id); if(!st) return;
+  if(!id) { 
+    pb.style.display = 'none'; 
+    return; 
+  }
+  
+  const st = S.students.find(s => s.id === id); 
+  
+  if(!st) return;
   pb.style.display = 'block';
   
-  document.getElementById('p-av').textContent = st.name[0];
+  document.getElementById('p-av').textContent = st.name[0]; 
   document.getElementById('p-name').textContent = st.name;
   
   const tF = st.customFaces || S.course.pages || 200;
   const q = calcQuota(tF, S.course.weeks||10, S.course.studyDays||5);
   
+  document.getElementById('p-course-info').textContent = st.customFaces ? `سجل محمي · مقرر خاص (${tF} وجه)` : `سجل محمي · المقرر العام (${tF} وجه)`;
   document.getElementById('p-score').textContent = fmt(st.score);
   document.getElementById('p-streak').textContent = calculateStreak(st.sessions);
   document.getElementById('p-stars').textContent = st.stars || 0;
   
-  const pSess = (st.sessions||[]).filter(s => s.att === 'present');
-  const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : 0;
-  
   const sd = S.course.studyDays || 5;
   const days = st.days && st.days.length === sd ? st.days : Array(sd).fill(0);
-  const dn = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; // Generic fallback
+  const dn = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; 
   
   document.getElementById('p-prog').style.width = (days.filter(Boolean).length / sd * 100) + '%';
   document.getElementById('p-days').innerHTML = days.map((d, i) => `
     <div class="list-row" style="margin-bottom:8px; padding:12px 16px;">
       <div>
-        <div style="font-weight:700;">${getDayNames(sd)[i] || 'يوم '+(i+1)}</div>
+        <div style="font-weight:700;">${dn[i]||'يوم '+(i+1)}</div>
         <div style="font-size:11px; color:var(--text-muted);">${getActualDateStr(S.course.sdate, 1, i, sd)} | المطلوب: ${q.dailyText} أوجه</div>
       </div>
-      ${d ? `<button class="btn btn-outline btn-sm" onclick="toggleDay(${id},${i})">تم ✓ (تراجع)</button>`
+      ${d ? `<button class="btn btn-outline btn-sm" onclick="toggleDay(${id},${i})">تم ✓ (تراجع)</button>` 
           : `<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">تأكيد الإنجاز</button>`}
     </div>
   `).join('');
 
   const hist = document.getElementById('p-hist');
   const sorted = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts);
+  
   hist.innerHTML = sorted.map(s => {
-    if(s.att !== 'present') return `<div class="list-row"><div style="color:var(--danger); font-weight:700;">${s.date} - غياب</div></div>`;
+    if(s.att !== 'present') {
+      return `<div class="list-row"><div style="color:var(--danger); font-weight:700;">${s.date} - غياب</div></div>`;
+    }
+    
     let revHtml = (s.rev && s.rev !== 'none') ? `<span style="font-size:11px; background:var(--bg-elevated); padding:2px 6px; border-radius:4px; color:var(--primary);">مراجعة: ${s.revG}</span>` : '';
+    
     return `
       <div class="list-row" style="align-items:flex-start;">
         <div>
@@ -1362,17 +2603,23 @@ function loadPortal() {
 }
 
 function toggleDay(id, idx) {
-  const st = S.students.find(s => s.id === id); if(!st) return;
+  const st = S.students.find(s => s.id === id); 
+  if(!st) return;
+  
   st.days[idx] = st.days[idx] ? 0 : 1;
-  saveState(); loadPortal();
+  saveState(); 
+  loadPortal();
+  
   if(S.sheetUrl) syncToSheet();
 }
 
 function printReport() {
   const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
-  const st = S.students.find(s=>s.id===id); if(!st) return;
-
-  const sess = st.sessions||[];
+  const st = S.students.find(s=>s.id===id); 
+  
+  if(!st) return;
+  
+  const sess = st.sessions || [];
   const pSess = sess.filter(s => s.att === 'present');
   const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
   
@@ -1385,16 +2632,28 @@ function printReport() {
   document.getElementById('rep-date').textContent = new Date().toLocaleDateString('ar-EG');
 
   const sorted = [...sess].sort((a,b)=>a.ts-b.ts);
+  
   document.getElementById('rep-tbody').innerHTML = sorted.map(s => {
-    if(s.att!=='present'){
-      const at = s.att==='excused'?'غائبة بعذر':'غائبة بدون عذر';
+    if(s.att !== 'present') {
+      const at = s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر';
       return `<tr><td>${s.date}<br><small style="color:#C0392B;">${at}</small></td><td colspan="3" style="text-align:center;color:#C0392B;">-</td></tr>`;
     }
-    const errs = s.errors&&s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات';
-    let revStr = '-';
-    if(s.rev && s.rev !== 'none') revStr = `<span style="color:#2E7D52;font-weight:bold;">${s.rev==='minor'?'صغرى':s.rev==='major'?'كبرى':'صغرى+كبرى'} (${s.revG})</span>`;
     
-    return `<tr><td>${s.date}</td><td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td><td>${revStr}</td><td>${errs}</td></tr>`;
+    const errs = s.errors && s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات';
+    let revStr = '-';
+    if(s.rev && s.rev !== 'none') {
+      const typeLabel = s.rev === 'minor' ? 'صغرى' : (s.rev === 'major' ? 'كبرى' : 'صغرى+كبرى');
+      revStr = `<span style="color:#2E7D52;font-weight:bold;">${typeLabel} (${s.revG})</span>`;
+    }
+    
+    return `
+      <tr>
+        <td>${s.date}</td>
+        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td>
+        <td>${revStr}</td>
+        <td>${errs}</td>
+      </tr>
+    `;
   }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
   
   window.print();
@@ -1402,73 +2661,69 @@ function printReport() {
 
 function setBoardSort(s) {
   boardSort = s;
-  document.getElementById('sort-alpha-btn').className = s==='alpha'?'btn btn-outline btn-sm':'btn btn-primary btn-sm';
-  document.getElementById('sort-pts-btn').className = s==='points'?'btn btn-outline btn-sm':'btn btn-primary btn-sm';
+  document.getElementById('sort-alpha-btn').className = s==='alpha' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm';
+  document.getElementById('sort-pts-btn').className = s==='points' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm';
   renderBoard();
 }
 
 function renderBoard() {
-  const sorted = boardSort==='alpha' ? [...S.students].sort((a,b)=>a.name.localeCompare(b.name,'ar')) 
-               : [...S.students].sort((a,b)=>((b.score||0)+(b.stars||0)*2)-((a.score||0)+(a.stars||0)*2));
-  
+  const sorted = boardSort==='alpha' 
+    ? [...S.students].sort((a,b) => a.name.localeCompare(b.name,'ar')) 
+    : [...S.students].sort((a,b) => ((b.score||0)+(b.stars||0)*2) - ((a.score||0)+(a.stars||0)*2));
+               
   document.getElementById('board-list').innerHTML = sorted.map((st,i) => {
     const isMe = isStudentMode && st.id === loggedInStudentId;
-    const rank = boardSort==='points' ? (i+1) : '-';
     return `
       <div class="list-row" style="${isMe?'border-color:var(--gold); background:var(--gold-pale);':''}">
         <div class="list-content">
-          <div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">${rank}</div>
+          <div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">
+            ${boardSort==='points' ? (i+1) : '-'}
+          </div>
           <div>
             <div style="font-weight:700; font-size:14px;">${st.name} ${isMe?'(أنتِ)':''}</div>
             <div style="font-size:12px; color:var(--text-muted);">إتقان: ${fmt(st.score)} | ⭐ ${st.stars||0}</div>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
 // ══════════════════════════════════════════════════════════
-// 8. GOOGLE SHEETS
+// 8. GOOGLE SHEETS CLOUD SYNC
 // ══════════════════════════════════════════════════════════
-function saveSheetCfg() {
-  S.sheetUrl = document.getElementById('sheet-url').value.trim();
-  S.teacherCode = document.getElementById('teacher-code').value.trim();
-  saveState(); toast('✅ تم حفظ إعدادات الربط');
-}
-
-function copyGsCode() {
-  navigator.clipboard.writeText(GS_CODE).then(()=>toast('✅ تم النسخ'));
-}
-
 async function sheetReq(action) {
-  if(!S.sheetUrl || !S.teacherCode) { toast('⚠️ أدخلي الرابط والرمز'); return null; }
+  if(!S.sheetUrl || !S.teacherCode) { 
+    toast('⚠️ إعدادات الربط غير مكتملة'); 
+    return null; 
+  }
+  
   setSyncDot('sync');
   try {
-    const res = await fetch(S.sheetUrl, { method: 'POST', body: JSON.stringify({action, code: S.teacherCode, payload: JSON.stringify(S)})});
+    const res = await fetch(S.sheetUrl, { 
+      method: 'POST', 
+      body: JSON.stringify({
+        action, 
+        code: S.teacherCode, 
+        payload: JSON.stringify(S)
+      })
+    });
     return await res.json();
-  } catch(e) { setSyncDot('err'); return null; }
+  } catch(e) { 
+    setSyncDot('err'); 
+    return null; 
+  }
 }
 
 async function syncToSheet() {
   if(isStudentMode) return; 
+  
   const r = await sheetReq('save');
-  if(r?.ok) { setSyncDot('ok'); toast('☁️ تمت المزامنة بنجاح'); }
-  else { setSyncDot('err'); toast('❌ فشل الاتصال بقاعدة البيانات'); }
-}
-
-async function testSheet() {
-  const r = await sheetReq('ping');
-  if(r?.ok) { setSyncDot('ok'); toast('✅ الاتصال يعمل بنجاح!'); }
-  else { setSyncDot('err'); toast('⚠️ فشل اختبار الاتصال'); }
-}
-
-async function loadFromSheet(force = false) {
-  const r = await sheetReq('load');
-  if(r?.ok && r.payload) {
-    S = JSON.parse(r.payload);
-    saveState(); initSetup(); toast('✅ تم استرجاع البيانات!');
-    if(isStudentMode) navigate('portal');
+  if(r?.ok) { 
+    setSyncDot('ok'); 
+    toast('☁️ تمت المزامنة بنجاح'); 
+  } else { 
+    setSyncDot('err'); 
+    toast('❌ فشل الاتصال بقاعدة البيانات'); 
   }
 }
 
@@ -1480,17 +2735,27 @@ async function loadFromSheet(force = false) {
   const sP = p.get('s'), uP = p.get('u'), cP = p.get('c');
   
   if(sP && uP && cP) {
-    isStudentMode = true; loggedInStudentId = parseInt(sP);
+    isStudentMode = true; 
+    loggedInStudentId = parseInt(sP);
     document.body.classList.add('student-mode');
-    try { S.sheetUrl = atob(uP); S.teacherCode = atob(cP); } catch(e){}
+    
+    try { 
+      S.sheetUrl = atob(uP); 
+      S.teacherCode = atob(cP); 
+    } catch(e){}
+    
     toast('جارٍ الاتصال بالمنصة...');
-    sheetReq('load').then(r => {
-      if(r?.ok && r.payload) S = JSON.parse(r.payload);
-      navigate('portal');
+    
+    sheetReq('load').then(r => { 
+      if(r?.ok && r.payload) {
+        S = JSON.parse(r.payload); 
+      }
+      navigate('portal'); 
     });
+    
   } else {
-    loadState();
-    initSetup();
+    loadState(); 
+    initSetup(); 
     navigate('setup');
   }
 })();
