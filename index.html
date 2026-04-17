@@ -737,7 +737,7 @@ select.form-control {
   border: 2px solid;
   text-align: center; 
   font-weight: 800; 
-  min-width: 130px; 
+  min-width: 140px; 
   display: flex; 
   flex-direction: column; 
   align-items: center;
@@ -1050,6 +1050,10 @@ select.form-control {
   padding-top: 16px;
 }
 
+/* Student mode specific styles */
+.student-mode .teacher-only { 
+  display: none !important; 
+}
 </style>
 </head>
 <body>
@@ -1120,7 +1124,7 @@ select.form-control {
       </div>
     </header>
 
-    <!-- ════ PAGE: SETUP (MERGED WITH SHEETS) ════ -->
+    <!-- ════ PAGE: SETUP ════ -->
     <div id="page-setup" class="page-wrapper active teacher-only">
       
       <div class="alert alert-info">
@@ -1418,10 +1422,22 @@ select.form-control {
                     <input type="number" id="ay3" class="form-control" placeholder="آية" style="width:80px;">
                     <input type="text" id="kw3" class="form-control" placeholder="الكلمة">
                   </div>
-                  <button class="btn btn-deduct d-warn" onclick="deduct(2,'خطأ تشكيل','ay3','kw3')">
+                  <button class="btn btn-deduct d-warn" onclick="deduct(2,'تنبيه تشكيل','ay3','kw3')">
                     <span class="d-pt">-2</span><span class="d-lb">تنبيه تشكيل</span>
                   </button>
                 </div>
+                
+                <!-- زر ردة التشكيل المطلوب -->
+                <div class="deduct-grid">
+                  <div class="deduct-inputs">
+                    <input type="number" id="ay4" class="form-control" placeholder="آية" style="width:80px;">
+                    <input type="text" id="kw4" class="form-control" placeholder="الكلمة">
+                  </div>
+                  <button class="btn btn-deduct d-err" onclick="deduct(4,'ردة تشكيل','ay4','kw4')">
+                    <span class="d-pt">-4</span><span class="d-lb">ردة تشكيل</span>
+                  </button>
+                </div>
+                
                 <div class="deduct-grid">
                   <div class="deduct-inputs">
                     <input type="text" id="kw5" class="form-control" placeholder="ملاحظة المتردد">
@@ -1430,6 +1446,17 @@ select.form-control {
                     <span class="d-pt">-0.5</span><span class="d-lb">تردد</span>
                   </button>
                 </div>
+                
+                <!-- زر التميز -->
+                <div class="deduct-grid">
+                  <div class="deduct-inputs">
+                    <input type="text" id="kw6" class="form-control" placeholder="سبب التميز (اختياري)">
+                  </div>
+                  <button class="btn btn-deduct d-pos" onclick="deduct(-2,'نجمة تميز','','kw6')">
+                    <span class="d-pt">+2</span><span class="d-lb">نجمة تميز</span>
+                  </button>
+                </div>
+                
               </div>
             </div>
             
@@ -1459,6 +1486,11 @@ select.form-control {
             <option value="">— اختاري الطالبة —</option>
           </select>
         </div>
+      </div>
+
+      <!-- تنبيه يعرض للطالبة للترحيب وحالة الاتصال -->
+      <div class="alert alert-info" id="student-alert" style="display:none; font-size:14px; font-weight:700;">
+        أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟
       </div>
 
       <div id="portal-body" style="display:none;">
@@ -1592,6 +1624,9 @@ select.form-control {
   </div>
 </div>
 
+<!-- ════ HIDDEN ELEMENT FOR COPYING ════ -->
+<textarea id="copy-helper" style="position:fixed; left:-9999px; top:-9999px; opacity:0;"></textarea>
+
 <script>
 // ══════════════════════════════════════════════════════════
 // 1. STATE MANAGEMENT & MOCK DATA
@@ -1642,7 +1677,7 @@ let S = {
         total: 2, 
         sessions: [
           {date: strB, ts: Date.now() - 300000, att: 'unexcused', rev: 'none', revR: '', revG: '', score: null, faces: 0, from: '-', to: '-', errors: [], star: false, ok: false, grade: '-'},
-          {date: strY, ts: Date.now() - 200000, att: 'present', rev: 'none', revR: '', revG: '', score: 88, faces: 2, from: '1', to: '2', errors: [{desc: 'حفظ وتصحيح', pts: -2}, {desc: 'تردد', pts: -0.5}], star: false, ok: true, grade: 'متوسط'}
+          {date: strY, ts: Date.now() - 200000, att: 'present', rev: 'none', revR: '', revG: '', score: 88, faces: 2, from: '1', to: '2', errors: [{desc: 'ردة تشكيل', pts: -4}, {desc: 'تردد', pts: -0.5}], star: false, ok: true, grade: 'متوسط'}
         ]
       },
       { 
@@ -2172,9 +2207,13 @@ function copyStudentLink(id) {
   }
   
   const base = window.location.href.split('?')[0];
-  const link = `${base}?s=${id}&u=${btoa(S.sheetUrl)}&c=${btoa(S.teacherCode)}`;
   
-  // Use a fallback text area for universal mobile support
+  // تشفير آمن جداً للروابط لضمان عملها على الواتساب وكل المتصفحات
+  const uEnc = encodeURIComponent(btoa(S.sheetUrl));
+  const cEnc = encodeURIComponent(btoa(S.teacherCode));
+  
+  const link = `${base}?s=${id}&u=${uEnc}&c=${cEnc}`;
+  
   const textarea = document.createElement('textarea');
   textarea.value = link;
   textarea.style.position = 'fixed';
@@ -2728,32 +2767,57 @@ async function syncToSheet() {
 }
 
 // ══════════════════════════════════════════════════════════
-// INIT
+// INIT & MAGIC LINK PARSER
 // ══════════════════════════════════════════════════════════
 (function init() {
   const p = new URLSearchParams(window.location.search);
   const sP = p.get('s'), uP = p.get('u'), cP = p.get('c');
   
   if(sP && uP && cP) {
+    // 🎓 Student Mode Boot
     isStudentMode = true; 
     loggedInStudentId = parseInt(sP);
     document.body.classList.add('student-mode');
     
     try { 
-      S.sheetUrl = atob(uP); 
-      S.teacherCode = atob(cP); 
-    } catch(e){}
+      // Safe decoding of URL parameters
+      S.sheetUrl = atob(decodeURIComponent(uP)); 
+      S.teacherCode = atob(decodeURIComponent(cP)); 
+    } catch(e) {
+      try {
+        // Fallback for older links without encodeURIComponent
+        S.sheetUrl = atob(uP); 
+        S.teacherCode = atob(cP);
+      } catch(ex) {}
+    }
     
-    toast('جارٍ الاتصال بالمنصة...');
+    // Load UI immediately
+    navigate('portal'); 
+    
+    // Custom loading state for student
+    const alertEl = document.getElementById('student-alert');
+    document.getElementById('portal-body').style.display = 'none';
+    alertEl.innerHTML = 'جاري الاتصال بالمنصة لجلب بياناتك... ⏳';
     
     sheetReq('load').then(r => { 
       if(r?.ok && r.payload) {
         S = JSON.parse(r.payload); 
+        const stExists = S.students.find(s => s.id === loggedInStudentId);
+        if(stExists) {
+            alertEl.innerHTML = 'أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟 (تحديث مباشر)';
+            loadPortal(); 
+        } else {
+            alertEl.innerHTML = '❌ عذراً، لم يتم العثور على بياناتك. قد تكون المعلمة حذفت السجل.';
+        }
+      } else {
+        alertEl.innerHTML = '❌ عذراً، لم نتمكن من جلب بياناتك من الخادم. تأكدي من تحديث المعلمة لبياناتها.';
       }
-      navigate('portal'); 
+    }).catch(err => {
+        alertEl.innerHTML = '❌ خطأ في الاتصال بالخادم.';
     });
     
   } else {
+    // 👩‍🏫 Teacher Mode Boot
     loadState(); 
     initSetup(); 
     navigate('setup');
