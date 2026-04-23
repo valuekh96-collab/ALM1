@@ -190,7 +190,7 @@ input, select, textarea { font-family: 'Cairo', sans-serif; max-width: 100%; }
 [data-theme="dark"] .btn-icon:hover { color: var(--gold); }
 
 /* ══ PAGE STRUCTURE ══ */
-.page-wrapper { padding: 32px; max-width: 1100px; margin: 0 auto; width: 100%; display: none; animation: fadeUp 0.4s ease; overflow-x: hidden; }
+.page-wrapper { padding: 32px; max-width: 1200px; margin: 0 auto; width: 100%; display: none; animation: fadeUp 0.4s ease; overflow-x: hidden; }
 .page-wrapper.active { display: block; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -287,7 +287,45 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 }
 [data-theme="dark"] .score-number { background: linear-gradient(135deg, var(--gold-lt), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
 
+/* Dashboard Charts */
+.chart-wrapper { position: relative; height: 320px; width: 100%; margin-top: 20px; }
+
+/* Toast Notifications */
+#toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--text-main); color: var(--bg-surface); padding: 14px 28px;
+  border-radius: 30px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow-lg);
+  opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; pointer-events: none;
+}
+#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════════════
+   SMART SPLIT LAYOUT (هندسة واجهة جلسة التسميع)
+══════════════════════════════════════════════════════════════════ */
+.session-layout {
+  display: grid;
+  gap: 24px;
+  align-items: start;
+}
+.session-controls {
+  position: sticky;
+  top: 90px; 
+  max-height: calc(100vh - 110px);
+  overflow-y: auto; 
+  padding-left: 5px; 
+}
+.session-controls::-webkit-scrollbar { width: 4px; }
+
+@media (min-width: 992px) {
+  .session-layout {
+    grid-template-columns: 1.3fr 1fr; /* المصحف مساحة أكبر */
+  }
+}
+
 /* أزرار الخصم السريع الموحدة */
+.unified-deduct-container-wrapper {
+  transition: all var(--trans);
+}
 .unified-deduct-container {
   background: var(--bg-elevated); border-radius: var(--r-md); padding: 20px;
   border: 1px solid var(--border-strong); margin-bottom: 24px;
@@ -309,27 +347,33 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 .d-3 { color: #C0392B; border-color: #C0392B; } .d-3:hover { background: var(--danger-lt); }
 .d-4 { color: #8E44AD; border-color: #8E44AD; } .d-4:hover { background: rgba(142,68,173,0.1); }
 
-/* Dashboard Charts */
-.chart-wrapper { position: relative; height: 320px; width: 100%; margin-top: 20px; }
-
-/* Toast Notifications */
-#toast {
-  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
-  background: var(--text-main); color: var(--bg-surface); padding: 14px 28px;
-  border-radius: 30px; font-size: 14px; font-weight: 700; box-shadow: var(--shadow-lg);
-  opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; pointer-events: none;
-}
-#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
 /* ══════════════════════════════════════════════════════════════════
    RESPONSIVE & MOBILE DESIGN
 ══════════════════════════════════════════════════════════════════ */
 .mobile-header-btn { display: none; }
 .bottom-nav { display: none; }
 
-@media (max-width: 992px) {
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .grid-3 { grid-template-columns: 1fr; }
+@media (max-width: 991px) {
+  .session-layout { grid-template-columns: 1fr; }
+  .session-controls { position: relative; top: 0; max-height: none; overflow-y: visible; }
+  
+  /* اللوحة العائمة السفلية في الموبايل */
+  .unified-deduct-container-wrapper {
+    position: sticky;
+    bottom: 60px; /* مسافة فوق شريط التنقل السفلي */
+    z-index: 150;
+    background: var(--bg-app);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: -10px -10px 16px -10px;
+    border-radius: var(--r-md);
+    box-shadow: 0 -10px 20px rgba(0,0,0,0.15);
+  }
+  [data-theme="dark"] .unified-deduct-container-wrapper {
+    box-shadow: 0 -10px 20px rgba(0,0,0,0.6);
+  }
+  .unified-inputs { grid-template-columns: 1fr; }
+  .btn-d { width: 100%; }
 }
 
 @media (max-width: 768px) {
@@ -349,7 +393,7 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
   .bottom-nav {
     display: flex; position: fixed; bottom: 0; left: 0; right: 0;
     background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-top: 1px solid var(--border);
-    z-index: 150; padding: 8px 12px; padding-bottom: max(8px, env(safe-area-inset-bottom));
+    z-index: 180; padding: 8px 12px; padding-bottom: max(8px, env(safe-area-inset-bottom));
     justify-content: space-between; box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
   }
   [data-theme="dark"] .bottom-nav { background: rgba(28, 23, 30, 0.9); }
@@ -362,8 +406,6 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
   .b-nav-item.active { color: var(--primary); }
   [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
   .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
-  
-  .unified-inputs { grid-template-columns: 1fr; }
   
   /* Quran font smaller on mobile */
   .quran-page { font-size: 24px !important; padding: 15px !important; }
@@ -750,130 +792,143 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
       </div>
 
       <div id="sess-body" style="display:none;">
-        <div id="evaluation-wrap">
+        <div id="evaluation-wrap" class="session-layout">
           
-          <!-- المراجعة المستقلة -->
-          <div class="card">
-            <h3 class="card-title">سجل المراجعة المستقل 🔄</h3>
-            <div class="grid-3">
-              <div class="form-group">
-                <label>نوع المراجعة</label>
-                <select class="form-control" id="rev-type">
-                  <option value="none">لا يوجد مراجعة</option>
-                  <option value="done">تمت المراجعة</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>النطاق المسموع</label>
-                <input type="text" class="form-control" id="rev-range" placeholder="مثال: البقرة 1-5">
-              </div>
-              <div class="form-group">
-                <label>تقييم المراجعة</label>
-                <select class="form-control" id="rev-grade">
-                  <option value="ممتاز">🌟 ممتاز</option>
-                  <option value="جيد جداً">✅ جيد جداً</option>
-                  <option value="جيد">👍 جيد</option>
-                  <option value="إعادة">🔁 يحتاج إعادة</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- ════ المصحف التفاعلي ════ -->
-          <div class="card" style="border-color: var(--gold); padding: 0; overflow: hidden; margin-bottom: 24px;">
-            <div style="background: var(--bg-elevated); padding: 12px; border-bottom: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-              
-              <button class="btn btn-outline btn-sm" onclick="changePage(1)">▶ السابق</button>
-
-              <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;">
-                <select id="surah-select" class="form-control" style="width: 130px; padding: 5px; font-size: 13px;" onchange="goToSurah()"></select>
-                <select id="juz-select" class="form-control" style="width: 90px; padding: 5px; font-size: 13px;" onchange="goToJuz()">
-                  <option value="">الجزء...</option>
-                </select>
-                <span style="font-weight: bold; color: var(--text-muted);">ص:</span>
-                <input type="number" id="quran-page-input" class="form-control" style="width: 60px; padding: 5px; text-align: center;" min="1" max="604" value="1" onchange="loadCurrentPage()">
-              </div>
-
-              <button class="btn btn-outline btn-sm" onclick="changePage(-1)">التالي ◀</button>
-            </div>
+          <!-- COLUMN 1: QURAN & RANGE -->
+          <div class="session-quran">
             
-            <div id="quran-page-container" class="quran-page">
-               <div style="text-align:center; color:var(--text-muted); margin-top: 50px;">
-                  اختر سورة أو رقم صفحة للبدء...
-               </div>
-            </div>
+            <!-- ════ المصحف التفاعلي ════ -->
+            <div class="card" style="border-color: var(--gold); padding: 0; overflow: hidden; margin-bottom: 24px;">
+              <div style="background: var(--bg-elevated); padding: 12px; border-bottom: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                
+                <button class="btn btn-outline btn-sm" onclick="changePage(1)">▶ السابق</button>
 
-            <!-- أزرار تعيين نقاط الحفظ -->
-            <div style="background: var(--bg-elevated); padding: 12px; border-top: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
-               <button class="btn btn-outline btn-sm" style="color:var(--success); border-color:var(--success);" onclick="setQuranPoint('start')">📍 تعيين كبداية الحفظ</button>
-               <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="setQuranPoint('end')">📍 تعيين كنهاية الحفظ</button>
-            </div>
-          </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;">
+                  <select id="surah-select" class="form-control" style="width: 130px; padding: 5px; font-size: 13px;" onchange="goToSurah()"></select>
+                  <select id="juz-select" class="form-control" style="width: 90px; padding: 5px; font-size: 13px;" onchange="goToJuz()">
+                    <option value="">الجزء...</option>
+                  </select>
+                  <span style="font-weight: bold; color: var(--text-muted);">ص:</span>
+                  <input type="number" id="quran-page-input" class="form-control" style="width: 60px; padding: 5px; text-align: center;" min="1" max="604" value="1" onchange="loadCurrentPage()">
+                </div>
 
-          <!-- تقييم الحفظ الجديد وتوحيد أزرار الخصم -->
-          <div class="card">
-            <div class="card-header"><h3 class="card-title">تقييم الحفظ الجديد والملاحظات</h3></div>
-            
-            <div class="grid-3" style="margin-bottom:24px;">
-              <div class="form-group">
-                <label>الأوجه المسموعة</label>
-                <input type="number" class="form-control" id="faces" oninput="updateBadge()">
-              </div>
-              <div class="form-group">
-                <label>من (السورة/الآية)</label>
-                <input type="text" class="form-control" id="from-a">
-              </div>
-              <div class="form-group">
-                <label>إلى (السورة/الآية)</label>
-                <input type="text" class="form-control" id="to-a">
-              </div>
-            </div>
-
-            <div class="grid-2">
-              <div style="background:var(--bg-app); border-radius:var(--r-md); padding:24px; text-align:center; border:1px solid var(--border);">
-                <h4 style="font-size:14px; color:var(--text-muted); margin-bottom:10px;">الدرجة الحية</h4>
-                <div class="score-number" id="live-score">100</div>
-                <div id="grade-badge"></div>
-                <div id="sess-badge" style="margin-top:12px;"></div>
+                <button class="btn btn-outline btn-sm" onclick="changePage(-1)">التالي ◀</button>
               </div>
               
-              <!-- صندوق أزرار الخصم الموحد (Unified Deduct Container) -->
-              <div class="unified-deduct-container">
-                <h4 style="font-size:14px; margin-bottom:12px; color:var(--primary);">أدخلي الخطأ ثم اضغطي على زر الخصم:</h4>
+              <div id="quran-page-container" class="quran-page">
+                 <div style="text-align:center; color:var(--text-muted); margin-top: 50px;">
+                    اختر سورة أو رقم صفحة للبدء...
+                 </div>
+              </div>
+
+              <!-- أزرار تعيين نقاط الحفظ -->
+              <div style="background: var(--bg-elevated); padding: 12px; border-top: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                 <button class="btn btn-outline btn-sm" style="color:var(--success); border-color:var(--success);" onclick="setQuranPoint('start')">📍 كبداية الحفظ</button>
+                 <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="setQuranPoint('end')">📍 كنهاية الحفظ</button>
+              </div>
+            </div>
+
+            <!-- نطاق التسميع الجديد -->
+            <div class="card" style="padding: 24px; margin-bottom: 24px;">
+              <h4 style="font-size:15px; margin-bottom:16px; color:var(--primary);">نطاق التسميع</h4>
+              <div class="grid-3">
+                <div class="form-group" style="margin:0;">
+                  <label>الأوجه المسموعة</label>
+                  <input type="number" class="form-control" id="faces" oninput="updateBadge()">
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label>من</label>
+                  <input type="text" class="form-control" id="from-a">
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label>إلى</label>
+                  <input type="text" class="form-control" id="to-a">
+                </div>
+              </div>
+            </div>
+            
+          </div>
+
+          <!-- COLUMN 2: CONTROLS -->
+          <div class="session-controls">
+            
+            <div class="unified-deduct-container-wrapper">
+              <!-- الدرجة الحية المدمجة -->
+              <div style="background:var(--bg-surface); border-radius:var(--r-md); padding:16px; text-align:center; border:2px solid var(--gold); margin-bottom:16px; box-shadow: var(--shadow-sm); display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
+                   <div id="grade-badge"></div>
+                   <div id="sess-badge"></div>
+                </div>
+                <div class="score-number" id="live-score" style="font-size:48px; margin:0;">100</div>
+              </div>
+              
+              <!-- صندوق أزرار الخصم الموحد -->
+              <div class="unified-deduct-container" style="margin-bottom:0; padding:16px;">
                 <div class="unified-inputs">
                   <div class="form-group" style="margin:0;">
-                    <label>رقم الآية (اختياري)</label>
+                    <label>الآية</label>
                     <input type="number" id="u-ayah" class="form-control" placeholder="رقم">
                   </div>
                   <div class="form-group" style="margin:0;">
-                    <label>الكلمات الخاطئة / الملاحظة</label>
-                    <input type="text" id="u-word" class="form-control" placeholder="الكلمة أو الملاحظة">
+                    <label>الكلمة/الملاحظة</label>
+                    <input type="text" id="u-word" class="form-control" placeholder="الملاحظة">
                   </div>
                 </div>
                 
                 <div class="unified-buttons">
-                  <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه حفظ (-1)</button>
-                  <button class="btn-d d-2" onclick="triggerDeduct(2, 'حفظ وتصحيح')">❌ حفظ وتصحيح (-2)</button>
-                  <button class="btn-d d-1" onclick="triggerDeduct(2, 'خطأ تشكيل')">◌ خطأ تشكيل (-2)</button>
-                  <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة تشكيل (-4)</button>
+                  <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه (-1)</button>
+                  <button class="btn-d d-2" onclick="triggerDeduct(2, 'حفظ وتصحيح')">❌ حفظ (-2)</button>
+                  <button class="btn-d d-1" onclick="triggerDeduct(2, 'خطأ تشكيل')">◌ تشكيل (-2)</button>
+                  <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة (-4)</button>
                   <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'تردد')">⋯ تردد (-0.5)</button>
                 </div>
               </div>
             </div>
             
-            <!-- سجل الخصومات الحي مع خيارات التعديل والحذف -->
-            <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--border);">
-              <h4 style="font-size:14px; margin-bottom:12px;">سجل الملاحظات لهذه الجلسة:</h4>
-              <div id="err-log" style="font-size:13px; background:var(--bg-app); padding:12px; border-radius:var(--r-sm);">
+            <!-- سجل المراجعة القابل للطي -->
+            <div class="card" style="padding: 16px; margin-bottom: 16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                 <h4 style="font-size:14px; margin:0; color:var(--primary);">سجل المراجعة 🔄 (اضغطي للفتح)</h4>
+                 <span style="color:var(--gold); font-size:12px;">▼</span>
+              </div>
+              <div style="display:none; margin-top:16px;">
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label>حالة المراجعة</label>
+                    <select class="form-control" id="rev-type">
+                      <option value="none">لا يوجد مراجعة</option>
+                      <option value="done">تمت المراجعة</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>التقييم</label>
+                    <select class="form-control" id="rev-grade">
+                      <option value="ممتاز">🌟 ممتاز</option>
+                      <option value="جيد جداً">✅ جيد جداً</option>
+                      <option value="جيد">👍 جيد</option>
+                      <option value="إعادة">🔁 يحتاج إعادة</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label>النطاق المسموع (اختياري)</label>
+                  <input type="text" class="form-control" id="rev-range" placeholder="مثال: البقرة 1-5">
+                </div>
+              </div>
+            </div>
+
+            <!-- سجل الملاحظات الحي مع خيارات التعديل والحذف -->
+            <div class="card" style="padding: 16px; margin-bottom: 16px;">
+              <h4 style="font-size:14px; margin-bottom:12px; color:var(--primary);">سجل الملاحظات لهذه الجلسة:</h4>
+              <div id="err-log" style="font-size:13px; background:var(--bg-app); padding:12px; border-radius:var(--r-sm); max-height:200px; overflow-y:auto;">
                 <!-- سيتم حقن الأخطاء هنا -->
               </div>
             </div>
-          </div>
-        </div>
 
-        <div class="grid-2">
-          <button class="btn btn-primary btn-block" onclick="saveSession()">💾 اعتماد وحفظ الجلسة</button>
-          <button class="btn btn-outline btn-block" id="btn-copy-rep" onclick="copyReport()">📋 نسخ التقرير للطالبة</button>
+            <button class="btn btn-primary btn-block" style="margin-bottom:12px; padding:16px; font-size:16px;" onclick="saveSession()">💾 اعتماد وحفظ الجلسة</button>
+            <button class="btn btn-outline btn-block" id="btn-copy-rep" onclick="copyReport()">📋 نسخ التقرير للطالبة</button>
+            
+          </div>
         </div>
       </div>
     </div>
@@ -1174,7 +1229,7 @@ function json(obj) {
 
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v5'); 
+    const d = localStorage.getItem('alm_pro_v6'); 
     if(d) S = JSON.parse(d); 
   } catch(e) {} 
 }
@@ -1182,7 +1237,7 @@ function loadState() {
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v5', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_v6', JSON.stringify(S)); 
     setSyncDot('local'); 
   } catch(e) {} 
 }
@@ -1623,7 +1678,8 @@ function startSession() {
 
 function toggleSessBody() {
   const att = document.getElementById('sess-att').value;
-  document.getElementById('evaluation-wrap').style.display = att === 'present' ? 'block' : 'none';
+  const wrap = document.getElementById('evaluation-wrap');
+  if (wrap) wrap.style.display = att === 'present' ? '' : 'none';
 }
 
 // دالة الخصم الموحدة تعتمد على الحقول العلوية
@@ -1682,7 +1738,7 @@ function editErr(id) {
   const newAyah = prompt('رقم الآية (اتركيه فارغاً للحذف):', currentAyah);
   if (newAyah === null) return;
   
-  const newWord = prompt('الكلمة الخاطئة / الملاحظة (اتركيه فارغاً للحذف):', currentWord);
+  const newWord = prompt('الكلمات الخاطئة / الملاحظة (اتركيه فارغاً للحذف):', currentWord);
   if (newWord === null) return;
   
   let newDesc = [];
@@ -2271,7 +2327,7 @@ async function loadCurrentPage() {
     }
 }
 
-// دالة التحديد المتعدد للكلمات
+// دالة التحديد المتعدد للكلمات بدون القفز المستمر
 function toggleWordSelection(ayah, el) {
     el.classList.toggle('selected');
     const selectedEls = document.querySelectorAll('.q-word.selected');
@@ -2283,14 +2339,6 @@ function toggleWordSelection(ayah, el) {
     
     document.getElementById('u-ayah').value = selectedEls.length > 0 ? ayah : '';
     document.getElementById('u-word').value = words.join(' ');
-    
-    if(selectedEls.length > 0) {
-        const target = document.querySelector('.unified-deduct-container');
-        if (target && selectedEls.length === 1) { // التمرير في الكلمة الأولى فقط
-            const y = target.getBoundingClientRect().top + window.scrollY - 100;
-            window.scrollTo({top: y, behavior: 'smooth'});
-        }
-    }
 }
 
 function ayahAr(n) { return n.replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[d]); }
