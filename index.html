@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>منصة ألف لام ميم الأكاديمية</title>
 
-<!-- استدعاء الخطوط العربية الفاخرة -->
+<!-- استدعاء الخطوط العربية الفاخرة والخط القرآني -->
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
 <!-- استدعاء مكتبة الرسوم البيانية -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -396,6 +397,55 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 
 /* Student mode specific styles */
 .student-mode .teacher-only { display: none !important; }
+
+/* ════ المصحف التفاعلي ════ */
+.quran-page {
+  font-family: 'Amiri Quran', serif;
+  font-size: 28px;
+  line-height: 2.3;
+  text-align: justify;
+  text-align-last: center;
+  direction: rtl;
+  padding: 30px;
+  background: #FDFBF7;
+  border: 1px solid var(--gold-lt);
+  border-radius: var(--r-md);
+  min-height: 500px;
+  user-select: none; /* لمنع التحديد العشوائي للنص أثناء النقر */
+}
+[data-theme="dark"] .quran-page {
+  background: #1A1714;
+  border-color: var(--gold-dk);
+}
+.q-line {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.q-word {
+  cursor: pointer;
+  padding: 0 3px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.q-word:hover {
+  background: rgba(212, 175, 55, 0.3);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+[data-theme="dark"] .q-word:hover { color: var(--gold); }
+.q-word.selected {
+  background: var(--danger-lt);
+  color: var(--danger);
+  font-weight: bold;
+  box-shadow: 0 0 0 2px var(--danger);
+}
+.q-ayah-end {
+  color: var(--gold-dk);
+  font-size: 20px;
+  margin: 0 4px;
+}
 </style>
 </head>
 <body>
@@ -551,7 +601,7 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
               <input type="text" class="form-control" id="sheet-url" placeholder="https://script.google.com/...">
             </div>
             <div class="form-group">
-              <label>رمزك السري (لحماية وتخصيص ملفك)</label>
+              <label>رمزك السري (كلمة المرور الخاصة بكِ)</label>
               <input type="text" class="form-control" id="teacher-code" placeholder="مثال: fatima2025" autocomplete="off">
             </div>
             
@@ -718,6 +768,33 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
                   <option value="إعادة">🔁 يحتاج إعادة</option>
                 </select>
               </div>
+            </div>
+          </div>
+
+          <!-- ════ المصحف التفاعلي ════ -->
+          <div class="card" style="border-color: var(--gold); padding: 0; overflow: hidden; margin-bottom: 24px;">
+            <div style="background: var(--bg-elevated); padding: 12px; border-bottom: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+              
+              <button class="btn btn-outline btn-sm" onclick="changePage(1)">▶ السابق</button>
+
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <select id="surah-select" class="form-control" style="width: 150px; padding: 5px; font-size: 13px;" onchange="goToSurah()"></select>
+                
+                <select id="juz-select" class="form-control" style="width: 100px; padding: 5px; font-size: 13px;" onchange="goToJuz()">
+                  <option value="">الجزء...</option>
+                </select>
+
+                <span style="font-weight: bold; color: var(--text-muted);">صفحة:</span>
+                <input type="number" id="quran-page-input" class="form-control" style="width: 65px; padding: 5px; text-align: center;" min="1" max="604" value="1" onchange="loadCurrentPage()">
+              </div>
+
+              <button class="btn btn-outline btn-sm" onclick="changePage(-1)">التالي ◀</button>
+            </div>
+            
+            <div id="quran-page-container" class="quran-page">
+               <div style="text-align:center; color:var(--text-muted); margin-top: 50px;">
+                  اختر سورة أو رقم صفحة للبدء...
+               </div>
             </div>
           </div>
 
@@ -945,80 +1022,26 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 
 <script>
 // ══════════════════════════════════════════════════════════
-// 1. STATE MANAGEMENT & MOCK DATA
+// 1. STATE MANAGEMENT (NO MOCK DATA)
 // ══════════════════════════════════════════════════════════
-const dToday = new Date();
-const dYest = new Date(dToday); 
-dYest.setDate(dYest.getDate() - 1);
-const dBefore = new Date(dToday); 
-dBefore.setDate(dBefore.getDate() - 3);
-
-const strT = dToday.toLocaleDateString('ar-EG');
-const strY = dYest.toLocaleDateString('ar-EG');
-const strB = dBefore.toLocaleDateString('ar-EG');
-
 let S = {
   course: { 
-    teacher: 'أ. فاطمة', 
-    cname: 'الزهراوين', 
+    teacher: '', 
+    cname: '', 
     pages: 200, 
     sdate: new Date().toISOString().split('T')[0], 
     weeks: 10, 
     studyDays: 5 
   },
-  students: [
-      { 
-        id: 1, 
-        name: 'عائشة محمد', 
-        score: 100, 
-        stars: 3, 
-        customFaces: null, 
-        days: [1,1,1,0,0], 
-        ok: 3, 
-        total: 3, 
-        sessions: [
-          {date: strB, ts: Date.now() - 300000, att: 'present', rev: 'minor', revR: 'البقرة 1-10', revG: 'ممتاز', score: 100, faces: 5, from: '1', to: '5', errors: [], star: true, ok: true, grade: 'ممتاز'},
-          {date: strY, ts: Date.now() - 200000, att: 'present', rev: 'none', revR: '', revG: '', score: 98, faces: 5, from: '6', to: '10', errors: [{desc: 'تنبيه تشكيل', pts: -2}], star: false, ok: true, grade: 'ممتاز'},
-          {date: strT, ts: Date.now() - 100000, att: 'present', rev: 'both', revR: 'البقرة 1-20', revG: 'جيد جداً', score: 100, faces: 6, from: '11', to: '16', errors: [], star: true, ok: true, grade: 'ممتاز'}
-        ]
-      },
-      { 
-        id: 2, 
-        name: 'مريم خالد', 
-        score: 88, 
-        stars: 0, 
-        customFaces: 50, 
-        days: [1,0,0,0,0], 
-        ok: 1, 
-        total: 2, 
-        sessions: [
-          {date: strB, ts: Date.now() - 300000, att: 'unexcused', rev: 'none', revR: '', revG: '', score: null, faces: 0, from: '-', to: '-', errors: [], star: false, ok: false, grade: '-'},
-          {date: strY, ts: Date.now() - 200000, att: 'present', rev: 'none', revR: '', revG: '', score: 88, faces: 2, from: '1', to: '2', errors: [{desc: 'حفظ وتصحيح', pts: -2}, {desc: 'ردة تشكيل', pts: -4}], star: false, ok: true, grade: 'متوسط'}
-        ]
-      },
-      { 
-        id: 3, 
-        name: 'سارة أحمد', 
-        score: 95, 
-        stars: 1, 
-        customFaces: null, 
-        days: [1,1,0,0,0], 
-        ok: 2, 
-        total: 2, 
-        sessions: [
-          {date: strB, ts: Date.now() - 300000, att: 'present', rev: 'major', revR: 'آل عمران 1-15', revG: 'ممتاز', score: 95, faces: 5, from: '20', to: '24', errors: [{desc: 'تنبيه حفظ', pts: -1}, {desc: 'تردد', pts: -0.5}], star: false, ok: true, grade: 'جيد جداً'},
-          {date: strY, ts: Date.now() - 200000, att: 'excused', rev: 'none', revR: '', revG: '', score: null, faces: 0, from: '-', to: '-', errors: [], star: false, ok: false, grade: '-'}
-        ]
-      }
-  ],
-  nextId: 4, 
+  students: [], // قائمة الطالبات الحقيقية
+  nextId: 1, 
   sheetUrl: '', 
   teacherCode: ''
 };
 
 let curSt = null;
 let sessScore = 100;
-let sessErrors = [];
+let sessErrors = []; // مصفوفة لتخزين الأخطاء وتعديلها
 let boardSort = 'points';
 let isStudentMode = false;
 let loggedInStudentId = null;
@@ -1140,17 +1163,15 @@ function json(obj) {
 
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_mock_test'); 
-    if(d) {
-        S = JSON.parse(d); 
-    }
-  } catch(e) { } 
+    const d = localStorage.getItem('alm_pro_final'); 
+    if(d) S = JSON.parse(d); 
+  } catch(e) {} 
 }
 
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_mock_test', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_final', JSON.stringify(S)); 
     setSyncDot('local'); 
   } catch(e) {} 
 }
@@ -1178,7 +1199,6 @@ function calcQuota(totalFaces, weeks, studyDays) {
   const maxDaily = rem > 0 ? baseDaily + 1 : baseDaily;
   
   const dailyText = baseDaily === maxDaily ? String(baseDaily) : `${baseDaily} إلى ${maxDaily}`;
-  
   return { weeklyFaces, sessionFaces, dailyText, totalFaces };
 }
 
@@ -1201,10 +1221,8 @@ function getActualDateStr(startDateStr, weekNum, dayIdx, totalStudyDays) {
 
 function calculateStreak(sessions) {
   if (!sessions || sessions.length === 0) return 0;
-  
   let streak = 0;
   const sorted = [...sessions].sort((a,b) => b.ts - a.ts);
-  
   for (let i = 0; i < sorted.length; i++) {
     if (sorted[i].att === 'present') {
       streak++;
@@ -1212,7 +1230,6 @@ function calculateStreak(sessions) {
       break; 
     }
   }
-  
   return streak;
 }
 
@@ -1260,7 +1277,6 @@ function navigate(pageId) {
 function toggleSidebar() {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('sb-overlay');
-  
   if (sb.style.transform === 'translateX(0px)') { 
     sb.style.transform = ''; 
     ov.classList.remove('active'); 
@@ -1273,10 +1289,8 @@ function toggleSidebar() {
 function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.getAttribute('data-theme') === 'dark';
-  
   html.setAttribute('data-theme', isDark ? 'light' : 'dark');
   localStorage.setItem('alm_theme', isDark ? 'light' : 'dark');
-  
   if(document.getElementById('page-dash').classList.contains('active')) {
     initDashboard();
   }
@@ -1598,6 +1612,7 @@ function startSession() {
   updateGradeDisp();
   
   document.getElementById('sess-body').style.display = 'block';
+  initQuranApp();
 }
 
 function toggleSessBody() {
@@ -1624,6 +1639,9 @@ function triggerDeduct(pts, label) {
   ayaInput.value = '';
   wordInput.value = '';
   
+  // إزالة التحديد من المصحف التفاعلي إذا كان موجوداً
+  document.querySelectorAll('.q-word').forEach(w => w.classList.remove('selected'));
+
   renderErrLog(); 
   updateGradeDisp();
 }
@@ -2152,6 +2170,110 @@ async function syncToSheet() {
     toast('❌ فشل الاتصال بقاعدة البيانات'); 
   }
 }
+
+// ══════════════════════════════════════════════════════════
+// 9. QURAN INTERACTIVE VIEWER (المصحف التفاعلي المتقدم)
+// ══════════════════════════════════════════════════════════
+let surahsData = [];
+
+async function initQuranApp() {
+    try {
+        const [sRes, jRes] = await Promise.all([
+            fetch('https://api.quran.com/api/v4/chapters?language=ar'),
+            fetch('https://api.quran.com/api/v4/juzs')
+        ]);
+        const sData = await sRes.json();
+        const jData = await jRes.json();
+        
+        surahsData = sData.chapters;
+        
+        document.getElementById('surah-select').innerHTML = surahsData.map(s => 
+            `<option value="${s.pages[0]}">سورة ${s.name_arabic}</option>`).join('');
+            
+        document.getElementById('juz-select').innerHTML = '<option value="">الجزء...</option>' + jData.juzs.map(j => 
+            `<option value="${j.first_page_number}">الجزء ${j.juz_number}</option>`).join('');
+            
+        loadCurrentPage();
+    } catch(e) { toast('❌ خطأ في تحميل بيانات المصحف'); }
+}
+
+function goToSurah() { 
+    document.getElementById('quran-page-input').value = document.getElementById('surah-select').value; 
+    loadCurrentPage(); 
+}
+
+function goToJuz() { 
+    document.getElementById('quran-page-input').value = document.getElementById('juz-select').value; 
+    loadCurrentPage(); 
+}
+
+function changePage(dir) {
+    let p = parseInt(document.getElementById('quran-page-input').value) - dir;
+    if(p >= 1 && p <= 604) { 
+        document.getElementById('quran-page-input').value = p; 
+        loadCurrentPage(); 
+    }
+}
+
+async function loadCurrentPage() {
+    const page = document.getElementById('quran-page-input').value;
+    const container = document.getElementById('quran-page-container');
+    const selectSurah = document.getElementById('surah-select');
+    
+    if(surahsData.length > 0) {
+        const currentSurah = [...surahsData].reverse().find(s => s.pages[0] <= page);
+        if(currentSurah) selectSurah.value = currentSurah.pages[0];
+    }
+
+    container.innerHTML = '<div style="text-align:center; margin-top:100px; color:var(--gold);">جارٍ جلب الصفحة... ⏳</div>';
+
+    try {
+        const res = await fetch(`https://api.quran.com/api/v4/verses/by_page/${page}?language=ar&words=true&word_fields=text_uthmani`);
+        const data = await res.json();
+        
+        let html = '';
+        let currentLine = -1;
+
+        data.verses.forEach(v => {
+            const ayahNum = v.verse_key.split(':')[1];
+            v.words.forEach(w => {
+                if(w.line_number !== currentLine) {
+                    if(currentLine !== -1) html += '</div>';
+                    html += '<div class="q-line">';
+                    currentLine = w.line_number;
+                }
+                
+                if(w.char_type_name === 'word') {
+                    html += `<span class="q-word" onclick="captureError('${w.text_uthmani}', '${ayahNum}', this)">${w.text_uthmani}</span>`;
+                } else if(w.char_type_name === 'end') {
+                    html += `<span class="q-ayah-end">﴿${ayahAr(ayahNum)}﴾</span>`;
+                }
+            });
+        });
+        if(currentLine !== -1) html += '</div>';
+        container.innerHTML = html;
+    } catch(err) {
+        container.innerHTML = '<div style="color:red; text-align:center; margin-top:50px;">فشل الاتصال بخادم القرآن.</div>';
+    }
+}
+
+function captureError(word, ayah, el) {
+    document.querySelectorAll('.q-word').forEach(w => w.classList.remove('selected'));
+    el.classList.add('selected');
+
+    document.getElementById('u-ayah').value = ayah;
+    document.getElementById('u-word').value = word;
+
+    toast(`📍 تم تحديد: ${word} (آية ${ayah})`);
+    
+    const target = document.querySelector('.unified-deduct-container');
+    if (target) {
+        const y = target.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({top: y, behavior: 'smooth'});
+    }
+}
+
+function ayahAr(n) { return n.replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[d]); }
 
 // ══════════════════════════════════════════════════════════
 // INIT & MAGIC LINK PARSER
