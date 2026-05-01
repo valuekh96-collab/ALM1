@@ -1050,7 +1050,7 @@
     @media (max-width: 991px) {
       .session-layout { 
         grid-template-columns: 1fr; 
-        padding-bottom: 120px; 
+        padding-bottom: 120px; /* Room for the bottom panel */
       }
       
       .session-controls, .session-quran { 
@@ -1061,9 +1061,10 @@
         padding: 0; 
       }
       
+      /* اللوحة السفلية العائمة في الجوال */
       .unified-deduct-container-wrapper { 
         position: fixed; 
-        bottom: 60px; 
+        bottom: 60px; /* أعلى من قائمة التنقل السفلية */
         left: 0; 
         right: 0; 
         z-index: 150; 
@@ -1100,7 +1101,7 @@
       }
       
       .mobile-score-wrap {
-        display: none !important; 
+        display: none !important; /* Hidden because score is in panel header */
       }
       
       .desktop-score-wrap {
@@ -1121,9 +1122,10 @@
       }
       
       .unified-inputs .form-group { margin-bottom: 0; width: 100%; }
-      .unified-inputs label { display: none; } 
+      .unified-inputs label { display: none; } /* إخفاء العناوين لتوفير المساحة */
       .unified-inputs input { height: 36px; padding: 5px 10px; font-size: 13px; }
       
+      /* أزرار قابلة للتمرير أفقياً */
       .unified-buttons { 
         display: flex;
         flex-wrap: nowrap;
@@ -1442,7 +1444,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> <!-- End Edit View -->
 
       <div class="card">
         <div class="card-header">
@@ -1690,7 +1692,11 @@
               </div>
             </div>
 
-            <button class="btn btn-primary btn-block" style="margin-bottom:12px; padding:16px; font-size:16px;" onclick="saveSession()">💾 اعتماد وحفظ الجلسة</button>
+            <!-- أزرار الحفظ ونسخ التقرير -->
+            <div style="display:flex; gap:10px; margin-bottom:12px;">
+              <button class="btn btn-primary" style="flex:2; padding:16px; font-size:16px;" onclick="saveSession()">💾 اعتماد وحفظ</button>
+              <button class="btn btn-outline" style="flex:1; padding:16px; font-size:14px;" onclick="copyReport()">📋 نسخ التقرير</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1926,7 +1932,7 @@ function doGet(e) {
 
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v11'); 
+    const d = localStorage.getItem('alm_pro_v12'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) S = p; 
@@ -1937,7 +1943,7 @@ function loadState() {
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v11', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_v12', JSON.stringify(S)); 
     setSyncDot('local'); 
     hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -2483,7 +2489,7 @@ function triggerDeduct(pts, label) {
   renderErrLog(); 
   updateGradeDisp();
 
-  // الإغلاق التلقائي للوحة في الموبايل
+  // طي اللوحة العائمة تلقائياً بعد الخصم في الموبايل
   if(window.innerWidth <= 991) {
     const body = document.getElementById('deduct-panel-body');
     const icon = document.getElementById('panel-toggle-icon');
@@ -2637,14 +2643,57 @@ function saveSession() {
   toast('✅ تم اعتماد وحفظ الجلسة'); 
   stopTimer(); 
   
-  // طي لوحة التحكم إذا كانت مفتوحة على الموبايل
+  // طي لوحة التحكم إذا كانت مفتوحة على الموبايل لكن تبقى الصفحة لتسمح بنسخ التقرير
   const body = document.getElementById('deduct-panel-body');
   if (body && body.classList.contains('expanded')) toggleDeductPanel();
   
-  document.getElementById('sess-body').style.display = 'none'; 
-  document.getElementById('sel-st').value = '';
-  
   if(S.sheetUrl) syncToSheet();
+}
+
+function copyReport() {
+  const st = S.students.find(s => s.id === curSt); 
+  const name = st ? st.name : '—';
+  
+  const faces = document.getElementById('faces').value;
+  const from = document.getElementById('from-a').value || '—';
+  const to = document.getElementById('to-a').value || '—';
+  
+  const g = gradeOf(sessScore);
+  const q = activeSessQuota?.sessionFaces || 10;
+  
+  const badge = parseInt(faces) > q ? '⭐ تجاوزت النصاب' : (parseInt(faces) >= q ? '🟢 مكتمل' : '🔴 لم يكتمل');
+  
+  const errLines = sessErrors.length 
+    ? sessErrors.map((e,i) => `  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n')
+    : '  ممتاز — لا توجد ملاحظات';
+  
+  const revType = document.getElementById('rev-type').value;
+  const revR = document.getElementById('rev-range').value;
+  const revG = document.getElementById('rev-grade').value;
+  
+  let rTxt = 'المراجعة : لا يوجد';
+  if(revType === 'done') {
+      rTxt = `المراجعة : تمت المراجعة (${revR||'—'}) — التقييم: ${revG}`;
+  }
+
+  const rep = [
+    `📋 تقرير جلسة التسميع — ${S.course.cname||'حلقة التحفيظ'}`,
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    `الطالبة  : ${name}`,
+    `التاريخ  : ${new Date().toLocaleDateString('ar-EG')}`,
+    `من        : ${from}   إلى : ${to}`,
+    `الأوجه   : ${faces} ${badge}`, 
+    rTxt,
+    `الدرجة   : ${fmt(sessScore)} / 100`,
+    `التقييم  : ${g.emoji} ${g.label}`,
+    '──────────────────────',
+    'الملاحظات الحفظ:',
+    errLines,
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    'وفّقكِ الله وبارك في جهدكِ 💜'
+  ].join('\n');
+  
+  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
 }
 
 // ══════════════════════════════════════════════════════════
@@ -2738,7 +2787,7 @@ async function loadCurrentPage() {
     }
 }
 
-// تحديد الكلمات والفتح التلقائي
+// التحديد المتعدد والفتح التلقائي
 function toggleWordSelection(ayah, el) {
     el.classList.toggle('selected');
     const selectedEls = document.querySelectorAll('.q-word.selected'); 
@@ -2751,7 +2800,7 @@ function toggleWordSelection(ayah, el) {
     document.getElementById('u-ayah').value = selectedEls.length > 0 ? ayah : ''; 
     document.getElementById('u-word').value = words.join(' ').trim();
 
-    // Auto-expand panel on mobile if words are selected
+    // فتح اللوحة التلقائي في الموبايل
     if(selectedEls.length > 0 && window.innerWidth <= 991) {
         const body = document.getElementById('deduct-panel-body');
         const icon = document.getElementById('panel-toggle-icon');
