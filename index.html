@@ -1050,7 +1050,7 @@
     @media (max-width: 991px) {
       .session-layout { 
         grid-template-columns: 1fr; 
-        padding-bottom: 120px; /* Room for the bottom panel */
+        padding-bottom: 120px; 
       }
       
       .session-controls, .session-quran { 
@@ -1061,10 +1061,9 @@
         padding: 0; 
       }
       
-      /* اللوحة السفلية العائمة في الجوال */
       .unified-deduct-container-wrapper { 
         position: fixed; 
-        bottom: 60px; /* أعلى من قائمة التنقل السفلية */
+        bottom: 60px; 
         left: 0; 
         right: 0; 
         z-index: 150; 
@@ -1101,7 +1100,7 @@
       }
       
       .mobile-score-wrap {
-        display: none !important; /* Hidden because score is in panel header */
+        display: none !important; 
       }
       
       .desktop-score-wrap {
@@ -1122,10 +1121,9 @@
       }
       
       .unified-inputs .form-group { margin-bottom: 0; width: 100%; }
-      .unified-inputs label { display: none; } /* إخفاء العناوين لتوفير المساحة */
+      .unified-inputs label { display: none; } 
       .unified-inputs input { height: 36px; padding: 5px 10px; font-size: 13px; }
       
-      /* أزرار قابلة للتمرير أفقياً */
       .unified-buttons { 
         display: flex;
         flex-wrap: nowrap;
@@ -1646,11 +1644,11 @@
                     </div>
                   </div>
                   <div class="unified-buttons">
-                    <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه<span class="d-pt">(-1)</span></button>
-                    <button class="btn-d d-2" onclick="triggerDeduct(2, 'حفظ وتصحيح')">❌ حفظ<span class="d-pt">(-2)</span></button>
-                    <button class="btn-d d-1" onclick="triggerDeduct(2, 'خطأ تشكيل')">◌ تشكيل<span class="d-pt">(-2)</span></button>
-                    <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة<span class="d-pt">(-4)</span></button>
-                    <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'تردد')">⋯ تردد<span class="d-pt">(-0.5)</span></button>
+                    <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه حفظ<span class="d-pt">(-1)</span><span class="hk">1</span></button>
+                    <button class="btn-d d-2" onclick="triggerDeduct(2, 'ردة حفظ')">❌ ردة حفظ<span class="d-pt">(-2)</span><span class="hk">2</span></button>
+                    <button class="btn-d d-1" onclick="triggerDeduct(2, 'تنبيه تشكيل')">◌ تنبيه تشكيل<span class="d-pt">(-2)</span><span class="hk">3</span></button>
+                    <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة تشكيل<span class="d-pt">(-4)</span><span class="hk">4</span></button>
+                    <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'خطأ تجويد')">⋯ خطأ تجويد<span class="d-pt">(-0.5)</span><span class="hk">5</span></button>
                   </div>
                 </div>
                 
@@ -1721,7 +1719,11 @@
               <h2 id="p-name" style="color:#fff; margin-bottom:4px; font-size:24px;">الاسم</h2>
               <p id="p-course-info" style="color:rgba(255,255,255,0.8); font-size:14px;">المقرر</p>
             </div>
-            <button class="btn btn-gold btn-sm" style="margin-right:auto; padding:8px 16px;" onclick="generatePDF()">🖨️ تحميل تقريري (PDF)</button>
+            
+            <div style="margin-right:auto; display:flex; gap:8px;">
+               <button class="btn btn-outline btn-sm" style="color:#fff; border-color:rgba(255,255,255,0.5); padding:8px 16px;" onclick="copyStudentReportFromPortal()">📋 نسخ التقرير</button>
+               <button class="btn btn-gold btn-sm" style="padding:8px 16px;" onclick="generatePDF()">🖨️ تحميل PDF</button>
+            </div>
           </div>
         </div>
 
@@ -1924,7 +1926,7 @@ function doGet(e) {
 
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v10'); 
+    const d = localStorage.getItem('alm_pro_v11'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) S = p; 
@@ -1935,7 +1937,7 @@ function loadState() {
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v10', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_v11', JSON.stringify(S)); 
     setSyncDot('local'); 
     hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -2151,10 +2153,10 @@ function toggleDeductPanel() {
   
   if (body.classList.contains('expanded')) {
     body.classList.remove('expanded');
-    icon.style.transform = 'rotate(0deg)';
+    if(icon) icon.style.transform = 'rotate(0deg)';
   } else {
     body.classList.add('expanded');
-    icon.style.transform = 'rotate(180deg)';
+    if(icon) icon.style.transform = 'rotate(180deg)';
   }
 }
 
@@ -2480,6 +2482,16 @@ function triggerDeduct(pts, label) {
   
   renderErrLog(); 
   updateGradeDisp();
+
+  // الإغلاق التلقائي للوحة في الموبايل
+  if(window.innerWidth <= 991) {
+    const body = document.getElementById('deduct-panel-body');
+    const icon = document.getElementById('panel-toggle-icon');
+    if (body && body.classList.contains('expanded')) {
+      body.classList.remove('expanded');
+      if(icon) icon.style.transform = 'rotate(0deg)';
+    }
+  }
 }
 
 function updateLiveScore() {
@@ -2494,10 +2506,10 @@ document.addEventListener('keydown', e => {
   if(!inSession || document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
   const keys = {
     '1': {p:1, l:'تنبيه حفظ'}, 
-    '2': {p:2, l:'حفظ وتصحيح'}, 
-    '3': {p:2, l:'خطأ تشكيل'}, 
+    '2': {p:2, l:'ردة حفظ'}, 
+    '3': {p:2, l:'تنبيه تشكيل'}, 
     '4': {p:4, l:'ردة تشكيل'}, 
-    '5': {p:0.5, l:'تردد'}
+    '5': {p:0.5, l:'خطأ تجويد'}
   };
   if(keys[e.key]) triggerDeduct(keys[e.key].p, keys[e.key].l);
 });
@@ -2635,52 +2647,6 @@ function saveSession() {
   if(S.sheetUrl) syncToSheet();
 }
 
-function copyReport() {
-  const st = S.students.find(s => s.id === curSt); 
-  const name = st ? st.name : '—';
-  
-  const faces = document.getElementById('faces').value;
-  const from = document.getElementById('from-a').value || '—';
-  const to = document.getElementById('to-a').value || '—';
-  
-  const g = gradeOf(sessScore);
-  const q = activeSessQuota?.sessionFaces || 10;
-  
-  const badge = parseInt(faces) > q ? '⭐ تجاوزت النصاب' : (parseInt(faces) >= q ? '🟢 مكتمل' : '🔴 لم يكتمل');
-  
-  const errLines = sessErrors.length 
-    ? sessErrors.map((e,i) => `  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n')
-    : '  ممتاز — لا توجد ملاحظات';
-  
-  const revType = document.getElementById('rev-type').value;
-  const revR = document.getElementById('rev-range').value;
-  const revG = document.getElementById('rev-grade').value;
-  
-  let rTxt = 'المراجعة : لا يوجد';
-  if(revType === 'done') {
-      rTxt = `المراجعة : تمت المراجعة (${revR||'—'}) — التقييم: ${revG}`;
-  }
-
-  const rep = [
-    `📋 تقرير جلسة التسميع — ${S.course.cname||'حلقة التحفيظ'}`,
-    '━━━━━━━━━━━━━━━━━━━━━━',
-    `الطالبة  : ${name}`,
-    `التاريخ  : ${new Date().toLocaleDateString('ar-EG')}`,
-    `من        : ${from}   إلى : ${to}`,
-    `الأوجه   : ${faces} ${badge}`, 
-    rTxt,
-    `الدرجة   : ${fmt(sessScore)} / 100`,
-    `التقييم  : ${g.emoji} ${g.label}`,
-    '──────────────────────',
-    'الملاحظات الحفظ:',
-    errLines,
-    '━━━━━━━━━━━━━━━━━━━━━━',
-    'وفّقكِ الله وبارك في جهدكِ 💜'
-  ].join('\n');
-  
-  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
-}
-
 // ══════════════════════════════════════════════════════════
 // 7. QURAN APP (CACHED & ALIGNED)
 // ══════════════════════════════════════════════════════════
@@ -2772,7 +2738,7 @@ async function loadCurrentPage() {
     }
 }
 
-// تحديد الكلمات
+// تحديد الكلمات والفتح التلقائي
 function toggleWordSelection(ayah, el) {
     el.classList.toggle('selected');
     const selectedEls = document.querySelectorAll('.q-word.selected'); 
@@ -2788,8 +2754,10 @@ function toggleWordSelection(ayah, el) {
     // Auto-expand panel on mobile if words are selected
     if(selectedEls.length > 0 && window.innerWidth <= 991) {
         const body = document.getElementById('deduct-panel-body');
+        const icon = document.getElementById('panel-toggle-icon');
         if (!body.classList.contains('expanded')) {
-            toggleDeductPanel();
+            body.classList.add('expanded');
+            if(icon) icon.style.transform = 'rotate(180deg)';
         }
     }
 }
@@ -2856,7 +2824,7 @@ function initDashboard() {
   Chart.defaults.font.family = 'Cairo';
 
   let tScore = 0, vCount = 0, tSess = 0, pSess = 0, eSess = 0;
-  const names = [], scores = [], errMap = { 'تنبيه حفظ': 0, 'حفظ وتصحيح': 0, 'خطأ تشكيل': 0, 'ردة تشكيل': 0, 'تردد': 0 }, trendData = {}; 
+  const names = [], scores = [], errMap = { 'تنبيه حفظ': 0, 'ردة حفظ': 0, 'تنبيه تشكيل': 0, 'ردة تشكيل': 0, 'خطأ تجويد': 0 }, trendData = {}; 
 
   S.students.forEach(st => {
     names.push(st.name.split(' ')[0]); 
@@ -2876,11 +2844,11 @@ function initDashboard() {
         trendData[s.ts].cnt++;
         
         (s.errors||[]).forEach(e => {
-          if(e.desc.includes('حفظ وتصحيح')) errMap['حفظ وتصحيح']++; 
+          if(e.desc.includes('ردة حفظ')) errMap['ردة حفظ']++; 
           else if(e.desc.includes('تنبيه حفظ')) errMap['تنبيه حفظ']++; 
           else if(e.desc.includes('ردة تشكيل')) errMap['ردة تشكيل']++; 
-          else if(e.desc.includes('تشكيل')) errMap['خطأ تشكيل']++; 
-          else if(e.desc.includes('تردد')) errMap['تردد']++; 
+          else if(e.desc.includes('تنبيه تشكيل')) errMap['تنبيه تشكيل']++; 
+          else if(e.desc.includes('خطأ تجويد')) errMap['خطأ تجويد']++; 
         });
       } else if (s.att === 'excused') {
         eSess++; 
@@ -3049,6 +3017,44 @@ function loadPortal() {
         <div style="font-size:20px; font-weight:800; font-family:'Amiri',serif; color:var(--primary);">${fmt(s.score)}</div>
       </div>`;
   }).join('') || '<div class="alert alert-info">لا توجد جلسات مسجلة بعد.</div>';
+}
+
+function copyStudentReportFromPortal() {
+  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const st = S.students.find(s=>s.id===id); 
+  if(!st) return;
+  
+  const sess = st.sessions || [];
+  const pSess = sess.filter(s => s.att === 'present');
+  const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
+  
+  let rep = `📋 التقرير الأكاديمي للطالبة — ${S.course.cname || 'حلقة التحفيظ'}\n`;
+  rep += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  rep += `الاسم: ${st.name}\n`;
+  rep += `معدل الإتقان: ${avg}%\n`;
+  rep += `نجوم التميز: ${st.stars || 0} ⭐\n`;
+  rep += `شعلة الحماس: ${calculateStreak(sess)} 🔥\n`;
+  rep += `──────────────────────\n`;
+  
+  if(sess.length > 0) {
+    const latest = [...sess].sort((a,b)=>b.ts - a.ts)[0];
+    rep += `📌 آخر جلسة (${latest.date}):\n`;
+    if(latest.att === 'present') {
+      rep += `▪️ حفظ: ${latest.faces} أوجه (${latest.from} إلى ${latest.to})\n`;
+      let revHtml = (latest.rev === 'done') ? `تمت المراجعة (${latest.revG})` : 'لا يوجد';
+      rep += `▪️ المراجعة: ${revHtml}\n`;
+      rep += `▪️ الدرجة: ${fmt(latest.score)} / 100 (${latest.grade})\n`;
+      const errs = latest.errors && latest.errors.length ? latest.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات';
+      rep += `▪️ الملاحظات: ${errs}\n`;
+    } else {
+      rep += `▪️ غياب: ${latest.att === 'excused' ? 'بعذر' : 'بدون عذر'}\n`;
+    }
+  } else {
+    rep += `لا توجد جلسات مسجلة بعد.\n`;
+  }
+  
+  rep += `━━━━━━━━━━━━━━━━━━━━━━\nوفّقكِ الله وبارك في مسيرتكِ 💜`;
+  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
 }
 
 function toggleDay(id, idx) { 
