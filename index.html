@@ -390,6 +390,13 @@
       color: var(--gold); 
     }
 
+    /* Remove obstacles to sticky behavior */
+    .app-container, .main-content, .page-wrapper { 
+      overflow: visible !important; 
+      overflow-x: visible !important; 
+      overflow-y: visible !important; 
+    }
+
     .page-wrapper { 
       padding: 32px; 
       max-width: 1200px; 
@@ -702,24 +709,6 @@
       flex-wrap: wrap; 
     }
 
-    .score-number { 
-      font-family: 'Amiri', serif; 
-      font-size: 96px; 
-      font-weight: 700; 
-      line-height: 1; 
-      text-align: center; 
-      background: linear-gradient(135deg, var(--primary), var(--gold)); 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
-      margin-bottom: 10px; 
-    }
-
-    [data-theme="dark"] .score-number { 
-      background: linear-gradient(135deg, var(--gold-lt), var(--gold)); 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent;
-    }
-
     .search-bar { 
       display: flex; 
       align-items: center; 
@@ -740,14 +729,7 @@
       font-weight: 600; 
     }
 
-    /* ════ SMART SPLIT LAYOUT ════ */
-    /* Remove obstacles to sticky behavior */
-    .app-container, .main-content, .page-wrapper { 
-      overflow: visible !important; 
-      overflow-x: visible !important; 
-      overflow-y: visible !important; 
-    }
-
+    /* ════ SMART SPLIT LAYOUT FOR SESSION ════ */
     .session-layout { 
       display: grid; 
       gap: 24px; 
@@ -783,6 +765,70 @@
       width: 4px; 
     }
 
+    /* QURAN VIEWER */
+    .quran-page {
+      font-family: 'Amiri Quran', serif; 
+      font-size: 28px; 
+      padding: 30px; 
+      background: #FDFBF7; 
+      border: 1px solid var(--gold-lt); 
+      border-radius: var(--r-md);
+      min-height: 500px; 
+      user-select: none; 
+      word-wrap: break-word; 
+      color: #1A1714;
+      /* إعدادات المحاذاة (Justify) */
+      text-align: justify; 
+      text-justify: inter-word; 
+    }
+    
+    [data-theme="dark"] .quran-page { 
+      background: #1A1714; 
+      border-color: var(--gold-dk); 
+      color: #F0EBF1;
+    }
+    
+    .q-line {
+      display: block; /* تغيير لـ block للمحافظة على التبرير المستوي */
+      text-align: justify;
+      text-align-last: center;
+      width: 100%;
+      margin-bottom: 5px;
+      line-height: 2.3;
+    }
+
+    .q-word { 
+      display: inline-block; 
+      cursor: pointer; 
+      padding: 0 2px; 
+      border-radius: 4px; 
+      transition: all 0.2s; 
+    }
+
+    .q-word:hover { 
+      background: rgba(212, 175, 55, 0.3); 
+      color: var(--primary); 
+    }
+
+    [data-theme="dark"] .q-word:hover { 
+      color: var(--gold); 
+    }
+
+    .q-word.selected { 
+      background: var(--danger-lt); 
+      color: var(--danger); 
+      font-weight: bold; 
+      box-shadow: 0 0 0 2px var(--danger); 
+    }
+
+    .q-ayah-end { 
+      color: var(--gold-dk); 
+      font-size: 20px; 
+      margin: 0 4px; 
+      display: inline-block; 
+      cursor: pointer; 
+    }
+
     .quran-bottom-actions { 
       position: sticky; 
       bottom: 0; 
@@ -795,65 +841,85 @@
       .session-layout { 
         grid-template-columns: 1.3fr 1fr; 
       } 
-    }
-
-    .unified-deduct-container-wrapper { 
-      transition: all var(--trans); 
-    }
-
-    .unified-deduct-container { 
-      background: var(--bg-elevated); 
-      border-radius: var(--r-md); 
-      padding: 20px; 
-      border: 1px solid var(--border-strong); 
-      margin-bottom: 24px; 
-    }
-
-    .unified-inputs { 
-      display: grid; 
-      grid-template-columns: 1fr 2fr; 
-      gap: 16px; 
-      margin-bottom: 16px; 
-    }
-
-    .unified-buttons { 
-      display: flex; 
-      flex-wrap: wrap; 
-      gap: 10px; 
-    }
-
-    .btn-d { 
-      flex: 1; 
-      min-width: 130px; 
-      padding: 12px; 
-      border-radius: var(--r-sm); 
-      border: 2px solid; 
-      text-align: center; 
-      font-weight: 700; 
-      transition: all var(--trans); 
-      background: var(--bg-surface); 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center;
-    }
-
-    .btn-d:hover { 
-      transform: translateY(-2px); 
-      box-shadow: var(--shadow-sm); 
-    }
-
-    .btn-d:active { 
-      transform: scale(0.97); 
-    }
-
-    .btn-d span.hk { 
-      font-size: 10px; 
-      background: var(--bg-app); 
-      padding: 2px 6px; 
-      border-radius: 4px; 
-      margin-top: 4px; 
-      color: var(--text-muted); 
-      border: 1px solid var(--border); 
+      .unified-deduct-container-wrapper { 
+        transition: all var(--trans); 
+      }
+      .mobile-score-wrap {
+        background: var(--bg-surface); 
+        border-radius: var(--r-md); 
+        padding: 16px; 
+        text-align: center; 
+        border: 2px solid var(--gold); 
+        margin-bottom: 16px; 
+        box-shadow: var(--shadow-sm); 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+      }
+      .score-number { 
+        font-family: 'Amiri', serif; 
+        font-size: 96px; 
+        font-weight: 700; 
+        line-height: 1; 
+        text-align: center; 
+        background: linear-gradient(135deg, var(--primary), var(--gold)); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        margin-bottom: 10px; 
+      }
+      [data-theme="dark"] .score-number { 
+        background: linear-gradient(135deg, var(--gold-lt), var(--gold)); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent;
+      }
+      .unified-deduct-container { 
+        background: var(--bg-elevated); 
+        border-radius: var(--r-md); 
+        padding: 20px; 
+        border: 1px solid var(--border-strong); 
+        margin-bottom: 24px; 
+      }
+      .unified-inputs { 
+        display: grid; 
+        grid-template-columns: 1fr 2fr; 
+        gap: 16px; 
+        margin-bottom: 16px; 
+      }
+      .unified-buttons { 
+        display: flex; 
+        flex-wrap: wrap; 
+        gap: 10px; 
+      }
+      .btn-d { 
+        flex: 1; 
+        min-width: 130px; 
+        padding: 12px; 
+        border-radius: var(--r-sm); 
+        border: 2px solid; 
+        text-align: center; 
+        font-weight: 700; 
+        transition: all var(--trans); 
+        background: var(--bg-surface); 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;
+      }
+      .btn-d:hover { 
+        transform: translateY(-2px); 
+        box-shadow: var(--shadow-sm); 
+      }
+      .btn-d:active { 
+        transform: scale(0.97); 
+      }
+      .btn-d span.hk { 
+        font-size: 10px; 
+        background: var(--bg-app); 
+        padding: 2px 6px; 
+        border-radius: 4px; 
+        margin-top: 4px; 
+        color: var(--text-muted); 
+        border: 1px solid var(--border); 
+      }
     }
 
     .d-1 { color: #D4AF37; border-color: #D4AF37; } 
@@ -954,7 +1020,7 @@
       justify-content: flex-end; 
     }
 
-    /* ════ RESPONSIVE ════ */
+    /* ════ RESPONSIVE & MOBILE SPECIFIC ════ */
     .mobile-header-btn { display: none; }
     .bottom-nav { display: none; }
 
@@ -969,22 +1035,92 @@
         overflow-y: visible; 
         padding: 0; 
       }
+      
+      /* اللوحة السفلية العائمة في الجوال */
       .unified-deduct-container-wrapper { 
-        position: sticky; 
-        bottom: 60px; 
-        z-index: 100; 
-        background: var(--bg-app); 
-        padding: 10px 0; 
-        margin: -10px -10px 16px -10px; 
-        border-radius: var(--r-md); 
-        box-shadow: 0 -10px 20px rgba(0,0,0,0.15); 
+        position: fixed; 
+        bottom: 55px; /* أعلى من قائمة التنقل السفلية */
+        left: 0; 
+        right: 0; 
+        z-index: 999; 
+        background: var(--bg-surface); 
+        padding: 10px 16px; 
+        border-top: 2px solid var(--gold); 
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -5px 25px rgba(0,0,0,0.15); 
       }
       [data-theme="dark"] .unified-deduct-container-wrapper { 
-        box-shadow: 0 -10px 20px rgba(0,0,0,0.6); 
+        background: var(--bg-app);
+        box-shadow: 0 -5px 25px rgba(0,0,0,0.8); 
       }
+      
+      .mobile-score-wrap {
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-bottom: 10px;
+      }
+      .score-number { 
+        font-family: 'Amiri', serif; 
+        font-size: 36px !important; 
+        font-weight: 700; 
+        line-height: 1; 
+        text-align: center; 
+        background: linear-gradient(135deg, var(--primary), var(--gold)); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        margin: 0 !important; 
+      }
+      [data-theme="dark"] .score-number { 
+        background: linear-gradient(135deg, var(--gold-lt), var(--gold)); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .unified-deduct-container {
+        padding: 0; 
+        border: none; 
+        margin: 0; 
+        background: transparent;
+      }
+
       .unified-inputs { 
-        grid-template-columns: 1fr; 
+        display: flex; 
+        gap: 10px; 
+        margin-bottom: 10px; 
       }
+      .unified-inputs .form-group { margin-bottom: 0; width: 100%; }
+      .unified-inputs label { display: none; } /* إخفاء العناوين لتوفير المساحة */
+      .unified-inputs input { height: 36px; padding: 5px 10px; font-size: 13px; }
+      
+      /* أزرار قابلة للتمرير أفقياً */
+      .unified-buttons { 
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .unified-buttons::-webkit-scrollbar { height: 0px; }
+      
+      .btn-d { 
+        min-width: fit-content; 
+        padding: 8px 12px; 
+        font-size: 13px; 
+        flex-direction: row; 
+        gap: 4px;
+        border-radius: var(--r-sm); 
+        border: 2px solid; 
+        text-align: center; 
+        font-weight: 700; 
+        background: var(--bg-surface);
+        white-space: nowrap;
+      }
+      .btn-d span.hk { display: none; }
+      
+      /* زيادة المساحة السفلية لكي لا تغطي اللوحة محتوى الصفحة */
+      .session-layout { padding-bottom: 260px; }
     }
 
     @media (max-width: 768px) {
@@ -995,7 +1131,7 @@
       .top-header { padding: 0 16px; }
       .mobile-header-btn { display: flex; }
       .hide-mobile { display: none !important; }
-      .page-wrapper { padding: 20px 16px; }
+      .page-wrapper { padding: 16px 12px; }
       .card { padding: 16px; }
       .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; gap: 12px; }
       
@@ -1035,8 +1171,6 @@
       .b-nav-item.active { color: var(--primary); }
       [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
       .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
-      .deduct-grid { grid-template-columns: 1fr; }
-      .btn-deduct { width: 100%; }
       
       /* Quran Font Adjustments for Mobile */
       .quran-page { 
@@ -1065,7 +1199,7 @@
     /* ════ PRINT STYLES ════ */
     @media print {
       body * { visibility: hidden; }
-      .app-container, .modal-overlay { display: none !important; }
+      .app-container, .modal-overlay, .unified-deduct-container-wrapper { display: none !important; }
       #rep-layer { 
         display: block !important; 
         visibility: visible !important; 
@@ -1096,87 +1230,6 @@
     .rep-table td { padding: 9px; border-bottom: 1px solid #E4DED4; }
     .rep-foot { text-align: center; font-size: 12px; color: #6B626D; margin-top: 30px; border-top: 1px dashed #E4DED4; padding-top: 16px; }
 
-    /* ════ QURAN VIEWER ════ */
-    .quran-page {
-      font-family: 'Amiri Quran', serif; 
-      font-size: 28px; 
-      line-height: 2.3;
-      text-align: justify; 
-      text-justify: inter-word; 
-      text-align-last: center; 
-      direction: rtl;
-      padding: 30px; 
-      background: #FDFBF7; 
-      border: 1px solid var(--gold-lt); 
-      border-radius: var(--r-md);
-      min-height: 500px; 
-      user-select: none; 
-      word-wrap: break-word; 
-      color: #1A1714;
-    }
-    
-    [data-theme="dark"] .quran-page { 
-      background: #1A1714; 
-      border-color: var(--gold-dk); 
-      color: #F0EBF1;
-    }
-
-    .q-word { 
-      display: inline-block; 
-      cursor: pointer; 
-      padding: 0 2px; 
-      border-radius: 4px; 
-      transition: all 0.2s; 
-    }
-
-    .q-word:hover { 
-      background: rgba(212, 175, 55, 0.3); 
-      color: var(--primary); 
-    }
-
-    [data-theme="dark"] .q-word:hover { 
-      color: var(--gold); 
-    }
-
-    .q-word.selected { 
-      background: var(--danger-lt); 
-      color: var(--danger); 
-      font-weight: bold; 
-      box-shadow: 0 0 0 2px var(--danger); 
-    }
-
-    .q-ayah-end { 
-      color: var(--gold-dk); 
-      font-size: 20px; 
-      margin: 0 4px; 
-      display: inline-block; 
-      cursor: pointer; 
-    }
-
-    /* Toast */
-    #toast { 
-      position: fixed; 
-      bottom: 80px; 
-      left: 50%; 
-      transform: translateX(-50%) translateY(100px); 
-      background: var(--text-main); 
-      color: var(--bg-surface); 
-      padding: 14px 28px; 
-      border-radius: 30px; 
-      font-size: 14px; 
-      font-weight: 700; 
-      box-shadow: var(--shadow-lg); 
-      opacity: 0; 
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-      z-index: 9999; 
-      pointer-events: none; 
-      text-align: center; 
-    }
-
-    #toast.show { 
-      transform: translateX(-50%) translateY(0); 
-      opacity: 1; 
-    }
   </style>
 </head>
 <body>
@@ -1356,7 +1409,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> <!-- End Edit View -->
 
       <div class="card">
         <div class="card-header">
@@ -1520,7 +1573,18 @@
           <!-- COLUMN 2: CONTROLS -->
           <div class="session-controls">
             <div class="unified-deduct-container-wrapper">
-              <div style="background:var(--bg-surface); border-radius:var(--r-md); padding:16px; text-align:center; border:2px solid var(--gold); margin-bottom:16px; box-shadow: var(--shadow-sm); display:flex; justify-content:space-between; align-items:center;">
+              
+              <!-- الموبايل: صندوق الدرجة الحية المدمج مع اللوحة العائمة -->
+              <div class="mobile-score-wrap" style="display:none;">
+                 <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
+                   <div id="grade-badge-mobile"></div>
+                   <div id="sess-badge-mobile"></div>
+                 </div>
+                 <div class="score-number" id="live-score-mobile">100</div>
+              </div>
+
+              <!-- سطح المكتب: عرض الدرجة العادي -->
+              <div class="desktop-score-wrap" style="background:var(--bg-surface); border-radius:var(--r-md); padding:16px; text-align:center; border:2px solid var(--gold); margin-bottom:16px; box-shadow: var(--shadow-sm); display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
                    <div id="grade-badge"></div>
                    <div id="sess-badge"></div>
@@ -1532,7 +1596,7 @@
                 <div class="unified-inputs">
                   <div class="form-group" style="margin:0;">
                     <label>الآية</label>
-                    <input type="number" id="u-ayah" class="form-control" placeholder="رقم">
+                    <input type="number" id="u-ayah" class="form-control" placeholder="الآية">
                   </div>
                   <div class="form-group" style="margin:0;">
                     <label>الكلمة/الملاحظة</label>
@@ -1540,11 +1604,11 @@
                   </div>
                 </div>
                 <div class="unified-buttons">
-                  <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه (-1)<br><span class="hk">1</span></button>
-                  <button class="btn-d d-2" onclick="triggerDeduct(2, 'حفظ وتصحيح')">❌ حفظ (-2)<br><span class="hk">2</span></button>
-                  <button class="btn-d d-1" onclick="triggerDeduct(2, 'خطأ تشكيل')">◌ تشكيل (-2)<br><span class="hk">3</span></button>
-                  <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة (-4)<br><span class="hk">4</span></button>
-                  <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'تردد')">⋯ تردد (-0.5)<br><span class="hk">5</span></button>
+                  <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه<span class="d-pt">(-1)</span></button>
+                  <button class="btn-d d-2" onclick="triggerDeduct(2, 'حفظ وتصحيح')">❌ حفظ<span class="d-pt">(-2)</span></button>
+                  <button class="btn-d d-1" onclick="triggerDeduct(2, 'خطأ تشكيل')">◌ تشكيل<span class="d-pt">(-2)</span></button>
+                  <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة<span class="d-pt">(-4)</span></button>
+                  <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'تردد')">⋯ تردد<span class="d-pt">(-0.5)</span></button>
                 </div>
               </div>
             </div>
@@ -1664,7 +1728,7 @@
   </main>
 
   <!-- ════ MOBILE BOTTOM NAV ════ -->
-  <nav class="bottom-nav">
+  <nav class="bottom-nav hide-mobile">
     <div class="b-nav-item active teacher-only" onclick="navigate('setup')">
       <span class="b-nav-icon">⚙️</span>
       إعداد
@@ -1815,7 +1879,7 @@ function doGet(e) {
 
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v8'); 
+    const d = localStorage.getItem('alm_pro_v9'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) S = p; 
@@ -1826,7 +1890,7 @@ function loadState() {
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v8', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_v9', JSON.stringify(S)); 
     setSyncDot('local'); 
     hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -1984,6 +2048,7 @@ function navigate(id) {
     document.getElementById('sel-portal').value = loggedInStudentId; 
     loadPortal(); 
   }
+  handleResponsiveLayout();
 }
 
 function toggleSidebar() {
@@ -2315,6 +2380,7 @@ function startSession() {
   initQuranApp(); 
   startTimer(); 
   inSession = true;
+  handleResponsiveLayout();
 }
 
 function startTimer() {
@@ -2349,13 +2415,21 @@ function triggerDeduct(pts, label) {
   sessScore = parseFloat(Math.max(0, Math.min(110, sessScore - pts)).toFixed(1));
   sessErrors.push({desc, pts, id: Date.now()});
   
-  document.getElementById('live-score').textContent = fmt(sessScore);
+  updateLiveScore();
+  
   document.getElementById('u-ayah').value = ''; 
   document.getElementById('u-word').value = '';
   document.querySelectorAll('.q-word.selected').forEach(w => w.classList.remove('selected'));
   
   renderErrLog(); 
   updateGradeDisp();
+}
+
+function updateLiveScore() {
+  const elDesk = document.getElementById('live-score');
+  const elMob = document.getElementById('live-score-mobile');
+  if(elDesk) elDesk.textContent = fmt(sessScore);
+  if(elMob) elMob.textContent = fmt(sessScore);
 }
 
 // Hotkeys for deduction
@@ -2376,7 +2450,7 @@ function deleteErr(id) {
   if (idx > -1) { 
     sessScore = parseFloat(Math.min(110, sessScore + Math.abs(sessErrors[idx].pts)).toFixed(1)); 
     sessErrors.splice(idx, 1); 
-    document.getElementById('live-score').textContent = fmt(sessScore); 
+    updateLiveScore();
     renderErrLog(); 
     updateGradeDisp(); 
   }
@@ -2432,7 +2506,12 @@ function renderErrLog() {
 
 function updateGradeDisp() { 
   const g = gradeOf(sessScore); 
-  document.getElementById('grade-badge').innerHTML = `<span class="status-badge ${g.cls}">${g.label}</span>`; 
+  const deskBadge = document.getElementById('grade-badge');
+  const mobBadge = document.getElementById('grade-badge-mobile');
+  const badgeHTML = `<span class="status-badge ${g.cls}">${g.label}</span>`;
+  
+  if(deskBadge) deskBadge.innerHTML = badgeHTML;
+  if(mobBadge) mobBadge.innerHTML = badgeHTML;
 }
 
 async function resetSess() { 
@@ -2494,8 +2573,54 @@ function saveSession() {
   if(S.sheetUrl) syncToSheet();
 }
 
+function copyReport() {
+  const st = S.students.find(s => s.id === curSt); 
+  const name = st ? st.name : '—';
+  
+  const faces = document.getElementById('faces').value;
+  const from = document.getElementById('from-a').value || '—';
+  const to = document.getElementById('to-a').value || '—';
+  
+  const g = gradeOf(sessScore);
+  const q = activeSessQuota?.sessionFaces || 10;
+  
+  const badge = parseInt(faces) > q ? '⭐ تجاوزت النصاب' : (parseInt(faces) >= q ? '🟢 مكتمل' : '🔴 لم يكتمل');
+  
+  const errLines = sessErrors.length 
+    ? sessErrors.map((e,i) => `  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n')
+    : '  ممتاز — لا توجد ملاحظات';
+  
+  const revType = document.getElementById('rev-type').value;
+  const revR = document.getElementById('rev-range').value;
+  const revG = document.getElementById('rev-grade').value;
+  
+  let rTxt = 'المراجعة : لا يوجد';
+  if(revType === 'done') {
+      rTxt = `المراجعة : تمت المراجعة (${revR||'—'}) — التقييم: ${revG}`;
+  }
+
+  const rep = [
+    `📋 تقرير جلسة التسميع — ${S.course.cname||'حلقة التحفيظ'}`,
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    `الطالبة  : ${name}`,
+    `التاريخ  : ${new Date().toLocaleDateString('ar-EG')}`,
+    `من        : ${from}   إلى : ${to}`,
+    `الأوجه   : ${faces} ${badge}`, 
+    rTxt,
+    `الدرجة   : ${fmt(sessScore)} / 100`,
+    `التقييم  : ${g.emoji} ${g.label}`,
+    '──────────────────────',
+    'الملاحظات الحفظ:',
+    errLines,
+    '━━━━━━━━━━━━━━━━━━━━━━',
+    'وفّقكِ الله وبارك في جهدكِ 💜'
+  ].join('\n');
+  
+  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
+}
+
 // ══════════════════════════════════════════════════════════
-// 7. QURAN APP (CACHED)
+// 7. QURAN APP (CACHED & ALIGNED)
 // ══════════════════════════════════════════════════════════
 let surahsData = [];
 const quranCache = new Map();
@@ -2561,11 +2686,20 @@ async function loadCurrentPage() {
     try {
         const res = await fetch(`https://api.quran.com/api/v4/verses/by_page/${page}?language=ar&words=true&word_fields=text_uthmani`);
         const data = await res.json();
+        
         let html = '';
+        let cLine = -1;
         
         data.verses.forEach(v => {
             const ayahNum = v.verse_key.split(':')[1];
             v.words.forEach(w => {
+                if(w.line_number !== cLine) { 
+                  if(cLine !== -1) html += '</div>'; 
+                  // استخدمنا block لضمان عمل الجيستفاي
+                  html += '<div class="q-line">'; 
+                  cLine = w.line_number; 
+                }
+                
                 if(w.char_type_name === 'word') {
                   html += `<span class="q-word" onclick="toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span> `;
                 } else if(w.char_type_name === 'end') {
@@ -2573,6 +2707,8 @@ async function loadCurrentPage() {
                 }
             });
         });
+        
+        if(cLine !== -1) html += '</div>';
         
         quranCache.set(page, html); 
         container.innerHTML = html;
@@ -2582,6 +2718,7 @@ async function loadCurrentPage() {
     }
 }
 
+// تحديد الكلمات
 function toggleWordSelection(ayah, el) {
     el.classList.toggle('selected');
     const selectedEls = document.querySelectorAll('.q-word.selected'); 
@@ -2624,11 +2761,28 @@ function setQuranPoint(type) {
         if(qStartPage > 0) {
             const totalFaces = Math.abs(page - qStartPage) + 1;
             document.getElementById('faces').value = totalFaces;
-            updateBadge();
         }
         toast('✅ تم تعيين نقطة النهاية وحساب الأوجه');
     }
 }
+
+// Handle layout adjustments for desktop vs mobile panels
+function handleResponsiveLayout() {
+  if (!document.getElementById('page-session').classList.contains('active')) return;
+  
+  const deskWrap = document.querySelector('.desktop-score-wrap');
+  const mobWrap = document.querySelector('.mobile-score-wrap');
+  
+  if(window.innerWidth <= 991) {
+     if(deskWrap) deskWrap.style.display = 'none';
+     if(mobWrap) mobWrap.style.display = 'flex';
+  } else {
+     if(deskWrap) deskWrap.style.display = 'flex';
+     if(mobWrap) mobWrap.style.display = 'none';
+  }
+}
+
+window.addEventListener('resize', handleResponsiveLayout);
 
 // ══════════════════════════════════════════════════════════
 // 8. DASHBOARD (CHARTS) 📊
@@ -2916,7 +3070,18 @@ function renderBoard() {
     
   document.getElementById('board-list').innerHTML = sorted.map((st,i) => {
     const isMe = isStudentMode && st.id === loggedInStudentId;
-    return `<div class="list-row" style="${isMe?'border-color:var(--gold); background:var(--gold-pale);':''}"><div class="list-content"><div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">${boardSort==='points' ? (i+1) : '-'}</div><div><div style="font-weight:700; font-size:14px;">${st.name} ${isMe?'(أنتِ)':''}</div><div style="font-size:12px; color:var(--text-muted);">إتقان: ${fmt(st.score)} | ⭐ ${st.stars||0}</div></div></div></div>`;
+    return `
+      <div class="list-row" style="${isMe?'border-color:var(--gold); background:var(--gold-pale);':''}">
+        <div class="list-content">
+          <div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">
+            ${boardSort==='points' ? (i+1) : '-'}
+          </div>
+          <div>
+            <div style="font-weight:700; font-size:14px;">${st.name} ${isMe?'(أنتِ)':''}</div>
+            <div style="font-size:12px; color:var(--text-muted);">إتقان: ${fmt(st.score)} | ⭐ ${st.stars||0}</div>
+          </div>
+        </div>
+      </div>`;
   }).join('');
 }
 
