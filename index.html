@@ -120,7 +120,6 @@
       text-decoration: none; 
     }
     
-    /* Accessibility fix: Replace outline: none */
     button { 
       cursor: pointer; 
       font-family: 'Cairo', sans-serif; 
@@ -159,7 +158,6 @@
       width: 100%; 
     }
 
-    /* Sidebar */
     .sidebar { 
       width: var(--sidebar-w); 
       background: var(--bg-surface); 
@@ -389,7 +387,6 @@
       color: var(--gold); 
     }
 
-    /* Remove obstacles to sticky behavior */
     .app-container, .main-content, .page-wrapper { 
       overflow: visible !important; 
       overflow-x: visible !important; 
@@ -435,7 +432,7 @@
       justify-content: space-between; 
       margin-bottom: 24px; 
       flex-wrap: wrap; 
-      gap: 10px;
+      gap: 10px; 
     }
 
     .card-title { 
@@ -904,6 +901,7 @@
       }
     }
 
+    /* Updated Deduction Button Colors */
     .d-1 { color: #D4AF37; border-color: #D4AF37; } 
     .d-1:hover { background: var(--gold-pale); }
     
@@ -1147,7 +1145,7 @@
     @media (max-width: 991px) {
       .session-layout { 
         grid-template-columns: 1fr; 
-        padding-bottom: 120px; /* Room for the bottom panel */
+        padding-bottom: 120px; 
       }
       
       .session-controls, .session-quran { 
@@ -1158,10 +1156,9 @@
         padding: 0; 
       }
       
-      /* اللوحة السفلية العائمة في الجوال */
       .unified-deduct-container-wrapper { 
         position: fixed; 
-        bottom: 60px; /* أعلى من قائمة التنقل السفلية */
+        bottom: 60px; 
         left: 0; 
         right: 0; 
         z-index: 150; 
@@ -1198,7 +1195,7 @@
       }
       
       .mobile-score-wrap {
-        display: none !important; /* Hidden because score is in panel header */
+        display: none !important; 
       }
       
       .desktop-score-wrap {
@@ -1219,10 +1216,9 @@
       }
       
       .unified-inputs .form-group { margin-bottom: 0; width: 100%; }
-      .unified-inputs label { display: none; } /* إخفاء العناوين لتوفير المساحة */
+      .unified-inputs label { display: none; } 
       .unified-inputs input { height: 36px; padding: 5px 10px; font-size: 13px; }
       
-      /* أزرار قابلة للتمرير أفقياً */
       .unified-buttons { 
         display: flex;
         flex-wrap: nowrap;
@@ -1257,7 +1253,7 @@
         text-align-last: center !important;
       }
       .q-line {
-        display: contents !important; /* دمج الأسطر كفقرة واحدة متصلة للجيستفاي */
+        display: contents !important; 
       }
       .q-word, .q-ayah-end {
         display: inline-block !important;
@@ -2207,6 +2203,8 @@
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+
 // ══════════════════════════════════════════════════════════
 // 1. SECURITY, VALIDATION & STATE MANAGEMENT
 // ══════════════════════════════════════════════════════════
@@ -2236,7 +2234,7 @@ function decodeData(hex) {
   return text;
 }
 
-let S = {
+window.S = {
   course: { 
     teacher: '', 
     cname: '', 
@@ -2255,9 +2253,9 @@ function validateState(data) {
   return data && data.course && typeof data.course === 'object' && Array.isArray(data.students);
 }
 
-let activeSessQuota = null;
+window.activeSessQuota = null;
 
-const GS_CODE = `// لوحة ألف لام ميم — الإصدار الأكاديمي الشامل
+window.GS_CODE = `// لوحة ألف لام ميم — الإصدار الأكاديمي الشامل
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
@@ -2333,9 +2331,9 @@ function injectMockData() {
   };
 }
 
-function loadState() { 
+window.loadState = function() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v22'); 
+    const d = localStorage.getItem('alm_pro_v24'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) {
@@ -2351,26 +2349,26 @@ function loadState() {
   } 
 }
 
-function saveState() { 
-  if(isStudentMode) return; 
+window.saveState = function() { 
+  if(window.isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v22', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_v24', JSON.stringify(S)); 
     setSyncDot('local'); 
-    hasUnsavedChanges = true; 
+    window.hasUnsavedChanges = true; 
   } catch(e) {} 
 }
 
-let curSt = null;
-let sessScore = 100;
-let sessErrors = [];
-let boardSort = 'points';
-let isStudentMode = false;
-let loggedInStudentId = null;
-let qStartPage = 0;
-let hasUnsavedChanges = false;
+window.curSt = null;
+window.sessScore = 100;
+window.sessErrors = [];
+window.boardSort = 'points';
+window.isStudentMode = false;
+window.loggedInStudentId = null;
+window.qStartPage = 0;
+window.hasUnsavedChanges = false;
 
 window.addEventListener('beforeunload', function (e) {
-  if (hasUnsavedChanges && !isStudentMode && document.getElementById('sess-body').style.display === 'block') {
+  if (window.hasUnsavedChanges && !window.isStudentMode && document.getElementById('sess-body').style.display === 'block') {
     e.preventDefault(); 
     e.returnValue = '';
   }
@@ -2379,7 +2377,7 @@ window.addEventListener('beforeunload', function (e) {
 // ══════════════════════════════════════════════════════════
 // 2. CUSTOM MODAL 
 // ══════════════════════════════════════════════════════════
-function showModal(title, bodyHtml, showInput = false, inputVal = '') {
+window.showModal = function(title, bodyHtml, showInput = false, inputVal = '') {
   return new Promise((resolve) => {
     const overlay = document.getElementById('custom-modal');
     document.getElementById('modal-title').textContent = title;
@@ -2421,13 +2419,13 @@ function showModal(title, bodyHtml, showInput = false, inputVal = '') {
 // ══════════════════════════════════════════════════════════
 // 3. CORE LOGIC & HELPERS
 // ══════════════════════════════════════════════════════════
-function fmt(n) { 
+window.fmt = function(n) { 
   if (n === null) return '—';
   if (n % 1 === 0) return n;
   return parseFloat(n.toFixed(1)); 
 }
 
-function gradeOf(s) {
+window.gradeOf = function(s) {
   if(s === null) return { label: '—', cls: 'status-neutral', emoji: '—' };
   if(s >= 95) return { label: 'ممتاز', cls: 'status-excellent', emoji: '🌟' };
   if(s >= 90) return { label: 'جيد جداً', cls: 'status-good', emoji: '✅' };
@@ -2435,7 +2433,7 @@ function gradeOf(s) {
   return { label: 'إعادة', cls: 'status-poor', emoji: '🔁' };
 }
 
-function calcQuota(totalFaces, weeks, studyDays) {
+window.calcQuota = function(totalFaces, weeks, studyDays) {
   const weeklyFaces = Math.ceil(totalFaces / weeks);
   const sessionFaces = Math.ceil(weeklyFaces / 2); 
   const baseDaily = Math.floor(weeklyFaces / studyDays);
@@ -2449,7 +2447,7 @@ function calcQuota(totalFaces, weeks, studyDays) {
   };
 }
 
-function getActualDateStr(start, wk, dayIdx, sd) {
+window.getActualDateStr = function(start, wk, dayIdx, sd) {
   if(!start) return ''; 
   let d = new Date(start); 
   if(isNaN(d.getTime())) return '';
@@ -2466,7 +2464,7 @@ function getActualDateStr(start, wk, dayIdx, sd) {
   return d.toLocaleDateString('ar-EG', { month: 'short', day: 'numeric' });
 }
 
-function calculateStreak(sessions) {
+window.calculateStreak = function(sessions) {
   if (!sessions || sessions.length === 0) return 0;
   let streak = 0; 
   const sorted = [...sessions].sort((a,b) => b.ts - a.ts);
@@ -2490,7 +2488,7 @@ const TITLES = {
   board: ['لوحة الصدارة','إحصائيات الحلقة'] 
 };
 
-function navigate(id) {
+window.navigate = function(id) {
   document.querySelectorAll('.page-wrapper, .nav-item, .b-nav-item').forEach(e => e.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   document.querySelectorAll(`[onclick="navigate('${id}')"]`).forEach(e => e.classList.add('active'));
@@ -2506,13 +2504,13 @@ function navigate(id) {
   if(id === 'dash') initDashboard(); 
   if(id === 'board') renderBoard();
   
-  if(id === 'portal' && isStudentMode) { 
-    document.getElementById('sel-portal').value = loggedInStudentId; 
+  if(id === 'portal' && window.isStudentMode) { 
+    document.getElementById('sel-portal').value = window.loggedInStudentId; 
     loadPortal(); 
   }
 }
 
-function toggleSidebar() {
+window.toggleSidebar = function() {
   const sb = document.getElementById('sidebar');
   const isOpen = sb.style.transform === 'translateX(0px)';
   
@@ -2520,7 +2518,7 @@ function toggleSidebar() {
   document.getElementById('sb-overlay').classList.toggle('active', !isOpen);
 }
 
-function toggleTheme() {
+window.toggleTheme = function() {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
   localStorage.setItem('alm_theme', isDark ? 'light' : 'dark');
@@ -2530,20 +2528,20 @@ function toggleTheme() {
   }
 }
 
-function toast(msg) { 
+window.toast = function(msg) { 
   const el = document.getElementById('toast'); 
   el.textContent = msg; 
   el.classList.add('show'); 
   setTimeout(() => el.classList.remove('show'), 3000); 
 }
 
-function updateUI() {
+window.updateUI = function() {
   const t = document.getElementById('teacher').value || 'المعلمة';
   document.getElementById('sb-uname').textContent = t; 
   document.getElementById('sb-avatar').textContent = t[0] || 'م';
 }
 
-function setSyncDot(state) {
+window.setSyncDot = function(state) {
   const map = {
     ok:['sok','متصل'], 
     err:['serr','خطأ'], 
@@ -2557,7 +2555,7 @@ function setSyncDot(state) {
   }
 }
 
-function toggleDeductPanel() {
+window.toggleDeductPanel = function() {
   const body = document.getElementById('deduct-panel-body');
   const icon = document.getElementById('panel-toggle-icon');
   
@@ -2573,7 +2571,7 @@ function toggleDeductPanel() {
 // ══════════════════════════════════════════════════════════
 // 5. SETUP & DATA MANAGEMENT
 // ══════════════════════════════════════════════════════════
-function lockSetup() {
+window.lockSetup = function() {
   document.getElementById('setup-edit-view').style.display = 'none'; 
   document.getElementById('setup-locked-view').style.display = 'block';
   document.getElementById('sum-teacher').textContent = S.course.teacher || '—'; 
@@ -2583,12 +2581,12 @@ function lockSetup() {
   document.getElementById('sum-days').textContent = sdMap[S.course.studyDays] || '—';
 }
 
-function unlockSetup() { 
+window.unlockSetup = function() { 
   document.getElementById('setup-edit-view').style.display = 'block'; 
   document.getElementById('setup-locked-view').style.display = 'none'; 
 }
 
-function validateSetupInline() {
+window.validateSetupInline = function() {
   const btn = document.getElementById('btn-save-setup');
   const t = document.getElementById('teacher').value.trim();
   const c = document.getElementById('cname').value.trim();
@@ -2602,7 +2600,7 @@ function validateSetupInline() {
   }
 }
 
-function initSetup() {
+window.initSetup = function() {
   const c = S.course;
   document.getElementById('teacher').value = c.teacher; 
   document.getElementById('cname').value = c.cname;
@@ -2612,7 +2610,7 @@ function initSetup() {
   document.getElementById('study-days').value = c.studyDays;
   document.getElementById('sheet-url').value = S.sheetUrl || ''; 
   document.getElementById('teacher-code').value = S.teacherCode || '';
-  document.getElementById('gs-code').value = GS_CODE;
+  document.getElementById('gs-code').value = window.GS_CODE;
   
   updateUI(); 
   calcPlan(); 
@@ -2626,7 +2624,7 @@ function initSetup() {
   }
 }
 
-function calcPlan() {
+window.calcPlan = function() {
   const tF = parseInt(document.getElementById('tpages').value) || 200;
   const wks = parseInt(document.getElementById('tweeks').value) || 10;
   const sd = parseInt(document.getElementById('study-days').value) || 5;
@@ -2657,7 +2655,7 @@ function calcPlan() {
   document.getElementById('week-plan').innerHTML = html;
 }
 
-function saveCourse() {
+window.saveCourse = function() {
   S.course = { 
     teacher: document.getElementById('teacher').value.trim(), 
     cname: document.getElementById('cname').value.trim(), 
@@ -2678,7 +2676,7 @@ function saveCourse() {
   if(S.sheetUrl) syncToSheet();
 }
 
-async function archiveCourse() {
+window.archiveCourse = async function() {
   const word = await showModal('أرشفة وتصفير الدورة', 'هذا سيحذف جميع الدرجات والسجلات للبدء بدورة جديدة. للتاكيد اكتبي كلمة "تأكيد" أدناه:', true, '');
   
   if(word !== 'تأكيد') { 
@@ -2705,14 +2703,14 @@ async function archiveCourse() {
   if(S.sheetUrl) syncToSheet();
 }
 
-function filterStudents() {
+window.filterStudents = function() {
   const term = document.getElementById('student-search').value.toLowerCase();
   document.querySelectorAll('.st-item').forEach(el => {
     el.style.display = el.getAttribute('data-name').includes(term) ? 'flex' : 'none';
   });
 }
 
-function renderStudentList() {
+window.renderStudentList = function() {
   const ss = [...S.students].sort((a,b) => a.name.localeCompare(b.name, 'ar'));
   const list = document.getElementById('student-list');
   
@@ -2735,7 +2733,7 @@ function renderStudentList() {
       </div>`).join('');
   }
   
-  if(!isStudentMode) {
+  if(!window.isStudentMode) {
     const opts = '<option value="">— اختاري الطالبة —</option>' + ss.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
     ['sel-st', 'sel-portal'].forEach(id => { 
       const el = document.getElementById(id); 
@@ -2748,7 +2746,7 @@ function renderStudentList() {
   }
 }
 
-async function editStudentName(id) {
+window.editStudentName = async function(id) {
   const st = S.students.find(s=>s.id === id); 
   if(!st) return;
   
@@ -2760,7 +2758,7 @@ async function editStudentName(id) {
   }
 }
 
-function addStudent() {
+window.addStudent = function() {
   const name = document.getElementById('new-name').value.trim();
   const cf = parseInt(document.getElementById('new-custom-faces').value);
   
@@ -2797,7 +2795,7 @@ function addStudent() {
   toast('✅ تمت إضافة ' + name);
 }
 
-async function delSt(id) {
+window.delSt = async function(id) {
   const st = S.students.find(s => s.id === id);
   const confirm = await showModal('تأكيد الحذف', `هل أنتِ متأكدة من حذف الطالبة "${st.name}" بجميع سجلاتها؟`);
   if(!confirm) return;
@@ -2807,7 +2805,7 @@ async function delSt(id) {
   renderStudentList();
 }
 
-function copyStudentLink(id) {
+window.copyStudentLink = function(id) {
   if(!S.sheetUrl || !S.teacherCode) { 
     toast('⚠️ اكتبي رابط Google Sheet واحفظي الإعدادات أولاً'); 
     return; 
@@ -2819,7 +2817,7 @@ function copyStudentLink(id) {
   fallbackCopy(link, '🔗 تم نسخ الرابط السري للطالبة بنجاح!');
 }
 
-function copyTeacherLink() {
+window.copyTeacherLink = function() {
   if(!S.sheetUrl || !S.teacherCode) { 
     toast('⚠️ يجب حفظ إعدادات الربط السحابي أولاً'); 
     return; 
@@ -2829,7 +2827,12 @@ function copyTeacherLink() {
   fallbackCopy(link, '🔗 تم نسخ رابط الدخول الخاص بكِ.');
 }
 
-function fallbackCopy(text, msg) {
+window.copyGsCode = function(e) {
+    e.preventDefault();
+    fallbackCopy(window.GS_CODE, '✅ تم نسخ كود Apps Script');
+}
+
+window.fallbackCopy = function(text, msg) {
   if(navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(() => toast(msg)).catch(() => useExecCmd(text, msg));
   } else {
@@ -2837,7 +2840,7 @@ function fallbackCopy(text, msg) {
   }
 }
 
-function useExecCmd(text, msg) {
+window.useExecCmd = function(text, msg) {
   const ta = document.getElementById('copy-helper'); 
   ta.value = text; 
   ta.select();
@@ -2852,11 +2855,11 @@ function useExecCmd(text, msg) {
 // ══════════════════════════════════════════════════════════
 // 6. SESSION MODULE & TIMER & HOTKEYS
 // ══════════════════════════════════════════════════════════
-let sessionTimerInt = null; 
-let sessionSeconds = 0; 
-let inSession = false;
+window.sessionTimerInt = null; 
+window.sessionSeconds = 0; 
+window.inSession = false;
 
-function startSession() {
+window.startSession = function() {
   const id = document.getElementById('sel-st').value;
   if(!id) { 
     document.getElementById('sess-body').style.display = 'none'; 
@@ -2869,11 +2872,11 @@ function startSession() {
   }
   
   const st = S.students.find(s => s.id === parseInt(id)); 
-  curSt = st.id; 
-  sessScore = 100; 
-  sessErrors = []; 
-  qStartPage = 0;
-  activeSessQuota = calcQuota(st.customFaces || S.course.pages || 200, S.course.weeks||10, S.course.studyDays||5);
+  window.curSt = st.id; 
+  window.sessScore = 100; 
+  window.sessErrors = []; 
+  window.qStartPage = 0;
+  window.activeSessQuota = calcQuota(st.customFaces || S.course.pages || 200, S.course.weeks||10, S.course.studyDays||5);
   
   // Update last sessions view 
   const lastSessWrap = document.getElementById('last-sessions-wrap');
@@ -2899,8 +2902,8 @@ function startSession() {
       }
   }
 
-  document.getElementById('quota-info-sess').textContent = `🎯 النصاب المستهدف: ${activeSessQuota.sessionFaces} أوجه`;
-  document.getElementById('faces').value = activeSessQuota.sessionFaces;
+  document.getElementById('quota-info-sess').textContent = `🎯 النصاب المستهدف: ${window.activeSessQuota.sessionFaces} أوجه`;
+  document.getElementById('faces').value = window.activeSessQuota.sessionFaces;
   document.getElementById('live-score').textContent = '100'; 
   document.getElementById('live-score-mobile').textContent = '100'; 
   document.getElementById('sess-att').value = 'present';
@@ -2914,40 +2917,40 @@ function startSession() {
   
   initQuranApp(); 
   startTimer(); 
-  inSession = true;
+  window.inSession = true;
 }
 
-function startTimer() {
+window.startTimer = function() {
   stopTimer(); 
-  sessionSeconds = 0; 
+  window.sessionSeconds = 0; 
   document.getElementById('session-timer').style.display = 'flex';
   const display = document.getElementById('timer-display');
   
-  sessionTimerInt = setInterval(() => {
-    sessionSeconds++;
-    const m = String(Math.floor(sessionSeconds / 60)).padStart(2, '0');
-    const s = String(sessionSeconds % 60).padStart(2, '0');
+  window.sessionTimerInt = setInterval(() => {
+    window.sessionSeconds++;
+    const m = String(Math.floor(window.sessionSeconds / 60)).padStart(2, '0');
+    const s = String(window.sessionSeconds % 60).padStart(2, '0');
     display.textContent = `${m}:${s}`;
   }, 1000);
 }
 
-function stopTimer() { 
-  clearInterval(sessionTimerInt); 
+window.stopTimer = function() { 
+  clearInterval(window.sessionTimerInt); 
   document.getElementById('session-timer').style.display = 'none'; 
-  inSession = false; 
+  window.inSession = false; 
 }
 
-function toggleSessBody() { 
+window.toggleSessBody = function() { 
   document.getElementById('evaluation-wrap').style.display = document.getElementById('sess-att').value === 'present' ? 'grid' : 'none'; 
 }
 
-function triggerDeduct(pts, label) {
+window.triggerDeduct = function(pts, label) {
   const aya = document.getElementById('u-ayah').value.trim();
   const kw = document.getElementById('u-word').value.trim();
   const desc = [aya ? `آية ${aya}` : '', kw ? `"${kw}"` : '', label].filter(Boolean).join(' · ');
   
-  sessScore = parseFloat(Math.max(0, Math.min(110, sessScore - pts)).toFixed(1));
-  sessErrors.push({desc, pts, id: Date.now()});
+  window.sessScore = parseFloat(Math.max(0, Math.min(110, window.sessScore - pts)).toFixed(1));
+  window.sessErrors.push({desc, pts, id: Date.now()});
   
   updateLiveScore();
   
@@ -2969,16 +2972,16 @@ function triggerDeduct(pts, label) {
   }
 }
 
-function updateLiveScore() {
+window.updateLiveScore = function() {
   const elDesk = document.getElementById('live-score');
   const elMob = document.getElementById('live-score-mobile');
-  if(elDesk) elDesk.textContent = fmt(sessScore);
-  if(elMob) elMob.textContent = fmt(sessScore);
+  if(elDesk) elDesk.textContent = fmt(window.sessScore);
+  if(elMob) elMob.textContent = fmt(window.sessScore);
 }
 
 // Hotkeys for deduction
 document.addEventListener('keydown', e => {
-  if(!inSession || document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+  if(!window.inSession || document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
   const keys = {
     '1': {p:1, l:'تنبيه حفظ'}, 
     '2': {p:2, l:'ردة حفظ'}, 
@@ -2989,19 +2992,19 @@ document.addEventListener('keydown', e => {
   if(keys[e.key]) triggerDeduct(keys[e.key].p, keys[e.key].l);
 });
 
-async function deleteErr(id) {
-  const idx = sessErrors.findIndex(e => e.id === id);
+window.deleteErr = function(id) {
+  const idx = window.sessErrors.findIndex(e => e.id === id);
   if (idx > -1) { 
-    sessScore = parseFloat(Math.min(110, sessScore + Math.abs(sessErrors[idx].pts)).toFixed(1)); 
-    sessErrors.splice(idx, 1); 
+    window.sessScore = parseFloat(Math.min(110, window.sessScore + Math.abs(window.sessErrors[idx].pts)).toFixed(1)); 
+    window.sessErrors.splice(idx, 1); 
     updateLiveScore();
     renderErrLog(); 
     updateGradeDisp(); 
   }
 }
 
-async function editErr(id) {
-  const err = sessErrors.find(e => e.id === id); 
+window.editErr = async function(id) {
+  const err = window.sessErrors.find(e => e.id === id); 
   if (!err) return;
   
   let cAyah = '', cWord = '';
@@ -3028,14 +3031,14 @@ async function editErr(id) {
   renderErrLog();
 }
 
-function renderErrLog() {
+window.renderErrLog = function() {
   const log = document.getElementById('err-log');
-  if(!sessErrors.length) { 
+  if(!window.sessErrors.length) { 
     log.innerHTML = '<span style="color:var(--text-muted);">لا توجد ملاحظات مسجلة.</span>'; 
     return; 
   }
   
-  log.innerHTML = sessErrors.map(e => `
+  log.innerHTML = window.sessErrors.map(e => `
     <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed var(--border-strong);">
       <div>
         <span style="color:var(--danger); font-weight:700; margin-left:8px; display:inline-block; width:25px;">${e.pts}</span>
@@ -3048,8 +3051,8 @@ function renderErrLog() {
     </div>`).join('');
 }
 
-function updateGradeDisp() { 
-  const g = gradeOf(sessScore); 
+window.updateGradeDisp = function() { 
+  const g = gradeOf(window.sessScore); 
   const deskBadge = document.getElementById('grade-badge');
   const mobBadge = document.getElementById('grade-badge-mobile');
   const badgeHTML = `<span class="status-badge ${g.cls}">${g.label}</span>`;
@@ -3058,18 +3061,18 @@ function updateGradeDisp() {
   if(mobBadge) mobBadge.innerHTML = badgeHTML;
 }
 
-async function resetSess() { 
-  const conf = await showModal('إعادة ضبط', 'هل أنتِ متأكدة من مسح التقييم والبدء من جديد؟'); 
+window.resetSess = async function() { 
+  const conf = await showModal('إعادة ضبط', 'هل أنتِ متأكدة من مسح التقييم والبدء من جديد؟', false); 
   if(conf) startSession(); 
 }
 
-function saveSession() {
-  if(!curSt) return; 
-  const st = S.students.find(s => s.id === curSt);
+window.saveSession = function() {
+  if(!window.curSt) return; 
+  const st = S.students.find(s => s.id === window.curSt);
   
   const att = document.getElementById('sess-att').value;
   const faces = parseInt(document.getElementById('faces').value) || 0;
-  const q = activeSessQuota?.sessionFaces || 10;
+  const q = window.activeSessQuota?.sessionFaces || 10;
   
   const revType = document.getElementById('rev-type').value;
   const revRange = document.getElementById('rev-range').value;
@@ -3080,8 +3083,8 @@ function saveSession() {
   let isOk = false;
   
   if(att === 'present') { 
-    fScore = sessScore; 
-    st.score = sessScore; 
+    fScore = window.sessScore; 
+    st.score = window.sessScore; 
     isOk = faces >= q; 
     if(isOk) st.ok = (st.ok||0) + 1; 
   }
@@ -3101,12 +3104,12 @@ function saveSession() {
     faces: att === 'present' ? faces : 0, 
     from: document.getElementById('from-a').value || '—', 
     to: document.getElementById('to-a').value || '—',
-    errors: att === 'present' ? sessErrors.slice() : [], 
+    errors: att === 'present' ? window.sessErrors.slice() : [], 
     privateNote: privNote,
     ok: isOk
   });
   
-  hasUnsavedChanges = false; 
+  window.hasUnsavedChanges = false; 
   saveState(); 
   renderStudentList(); 
   toast('✅ تم اعتماد وحفظ الجلسة'); 
@@ -3123,21 +3126,21 @@ function saveSession() {
   if(S.sheetUrl) syncToSheet();
 }
 
-function copyReport() {
-  const st = S.students.find(s => s.id === curSt); 
+window.copyReport = function() {
+  const st = S.students.find(s => s.id === window.curSt); 
   const name = st ? st.name : '—';
   
   const faces = document.getElementById('faces').value;
   const from = document.getElementById('from-a').value || '—';
   const to = document.getElementById('to-a').value || '—';
   
-  const g = gradeOf(sessScore);
-  const q = activeSessQuota?.sessionFaces || 10;
+  const g = gradeOf(window.sessScore);
+  const q = window.activeSessQuota?.sessionFaces || 10;
   
   const badge = parseInt(faces) >= q ? '🟢 مكتمل' : '🔴 لم يكتمل';
   
-  const errLines = sessErrors.length 
-    ? sessErrors.map((e,i) => `  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n')
+  const errLines = window.sessErrors.length 
+    ? window.sessErrors.map((e,i) => `  ${i+1}. ${e.desc} (${e.pts<0?'+':'-'}${Math.abs(e.pts)})`).join('\n')
     : '  ممتاز — لا توجد ملاحظات';
   
   const revType = document.getElementById('rev-type').value;
@@ -3157,7 +3160,7 @@ function copyReport() {
     `من        : ${from}   إلى : ${to}`,
     `الأوجه   : ${faces} ${badge}`, 
     rTxt,
-    `الدرجة   : ${fmt(sessScore)} / 100`,
+    `الدرجة   : ${fmt(window.sessScore)} / 100`,
     `التقييم  : ${g.emoji} ${g.label}`,
     '──────────────────────',
     'الملاحظات الحفظ:',
@@ -3169,161 +3172,24 @@ function copyReport() {
   fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
 }
 
-function copyStudentReportFromPortal() {
-  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
-  const st = S.students.find(s=>s.id===id); 
-  if(!st) return;
-  
-  const sess = st.sessions || [];
-  const pSess = sess.filter(s => s.att === 'present');
-  const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
-  
-  let rep = `📋 التقرير الأكاديمي للطالبة — ${S.course.cname || 'حلقة التحفيظ'}\n━━━━━━━━━━━━━━━━━━━━━━\nالاسم: ${st.name}\nمعدل الإتقان: ${avg}%\nشعلة الحماس: ${calculateStreak(sess)} 🔥\n──────────────────────\n`;
-  if(sess.length > 0) {
-    const latest = [...sess].sort((a,b)=>b.ts - a.ts)[0]; 
-    rep += `📌 آخر جلسة (${latest.date}):\n`;
-    if(latest.att === 'present') {
-      rep += `▪️ حفظ: ${latest.faces} أوجه (${latest.from} إلى ${latest.to})\n`;
-      rep += `▪️ المراجعة: ${(latest.rev === 'done') ? `تمت المراجعة (${latest.revG})` : 'لا يوجد'}\n`;
-      rep += `▪️ الدرجة: ${fmt(latest.score)} / 100 (${latest.grade})\n`;
-      rep += `▪️ الملاحظات: ${latest.errors && latest.errors.length ? latest.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات'}\n`;
-    } else { 
-      rep += `▪️ غياب: ${latest.att === 'excused' ? 'بعذر' : 'بدون عذر'}\n`; 
-    }
-  } else { 
-    rep += `لا توجد جلسات مسجلة بعد.\n`; 
-  }
-  rep += `━━━━━━━━━━━━━━━━━━━━━━\nوفّقكِ الله وبارك في مسيرتكِ 💜`;
-  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
-}
-
-function toggleDay(id, idx) { const st = S.students.find(s => s.id === id); if(!st) return; st.days[idx] = st.days[idx] ? 0 : 1; saveState(); loadPortal(); if(S.sheetUrl) syncToSheet(); }
-
-function generatePDF() {
-  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
-  const st = S.students.find(s=>s.id===id); 
-  if(!st) return;
-  
-  const sess = st.sessions || [];
-  const pSess = sess.filter(s => s.att === 'present');
-  
-  document.getElementById('rep-t-name').textContent = S.course.teacher || '—'; 
-  document.getElementById('rep-s-name').textContent = st.name; 
-  document.getElementById('rep-c-name').textContent = S.course.cname || '—';
-  document.getElementById('rep-score').textContent = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
-  document.getElementById('rep-sessions').textContent = pSess.length; 
-  document.getElementById('rep-date').textContent = new Date().toLocaleDateString('ar-EG');
-  
-  document.getElementById('rep-tbody').innerHTML = [...sess].sort((a,b)=>a.ts-b.ts).map(s => {
-    if(s.att !== 'present') {
-      return `<tr><td>${s.date}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td><td colspan="3" style="text-align:center;color:#C0392B;">-</td></tr>`;
-    }
-    const errs = s.errors && s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا ملاحظات';
-    let revStr = '-';
-    if(s.rev === 'done') {
-      revStr = `<span style="color:#2E7D52;font-weight:bold;">تمت المراجعة (${s.revG})</span>`;
-    }
-    return `
-      <tr>
-        <td>${s.date}</td>
-        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td>
-        <td>${revStr}</td>
-        <td>${errs}</td>
-      </tr>
-    `;
-  }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
-  
-  const element = document.getElementById('rep-layer'); 
-  element.style.display = 'block';
-  
-  html2pdf().set({ 
-    margin: 10, 
-    filename: `تقرير_${st.name}.pdf`, 
-    image: { type: 'jpeg', quality: 0.98 }, 
-    html2canvas: { scale: 2 }, 
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
-  }).from(element).save().then(() => { 
-    element.style.display = 'none'; 
-  });
-}
-
-function setBoardSort(s) { 
-  boardSort = s; 
-  document.getElementById('sort-alpha-btn').className = s==='alpha' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
-  document.getElementById('sort-pts-btn').className = s==='points' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
-  renderBoard(); 
-}
-
-function renderBoard() {
-  const ss = S.students.filter(s => s.total > 0);
-  const sorted = boardSort==='alpha' ? ss.sort((a,b) => a.name.localeCompare(b.name,'ar')) : ss.sort((a,b) => (b.score||0) - (a.score||0));
-  
-  if (boardSort === 'points' && sorted.length >= 1) {
-     let podiumHtml = ''; 
-     const p2 = sorted[1], p1 = sorted[0], p3 = sorted[2];
-     if(p2) podiumHtml += `<div class="podium-item podium-2"><div class="podium-avatar">${p2.name[0]}</div><div class="podium-bar">2</div><div class="podium-name">${p2.name}</div></div>`;
-     if(p1) podiumHtml += `<div class="podium-item podium-1"><div class="podium-avatar">${p1.name[0]}</div><div class="podium-bar">1</div><div class="podium-name">${p1.name}</div></div>`;
-     if(p3) podiumHtml += `<div class="podium-item podium-3"><div class="podium-avatar">${p3.name[0]}</div><div class="podium-bar">3</div><div class="podium-name">${p3.name}</div></div>`;
-     const podiumViewEl = document.getElementById('podium-view');
-     if(podiumViewEl) { podiumViewEl.innerHTML = podiumHtml; podiumViewEl.style.display = 'flex'; }
-  } else {
-     const podiumViewEl = document.getElementById('podium-view');
-     if(podiumViewEl) podiumViewEl.style.display = 'none';
-  }
-
-  const weekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000); 
-  let topName = null, topScore = -1;
-  S.students.forEach(st => { 
-    (st.sessions||[]).forEach(s => { 
-      if(s.att === 'present' && s.ts >= weekAgo && s.score > topScore) { 
-        topScore = s.score; 
-        topName = st.name; 
-      } 
-    }); 
-  });
-
-  const boardListEl = document.getElementById('board-list');
-  if (boardListEl) {
-      boardListEl.innerHTML = sorted.map((st,i) => {
-        const isMe = isStudentMode && st.id === loggedInStudentId;
-        const isStar = st.name === topName;
-        return `
-          <div class="list-row" style="${isMe?'border-color:var(--gold); background:var(--gold-pale);':''}">
-            <div class="list-content" style="width:100%;">
-              <div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">
-                ${boardSort==='points' ? (i+1) : '-'}
-              </div>
-              <div style="flex:1;">
-                <div style="font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center;">
-                   <span>${st.name} ${isMe?'<span style="color:var(--gold); font-size:10px;">(أنتِ)</span>':''} ${isStar?'🌟 <span style="font-size:10px; color:var(--gold);">نجمة الأسبوع</span>':''}</span>
-                   <span style="color:var(--primary);">${fmt(st.score)}</span>
-                </div>
-                <div class="progress-bar-container" style="height:4px; margin-top:6px;"><div class="progress-bar-fill" style="width: ${st.score||0}%;"></div></div>
-              </div>
-            </div>
-          </div>`;
-      }).join('') || '<div class="alert alert-info">لا توجد طالبات مقيمات بعد.</div>';
-  }
-}
-
 // ══════════════════════════════════════════════════════════
 // 7. QURAN APP 
 // ══════════════════════════════════════════════════════════
-let surahsData = []; 
-const quranCache = new Map(); 
-const JUZ_PAGES = [1, 22, 42, 62, 82, 102, 122, 142, 162, 182, 202, 222, 242, 262, 282, 302, 322, 342, 362, 382, 402, 422, 442, 462, 482, 502, 522, 542, 562, 582];
+window.surahsData = []; 
+window.quranCache = new Map(); 
+window.JUZ_PAGES = [1, 22, 42, 62, 82, 102, 122, 142, 162, 182, 202, 222, 242, 262, 282, 302, 322, 342, 362, 382, 402, 422, 442, 462, 482, 502, 522, 542, 562, 582];
 
-async function initQuranApp() {
-    if(surahsData.length > 0) return; 
+window.initQuranApp = async function() {
+    if(window.surahsData.length > 0) return; 
     try {
         const sRes = await fetch('https://api.quran.com/api/v4/chapters?language=ar'); 
-        surahsData = (await sRes.json()).chapters;
+        window.surahsData = (await sRes.json()).chapters;
         
-        document.getElementById('surah-select').innerHTML = surahsData.map(s => 
+        document.getElementById('surah-select').innerHTML = window.surahsData.map(s => 
           `<option value="${s.pages[0]}">سورة ${s.name_arabic}</option>`
         ).join('');
         
-        document.getElementById('juz-select').innerHTML = '<option value="">الجزء...</option>' + JUZ_PAGES.map((page, i) => 
+        document.getElementById('juz-select').innerHTML = '<option value="">الجزء...</option>' + window.JUZ_PAGES.map((page, i) => 
           `<option value="${page}">الجزء ${i + 1}</option>`
         ).join('');
         
@@ -3331,12 +3197,12 @@ async function initQuranApp() {
     } catch(e) {}
 }
 
-function goToSurah() { 
+window.goToSurah = function() { 
   document.getElementById('quran-page-input').value = document.getElementById('surah-select').value; 
   loadCurrentPage(); 
 }
 
-function goToJuz() { 
+window.goToJuz = function() { 
   const val = document.getElementById('juz-select').value; 
   if(val) { 
     document.getElementById('quran-page-input').value = val; 
@@ -3344,7 +3210,7 @@ function goToJuz() {
   } 
 }
 
-function changePage(dir) { 
+window.changePage = function(dir) { 
   let p = parseInt(document.getElementById('quran-page-input').value) - dir; 
   if(p >= 1 && p <= 604) { 
     document.getElementById('quran-page-input').value = p; 
@@ -3352,17 +3218,17 @@ function changePage(dir) {
   } 
 }
 
-async function loadCurrentPage() {
+window.loadCurrentPage = async function() {
     const page = document.getElementById('quran-page-input').value;
     const container = document.getElementById('quran-page-container');
     
-    if(surahsData.length > 0) { 
-      const cSurah = [...surahsData].reverse().find(s => s.pages[0] <= page); 
+    if(window.surahsData.length > 0) { 
+      const cSurah = [...window.surahsData].reverse().find(s => s.pages[0] <= page); 
       if(cSurah) document.getElementById('surah-select').value = cSurah.pages[0]; 
     }
 
-    if(quranCache.has(page)) { 
-      container.innerHTML = quranCache.get(page); 
+    if(window.quranCache.has(page)) { 
+      container.innerHTML = window.quranCache.get(page); 
       return; 
     }
 
@@ -3393,7 +3259,7 @@ async function loadCurrentPage() {
         if(cLine !== -1) html += '</div>';
         html += '</div>';
         
-        quranCache.set(page, html); 
+        window.quranCache.set(page, html); 
         container.innerHTML = html;
         
     } catch(err) { 
@@ -3401,7 +3267,7 @@ async function loadCurrentPage() {
     }
 }
 
-function toggleWordSelection(ayah, el) {
+window.toggleWordSelection = function(ayah, el) {
     el.classList.toggle('selected'); 
     const selectedEls = document.querySelectorAll('.q-word.selected'); 
     let words = [];
@@ -3413,6 +3279,7 @@ function toggleWordSelection(ayah, el) {
     document.getElementById('u-ayah').value = selectedEls.length > 0 ? ayah : ''; 
     document.getElementById('u-word').value = words.join(' ').trim();
     
+    // Auto-open panel on mobile
     if(selectedEls.length > 0 && window.innerWidth <= 991) { 
       const body = document.getElementById('deduct-panel-body'); 
       const icon = document.getElementById('panel-toggle-icon');
@@ -3423,11 +3290,11 @@ function toggleWordSelection(ayah, el) {
     }
 }
 
-function ayahAr(n) { 
+window.ayahAr = function(n) { 
   return n.replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[d]); 
 }
 
-function setQuranPoint(type) {
+window.setQuranPoint = function(type) {
     const page = parseInt(document.getElementById('quran-page-input').value);
     const sel = document.getElementById('surah-select');
     const surahName = sel.options[sel.selectedIndex].text;
@@ -3437,11 +3304,11 @@ function setQuranPoint(type) {
     
     if(type === 'start') { 
       document.getElementById('from-a').value = pointText; 
-      qStartPage = page; 
+      window.qStartPage = page; 
       toast('✅ تم تعيين البداية'); 
     } else { 
       document.getElementById('to-a').value = pointText; 
-      if(qStartPage > 0) document.getElementById('faces').value = Math.abs(page - qStartPage) + 1; 
+      if(window.qStartPage > 0) document.getElementById('faces').value = Math.abs(page - window.qStartPage) + 1; 
       toast('✅ تم تعيين النهاية'); 
     }
 }
@@ -3449,9 +3316,9 @@ function setQuranPoint(type) {
 // ══════════════════════════════════════════════════════════
 // 8. DASHBOARD (CHARTS & ANALYTICS) 📊
 // ══════════════════════════════════════════════════════════
-let charts = {};
+window.charts = {};
 
-function initDashboard() {
+window.initDashboard = function() {
   const empty = document.getElementById('dash-empty-state');
   const content = document.getElementById('dash-content');
   
@@ -3563,13 +3430,13 @@ function initDashboard() {
   if(weekStarsEl) weekStarsEl.textContent = topStudent ? `${topStudent} (${fmt(topScore)})` : 'لا يوجد';
 
   const targetAvg = 90;
-  if(charts.bar) { 
-    charts.bar.destroy();
+  if(window.charts.bar) { 
+    window.charts.bar.destroy();
   }
   
   const scoreBarChartEl = document.getElementById('scoreBarChart');
   if (scoreBarChartEl) {
-    charts.bar = new Chart(scoreBarChartEl, { 
+    window.charts.bar = new Chart(scoreBarChartEl, { 
       type: 'bar', 
       data: { 
         labels: names, 
@@ -3594,13 +3461,13 @@ function initDashboard() {
      errorInsightEl.textContent = topErr ? `الخطأ الأكثر شيوعاً هو: ${topErr}` : '';
   }
   
-  if(charts.radar) {
-    charts.radar.destroy();
+  if(window.charts.radar) {
+    window.charts.radar.destroy();
   }
   
   const errorRadarChartEl = document.getElementById('errorRadarChart');
   if (errorRadarChartEl) {
-    charts.radar = new Chart(errorRadarChartEl, { 
+    window.charts.radar = new Chart(errorRadarChartEl, { 
       type: 'radar', 
       data: { 
         labels: Object.keys(errMap), 
@@ -3621,7 +3488,7 @@ function initDashboard() {
     let lastKnown = null;
     sortedDayTs.forEach(dayTs => {
       const dStart = dayTs;
-      const dEnd = dayTs + 86400000;
+      const dEnd = dayTs + 86400000; // +1 day
       const s = (st.sessions||[]).find(x => x.ts >= dStart && x.ts < dEnd && x.att === 'present');
       if(s && s.score !== null) lastKnown = s.score;
       data.push(lastKnown);
@@ -3630,13 +3497,13 @@ function initDashboard() {
     return { label: st.name.split(' ')[0], data: data, borderColor: `hsl(${hue}, 60%, 50%)`, tension: 0.4, borderWidth: 2, fill: false };
   });
 
-  if(charts.line) {
-    charts.line.destroy();
+  if(window.charts.line) {
+    window.charts.line.destroy();
   }
   
   const trendLineChartEl = document.getElementById('trendLineChart');
   if (trendLineChartEl) {
-    charts.line = new Chart(trendLineChartEl, { 
+    window.charts.line = new Chart(trendLineChartEl, { 
       type: 'line', 
       data: { labels: trendLabels, datasets: datasets }, 
       options: { 
@@ -3650,7 +3517,7 @@ function initDashboard() {
   renderHeatmap(sortedDayTs.slice(-5));
 }
 
-function renderHeatmap(tsArray) {
+window.renderHeatmap = function(tsArray) {
   const container = document.getElementById('attendance-heatmap');
   if(!container) return;
   if(!tsArray.length) { container.innerHTML = ''; return; }
@@ -3681,9 +3548,286 @@ function renderHeatmap(tsArray) {
 }
 
 // ══════════════════════════════════════════════════════════
+// 9. PORTAL & STUDENT VIEW
+// ══════════════════════════════════════════════════════════
+window.deleteSession = async function(stId, ts) {
+  const confirm = await showModal('حذف الجلسة', 'تأكيد حذف هذه الجلسة نهائياً واستعادة الدرجات؟', false);
+  if(!confirm) return;
+  
+  const st = S.students.find(s => s.id === stId); 
+  if(!st) return;
+  
+  const sessIdx = st.sessions.findIndex(s => s.ts === ts);
+  if (sessIdx > -1) {
+    st.sessions.splice(sessIdx, 1);
+    st.ok = 0; 
+    st.total = st.sessions.length; 
+    let lps = null;
+    
+    const ascSessions = [...st.sessions].sort((a,b) => a.ts - b.ts);
+    for(let s of ascSessions) { 
+      if (s.att === 'present') { 
+        lps = s.score; 
+        if(s.ok) st.ok++; 
+      } 
+    }
+    
+    st.score = lps;
+    saveState(); 
+    loadPortal(); 
+    toast('🗑️ تم حذف الجلسة وإعادة الحساب'); 
+    
+    if(S.sheetUrl) syncToSheet();
+  }
+}
+
+window.loadPortal = function() {
+  const id = window.isStudentMode ? window.loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const pb = document.getElementById('portal-body'); 
+  
+  if(!id) { 
+    if(pb) pb.style.display = 'none'; 
+    return; 
+  }
+  
+  const st = S.students.find(s => s.id === id); 
+  
+  if(!st) return;
+  if(pb) pb.style.display = 'block';
+  
+  const pAvEl = document.getElementById('p-av'); if(pAvEl) pAvEl.textContent = st.name[0];
+  const pNameEl = document.getElementById('p-name'); if(pNameEl) pNameEl.textContent = st.name;
+  
+  const tF = st.customFaces || S.course.pages || 200;
+  const q = calcQuota(tF, S.course.weeks||10, S.course.studyDays||5);
+  
+  const pCourseInfoEl = document.getElementById('p-course-info'); 
+  if(pCourseInfoEl) pCourseInfoEl.textContent = st.customFaces ? `سجل محمي · مقرر خاص (${tF} وجه)` : `سجل محمي · المقرر العام (${tF} وجه)`;
+  
+  const pScoreEl = document.getElementById('p-score'); if(pScoreEl) pScoreEl.textContent = fmt(st.score);
+  const pStreakEl = document.getElementById('p-streak'); if(pStreakEl) pStreakEl.textContent = calculateStreak(st.sessions);
+  
+  const sd = S.course.studyDays || 5;
+  const days = st.days && st.days.length === sd ? st.days : Array(sd).fill(0);
+  const dn = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; 
+  const pSess = (st.sessions||[]).filter(s => s.att==='present');
+  
+  let totCompletedFaces = pSess.reduce((a,s) => a + (s.faces||0), 0);
+  let progFacePct = Math.min(100, Math.round((totCompletedFaces / tF) * 100));
+  
+  const pFacesTxtEl = document.getElementById('p-faces-txt'); if(pFacesTxtEl) pFacesTxtEl.textContent = `أنجزتِ ${totCompletedFaces} وجهاً من ${tF}`;
+  const pFacesPctEl = document.getElementById('p-faces-pct'); if(pFacesPctEl) pFacesPctEl.textContent = progFacePct + '%';
+  const pFacesProgEl = document.getElementById('p-faces-prog'); if(pFacesProgEl) pFacesProgEl.style.width = progFacePct + '%';
+
+  const pProgEl = document.getElementById('p-prog'); if(pProgEl) pProgEl.style.width = (days.filter(Boolean).length / sd * 100) + '%';
+  
+  const sDateObj = new Date(S.course.sdate);
+  const weeksPassed = Math.floor(Math.max(0, (Date.now() - sDateObj.getTime()) / (7*24*60*60*1000))) + 1; 
+  
+  const pDaysEl = document.getElementById('p-days');
+  if (pDaysEl) {
+     pDaysEl.innerHTML = days.map((d, i) => `
+      <div class="list-row" style="margin-bottom:8px; padding:12px 16px;">
+        <div>
+          <div style="font-weight:700;">${dn[i]||'يوم '+(i+1)}</div>
+          <div style="font-size:11px; color:var(--text-muted);">${getActualDateStr(S.course.sdate, weeksPassed, i, sd)} | المطلوب: ${q.dailyText} أوجه</div>
+        </div>
+        ${d ? `<button class="btn btn-outline btn-sm" onclick="toggleDay(${id},${i})">تم ✓</button>` : `<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">تأكيد الإنجاز</button>`}
+      </div>`).join('');
+  }
+
+  const slData = [...pSess].sort((a,b)=>a.ts - b.ts).slice(-5).map(s => s.score);
+  if(window.charts.sparkline) { 
+    window.charts.sparkline.destroy();
+  }
+  
+  const sparklineChartEl = document.getElementById('sparklineChart');
+  if (sparklineChartEl) {
+    window.charts.sparkline = new Chart(sparklineChartEl, { 
+      type: 'line', 
+      data: { labels: Array(slData.length).fill(''), datasets: [{ data: slData, borderColor: '#D4AF37', backgroundColor: 'rgba(212, 175, 55, 0.1)', tension: 0.4, fill: true, pointRadius: 3 }] }, 
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false, min: 60, max: 100 } }, layout: { padding: 5 } } 
+    });
+  }
+
+  const hist = document.getElementById('p-hist');
+  if (hist) {
+      hist.innerHTML = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts).map(s => {
+        const delBtn = !window.isStudentMode ? `<button class="btn btn-danger btn-sm" style="padding:4px 8px; font-size:11px; margin-top:8px;" onclick="deleteSession(${id}, ${s.ts})">🗑️ حذف</button>` : '';
+        
+        if(s.att !== 'present') {
+          return `<div class="list-row" style="align-items:flex-start;"><div><div style="color:var(--danger); font-weight:700;">${s.date} - غياب</div></div>${delBtn}</div>`;
+        }
+        
+        let revHtml = (s.rev === 'done') ? `<div style="font-size:11px; background:var(--bg-elevated); padding:4px 8px; border-radius:4px; color:var(--primary); margin-top:6px; display:inline-block;">مراجعة: ${s.revG}</div>` : '';
+        
+        let notesHtml = '';
+        if(s.errors && s.errors.length > 0) { notesHtml += `<div style="margin-top:6px; font-size:11px; color:var(--danger);"><strong style="color:var(--text-muted)">الأخطاء:</strong> ${s.errors.map(e=>e.desc).join(' | ')}</div>`; }
+        if(!window.isStudentMode && s.privateNote) { notesHtml += `<div style="margin-top:6px; font-size:11px; background:var(--gold-pale); padding:4px; border-radius:4px;"><strong style="color:var(--gold-dk)">ملاحظة خاصة:</strong> ${s.privateNote}</div>`; }
+
+        return `
+          <div class="list-row" style="align-items:flex-start;">
+            <div>
+              <div style="font-weight:700;">${s.date}</div>
+              <div style="font-size:12px; color:var(--text-muted);">حفظ: ${s.faces} أوجه (${s.from}-${s.to})</div>
+              ${revHtml}
+              ${notesHtml}
+              <div>${delBtn}</div>
+            </div>
+            <div style="font-size:20px; font-weight:800; font-family:'Amiri',serif; color:var(--primary);">${fmt(s.score)}</div>
+          </div>`;
+      }).join('') || '<div class="alert alert-info">لا توجد جلسات مسجلة بعد.</div>';
+  }
+}
+
+window.copyStudentReportFromPortal = function() {
+  const id = window.isStudentMode ? window.loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const st = S.students.find(s=>s.id===id); 
+  if(!st) return;
+  
+  const sess = st.sessions || [];
+  const pSess = sess.filter(s => s.att === 'present');
+  const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
+  
+  let rep = `📋 التقرير الأكاديمي للطالبة — ${S.course.cname || 'حلقة التحفيظ'}\n━━━━━━━━━━━━━━━━━━━━━━\nالاسم: ${st.name}\nمعدل الإتقان: ${avg}%\nشعلة الحماس: ${calculateStreak(sess)} 🔥\n──────────────────────\n`;
+  if(sess.length > 0) {
+    const latest = [...sess].sort((a,b)=>b.ts - a.ts)[0]; 
+    rep += `📌 آخر جلسة (${latest.date}):\n`;
+    if(latest.att === 'present') {
+      rep += `▪️ حفظ: ${latest.faces} أوجه (${latest.from} إلى ${latest.to})\n`;
+      rep += `▪️ المراجعة: ${(latest.rev === 'done') ? `تمت المراجعة (${latest.revG})` : 'لا يوجد'}\n`;
+      rep += `▪️ الدرجة: ${fmt(latest.score)} / 100 (${latest.grade})\n`;
+      rep += `▪️ الملاحظات: ${latest.errors && latest.errors.length ? latest.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات'}\n`;
+    } else { 
+      rep += `▪️ غياب: ${latest.att === 'excused' ? 'بعذر' : 'بدون عذر'}\n`; 
+    }
+  } else { 
+    rep += `لا توجد جلسات مسجلة بعد.\n`; 
+  }
+  rep += `━━━━━━━━━━━━━━━━━━━━━━\nوفّقكِ الله وبارك في مسيرتكِ 💜`;
+  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
+}
+
+window.toggleDay = function(id, idx) { 
+  const st = S.students.find(s => s.id === id); 
+  if(!st) return; 
+  st.days[idx] = st.days[idx] ? 0 : 1; 
+  saveState(); 
+  loadPortal(); 
+  if(S.sheetUrl) syncToSheet(); 
+}
+
+window.generatePDF = function() {
+  const id = window.isStudentMode ? window.loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const st = S.students.find(s=>s.id===id); 
+  if(!st) return;
+  
+  const sess = st.sessions || [];
+  const pSess = sess.filter(s => s.att === 'present');
+  
+  document.getElementById('rep-t-name').textContent = S.course.teacher || '—'; 
+  document.getElementById('rep-s-name').textContent = st.name; 
+  document.getElementById('rep-c-name').textContent = S.course.cname || '—';
+  document.getElementById('rep-score').textContent = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
+  document.getElementById('rep-sessions').textContent = pSess.length; 
+  document.getElementById('rep-date').textContent = new Date().toLocaleDateString('ar-EG');
+  
+  document.getElementById('rep-tbody').innerHTML = [...sess].sort((a,b)=>a.ts-b.ts).map(s => {
+    if(s.att !== 'present') {
+      return `<tr><td>${s.date}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td><td colspan="3" style="text-align:center;color:#C0392B;">-</td></tr>`;
+    }
+    const errs = s.errors && s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا ملاحظات';
+    let revStr = '-';
+    if(s.rev === 'done') {
+      revStr = `<span style="color:#2E7D52;font-weight:bold;">تمت المراجعة (${s.revG})</span>`;
+    }
+    return `
+      <tr>
+        <td>${s.date}</td>
+        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td>
+        <td>${revStr}</td>
+        <td>${errs}</td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
+  
+  const element = document.getElementById('rep-layer'); 
+  element.style.display = 'block';
+  
+  html2pdf().set({ 
+    margin: 10, 
+    filename: `تقرير_${st.name}.pdf`, 
+    image: { type: 'jpeg', quality: 0.98 }, 
+    html2canvas: { scale: 2 }, 
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+  }).from(element).save().then(() => { 
+    element.style.display = 'none'; 
+  });
+}
+
+window.setBoardSort = function(s) { 
+  window.boardSort = s; 
+  document.getElementById('sort-alpha-btn').className = s==='alpha' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
+  document.getElementById('sort-pts-btn').className = s==='points' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
+  renderBoard(); 
+}
+
+window.renderBoard = function() {
+  const ss = S.students.filter(s => s.total > 0);
+  const sorted = window.boardSort==='alpha' ? ss.sort((a,b) => a.name.localeCompare(b.name,'ar')) : ss.sort((a,b) => (b.score||0) - (a.score||0));
+  
+  if (window.boardSort === 'points' && sorted.length >= 1) {
+     let podiumHtml = ''; 
+     const p2 = sorted[1], p1 = sorted[0], p3 = sorted[2];
+     if(p2) podiumHtml += `<div class="podium-item podium-2"><div class="podium-avatar">${p2.name[0]}</div><div class="podium-bar">2</div><div class="podium-name">${p2.name}</div></div>`;
+     if(p1) podiumHtml += `<div class="podium-item podium-1"><div class="podium-avatar">${p1.name[0]}</div><div class="podium-bar">1</div><div class="podium-name">${p1.name}</div></div>`;
+     if(p3) podiumHtml += `<div class="podium-item podium-3"><div class="podium-avatar">${p3.name[0]}</div><div class="podium-bar">3</div><div class="podium-name">${p3.name}</div></div>`;
+     const podiumViewEl = document.getElementById('podium-view');
+     if(podiumViewEl) { podiumViewEl.innerHTML = podiumHtml; podiumViewEl.style.display = 'flex'; }
+  } else {
+     const podiumViewEl = document.getElementById('podium-view');
+     if(podiumViewEl) podiumViewEl.style.display = 'none';
+  }
+
+  const weekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000); 
+  let topName = null, topScore = -1;
+  S.students.forEach(st => { 
+    (st.sessions||[]).forEach(s => { 
+      if(s.att === 'present' && s.ts >= weekAgo && s.score > topScore) { 
+        topScore = s.score; 
+        topName = st.name; 
+      } 
+    }); 
+  });
+
+  const boardListEl = document.getElementById('board-list');
+  if (boardListEl) {
+      boardListEl.innerHTML = sorted.map((st,i) => {
+        const isMe = window.isStudentMode && st.id === window.loggedInStudentId;
+        const isStar = st.name === topName;
+        return `
+          <div class="list-row" style="${isMe?'border-color:var(--gold); background:var(--gold-pale);':''}">
+            <div class="list-content" style="width:100%;">
+              <div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">
+                ${window.boardSort==='points' ? (i+1) : '-'}
+              </div>
+              <div style="flex:1;">
+                <div style="font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center;">
+                   <span>${st.name} ${isMe?'<span style="color:var(--gold); font-size:10px;">(أنتِ)</span>':''} ${isStar?'🌟 <span style="font-size:10px; color:var(--gold);">نجمة الأسبوع</span>':''}</span>
+                   <span style="color:var(--primary);">${fmt(st.score)}</span>
+                </div>
+                <div class="progress-bar-container" style="height:4px; margin-top:6px;"><div class="progress-bar-fill" style="width: ${st.score||0}%;"></div></div>
+              </div>
+            </div>
+          </div>`;
+      }).join('') || '<div class="alert alert-info">لا توجد طالبات مقيمات بعد.</div>';
+  }
+}
+
+// ══════════════════════════════════════════════════════════
 // 10. GOOGLE SHEETS CLOUD SYNC
 // ══════════════════════════════════════════════════════════
-async function sheetReq(action) {
+window.sheetReq = async function(action) {
   if(!S.sheetUrl || !S.teacherCode) { toast('⚠️ إعدادات الربط غير مكتملة'); return null; }
   setSyncDot('sync');
   try { 
@@ -3694,13 +3838,14 @@ async function sheetReq(action) {
     return null; 
   }
 }
-async function syncToSheet() { 
-  if(isStudentMode) return; 
-  const r = await sheetReq('save'); 
+
+window.syncToSheet = async function() { 
+  if(window.isStudentMode) return; 
+  const r = await window.sheetReq('save'); 
   if(r?.ok) { 
     setSyncDot('ok'); 
     toast('☁️ تمت المزامنة بنجاح'); 
-    hasUnsavedChanges = false; 
+    window.hasUnsavedChanges = false; 
   } else { 
     setSyncDot('err'); 
     toast('❌ فشل الاتصال بقاعدة البيانات'); 
@@ -3710,7 +3855,7 @@ async function syncToSheet() {
 // ══════════════════════════════════════════════════════════
 // INIT & MAGIC LINK PARSER
 // ══════════════════════════════════════════════════════════
-(function init() {
+function init() {
   const p = new URLSearchParams(window.location.search);
   const sP = p.get('s'), uP = p.get('u'), cP = p.get('c'), tP = p.get('t'), exp = p.get('exp');
   
@@ -3722,7 +3867,7 @@ async function syncToSheet() {
   if(tP === '1' && uP && cP) {
     try { S.sheetUrl = decodeData(uP); S.teacherCode = decodeData(cP); } catch(e) {}
     toast('جارٍ استرجاع بيانات المعلمة...');
-    sheetReq('load').then(r => {
+    window.sheetReq('load').then(r => {
       if(r?.ok && r.payload) { 
         const parsed = JSON.parse(r.payload); 
         if(validateState(parsed)) { 
@@ -3741,8 +3886,8 @@ async function syncToSheet() {
   }
   
   if(sP && uP && cP) {
-    isStudentMode = true; 
-    loggedInStudentId = parseInt(sP); 
+    window.isStudentMode = true; 
+    window.loggedInStudentId = parseInt(sP); 
     document.body.classList.add('student-mode');
     
     try { 
@@ -3761,12 +3906,12 @@ async function syncToSheet() {
     alertEl.style.display = 'block'; 
     alertEl.innerHTML = 'جاري الاتصال بالمنصة لجلب بياناتك... ⏳';
     
-    sheetReq('load').then(r => { 
+    window.sheetReq('load').then(r => { 
       if(r?.ok && r.payload) {
         const parsed = JSON.parse(r.payload);
         if(validateState(parsed)) { 
           S = parsed; 
-          const stExists = S.students.find(s => s.id === loggedInStudentId); 
+          const stExists = S.students.find(s => s.id === window.loggedInStudentId); 
           if(stExists) { 
             alertEl.innerHTML = 'أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟'; 
             loadPortal(); 
@@ -3779,13 +3924,20 @@ async function syncToSheet() {
       } else {
         alertEl.innerHTML = '❌ عذراً، لم نتمكن من جلب بياناتك.';
       }
-    }).catch(err => alertEl.innerHTML = '❌ خطأ في الاتصال بالخادم.');
+    }).catch(err => {
+        alertEl.innerHTML = '❌ خطأ في الاتصال بالخادم.';
+    });
   } else { 
     loadState(); 
     initSetup(); 
     navigate('setup'); 
   }
-})();
+}
+
+// Start application
+init();
+
+}); // End DOMContentLoaded
 </script>
 </body>
 </html>
