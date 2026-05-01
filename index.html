@@ -111,7 +111,7 @@ input, select, textarea { font-family: 'Cairo', sans-serif; max-width: 100%; }
 /* ══════════════════════════════════════════════════════════════════
    LAYOUT COMPONENTS (التخطيط)
 ══════════════════════════════════════════════════════════════════ */
-.app-container { display: flex; min-height: 100vh; width: 100%; }
+.app-container { display: flex; min-height: 100vh; width: 100%; overflow-x: hidden; }
 
 /* ══ SIDEBAR ══ */
 .sidebar {
@@ -190,13 +190,12 @@ input, select, textarea { font-family: 'Cairo', sans-serif; max-width: 100%; }
 [data-theme="dark"] .btn-icon:hover { color: var(--gold); }
 
 /* ══ PAGE STRUCTURE ══ */
-/* إزالة العوائق التي تمنع التثبيت Sticky */
 .app-container, .main-content, .page-wrapper { 
   overflow: visible !important; 
   overflow-x: visible !important; 
   overflow-y: visible !important; 
 }
-.page-wrapper { padding: 32px; max-width: 1200px; margin: 0 auto; width: 100%; display: none; animation: fadeUp 0.4s ease; }
+.page-wrapper { padding: 32px; max-width: 1200px; margin: 0 auto; width: 100%; display: none; animation: fadeUp 0.4s ease; overflow-x: hidden; }
 .page-wrapper.active { display: block; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -207,6 +206,7 @@ input, select, textarea { font-family: 'Cairo', sans-serif; max-width: 100%; }
   background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--r-lg);
   padding: 28px; margin-bottom: 24px; box-shadow: var(--shadow-sm);
   transition: box-shadow var(--trans), transform var(--trans);
+  overflow-x: auto; 
 }
 .card:hover { box-shadow: var(--shadow-md); }
 .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 10px;}
@@ -304,7 +304,6 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 }
 #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-
 /* ══════════════════════════════════════════════════════════════════
    SMART SPLIT LAYOUT (هندسة واجهة جلسة التسميع)
 ══════════════════════════════════════════════════════════════════ */
@@ -313,6 +312,7 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
   gap: 24px;
   align-items: start;
 }
+
 .session-quran {
   max-height: calc(100vh - 120px);
   overflow-y: auto;
@@ -427,9 +427,6 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
   .b-nav-item.active { color: var(--primary); }
   [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
   .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
-  
-  /* Quran font smaller on mobile */
-  .quran-page { font-size: 24px !important; padding: 15px !important; }
 }
 
 /* Sidebar Overlay */
@@ -470,42 +467,37 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
 /* Student mode specific styles */
 .student-mode .teacher-only { display: none !important; }
 
-/* ════ المصحف التفاعلي ════ */
+/* ════ المصحف التفاعلي (المحسن للجوال) ════ */
 .quran-page {
   font-family: 'Amiri Quran', serif;
-  font-size: 28px;
-  line-height: 2.3;
+  font-size: 26px;
+  line-height: 2.2;
   text-align: justify;
+  text-justify: inter-word;
   text-align-last: center;
   direction: rtl;
-  padding: 30px;
+  padding: 20px;
   background: #FDFBF7;
   border: 1px solid var(--gold-lt);
   border-radius: var(--r-md);
-  min-height: 500px;
-  user-select: none; /* لمنع التحديد العشوائي للنص أثناء النقر */
-  word-break: break-word; /* Responsive */
+  min-height: 400px;
+  user-select: none;
+  word-wrap: break-word;
 }
 [data-theme="dark"] .quran-page {
   background: #1A1714;
   border-color: var(--gold-dk);
 }
-.q-line {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  width: 100%;
-}
 .q-word {
+  display: inline-block;
   cursor: pointer;
-  padding: 0 3px;
+  padding: 0 2px;
   border-radius: 4px;
   transition: all 0.2s;
 }
 .q-word:hover {
   background: rgba(212, 175, 55, 0.3);
   color: var(--primary);
-  transform: translateY(-2px);
 }
 [data-theme="dark"] .q-word:hover { color: var(--gold); }
 .q-word.selected {
@@ -518,6 +510,17 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
   color: var(--gold-dk);
   font-size: 20px;
   margin: 0 4px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  /* تصغير خط المصحف قليلاً في الجوال ليتناسب مع الشاشة */
+  .quran-page { 
+    font-size: 22px !important; 
+    padding: 15px !important; 
+    line-height: 2.2 !important; 
+  }
 }
 </style>
 </head>
@@ -819,7 +822,7 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
           <div class="session-quran">
             
             <!-- ════ المصحف التفاعلي ════ -->
-            <div class="card" style="border-color: var(--gold); padding: 0; overflow: hidden; margin-bottom: 24px; display: flex; flex-direction: column; min-height: 65vh; position: relative;">
+            <div class="card" style="border-color: var(--gold); padding: 0; overflow: hidden; margin-bottom: 24px; display: flex; flex-direction: column; position: relative;">
               <div style="background: var(--bg-elevated); padding: 12px; border-bottom: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px;">
                 <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;">
                   <select id="surah-select" class="form-control" style="width: 130px; padding: 5px; font-size: 13px;" onchange="goToSurah()"></select>
@@ -1251,7 +1254,7 @@ function json(obj) {
 
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v6'); 
+    const d = localStorage.getItem('alm_pro_final2'); 
     if(d) S = JSON.parse(d); 
   } catch(e) {} 
 }
@@ -1259,7 +1262,7 @@ function loadState() {
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v6', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_final2', JSON.stringify(S)); 
     setSyncDot('local'); 
   } catch(e) {} 
 }
@@ -1498,7 +1501,7 @@ function saveCourse() {
 }
 
 function archiveCourse() {
-  if(!confirm('⚠️ هل أنتِ متأكدة من أرشفة وتصفير هذه الدورة؟ سيتم تصفير درجات وسجلات الطالبات لبدء دورة جديدة وسيتم مسح البيانات الافتراضية إذا كانت موجودة.')) return;
+  if(!confirm('⚠️ هل أنتِ متأكدة من أرشفة وتصفير هذه الدورة؟ سيتم تصفير درجات وسجلات الطالبات لبدء دورة جديدة.')) return;
   
   const sd = S.course.studyDays || 5;
   
@@ -1679,7 +1682,7 @@ function startSession() {
   curSt = st.id; 
   sessScore = 100; 
   sessErrors = [];
-  qStartPage = 0; // تصفير صفحة البداية
+  qStartPage = 0; 
   
   const tf = st.customFaces || S.course.pages || 200;
   const q = calcQuota(tf, S.course.weeks||10, S.course.studyDays||5);
@@ -1750,7 +1753,7 @@ function editErr(id) {
   let label = '';
   
   let parts = err.desc.split(' · ');
-  label = parts[parts.length - 1]; // الكلمة الأخيرة هي نوع الخصم
+  label = parts[parts.length - 1]; 
   
   parts.forEach(p => {
     if(p.startsWith('آية')) currentAyah = p.replace('آية', '').trim();
@@ -2269,10 +2272,6 @@ let surahsData = [];
 // مصفوفة ثابتة ودقيقة لبداية صفحات الأجزاء الـ 30 في المصحف
 const JUZ_PAGES = [1, 22, 42, 62, 82, 102, 122, 142, 162, 182, 202, 222, 242, 262, 282, 302, 322, 342, 362, 382, 402, 422, 442, 462, 482, 502, 522, 542, 562, 582];
 
-// متغيرات للتحكم بلمس المصحف
-let touchStartX = 0;
-let touchEndX = 0;
-
 async function initQuranApp() {
     try {
         const sRes = await fetch('https://api.quran.com/api/v4/chapters?language=ar');
@@ -2287,32 +2286,7 @@ async function initQuranApp() {
             `<option value="${page}">الجزء ${index + 1}</option>`).join('');
             
         loadCurrentPage();
-        setupQuranSwipe();
     } catch(e) { toast('❌ خطأ في تحميل بيانات المصحف'); }
-}
-
-function setupQuranSwipe() {
-    const qCont = document.getElementById('quran-page-container');
-    if(!qCont) return;
-    qCont.addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-    }, {passive: true});
-    qCont.addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleQuranSwipe();
-    }, {passive: true});
-}
-
-function handleQuranSwipe() {
-    const swipeThreshold = 50;
-    if (touchEndX < touchStartX - swipeThreshold) {
-        // التمرير لليسار (السحب من اليمين لليسار) -> الصفحة التالية (+1)
-        changePage(-1);
-    }
-    if (touchEndX > touchStartX + swipeThreshold) {
-        // التمرير لليمين (السحب من اليسار لليمين) -> الصفحة السابقة (-1)
-        changePage(1);
-    }
 }
 
 function goToSurah() { 
@@ -2353,25 +2327,17 @@ async function loadCurrentPage() {
         const data = await res.json();
         
         let html = '';
-        let currentLine = -1;
 
         data.verses.forEach(v => {
             const ayahNum = v.verse_key.split(':')[1];
             v.words.forEach(w => {
-                if(w.line_number !== currentLine) {
-                    if(currentLine !== -1) html += '</div>';
-                    html += '<div class="q-line">';
-                    currentLine = w.line_number;
-                }
-                
                 if(w.char_type_name === 'word') {
-                    html += `<span class="q-word" onclick="toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span>`;
+                    html += `<span class="q-word" onclick="toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span> `;
                 } else if(w.char_type_name === 'end') {
-                    html += `<span class="q-ayah-end">﴿${ayahAr(ayahNum)}﴾</span>`;
+                    html += `<span class="q-ayah-end" onclick="toggleWordSelection('${ayahNum}', this)">﴿${ayahAr(ayahNum)}﴾</span> `;
                 }
             });
         });
-        if(currentLine !== -1) html += '</div>';
         container.innerHTML = html;
     } catch(err) {
         container.innerHTML = '<div style="color:red; text-align:center; margin-top:50px;">فشل الاتصال بخادم القرآن.</div>';
@@ -2385,11 +2351,11 @@ function toggleWordSelection(ayah, el) {
     let words = [];
     
     selectedEls.forEach(w => {
-        words.push(w.textContent);
+        words.push(w.textContent.replace(/[﴾﴿0-9٠-٩]/g, '').trim()); // Clean up ayah markers if selected
     });
     
     document.getElementById('u-ayah').value = selectedEls.length > 0 ? ayah : '';
-    document.getElementById('u-word').value = words.join(' ');
+    document.getElementById('u-word').value = words.join(' ').trim();
 }
 
 function ayahAr(n) { return n.replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[d]); }
