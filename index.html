@@ -159,6 +159,7 @@
       width: 100%; 
     }
 
+    /* Sidebar */
     .sidebar { 
       width: var(--sidebar-w); 
       background: var(--bg-surface); 
@@ -1249,6 +1250,20 @@
       }
       
       .btn-d span.hk { display: none; }
+
+      /* ════ القرآن في الجوال - فقرة متصلة ════ */
+      .q-page-content {
+        display: block !important;
+        text-align: justify !important;
+        text-align-last: center !important;
+      }
+      .q-line {
+        display: contents !important; /* دمج الأسطر كفقرة واحدة متصلة للجيستفاي */
+      }
+      .q-word, .q-ayah-end {
+        display: inline-block !important;
+        margin-bottom: 8px !important;
+      }
     }
 
     @media (max-width: 768px) {
@@ -1300,10 +1315,11 @@
       [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
       .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
       
-      /* ════ القرآن في الجوال - فقرة متصلة ════ */
+      /* Quran Font Adjustments for Mobile */
       .quran-page { 
         font-size: 26px !important; 
         padding: 20px 15px !important; 
+        line-height: 2.2 !important; 
         border-width: 6px !important;
         outline-offset: -4px !important;
       }
@@ -1342,6 +1358,11 @@
       }
       #rep-layer * { visibility: visible; }
       @page { margin: 15mm; size: A4 portrait; }
+    }
+
+    #rep-layer {
+      direction: rtl !important;
+      text-align: right !important;
     }
 
     .rep-wrap { 
@@ -1440,6 +1461,7 @@
     .rep-table td { 
       padding: 9px; 
       border-bottom: 1px solid #E4DED4; 
+      vertical-align: top;
     }
 
     .rep-foot { 
@@ -1548,7 +1570,7 @@
 <div class="app-container">
 
   <!-- ════ SIDEBAR ════ -->
-  <div class="sidebar-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
+  <div class="sidebar-overlay" id="sb-overlay" onclick="window.toggleSidebar()"></div>
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="logo-container">
@@ -1562,19 +1584,19 @@
     </div>
 
     <nav class="nav-menu">
-      <button class="nav-item active teacher-only" onclick="navigate('setup')">
+      <button class="nav-item active teacher-only" onclick="window.navigate('setup')">
         <span class="nav-icon">⚙️</span> إعداد الدورة
       </button>
-      <button class="nav-item teacher-only" onclick="navigate('session')">
+      <button class="nav-item teacher-only" onclick="window.navigate('session')">
         <span class="nav-icon">🎙️</span> جلسة التسميع
       </button>
-      <button class="nav-item teacher-only" onclick="navigate('dash')">
+      <button class="nav-item teacher-only" onclick="window.navigate('dash')">
         <span class="nav-icon">📊</span> لوحة التحليلات
       </button>
-      <button class="nav-item" onclick="navigate('portal')">
+      <button class="nav-item" onclick="window.navigate('portal')">
         <span class="nav-icon">👤</span> بوابة الطالبة
       </button>
-      <button class="nav-item" onclick="navigate('board')">
+      <button class="nav-item" onclick="window.navigate('board')">
         <span class="nav-icon">🏆</span> لوحة الصدارة
       </button>
     </nav>
@@ -1596,7 +1618,7 @@
     <!-- HEADER -->
     <header class="top-header">
       <div style="display:flex; align-items:center; gap:16px;">
-        <button class="btn-icon mobile-header-btn" onclick="toggleSidebar()">☰</button>
+        <button class="btn-icon mobile-header-btn" onclick="window.toggleSidebar()">☰</button>
         <div class="header-titles">
           <h2 id="top-title">إعداد الدورة</h2>
           <p id="top-sub" class="hide-mobile">تخصيص البيانات والربط السحابي</p>
@@ -1607,11 +1629,11 @@
         <div id="session-timer" class="session-timer teacher-only" style="display:none;">
            ⏱️ <span id="timer-display">00:00</span>
         </div>
-        <div class="sync-indicator teacher-only" onclick="syncToSheet()" title="مزامنة البيانات يدوياً">
+        <div class="sync-indicator teacher-only" onclick="window.syncToSheet()" title="مزامنة البيانات يدوياً">
           <div class="dot local" id="sync-dot"></div>
           <span class="hide-mobile" id="sync-lbl">محلي</span>
         </div>
-        <button class="btn-icon" onclick="toggleTheme()" title="تبديل المظهر">🌓</button>
+        <button class="btn-icon" onclick="window.toggleTheme()" title="تبديل المظهر">🌓</button>
       </div>
     </header>
 
@@ -1628,12 +1650,12 @@
         <p style="font-size:13px; font-weight:600; color:var(--text-muted);">
           لفتح المنصة من جهاز آخر واسترجاع بياناتك تلقائياً، انسخي هذا الرابط واحتفظي به.
         </p>
-        <button class="btn btn-primary btn-sm" style="align-self:flex-start;" onclick="copyTeacherLink()">🔗 نسخ رابط الدخول الخاص بي</button>
+        <button class="btn btn-primary btn-sm" style="align-self:flex-start;" onclick="window.copyTeacherLink()">🔗 نسخ رابط الدخول الخاص بي</button>
       </div>
 
       <!-- LOCKED SUMMARY VIEW -->
       <div id="setup-locked-view" class="card" style="display:none; position:relative; border-color:var(--gold);">
-        <button class="btn btn-outline" onclick="unlockSetup()" style="position:absolute; top:24px; left:24px; font-size:12px; padding:6px 12px; color:var(--gold); border-color:var(--gold);">✏️ تعديل الإعدادات</button>
+        <button class="btn btn-outline" onclick="window.unlockSetup()" style="position:absolute; top:24px; left:24px; font-size:12px; padding:6px 12px; color:var(--gold); border-color:var(--gold);">✏️ تعديل الإعدادات</button>
         <h3 class="card-title">إعدادات الدورة الحالية والربط</h3>
         <div class="grid-4" style="margin-top:20px;">
           <div>
@@ -1660,32 +1682,32 @@
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">البيانات الأساسية والربط السحابي</h3>
-            <button class="btn btn-outline" style="padding:8px 16px; font-size:12px; color:var(--danger); border-color:rgba(192, 57, 43, 0.3);" onclick="archiveCourse()">🗄️ بدء دورة جديدة</button>
+            <button class="btn btn-outline" style="padding:8px 16px; font-size:12px; color:var(--danger); border-color:rgba(192, 57, 43, 0.3);" onclick="window.archiveCourse()">🗄️ بدء دورة جديدة</button>
           </div>
           <div class="grid-2">
             <div class="form-group">
               <label>اسم المعلمة</label>
-              <input type="text" class="form-control" id="teacher" placeholder="مثال: أ. فاطمة" oninput="validateSetupInline(); updateUI()">
+              <input type="text" class="form-control" id="teacher" placeholder="مثال: أ. فاطمة" oninput="window.validateSetupInline(); window.updateUI()">
             </div>
             <div class="form-group">
               <label>اسم المقرر العام</label>
-              <input type="text" class="form-control" id="cname" placeholder="مثال: الزهراوين" oninput="validateSetupInline()">
+              <input type="text" class="form-control" id="cname" placeholder="مثال: الزهراوين" oninput="window.validateSetupInline()">
             </div>
             <div class="form-group">
               <label>إجمالي أوجه المقرر</label>
-              <input type="number" class="form-control" id="tpages" value="200" oninput="calcPlan()">
+              <input type="number" class="form-control" id="tpages" value="200" oninput="window.calcPlan()">
             </div>
             <div class="form-group">
               <label>تاريخ بدء الدورة</label>
-              <input type="date" class="form-control" id="sdate" onchange="calcPlan()">
+              <input type="date" class="form-control" id="sdate" onchange="window.calcPlan()">
             </div>
             <div class="form-group">
               <label>مدة الدورة (بالأسابيع)</label>
-              <input type="number" class="form-control" id="tweeks" value="10" oninput="calcPlan()">
+              <input type="number" class="form-control" id="tweeks" value="10" oninput="window.calcPlan()">
             </div>
             <div class="form-group">
               <label>أيام الورد اليومي</label>
-              <select class="form-control" id="study-days" onchange="calcPlan()">
+              <select class="form-control" id="study-days" onchange="window.calcPlan()">
                 <option value="5" selected>5 أيام (الأحد — الخميس)</option>
                 <option value="6">6 أيام (السبت — الخميس)</option>
                 <option value="7">7 أيام (بدون راحة)</option>
@@ -1698,11 +1720,11 @@
             
             <div class="form-group">
               <label>رابط التطبيق (Web App URL)</label>
-              <input type="text" class="form-control" id="sheet-url" placeholder="https://script.google.com/..." oninput="validateSetupInline()">
+              <input type="text" class="form-control" id="sheet-url" placeholder="https://script.google.com/..." oninput="window.validateSetupInline()">
             </div>
             <div class="form-group">
               <label>رمزك السري (كلمة المرور الخاصة بكِ)</label>
-              <input type="password" class="form-control" id="teacher-code" placeholder="مثال: fatima2025" autocomplete="off" oninput="validateSetupInline()">
+              <input type="password" class="form-control" id="teacher-code" placeholder="مثال: fatima2025" autocomplete="off" oninput="window.validateSetupInline()">
             </div>
             
             <div style="grid-column: 1 / -1;">
@@ -1711,17 +1733,18 @@
                 <div style="margin-top:12px; color:var(--text-muted); line-height:1.8; cursor:text;">
                   1. افتحي Google Sheets وأنشئي ملفاً جديداً.<br>
                   2. من القائمة اختاري: Extensions ← Apps Script<br>
-                  3. الصقي هذا الكود:<br>
+                  3. الصقي هذا الكود بالكامل:<br>
                   <div style="position:relative; margin-top:8px;">
-                    <textarea id="gs-code" class="form-control" style="font-family:monospace; font-size:11px; height:100px; direction:ltr; background:#1C171E; color:#E0E0E0;" readonly></textarea>
-                    <button class="btn btn-gold btn-sm" style="position:absolute; top:8px; right:8px;" onclick="copyGsCode(event)">نسخ الكود</button>
+                    <textarea id="gs-code" class="form-control" style="font-family:monospace; font-size:11px; height:120px; direction:ltr; text-align:left; background:#1C171E; color:#E0E0E0;" readonly></textarea>
+                    <button class="btn btn-gold btn-sm" style="position:absolute; top:8px; right:8px;" onclick="window.copyGsCode(event)">نسخ الكود</button>
                   </div>
                   4. اضغطي Deploy ← New deployment ← Web app.<br>
                   5. Who has access: Anyone ← Deploy.<br>
-                  6. انسخي الرابط وضعيه في الحقل المخصص أعلاه.
+                  6. انسخي الرابط وضعيه في الحقل المخصص أعلاه.<br>
+                  <em style="color:var(--danger);">*ملاحظة: يمكنكِ التعديل مباشرة على ملف الإكسل (صفحة "طالبات" أو "إعدادات")، وسوف تتحدث المنصة تلقائياً عند فتحها!</em>
                 </div>
               </details>
-              <button class="btn btn-primary btn-block" id="btn-save-setup" onclick="saveCourse()" disabled>💾 حفظ وتثبيت الإعدادات</button>
+              <button class="btn btn-primary btn-block" id="btn-save-setup" onclick="window.saveCourse()" disabled>💾 حفظ وتثبيت الإعدادات</button>
             </div>
           </div>
         </div>
@@ -1753,13 +1776,13 @@
             <label>مقرر مخصص (اختياري - بالأوجه)</label>
             <input type="number" class="form-control" id="new-custom-faces" placeholder="يترك فارغاً للمقرر العام">
           </div>
-          <button class="btn btn-gold" style="grid-column: span 2;" onclick="addStudent()">إضافة للطالبة للمنصة ➕</button>
+          <button class="btn btn-gold" style="grid-column: span 2;" onclick="window.addStudent()">إضافة للطالبة للمنصة ➕</button>
         </div>
         
         <!-- Search Bar -->
         <div class="search-bar">
            <span style="font-size:18px; color:var(--text-muted);">🔍</span>
-           <input type="text" id="student-search" placeholder="ابحثي عن طالبة..." onkeyup="filterStudents()">
+           <input type="text" id="student-search" placeholder="ابحثي عن طالبة..." onkeyup="window.filterStudents()">
         </div>
 
         <div id="student-list"></div>
@@ -1834,13 +1857,13 @@
         <div class="grid-2">
           <div class="form-group">
             <label>اختيار الطالبة</label>
-            <select class="form-control" id="sel-st" onchange="startSession()">
+            <select class="form-control" id="sel-st" onchange="window.startSession()">
               <option value="">— حددي الطالبة —</option>
             </select>
           </div>
           <div class="form-group">
             <label>تسجيل الحضور</label>
-            <select class="form-control" id="sess-att" onchange="toggleSessBody()">
+            <select class="form-control" id="sess-att" onchange="window.toggleSessBody()">
               <option value="present">✅ حاضرة (تقييم شامل)</option>
               <option value="excused">🟡 غائبة بعذر</option>
               <option value="unexcused">🔴 غائبة بدون عذر</option>
@@ -1859,12 +1882,12 @@
             <div class="card" style="border-color: var(--gold); padding: 0; overflow: hidden; margin-bottom: 24px; display: flex; flex-direction: column; position: relative;">
               <div style="background: var(--bg-elevated); padding: 12px; border-bottom: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px;">
                 <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;">
-                  <select id="surah-select" class="form-control" style="width: 130px; padding: 5px; font-size: 13px;" onchange="goToSurah()"></select>
-                  <select id="juz-select" class="form-control" style="width: 90px; padding: 5px; font-size: 13px;" onchange="goToJuz()">
+                  <select id="surah-select" class="form-control" style="width: 130px; padding: 5px; font-size: 13px;" onchange="window.goToSurah()"></select>
+                  <select id="juz-select" class="form-control" style="width: 90px; padding: 5px; font-size: 13px;" onchange="window.goToJuz()">
                     <option value="">الجزء...</option>
                   </select>
                   <span style="font-weight: bold; color: var(--text-muted);">ص:</span>
-                  <input type="number" id="quran-page-input" class="form-control" style="width: 60px; padding: 5px; text-align: center;" min="1" max="604" value="1" onchange="loadCurrentPage()">
+                  <input type="number" id="quran-page-input" class="form-control" style="width: 60px; padding: 5px; text-align: center;" min="1" max="604" value="1" onchange="window.loadCurrentPage()">
                 </div>
               </div>
               
@@ -1875,12 +1898,12 @@
               </div>
               
               <div class="quran-bottom-actions" style="padding: 12px; border-top: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-                 <button class="btn btn-outline btn-sm" onclick="changePage(1)">▶ السابق</button>
+                 <button class="btn btn-outline btn-sm" onclick="window.changePage(1)">▶ السابق</button>
                  <div style="display: flex; gap:8px;">
-                   <button class="btn btn-outline btn-sm" style="color:var(--success); border-color:var(--success);" onclick="setQuranPoint('start')">📍 كبداية</button>
-                   <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="setQuranPoint('end')">📍 كنهاية</button>
+                   <button class="btn btn-outline btn-sm" style="color:var(--success); border-color:var(--success);" onclick="window.setQuranPoint('start')">📍 كبداية</button>
+                   <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="window.setQuranPoint('end')">📍 كنهاية</button>
                  </div>
-                 <button class="btn btn-outline btn-sm" onclick="changePage(-1)">التالي ◀</button>
+                 <button class="btn btn-outline btn-sm" onclick="window.changePage(-1)">التالي ◀</button>
               </div>
             </div>
 
@@ -1889,7 +1912,7 @@
               <div class="grid-3">
                 <div class="form-group" style="margin:0;">
                   <label>الأوجه المسموعة</label>
-                  <input type="number" class="form-control" id="faces" oninput="updateGradeDisp()">
+                  <input type="number" class="form-control" id="faces" oninput="window.updateGradeDisp()">
                 </div>
                 <div class="form-group" style="margin:0;">
                   <label>من</label>
@@ -1914,7 +1937,7 @@
             <div class="unified-deduct-container-wrapper" id="deduct-panel">
               
               <!-- Mobile Header (Clickable) -->
-              <div class="panel-header hide-desktop" onclick="toggleDeductPanel()">
+              <div class="panel-header hide-desktop" onclick="window.toggleDeductPanel()">
                 <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
                    <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
                      <div id="grade-badge-mobile"></div>
@@ -1950,11 +1973,11 @@
                     </div>
                   </div>
                   <div class="unified-buttons">
-                    <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه حفظ<span class="hk">1</span></button>
-                    <button class="btn-d d-2" onclick="triggerDeduct(2, 'ردة حفظ')">❌ ردة حفظ<span class="hk">2</span></button>
-                    <button class="btn-d d-1" onclick="triggerDeduct(2, 'تنبيه تشكيل')">◌ تنبيه تشكيل<span class="hk">3</span></button>
-                    <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة تشكيل<span class="hk">4</span></button>
-                    <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'خطأ تجويد')">⋯ خطأ تجويد<span class="hk">5</span></button>
+                    <button class="btn-d d-1" onclick="window.triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه حفظ<span class="hk">1</span></button>
+                    <button class="btn-d d-2" onclick="window.triggerDeduct(2, 'ردة حفظ')">❌ ردة حفظ<span class="hk">2</span></button>
+                    <button class="btn-d d-1" onclick="window.triggerDeduct(2, 'تنبيه تشكيل')">◌ تنبيه تشكيل<span class="hk">3</span></button>
+                    <button class="btn-d d-3" onclick="window.triggerDeduct(4, 'ردة تشكيل')">🚫 ردة تشكيل<span class="hk">4</span></button>
+                    <button class="btn-d d-4" onclick="window.triggerDeduct(0.5, 'خطأ تجويد')">⋯ خطأ تجويد<span class="hk">5</span></button>
                   </div>
                 </div>
                 
@@ -1995,20 +2018,24 @@
                 </div>
               </div>
             </div>
-
-            <div class="card" style="padding: 16px; margin-bottom: 16px;">
-              <div class="form-group" style="margin:0;">
-                <label>ملاحظة خاصة (للمعلمة فقط) 🔒</label>
-                <textarea class="form-control" id="private-note" rows="2" placeholder="ملاحظات لا تظهر للطالبة..."></textarea>
-              </div>
-            </div>
-
-            <div style="display:flex; gap:10px; margin-bottom:12px;">
-              <button class="btn btn-primary" style="flex:2; padding:16px; font-size:16px;" onclick="saveSession()">💾 اعتماد وحفظ</button>
-              <button class="btn btn-outline" style="flex:1; padding:16px; font-size:14px;" onclick="copyReport()">📋 نسخ التقرير</button>
-            </div>
           </div>
         </div>
+        
+        <!-- أزرار الحفظ (نُقلت لتكون ظاهرة حتى لو كانت الطالبة غائبة) -->
+        <div id="session-actions-wrap">
+          <div class="card" style="padding: 16px; margin-top: 16px; margin-bottom: 16px;">
+            <div class="form-group" style="margin:0;">
+              <label>ملاحظة خاصة (للمعلمة فقط) 🔒</label>
+              <textarea class="form-control" id="private-note" rows="2" placeholder="ملاحظات لا تظهر للطالبة... (تعمل حتى في حالة الغياب)"></textarea>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-bottom:12px;">
+            <button class="btn btn-primary" style="flex:2; padding:16px; font-size:16px;" onclick="window.saveSession()">💾 اعتماد وحفظ التقييم</button>
+            <button class="btn btn-outline" style="flex:1; padding:16px; font-size:14px;" id="btn-copy-report" onclick="window.copyReport()">📋 نسخ التقرير</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -2017,7 +2044,7 @@
       <div class="card teacher-only">
         <div class="form-group" style="margin:0;">
           <label>معاينة بوابة الطالبة:</label>
-          <select class="form-control" id="sel-portal" onchange="loadPortal()">
+          <select class="form-control" id="sel-portal" onchange="window.loadPortal()">
             <option value="">— اختاري الطالبة —</option>
           </select>
         </div>
@@ -2037,8 +2064,8 @@
             </div>
             
             <div style="margin-right:auto; display:flex; gap:8px;">
-               <button class="btn btn-outline btn-sm" style="color:#fff; border-color:rgba(255,255,255,0.5); padding:8px 16px;" onclick="copyStudentReportFromPortal()">📋 نسخ التقرير</button>
-               <button class="btn btn-gold btn-sm" style="padding:8px 16px;" onclick="generatePDF()">🖨️ تحميل PDF</button>
+               <button class="btn btn-outline btn-sm" style="color:#fff; border-color:rgba(255,255,255,0.5); padding:8px 16px;" onclick="window.copyStudentReportFromPortal()">📋 نسخ التقرير</button>
+               <button class="btn btn-gold btn-sm" style="padding:8px 16px;" onclick="window.generatePDF()">🖨️ تحميل PDF</button>
             </div>
           </div>
         </div>
@@ -2098,8 +2125,8 @@
         <div class="card-header">
           <h3 class="card-title">لوحة الشرف والصدارة</h3>
           <div style="display:flex; gap:8px;">
-            <button class="btn btn-outline btn-sm" id="sort-alpha-btn" onclick="setBoardSort('alpha')">أبجدي</button>
-            <button class="btn btn-primary btn-sm" id="sort-pts-btn" onclick="setBoardSort('points')">الدرجات</button>
+            <button class="btn btn-outline btn-sm" id="sort-alpha-btn" onclick="window.setBoardSort('alpha')">أبجدي</button>
+            <button class="btn btn-primary btn-sm" id="sort-pts-btn" onclick="window.setBoardSort('points')">الدرجات</button>
           </div>
         </div>
         <div id="board-list"></div>
@@ -2109,23 +2136,23 @@
   </main>
 
   <nav class="bottom-nav hide-mobile">
-    <div class="b-nav-item active teacher-only" onclick="navigate('setup')">
+    <div class="b-nav-item active teacher-only" onclick="window.navigate('setup')">
       <span class="b-nav-icon">⚙️</span>
       إعداد
     </div>
-    <div class="b-nav-item teacher-only" onclick="navigate('session')">
+    <div class="b-nav-item teacher-only" onclick="window.navigate('session')">
       <span class="b-nav-icon">🎙️</span>
       تسميع
     </div>
-    <div class="b-nav-item teacher-only" onclick="navigate('dash')">
+    <div class="b-nav-item teacher-only" onclick="window.navigate('dash')">
       <span class="b-nav-icon">📊</span>
       تحليل
     </div>
-    <div class="b-nav-item" onclick="navigate('portal')">
+    <div class="b-nav-item" onclick="window.navigate('portal')">
       <span class="b-nav-icon">👤</span>
       بوابتي
     </div>
-    <div class="b-nav-item" onclick="navigate('board')">
+    <div class="b-nav-item" onclick="window.navigate('board')">
       <span class="b-nav-icon">🏆</span>
       الصدارة
     </div>
@@ -2241,28 +2268,130 @@ function validateState(data) {
 
 window.activeSessQuota = null;
 
-window.GS_CODE = `// لوحة ألف لام ميم — الإصدار الأكاديمي الشامل
+// ══════════════════════════════════════════════════════════
+// APPS SCRIPT CODE (Bi-directional Sync capabilities)
+// ══════════════════════════════════════════════════════════
+window.GS_CODE = `// لوحة ألف لام ميم — الإصدار الأكاديمي الشامل (دعم المزامنة المزدوجة)
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    var data = JSON.parse(e.postData.contents);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var code = data.code || 'default';
+
     if (data.action === 'save') {
-      let db = ss.getSheetByName('DB_'+data.code) || ss.insertSheet('DB_'+data.code);
-      db.hideSheet(); 
-      db.getRange(1,1,1,2).setValues([['alm_data', data.payload]]);
+      var payload = JSON.parse(data.payload);
+      
+      // 1. حفظ البيانات الخام في ورقة مخفية لضمان عدم ضياع التقييمات
+      var dbSheet = ss.getSheetByName('DB_' + code);
+      if (!dbSheet) { dbSheet = ss.insertSheet('DB_' + code); dbSheet.hideSheet(); }
+      dbSheet.getRange(1, 1).setValue(JSON.stringify(payload));
+
+      // 2. تحديث ورقة الطالبات لتكون مرئية وقابلة للتعديل
+      var stSheet = ss.getSheetByName('طالبات_' + code);
+      if (!stSheet) {
+        stSheet = ss.insertSheet('طالبات_' + code);
+        stSheet.appendRow(['معرف الطالبة (لا تقم بتعديله)', 'اسم الطالبة', 'مقرر مخصص (اختياري)']);
+        stSheet.getRange(1, 1, 1, 3).setFontWeight('bold').setBackground('#f3eaf4');
+      }
+      
+      var stData = payload.students.map(function(st) {
+        return [st.id, st.name, st.customFaces || ''];
+      });
+      
+      if (stData.length > 0) {
+        stSheet.getRange(2, 1, stSheet.getLastRow() || 2, 3).clearContent();
+        stSheet.getRange(2, 1, stData.length, 3).setValues(stData);
+      }
+
+      // 3. تحديث ورقة الإعدادات
+      var courseSheet = ss.getSheetByName('إعدادات_' + code);
+      if (!courseSheet) {
+         courseSheet = ss.insertSheet('إعدادات_' + code);
+         courseSheet.appendRow(['المفتاح', 'القيمة']);
+         courseSheet.getRange(1, 1, 1, 2).setFontWeight('bold').setBackground('#f3eaf4');
+      }
+      courseSheet.getRange(2, 1, 6, 2).setValues([
+        ['المعلمة', payload.course.teacher],
+        ['المقرر', payload.course.cname],
+        ['إجمالي الأوجه', payload.course.pages],
+        ['تاريخ البدء', payload.course.sdate],
+        ['الأسابيع', payload.course.weeks],
+        ['أيام الورد', payload.course.studyDays]
+      ]);
+
       return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
     }
+
     if (data.action === 'load') {
-      let db = ss.getSheetByName('DB_'+data.code);
-      return ContentService.createTextOutput(JSON.stringify({ok:true, payload: db ? db.getRange(1,2).getValue() : null})).setMimeType(ContentService.MimeType.JSON);
+      var dbSheet = ss.getSheetByName('DB_' + code);
+      if (!dbSheet) return ContentService.createTextOutput(JSON.stringify({ok:true, payload: null})).setMimeType(ContentService.MimeType.JSON);
+
+      var rawJson = dbSheet.getRange(1, 1).getValue();
+      if (!rawJson) return ContentService.createTextOutput(JSON.stringify({ok:true, payload: null})).setMimeType(ContentService.MimeType.JSON);
+
+      var payload = JSON.parse(rawJson);
+
+      // قراءة التعديلات اليدوية من ورقة الطالبات وإضافتها للتطبيق
+      var stSheet = ss.getSheetByName('طالبات_' + code);
+      if (stSheet) {
+        var rows = stSheet.getDataRange().getValues();
+        var validIds = [];
+        for (var i = 1; i < rows.length; i++) {
+          var id = parseInt(rows[i][0]);
+          var name = rows[i][1];
+          var faces = parseInt(rows[i][2]);
+          
+          if (!name) continue; // تخطي الصفوف الفارغة
+          
+          if (isNaN(id)) {
+             // طالبة جديدة تمت إضافتها يدوياً في الإكسل
+             id = payload.nextId++;
+             stSheet.getRange(i+1, 1).setValue(id);
+          }
+          validIds.push(id);
+          
+          var existing = payload.students.find(function(s) { return s.id === id; });
+          if (existing) {
+            existing.name = name;
+            existing.customFaces = isNaN(faces) ? null : faces;
+          } else {
+            payload.students.push({
+              id: id, name: name, score: null, sessions: [],
+              days: Array(payload.course.studyDays || 5).fill(0), ok: 0, total: 0,
+              customFaces: isNaN(faces) ? null : faces
+            });
+          }
+        }
+        // اختياري: إبقاء الطالبات اللاتي لم يتم حذفهن من الإكسل
+        payload.students = payload.students.filter(function(s) { return validIds.indexOf(s.id) !== -1; });
+      }
+
+      // قراءة التعديلات اليدوية من ورقة الإعدادات
+      var courseSheet = ss.getSheetByName('إعدادات_' + code);
+      if (courseSheet) {
+         var cRows = courseSheet.getDataRange().getValues();
+         var cMap = {};
+         for (var j=1; j<cRows.length; j++) { cMap[cRows[j][0]] = cRows[j][1]; }
+         if (cMap['المعلمة']) payload.course.teacher = cMap['المعلمة'];
+         if (cMap['المقرر']) payload.course.cname = cMap['المقرر'];
+         if (cMap['إجمالي الأوجه']) payload.course.pages = parseInt(cMap['إجمالي الأوجه']) || payload.course.pages;
+         if (cMap['تاريخ البدء']) {
+            var d = new Date(cMap['تاريخ البدء']);
+            if(!isNaN(d.getTime())) payload.course.sdate = d.toISOString().split('T')[0];
+         }
+         if (cMap['الأسابيع']) payload.course.weeks = parseInt(cMap['الأسابيع']) || payload.course.weeks;
+         if (cMap['أيام الورد']) payload.course.studyDays = parseInt(cMap['أيام الورد']) || payload.course.studyDays;
+      }
+
+      return ContentService.createTextOutput(JSON.stringify({ok:true, payload: JSON.stringify(payload)})).setMimeType(ContentService.MimeType.JSON);
     }
-    return ContentService.createTextOutput(JSON.stringify({ok:true, msg:'pong'})).setMimeType(ContentService.MimeType.JSON);
-  } catch(err) { 
-    return ContentService.createTextOutput(JSON.stringify({ok:false, msg:err.toString()})).setMimeType(ContentService.MimeType.JSON); 
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({ok:false, msg:err.toString()})).setMimeType(ContentService.MimeType.JSON);
   }
 }
-function doGet(e) { 
-  return ContentService.createTextOutput("ALM API Running").setMimeType(ContentService.MimeType.TEXT); 
+
+function doGet(e) {
+  return ContentService.createTextOutput("ALM API is Running").setMimeType(ContentService.MimeType.TEXT);
 }`;
 
 function injectMockData() {
@@ -2319,7 +2448,7 @@ function injectMockData() {
 
 window.loadState = function() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v25'); 
+    const d = localStorage.getItem('alm_pro_v26'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) {
@@ -2338,7 +2467,7 @@ window.loadState = function() {
 window.saveState = function() { 
   if(window.isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v25', JSON.stringify(window.S)); 
+    localStorage.setItem('alm_pro_v26', JSON.stringify(window.S)); 
     window.setSyncDot('local'); 
     window.hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -3113,6 +3242,23 @@ window.copyReport = function() {
   const st = window.S.students.find(s => s.id === window.curSt); 
   const name = st ? st.name : '—';
   
+  const att = document.getElementById('sess-att').value;
+  
+  if (att !== 'present') {
+    const statusTxt = att === 'excused' ? 'غائبة بعذر 🟡' : 'غائبة بدون عذر 🔴';
+    const rep = [
+      `📋 تقرير جلسة التسميع — ${window.S.course.cname||'حلقة التحفيظ'}`,
+      '━━━━━━━━━━━━━━━━━━━━━━',
+      `الطالبة  : ${name}`,
+      `التاريخ  : ${new Date().toLocaleDateString('ar-EG')}`,
+      `الحالة   : ${statusTxt}`,
+      '━━━━━━━━━━━━━━━━━━━━━━',
+      'وفّقكِ الله 💜'
+    ].join('\n');
+    window.fallbackCopy(rep, '📋 تم نسخ تقرير الغياب بنجاح!');
+    return;
+  }
+
   const faces = document.getElementById('faces').value;
   const from = document.getElementById('from-a').value || '—';
   const to = document.getElementById('to-a').value || '—';
@@ -3146,7 +3292,7 @@ window.copyReport = function() {
     `الدرجة   : ${window.fmt(window.sessScore)} / 100`,
     `التقييم  : ${g.emoji} ${g.label}`,
     '──────────────────────',
-    'الملاحظات החفظ:',
+    'الملاحظات:',
     errLines,
     '━━━━━━━━━━━━━━━━━━━━━━',
     'وفّقكِ الله وبارك في جهدكِ 💜'
@@ -3221,11 +3367,7 @@ window.loadCurrentPage = async function() {
         const res = await fetch(`https://api.quran.com/api/v4/verses/by_page/${page}?language=ar&words=true&word_fields=text_uthmani`); 
         const data = await res.json();
         
-        /* التحديث الجذري للمصحف: 
-           بدلاً من الأسطر المنفصلة التي تخرب العرض على الجوال، 
-           نضعها في حاوية واحدة بخاصية الجيستفاي للتجاوب التام.
-        */
-        let html = '<div class="q-page-content" style="text-align: justify; text-align-last: center; line-height: 2.4;">'; 
+        let html = '<div class="q-page-content">'; 
         
         data.verses.forEach(v => { 
           const ayahNum = v.verse_key.split(':')[1]; 
@@ -3260,6 +3402,7 @@ window.toggleWordSelection = function(ayah, el) {
     document.getElementById('u-ayah').value = selectedEls.length > 0 ? ayah : ''; 
     document.getElementById('u-word').value = words.join(' ').trim();
     
+    // Auto-open panel on mobile
     if(selectedEls.length > 0 && window.innerWidth <= 991) { 
       const body = document.getElementById('deduct-panel-body'); 
       const icon = document.getElementById('panel-toggle-icon');
@@ -3468,7 +3611,7 @@ window.initDashboard = function() {
     let lastKnown = null;
     sortedDayTs.forEach(dayTs => {
       const dStart = dayTs;
-      const dEnd = dayTs + 86400000;
+      const dEnd = dayTs + 86400000; // +1 day
       const s = (st.sessions||[]).find(x => x.ts >= dStart && x.ts < dEnd && x.att === 'present');
       if(s && s.score !== null) lastKnown = s.score;
       data.push(lastKnown);
@@ -3634,22 +3777,23 @@ window.loadPortal = function() {
   if (hist) {
       hist.innerHTML = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts).map(s => {
         const delBtn = !window.isStudentMode ? `<button class="btn btn-danger btn-sm" style="padding:4px 8px; font-size:11px; margin-top:8px;" onclick="window.deleteSession(${id}, ${s.ts})">🗑️ حذف</button>` : '';
+        const rlm = "\u200F";
         
         if(s.att !== 'present') {
-          return `<div class="list-row" style="align-items:flex-start;"><div><div style="color:var(--danger); font-weight:700;">${s.date} - غياب</div></div>${delBtn}</div>`;
+          return `<div class="list-row" style="align-items:flex-start;"><div><div style="color:var(--danger); font-weight:700;">${rlm}${s.date}${rlm} - غياب</div></div>${delBtn}</div>`;
         }
         
         let revHtml = (s.rev === 'done') ? `<div style="font-size:11px; background:var(--bg-elevated); padding:4px 8px; border-radius:4px; color:var(--primary); margin-top:6px; display:inline-block;">مراجعة: ${s.revG}</div>` : '';
         
         let notesHtml = '';
-        if(s.errors && s.errors.length > 0) { notesHtml += `<div style="margin-top:6px; font-size:11px; color:var(--danger);"><strong style="color:var(--text-muted)">الأخطاء:</strong> ${s.errors.map(e=>e.desc).join(' | ')}</div>`; }
-        if(!window.isStudentMode && s.privateNote) { notesHtml += `<div style="margin-top:6px; font-size:11px; background:var(--gold-pale); padding:4px; border-radius:4px;"><strong style="color:var(--gold-dk)">ملاحظة خاصة:</strong> ${s.privateNote}</div>`; }
+        if(s.errors && s.errors.length > 0) { notesHtml += `<div style="margin-top:6px; font-size:11px; color:var(--danger);"><strong style="color:var(--text-muted)">الأخطاء:</strong> ${rlm}${s.errors.map(e=>e.desc).join(' | ')}${rlm}</div>`; }
+        if(!window.isStudentMode && s.privateNote) { notesHtml += `<div style="margin-top:6px; font-size:11px; background:var(--gold-pale); padding:4px; border-radius:4px;"><strong style="color:var(--gold-dk)">ملاحظة خاصة:</strong> ${rlm}${s.privateNote}${rlm}</div>`; }
 
         return `
           <div class="list-row" style="align-items:flex-start;">
             <div>
-              <div style="font-weight:700;">${s.date}</div>
-              <div style="font-size:12px; color:var(--text-muted);">حفظ: ${s.faces} أوجه (${s.from}-${s.to})</div>
+              <div style="font-weight:700;">${rlm}${s.date}${rlm}</div>
+              <div style="font-size:12px; color:var(--text-muted);">حفظ: ${s.faces} أوجه (${rlm}${s.from} - ${s.to}${rlm})</div>
               ${revHtml}
               ${notesHtml}
               <div>${delBtn}</div>
@@ -3704,6 +3848,7 @@ window.generatePDF = function() {
   
   const sess = st.sessions || [];
   const pSess = sess.filter(s => s.att === 'present');
+  const rlm = "\u200F";
   
   document.getElementById('rep-t-name').textContent = window.S.course.teacher || '—'; 
   document.getElementById('rep-s-name').textContent = st.name; 
@@ -3714,7 +3859,7 @@ window.generatePDF = function() {
   
   document.getElementById('rep-tbody').innerHTML = [...sess].sort((a,b)=>a.ts-b.ts).map(s => {
     if(s.att !== 'present') {
-      return `<tr><td>${s.date}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td><td colspan="3" style="text-align:center;color:#C0392B;">-</td></tr>`;
+      return `<tr><td style="vertical-align:top;">${rlm}${s.date}${rlm}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td><td colspan="3" style="text-align:center;color:#C0392B;vertical-align:top;">-</td></tr>`;
     }
     const errs = s.errors && s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا ملاحظات';
     let revStr = '-';
@@ -3723,10 +3868,10 @@ window.generatePDF = function() {
     }
     return `
       <tr>
-        <td>${s.date}</td>
-        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${window.fmt(s.score)}</b></td>
-        <td>${revStr}</td>
-        <td>${errs}</td>
+        <td style="vertical-align:top;">${rlm}${s.date}${rlm}</td>
+        <td style="vertical-align:top;">${rlm}${s.faces} أوجه${rlm}<br><small>${rlm}${s.from} - ${s.to}${rlm}</small><br><b style="color:#D4AF37">${window.fmt(s.score)}</b></td>
+        <td style="vertical-align:top;">${revStr}</td>
+        <td style="vertical-align:top;">${rlm}${errs}${rlm}</td>
       </tr>
     `;
   }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
@@ -3912,7 +4057,6 @@ function init() {
     window.initSetup(); 
     window.navigate('setup');
 
-    // --- التحديث الجديد: جلب البيانات تلقائياً من السحابة عند فتح التطبيق (المزامنة بين الأجهزة) ---
     if (!window.isStudentMode && window.S.sheetUrl && window.S.teacherCode) {
         window.setSyncDot('sync');
         window.sheetReq('load').then(r => {
@@ -3920,8 +4064,8 @@ function init() {
                 const parsed = JSON.parse(r.payload);
                 if (validateState(parsed)) {
                     window.S = parsed;
-                    window.saveState(); // حفظها محلياً
-                    window.initSetup(); // تحديث الواجهة
+                    window.saveState(); 
+                    window.initSetup(); 
                     if (document.getElementById('page-dash').classList.contains('active')) window.initDashboard();
                     if (document.getElementById('page-board').classList.contains('active')) window.renderBoard();
                     window.setSyncDot('ok');
