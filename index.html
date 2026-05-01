@@ -889,6 +889,8 @@
       margin-bottom: 8px; 
       border-radius: 0 var(--r-sm) var(--r-sm) 0; 
       font-size: 13px; 
+      display: flex;
+      justify-content: space-between;
     }
 
     /* Podium Leaderboard */
@@ -1109,7 +1111,9 @@
     @media (max-width: 991px) {
       .session-layout { 
         grid-template-columns: 1fr; 
+        padding-bottom: 120px; /* Room for the bottom panel */
       }
+      
       .session-controls, .session-quran { 
         position: relative; 
         top: 0; 
@@ -1117,22 +1121,98 @@
         overflow-y: visible; 
         padding: 0; 
       }
+      
+      /* اللوحة السفلية العائمة في الجوال */
       .unified-deduct-container-wrapper { 
-        position: sticky; 
-        bottom: 60px; 
-        z-index: 100; 
-        background: var(--bg-app); 
-        padding: 10px 0; 
-        margin: -10px -10px 16px -10px; 
-        border-radius: var(--r-md); 
-        box-shadow: 0 -10px 20px rgba(0,0,0,0.15); 
+        position: fixed; 
+        bottom: 60px; /* أعلى من قائمة التنقل السفلية */
+        left: 0; 
+        right: 0; 
+        z-index: 150; 
+        background: var(--bg-surface); 
+        border-top: 2px solid var(--gold); 
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -5px 25px rgba(0,0,0,0.15); 
+        transition: transform 0.3s ease;
       }
+      
       [data-theme="dark"] .unified-deduct-container-wrapper { 
-        box-shadow: 0 -10px 20px rgba(0,0,0,0.6); 
+        background: var(--bg-elevated);
+        box-shadow: 0 -5px 25px rgba(0,0,0,0.8); 
       }
+      
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 20px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--border-strong);
+      }
+
+      .panel-body {
+        display: none;
+        padding: 16px;
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+      
+      .panel-body.expanded {
+        display: block;
+      }
+      
+      .mobile-score-wrap {
+        display: none !important; /* Hidden because score is in panel header */
+      }
+      
+      .desktop-score-wrap {
+        display: none !important;
+      }
+      
+      .unified-deduct-container {
+        padding: 0; 
+        border: none; 
+        margin: 0; 
+        background: transparent;
+      }
+
       .unified-inputs { 
-        grid-template-columns: 1fr; 
+        display: flex; 
+        gap: 10px; 
+        margin-bottom: 10px; 
       }
+      
+      .unified-inputs .form-group { margin-bottom: 0; width: 100%; }
+      .unified-inputs label { display: none; } /* إخفاء العناوين لتوفير المساحة */
+      .unified-inputs input { height: 36px; padding: 5px 10px; font-size: 13px; }
+      
+      /* أزرار قابلة للتمرير أفقياً */
+      .unified-buttons { 
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .unified-buttons::-webkit-scrollbar { height: 0px; }
+      
+      .btn-d { 
+        min-width: fit-content; 
+        padding: 8px 12px; 
+        font-size: 13px; 
+        flex-direction: row; 
+        gap: 4px;
+        border-radius: var(--r-sm); 
+        border: 2px solid; 
+        text-align: center; 
+        font-weight: 700; 
+        background: var(--bg-surface);
+        white-space: nowrap;
+      }
+      
+      .btn-d span.hk { display: none; }
     }
 
     @media (max-width: 768px) {
@@ -1142,9 +1222,10 @@
       .main-content { width: 100%; margin-right: 0 !important; padding-bottom: 80px; }
       .top-header { padding: 0 16px; }
       .mobile-header-btn { display: flex; }
-      .page-wrapper { padding: 20px 16px; }
+      .hide-mobile { display: none !important; }
+      .page-wrapper { padding: 16px 12px; }
       .card { padding: 16px; }
-      .grid-2, .grid-4 { grid-template-columns: 1fr; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; gap: 12px; }
       
       /* Bottom Nav for Mobile */
       .bottom-nav { 
@@ -1182,14 +1263,14 @@
       .b-nav-item.active { color: var(--primary); }
       [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
       .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
-      .deduct-grid { grid-template-columns: 1fr; }
-      .btn-deduct { width: 100%; }
       
       /* Quran Font Adjustments for Mobile */
       .quran-page { 
-        font-size: 24px !important; 
-        padding: 15px !important; 
+        font-size: 26px !important; 
+        padding: 20px 15px !important; 
         line-height: 2.2 !important; 
+        border-width: 6px !important;
+        outline-offset: -4px !important;
       }
     }
 
@@ -1243,97 +1324,7 @@
     .rep-table td { padding: 9px; border-bottom: 1px solid #E4DED4; }
     .rep-foot { text-align: center; font-size: 12px; color: #6B626D; margin-top: 30px; border-top: 1px dashed #E4DED4; padding-top: 16px; }
 
-    /* ════ QURAN VIEWER ════ */
-    .quran-page {
-      font-family: 'Amiri Quran', serif; 
-      font-size: 28px; 
-      line-height: 2.3;
-      text-align: justify; 
-      text-justify: inter-word; 
-      text-align-last: center; 
-      direction: rtl;
-      padding: 30px; 
-      background: #FDFBF7; 
-      border: 1px solid var(--gold-lt); 
-      border-radius: var(--r-md);
-      min-height: 500px; 
-      user-select: none; 
-      word-wrap: break-word; 
-      color: #1A1714;
-    }
-
-    [data-theme="dark"] .quran-page { 
-      background: #1A1714; 
-      border-color: var(--gold-dk); 
-      color: #F0EBF1;
-    }
-
-    .q-line { 
-      display: block; 
-      text-align: justify; 
-      text-align-last: center; 
-      width: 100%; 
-      margin-bottom: 5px; 
-      line-height: 2.3; 
-    }
-
-    .q-word { 
-      display: inline-block; 
-      cursor: pointer; 
-      padding: 0 2px; 
-      border-radius: 4px; 
-      transition: all 0.2s; 
-    }
-
-    .q-word:hover { 
-      background: rgba(212, 175, 55, 0.3); 
-      color: var(--primary); 
-    }
-
-    [data-theme="dark"] .q-word:hover { 
-      color: var(--gold); 
-    }
-
-    .q-word.selected { 
-      background: var(--danger-lt); 
-      color: var(--danger); 
-      font-weight: bold; 
-      box-shadow: 0 0 0 2px var(--danger); 
-    }
-
-    .q-ayah-end { 
-      color: var(--gold-dk); 
-      font-size: 20px; 
-      margin: 0 4px; 
-      display: inline-block; 
-      cursor: pointer; 
-    }
-
-    /* Toast */
-    #toast { 
-      position: fixed; 
-      bottom: 80px; 
-      left: 50%; 
-      transform: translateX(-50%) translateY(100px); 
-      background: var(--text-main); 
-      color: var(--bg-surface); 
-      padding: 14px 28px; 
-      border-radius: 30px; 
-      font-size: 14px; 
-      font-weight: 700; 
-      box-shadow: var(--shadow-lg); 
-      opacity: 0; 
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-      z-index: 9999; 
-      pointer-events: none; 
-      text-align: center; 
-    }
-
-    #toast.show { 
-      transform: translateX(-50%) translateY(0); 
-      opacity: 1; 
-    }
-    
+    /* Student mode specific styles */
     .student-mode .teacher-only { display: none !important; }
   </style>
 </head>
@@ -1411,6 +1402,7 @@
 
     <!-- ════ PAGE: SETUP ════ -->
     <div id="page-setup" class="page-wrapper active teacher-only">
+      
       <div class="alert alert-info" style="background:var(--primary-pale); border:1px dashed var(--primary); color:var(--primary); display:flex; flex-direction:column; gap:12px;">
         <div style="display:flex; align-items:center; justify-content: space-between;">
           <div style="display:flex; align-items:center; gap:8px;">
@@ -1453,7 +1445,7 @@
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">البيانات الأساسية والربط السحابي</h3>
-            <button class="btn btn-outline" style="padding:8px 16px; font-size:12px; color:var(--danger); border-color:rgba(192, 57, 43, 0.3);" onclick="archiveCourse()">🗄️ أرشفة وتصفير الدورة</button>
+            <button class="btn btn-outline" style="padding:8px 16px; font-size:12px; color:var(--danger); border-color:rgba(192, 57, 43, 0.3);" onclick="archiveCourse()">🗄️ بدء دورة جديدة</button>
           </div>
           <div class="grid-2">
             <div class="form-group">
@@ -1537,6 +1529,13 @@
         <div class="card-header">
           <h3 class="card-title">إدارة الطالبات والمقررات الفردية</h3>
         </div>
+        
+        <!-- Search Bar -->
+        <div class="search-bar">
+           <span style="font-size:18px; color:var(--text-muted);">🔍</span>
+           <input type="text" id="student-search" placeholder="ابحثي عن طالبة..." onkeyup="filterStudents()">
+        </div>
+
         <div class="grid-2" style="align-items:end; margin-bottom:24px; background:var(--bg-elevated); padding:20px; border-radius:var(--r-md);">
           <div class="form-group" style="margin:0;">
             <label>اسم الطالبة الجديدة</label>
@@ -1549,13 +1548,9 @@
           <button class="btn btn-gold" style="grid-column: span 2;" onclick="addStudent()">إضافة للطالبة للمنصة ➕</button>
         </div>
         
-        <!-- Search Bar -->
-        <div class="search-bar">
-           <span style="font-size:18px; color:var(--text-muted);">🔍</span>
-           <input type="text" id="student-search" placeholder="ابحثي عن طالبة..." onkeyup="filterStudents()">
+        <div id="student-list" class="grid-2">
+          <!-- Students injected here -->
         </div>
-
-        <div id="student-list"></div>
       </div>
     </div>
 
@@ -1579,12 +1574,12 @@
             <div class="kpi-label">معدل الانضباط والحضور</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-value" id="d-total-sess">0</div>
-            <div class="kpi-label">إجمالي جلسات التسميع</div>
-          </div>
-          <div class="kpi-card">
             <div class="kpi-value" id="d-course-prog">0%</div>
             <div class="kpi-label">تقدم الدورة الزمني</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="d-week-stars" style="font-size: 24px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">—</div>
+            <div class="kpi-label">نجمة الأسبوع 🌟</div>
           </div>
         </div>
 
@@ -1699,9 +1694,14 @@
           <!-- COLUMN 2: CONTROLS -->
           <div class="session-controls">
             
-            <div id="last-sessions-panel" style="margin-bottom: 16px;"></div>
+            <div id="last-sessions-wrap" style="display:none; margin-bottom: 16px;">
+              <h4 style="font-size:14px; margin-bottom:8px; color:var(--primary);">أحدث التقييمات:</h4>
+              <div id="last-sessions-list"></div>
+            </div>
 
             <div class="unified-deduct-container-wrapper" id="deduct-panel">
+              
+              <!-- Mobile Header (Clickable) -->
               <div class="panel-header hide-desktop" onclick="toggleDeductPanel()">
                 <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
                    <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
@@ -1715,8 +1715,10 @@
                 </div>
               </div>
 
+              <!-- Panel Body -->
               <div class="panel-body" id="deduct-panel-body">
-                <div class="desktop-score-wrap">
+                <!-- سطح المكتب: عرض الدرجة العادي -->
+                <div class="desktop-score-wrap" style="background:var(--bg-surface); border-radius:var(--r-md); padding:16px; text-align:center; border:2px solid var(--gold); margin-bottom:16px; box-shadow: var(--shadow-sm); display:flex; justify-content:space-between; align-items:center;">
                   <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
                      <div id="grade-badge"></div>
                      <div id="sess-badge"></div>
@@ -1736,14 +1738,15 @@
                     </div>
                   </div>
                   <div class="unified-buttons">
-                    <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه حفظ<span class="hk">1</span></button>
-                    <button class="btn-d d-2" onclick="triggerDeduct(2, 'ردة حفظ')">❌ ردة حفظ<span class="hk">2</span></button>
-                    <button class="btn-d d-1" onclick="triggerDeduct(2, 'تنبيه تشكيل')">◌ تنبيه تشكيل<span class="hk">3</span></button>
-                    <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة تشكيل<span class="hk">4</span></button>
-                    <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'خطأ تجويد')">⋯ خطأ تجويد<span class="hk">5</span></button>
+                    <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه حفظ<span class="d-pt">(-1)</span><span class="hk">1</span></button>
+                    <button class="btn-d d-2" onclick="triggerDeduct(2, 'ردة حفظ')">❌ ردة حفظ<span class="d-pt">(-2)</span><span class="hk">2</span></button>
+                    <button class="btn-d d-1" onclick="triggerDeduct(2, 'تنبيه تشكيل')">◌ تنبيه تشكيل<span class="d-pt">(-2)</span><span class="hk">3</span></button>
+                    <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة تشكيل<span class="d-pt">(-4)</span><span class="hk">4</span></button>
+                    <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'خطأ تجويد')">⋯ خطأ تجويد<span class="d-pt">(-0.5)</span><span class="hk">5</span></button>
                   </div>
                 </div>
                 
+                <!-- سجل الخصومات مدمج داخل اللوحة -->
                 <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border-strong);">
                    <h4 style="font-size:14px; margin-bottom:12px; color:var(--primary);">سجل الملاحظات:</h4>
                    <div id="err-log" style="font-size:13px; background:var(--bg-app); padding:12px; border-radius:var(--r-sm); max-height:150px; overflow-y:auto;"></div>
@@ -2578,7 +2581,11 @@ function startSession() {
   if(!id) { 
     document.getElementById('sess-body').style.display = 'none'; 
     stopTimer(); 
-    document.getElementById('last-sessions-wrap').style.display = 'none';
+    
+    // تأمين إخفاء نافذة الجلسات السابقة بأمان
+    const lastSessWrap = document.getElementById('last-sessions-wrap');
+    if(lastSessWrap) lastSessWrap.style.display = 'none';
+    
     return; 
   }
   
@@ -2589,19 +2596,22 @@ function startSession() {
   qStartPage = 0;
   activeSessQuota = calcQuota(st.customFaces || S.course.pages || 200, S.course.weeks||10, S.course.studyDays||5);
   
-  // Update last sessions view
+  // Update last sessions view (مع التأكد من وجود العنصر HTML)
+  const lastSessWrap = document.getElementById('last-sessions-wrap');
   const lastSessCont = document.getElementById('last-sessions-list');
-  const sortedSess = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts).slice(0,3);
   
-  if(sortedSess.length) {
-     lastSessCont.innerHTML = sortedSess.map(s => `
-      <div class="mini-history-item">
-        <div>${s.date}</div>
-        <strong style="color:var(--primary);">${fmt(s.score)}</strong>
-      </div>`).join('');
-     document.getElementById('last-sessions-wrap').style.display = 'block';
-  } else { 
-    document.getElementById('last-sessions-wrap').style.display = 'none'; 
+  if (lastSessWrap && lastSessCont) {
+      const sortedSess = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts).slice(0,3);
+      if(sortedSess.length > 0) {
+         lastSessCont.innerHTML = sortedSess.map(s => `
+          <div class="mini-history-item">
+            <div>${s.date}</div>
+            <strong style="color:var(--primary);">${fmt(s.score)}</strong>
+          </div>`).join('');
+         lastSessWrap.style.display = 'block';
+      } else { 
+        lastSessWrap.style.display = 'none'; 
+      }
   }
 
   document.getElementById('quota-info-sess').textContent = `🎯 النصاب المستهدف: ${activeSessQuota.sessionFaces} أوجه`;
@@ -2817,13 +2827,11 @@ function saveSession() {
   toast('✅ تم اعتماد وحفظ الجلسة'); 
   stopTimer(); 
   
+  // لا نخفي الشاشة لتمكين النسخ، فقط نخفي اللوحة العائمة
   if (window.innerWidth <= 991) { 
     const body = document.getElementById('deduct-panel-body'); 
     if (body && body.classList.contains('expanded')) toggleDeductPanel(); 
   }
-  
-  document.getElementById('sess-body').style.display = 'none'; 
-  document.getElementById('sel-st').value = '';
   
   if(S.sheetUrl) syncToSheet();
 }
@@ -2865,7 +2873,7 @@ function copyReport() {
     `الدرجة   : ${fmt(sessScore)} / 100`,
     `التقييم  : ${g.emoji} ${g.label}`,
     '──────────────────────',
-    'الملاحظات التجويدية:',
+    'الملاحظات الحفظ:',
     errLines,
     '━━━━━━━━━━━━━━━━━━━━━━',
     'وفّقكِ الله وبارك في جهدكِ 💜'
