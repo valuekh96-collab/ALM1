@@ -119,7 +119,6 @@
       text-decoration: none; 
     }
     
-    /* Accessibility fix: Replace outline: none */
     button { 
       cursor: pointer; 
       font-family: 'Cairo', sans-serif; 
@@ -387,7 +386,6 @@
       color: var(--gold); 
     }
 
-    /* Remove obstacles to sticky behavior */
     .app-container, .main-content, .page-wrapper { 
       overflow: visible !important; 
       overflow-x: visible !important; 
@@ -497,6 +495,15 @@
       box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.1); 
     }
 
+    select.form-control { 
+      cursor: pointer; 
+      appearance: none; 
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); 
+      background-repeat: no-repeat; 
+      background-position: left 16px center; 
+      background-size: 16px; 
+    }
+
     .btn { 
       display: inline-flex; 
       align-items: center; 
@@ -507,6 +514,7 @@
       font-size: 15px; 
       font-weight: 700; 
       transition: all var(--trans); 
+      cursor: pointer; 
       border: 2px solid transparent; 
     }
 
@@ -1111,7 +1119,6 @@
     @media (max-width: 991px) {
       .session-layout { 
         grid-template-columns: 1fr; 
-        padding-bottom: 120px; /* Room for the bottom panel */
       }
       
       .session-controls, .session-quran { 
@@ -1263,15 +1270,6 @@
       .b-nav-item.active { color: var(--primary); }
       [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
       .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
-      
-      /* Quran Font Adjustments for Mobile */
-      .quran-page { 
-        font-size: 26px !important; 
-        padding: 20px 15px !important; 
-        line-height: 2.2 !important; 
-        border-width: 6px !important;
-        outline-offset: -4px !important;
-      }
     }
 
     .sidebar-overlay { 
@@ -1326,6 +1324,74 @@
 
     /* Student mode specific styles */
     .student-mode .teacher-only { display: none !important; }
+
+    /* ════ QURAN VIEWER (RESTORED TO FLEX/CENTER) ════ */
+    .quran-page {
+      font-family: 'Amiri Quran', serif; 
+      font-size: 28px; 
+      direction: rtl;
+      padding: 30px; 
+      background: #FDFBF7; 
+      border: 1px solid var(--gold-lt); 
+      border-radius: var(--r-md);
+      min-height: 500px; 
+      user-select: none; 
+      color: #1A1714;
+    }
+
+    [data-theme="dark"] .quran-page { 
+      background: #1A1714; 
+      border-color: var(--gold-dk); 
+      color: #F0EBF1;
+    }
+
+    /* Restored flexbox styling to render line-by-line properly */
+    .q-line { 
+      display: flex; 
+      justify-content: center; 
+      flex-wrap: wrap; 
+      width: 100%; 
+      margin-bottom: 5px;
+    }
+
+    .q-word { 
+      display: inline-block; 
+      cursor: pointer; 
+      padding: 0 2px; 
+      border-radius: 4px; 
+      transition: all 0.2s; 
+    }
+
+    .q-word:hover { 
+      background: rgba(212, 175, 55, 0.3); 
+      color: var(--primary); 
+    }
+
+    [data-theme="dark"] .q-word:hover { 
+      color: var(--gold); 
+    }
+
+    .q-word.selected { 
+      background: var(--danger-lt); 
+      color: var(--danger); 
+      font-weight: bold; 
+      box-shadow: 0 0 0 2px var(--danger); 
+    }
+
+    .q-ayah-end { 
+      color: var(--gold-dk); 
+      font-size: 20px; 
+      margin: 0 4px; 
+      display: inline-block; 
+      cursor: pointer; 
+    }
+
+    @media (max-width: 768px) {
+      .quran-page { 
+        font-size: 24px; 
+        padding: 15px; 
+      }
+    }
   </style>
 </head>
 <body>
@@ -1529,13 +1595,6 @@
         <div class="card-header">
           <h3 class="card-title">إدارة الطالبات والمقررات الفردية</h3>
         </div>
-        
-        <!-- Search Bar -->
-        <div class="search-bar">
-           <span style="font-size:18px; color:var(--text-muted);">🔍</span>
-           <input type="text" id="student-search" placeholder="ابحثي عن طالبة..." onkeyup="filterStudents()">
-        </div>
-
         <div class="grid-2" style="align-items:end; margin-bottom:24px; background:var(--bg-elevated); padding:20px; border-radius:var(--r-md);">
           <div class="form-group" style="margin:0;">
             <label>اسم الطالبة الجديدة</label>
@@ -1548,9 +1607,13 @@
           <button class="btn btn-gold" style="grid-column: span 2;" onclick="addStudent()">إضافة للطالبة للمنصة ➕</button>
         </div>
         
-        <div id="student-list" class="grid-2">
-          <!-- Students injected here -->
+        <!-- Search Bar -->
+        <div class="search-bar">
+           <span style="font-size:18px; color:var(--text-muted);">🔍</span>
+           <input type="text" id="student-search" placeholder="ابحثي عن طالبة..." onkeyup="filterStudents()">
         </div>
+
+        <div id="student-list"></div>
       </div>
     </div>
 
@@ -1574,12 +1637,12 @@
             <div class="kpi-label">معدل الانضباط والحضور</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-value" id="d-course-prog">0%</div>
-            <div class="kpi-label">تقدم الدورة الزمني</div>
+            <div class="kpi-value" id="d-total-sess">0</div>
+            <div class="kpi-label">إجمالي جلسات التسميع</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-value" id="d-week-stars" style="font-size: 24px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">—</div>
-            <div class="kpi-label">نجمة الأسبوع 🌟</div>
+            <div class="kpi-value" id="d-course-prog">0%</div>
+            <div class="kpi-label">تقدم الدورة الزمني</div>
           </div>
         </div>
 
@@ -1738,11 +1801,11 @@
                     </div>
                   </div>
                   <div class="unified-buttons">
-                    <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه حفظ<span class="d-pt">(-1)</span><span class="hk">1</span></button>
-                    <button class="btn-d d-2" onclick="triggerDeduct(2, 'ردة حفظ')">❌ ردة حفظ<span class="d-pt">(-2)</span><span class="hk">2</span></button>
-                    <button class="btn-d d-1" onclick="triggerDeduct(2, 'تنبيه تشكيل')">◌ تنبيه تشكيل<span class="d-pt">(-2)</span><span class="hk">3</span></button>
-                    <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة تشكيل<span class="d-pt">(-4)</span><span class="hk">4</span></button>
-                    <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'خطأ تجويد')">⋯ خطأ تجويد<span class="d-pt">(-0.5)</span><span class="hk">5</span></button>
+                    <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه حفظ<span class="hk">1</span></button>
+                    <button class="btn-d d-2" onclick="triggerDeduct(2, 'ردة حفظ')">❌ ردة حفظ<span class="hk">2</span></button>
+                    <button class="btn-d d-1" onclick="triggerDeduct(2, 'تنبيه تشكيل')">◌ تنبيه تشكيل<span class="hk">3</span></button>
+                    <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة تشكيل<span class="hk">4</span></button>
+                    <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'خطأ تجويد')">⋯ خطأ تجويد<span class="hk">5</span></button>
                   </div>
                 </div>
                 
@@ -2054,7 +2117,7 @@ function doGet(e) {
 
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v16'); 
+    const d = localStorage.getItem('alm_pro_v17'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) S = p; 
@@ -2065,7 +2128,7 @@ function loadState() {
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v16', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_v17', JSON.stringify(S)); 
     setSyncDot('local'); 
     hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -2268,11 +2331,6 @@ function setSyncDot(state) {
   if(document.getElementById('sync-dot')) { 
     document.getElementById('sync-dot').className = 'dot ' + map[state][0]; 
     document.getElementById('sync-lbl').textContent = map[state][1]; 
-  }
-  
-  if(document.getElementById('sum-sync-dot')) { 
-    document.getElementById('sum-sync-dot').className = 'dot ' + map[state][0]; 
-    document.getElementById('sum-sync-txt').textContent = map[state][1]; 
   }
 }
 
@@ -2582,7 +2640,6 @@ function startSession() {
     document.getElementById('sess-body').style.display = 'none'; 
     stopTimer(); 
     
-    // تأمين إخفاء نافذة الجلسات السابقة بأمان
     const lastSessWrap = document.getElementById('last-sessions-wrap');
     if(lastSessWrap) lastSessWrap.style.display = 'none';
     
@@ -2596,7 +2653,6 @@ function startSession() {
   qStartPage = 0;
   activeSessQuota = calcQuota(st.customFaces || S.course.pages || 200, S.course.weeks||10, S.course.studyDays||5);
   
-  // Update last sessions view (مع التأكد من وجود العنصر HTML)
   const lastSessWrap = document.getElementById('last-sessions-wrap');
   const lastSessCont = document.getElementById('last-sessions-list');
   
@@ -2673,7 +2729,6 @@ function triggerDeduct(pts, label) {
   renderErrLog(); 
   updateGradeDisp();
 
-  // طي اللوحة العائمة تلقائياً بعد الخصم في الموبايل
   if(window.innerWidth <= 991) {
     const body = document.getElementById('deduct-panel-body');
     const icon = document.getElementById('panel-toggle-icon');
@@ -2691,7 +2746,6 @@ function updateLiveScore() {
   if(elMob) elMob.textContent = fmt(sessScore);
 }
 
-// Hotkeys for deduction
 document.addEventListener('keydown', e => {
   if(!inSession || document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
   const keys = {
@@ -2827,7 +2881,6 @@ function saveSession() {
   toast('✅ تم اعتماد وحفظ الجلسة'); 
   stopTimer(); 
   
-  // لا نخفي الشاشة لتمكين النسخ، فقط نخفي اللوحة العائمة
   if (window.innerWidth <= 991) { 
     const body = document.getElementById('deduct-panel-body'); 
     if (body && body.classList.contains('expanded')) toggleDeductPanel(); 
@@ -2873,7 +2926,7 @@ function copyReport() {
     `الدرجة   : ${fmt(sessScore)} / 100`,
     `التقييم  : ${g.emoji} ${g.label}`,
     '──────────────────────',
-    'الملاحظات الحفظ:',
+    'الملاحظات:',
     errLines,
     '━━━━━━━━━━━━━━━━━━━━━━',
     'وفّقكِ الله وبارك في جهدكِ 💜'
@@ -2949,9 +3002,16 @@ async function loadCurrentPage() {
         const data = await res.json();
         
         let html = '<div class="q-page-content">'; 
+        let cLine = -1;
+        
         data.verses.forEach(v => { 
           const ayahNum = v.verse_key.split(':')[1]; 
           v.words.forEach(w => { 
+            if(w.line_number !== cLine) { 
+              if(cLine !== -1) html += '</div>'; 
+              html += '<div class="q-line">'; 
+              cLine = w.line_number; 
+            }
             if(w.char_type_name === 'word') { 
               html += `<span class="q-word" onclick="toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span> `; 
             } else if(w.char_type_name === 'end') { 
@@ -2959,6 +3019,7 @@ async function loadCurrentPage() {
             } 
           }); 
         }); 
+        if(cLine !== -1) html += '</div>';
         html += '</div>';
         
         quranCache.set(page, html); 
@@ -2981,7 +3042,6 @@ function toggleWordSelection(ayah, el) {
     document.getElementById('u-ayah').value = selectedEls.length > 0 ? ayah : ''; 
     document.getElementById('u-word').value = words.join(' ').trim();
     
-    // Auto-open panel on mobile
     if(selectedEls.length > 0 && window.innerWidth <= 991) { 
       const body = document.getElementById('deduct-panel-body'); 
       const icon = document.getElementById('panel-toggle-icon');
@@ -3230,7 +3290,6 @@ function toggleDay(id, idx) { const st = S.students.find(s => s.id === id); if(!
 function generatePDF() {
   const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
   const st = S.students.find(s=>s.id===id); if(!st) return;
-  
   const sess = st.sessions || [], pSess = sess.filter(s => s.att === 'present');
   document.getElementById('rep-t-name').textContent = S.course.teacher || '—'; document.getElementById('rep-s-name').textContent = st.name; document.getElementById('rep-c-name').textContent = S.course.cname || '—';
   document.getElementById('rep-score').textContent = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
