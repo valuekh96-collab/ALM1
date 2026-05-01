@@ -709,6 +709,24 @@
       flex-wrap: wrap; 
     }
 
+    .score-number { 
+      font-family: 'Amiri', serif; 
+      font-size: 96px; 
+      font-weight: 700; 
+      line-height: 1; 
+      text-align: center; 
+      background: linear-gradient(135deg, var(--primary), var(--gold)); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+      margin-bottom: 10px; 
+    }
+
+    [data-theme="dark"] .score-number { 
+      background: linear-gradient(135deg, var(--gold-lt), var(--gold)); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent;
+    }
+
     .search-bar { 
       display: flex; 
       align-items: center; 
@@ -767,34 +785,35 @@
 
     /* QURAN VIEWER */
     .quran-page {
-      font-family: 'Amiri Quran', serif; 
-      font-size: 28px; 
-      padding: 30px; 
+      font-family: 'Amiri Quran', 'Amiri', serif; 
+      font-size: 32px; 
+      line-height: 2.4;
+      text-align: justify; 
+      text-justify: inter-word; 
+      text-align-last: center; 
+      direction: rtl;
+      padding: 40px; 
       background: #FDFBF7; 
-      border: 1px solid var(--gold-lt); 
-      border-radius: var(--r-md);
-      min-height: 500px; 
+      border: 12px solid #EFE6D5;
+      outline: 1px solid var(--gold-lt);
+      outline-offset: -8px;
+      border-radius: 8px;
+      min-height: 60vh; 
       user-select: none; 
       word-wrap: break-word; 
       color: #1A1714;
-      /* إعدادات المحاذاة (Justify) */
-      text-align: justify; 
-      text-justify: inter-word; 
     }
     
     [data-theme="dark"] .quran-page { 
-      background: #1A1714; 
-      border-color: var(--gold-dk); 
-      color: #F0EBF1;
+      background: #151210; 
+      border-color: #2A241E; 
+      outline-color: var(--gold-dk);
+      color: #E6E0D8;
     }
     
-    .q-line {
-      display: block; /* تغيير لـ block للمحافظة على التبرير المستوي */
-      text-align: justify;
-      text-align-last: center;
+    .q-page-content {
+      display: block; 
       width: 100%;
-      margin-bottom: 5px;
-      line-height: 2.3;
     }
 
     .q-word { 
@@ -841,10 +860,23 @@
       .session-layout { 
         grid-template-columns: 1.3fr 1fr; 
       } 
+      
+      .panel-header { display: none; }
+      
+      .panel-body { display: block !important; }
+      
       .unified-deduct-container-wrapper { 
         transition: all var(--trans); 
+        background: transparent;
+        box-shadow: none;
+        position: static;
       }
+      
       .mobile-score-wrap {
+        display: none !important;
+      }
+      
+      .desktop-score-wrap {
         background: var(--bg-surface); 
         border-radius: var(--r-md); 
         padding: 16px; 
@@ -856,22 +888,7 @@
         justify-content: space-between; 
         align-items: center;
       }
-      .score-number { 
-        font-family: 'Amiri', serif; 
-        font-size: 96px; 
-        font-weight: 700; 
-        line-height: 1; 
-        text-align: center; 
-        background: linear-gradient(135deg, var(--primary), var(--gold)); 
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent; 
-        margin-bottom: 10px; 
-      }
-      [data-theme="dark"] .score-number { 
-        background: linear-gradient(135deg, var(--gold-lt), var(--gold)); 
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent;
-      }
+      
       .unified-deduct-container { 
         background: var(--bg-elevated); 
         border-radius: var(--r-md); 
@@ -879,17 +896,20 @@
         border: 1px solid var(--border-strong); 
         margin-bottom: 24px; 
       }
+      
       .unified-inputs { 
         display: grid; 
         grid-template-columns: 1fr 2fr; 
         gap: 16px; 
         margin-bottom: 16px; 
       }
+      
       .unified-buttons { 
         display: flex; 
         flex-wrap: wrap; 
         gap: 10px; 
       }
+      
       .btn-d { 
         flex: 1; 
         min-width: 130px; 
@@ -904,13 +924,16 @@
         flex-direction: column; 
         align-items: center;
       }
+      
       .btn-d:hover { 
         transform: translateY(-2px); 
         box-shadow: var(--shadow-sm); 
       }
+      
       .btn-d:active { 
         transform: scale(0.97); 
       }
+      
       .btn-d span.hk { 
         font-size: 10px; 
         background: var(--bg-app); 
@@ -1027,7 +1050,9 @@
     @media (max-width: 991px) {
       .session-layout { 
         grid-template-columns: 1fr; 
+        padding-bottom: 120px; /* Room for the bottom panel */
       }
+      
       .session-controls, .session-quran { 
         position: relative; 
         top: 0; 
@@ -1039,42 +1064,48 @@
       /* اللوحة السفلية العائمة في الجوال */
       .unified-deduct-container-wrapper { 
         position: fixed; 
-        bottom: 55px; /* أعلى من قائمة التنقل السفلية */
+        bottom: 60px; /* أعلى من قائمة التنقل السفلية */
         left: 0; 
         right: 0; 
-        z-index: 999; 
+        z-index: 150; 
         background: var(--bg-surface); 
-        padding: 10px 16px; 
         border-top: 2px solid var(--gold); 
         border-radius: 20px 20px 0 0;
         box-shadow: 0 -5px 25px rgba(0,0,0,0.15); 
+        transition: transform 0.3s ease;
       }
+      
       [data-theme="dark"] .unified-deduct-container-wrapper { 
-        background: var(--bg-app);
+        background: var(--bg-elevated);
         box-shadow: 0 -5px 25px rgba(0,0,0,0.8); 
       }
       
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 20px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--border-strong);
+      }
+
+      .panel-body {
+        display: none;
+        padding: 16px;
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+      
+      .panel-body.expanded {
+        display: block;
+      }
+      
       .mobile-score-wrap {
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        margin-bottom: 10px;
+        display: none !important; /* Hidden because score is in panel header */
       }
-      .score-number { 
-        font-family: 'Amiri', serif; 
-        font-size: 36px !important; 
-        font-weight: 700; 
-        line-height: 1; 
-        text-align: center; 
-        background: linear-gradient(135deg, var(--primary), var(--gold)); 
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent; 
-        margin: 0 !important; 
-      }
-      [data-theme="dark"] .score-number { 
-        background: linear-gradient(135deg, var(--gold-lt), var(--gold)); 
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent;
+      
+      .desktop-score-wrap {
+        display: none !important;
       }
       
       .unified-deduct-container {
@@ -1089,6 +1120,7 @@
         gap: 10px; 
         margin-bottom: 10px; 
       }
+      
       .unified-inputs .form-group { margin-bottom: 0; width: 100%; }
       .unified-inputs label { display: none; } /* إخفاء العناوين لتوفير المساحة */
       .unified-inputs input { height: 36px; padding: 5px 10px; font-size: 13px; }
@@ -1102,6 +1134,7 @@
         gap: 8px;
         -webkit-overflow-scrolling: touch;
       }
+      
       .unified-buttons::-webkit-scrollbar { height: 0px; }
       
       .btn-d { 
@@ -1117,10 +1150,8 @@
         background: var(--bg-surface);
         white-space: nowrap;
       }
-      .btn-d span.hk { display: none; }
       
-      /* زيادة المساحة السفلية لكي لا تغطي اللوحة محتوى الصفحة */
-      .session-layout { padding-bottom: 260px; }
+      .btn-d span.hk { display: none; }
     }
 
     @media (max-width: 768px) {
@@ -1174,9 +1205,11 @@
       
       /* Quran Font Adjustments for Mobile */
       .quran-page { 
-        font-size: 24px !important; 
-        padding: 15px !important; 
+        font-size: 26px !important; 
+        padding: 20px 15px !important; 
         line-height: 2.2 !important; 
+        border-width: 6px !important;
+        outline-offset: -4px !important;
       }
     }
 
@@ -1230,6 +1263,8 @@
     .rep-table td { padding: 9px; border-bottom: 1px solid #E4DED4; }
     .rep-foot { text-align: center; font-size: 12px; color: #6B626D; margin-top: 30px; border-top: 1px dashed #E4DED4; padding-top: 16px; }
 
+    /* Student mode specific styles */
+    .student-mode .teacher-only { display: none !important; }
   </style>
 </head>
 <body>
@@ -1409,7 +1444,7 @@
             </div>
           </div>
         </div>
-      </div> <!-- End Edit View -->
+      </div>
 
       <div class="card">
         <div class="card-header">
@@ -1572,43 +1607,57 @@
 
           <!-- COLUMN 2: CONTROLS -->
           <div class="session-controls">
-            <div class="unified-deduct-container-wrapper">
+            <div class="unified-deduct-container-wrapper" id="deduct-panel">
               
-              <!-- الموبايل: صندوق الدرجة الحية المدمج مع اللوحة العائمة -->
-              <div class="mobile-score-wrap" style="display:none;">
-                 <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
-                   <div id="grade-badge-mobile"></div>
-                   <div id="sess-badge-mobile"></div>
-                 </div>
-                 <div class="score-number" id="live-score-mobile">100</div>
+              <!-- Mobile Header (Clickable) -->
+              <div class="panel-header hide-desktop" onclick="toggleDeductPanel()">
+                <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+                   <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
+                     <div id="grade-badge-mobile"></div>
+                   </div>
+                   <div style="display:flex; align-items:center; gap: 10px;">
+                      <span style="font-size: 12px; color: var(--text-muted);">اضغطي للخصم</span>
+                      <div class="score-number" id="live-score-mobile" style="font-size:28px !important; margin:0 !important;">100</div>
+                      <span id="panel-toggle-icon" style="transition: transform 0.3s;">🔼</span>
+                   </div>
+                </div>
               </div>
 
-              <!-- سطح المكتب: عرض الدرجة العادي -->
-              <div class="desktop-score-wrap" style="background:var(--bg-surface); border-radius:var(--r-md); padding:16px; text-align:center; border:2px solid var(--gold); margin-bottom:16px; box-shadow: var(--shadow-sm); display:flex; justify-content:space-between; align-items:center;">
-                <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-                   <div id="grade-badge"></div>
-                   <div id="sess-badge"></div>
-                </div>
-                <div class="score-number" id="live-score" style="font-size:48px; margin:0;">100</div>
-              </div>
-              
-              <div class="unified-deduct-container" style="margin-bottom:0; padding:16px;">
-                <div class="unified-inputs">
-                  <div class="form-group" style="margin:0;">
-                    <label>الآية</label>
-                    <input type="number" id="u-ayah" class="form-control" placeholder="الآية">
+              <!-- Panel Body -->
+              <div class="panel-body" id="deduct-panel-body">
+                <!-- سطح المكتب: عرض الدرجة العادي -->
+                <div class="desktop-score-wrap" style="background:var(--bg-surface); border-radius:var(--r-md); padding:16px; text-align:center; border:2px solid var(--gold); margin-bottom:16px; box-shadow: var(--shadow-sm); display:flex; justify-content:space-between; align-items:center;">
+                  <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
+                     <div id="grade-badge"></div>
+                     <div id="sess-badge"></div>
                   </div>
-                  <div class="form-group" style="margin:0;">
-                    <label>الكلمة/الملاحظة</label>
-                    <input type="text" id="u-word" class="form-control" placeholder="الملاحظة">
+                  <div class="score-number" id="live-score" style="font-size:48px; margin:0;">100</div>
+                </div>
+                
+                <div class="unified-deduct-container" style="margin-bottom:0; padding:0; border:none; background:transparent;">
+                  <div class="unified-inputs">
+                    <div class="form-group" style="margin:0;">
+                      <label class="hide-mobile">الآية</label>
+                      <input type="number" id="u-ayah" class="form-control" placeholder="الآية">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                      <label class="hide-mobile">الكلمة/الملاحظة</label>
+                      <input type="text" id="u-word" class="form-control" placeholder="الكلمات المحددة...">
+                    </div>
+                  </div>
+                  <div class="unified-buttons">
+                    <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه<span class="d-pt">(-1)</span></button>
+                    <button class="btn-d d-2" onclick="triggerDeduct(2, 'حفظ وتصحيح')">❌ حفظ<span class="d-pt">(-2)</span></button>
+                    <button class="btn-d d-1" onclick="triggerDeduct(2, 'خطأ تشكيل')">◌ تشكيل<span class="d-pt">(-2)</span></button>
+                    <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة<span class="d-pt">(-4)</span></button>
+                    <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'تردد')">⋯ تردد<span class="d-pt">(-0.5)</span></button>
                   </div>
                 </div>
-                <div class="unified-buttons">
-                  <button class="btn-d d-1" onclick="triggerDeduct(1, 'تنبيه حفظ')">⚠️ تنبيه<span class="d-pt">(-1)</span></button>
-                  <button class="btn-d d-2" onclick="triggerDeduct(2, 'حفظ وتصحيح')">❌ حفظ<span class="d-pt">(-2)</span></button>
-                  <button class="btn-d d-1" onclick="triggerDeduct(2, 'خطأ تشكيل')">◌ تشكيل<span class="d-pt">(-2)</span></button>
-                  <button class="btn-d d-3" onclick="triggerDeduct(4, 'ردة تشكيل')">🚫 ردة<span class="d-pt">(-4)</span></button>
-                  <button class="btn-d d-4" onclick="triggerDeduct(0.5, 'تردد')">⋯ تردد<span class="d-pt">(-0.5)</span></button>
+                
+                <!-- سجل الخصومات مدمج داخل اللوحة -->
+                <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border-strong);">
+                   <h4 style="font-size:14px; margin-bottom:12px; color:var(--primary);">سجل الملاحظات:</h4>
+                   <div id="err-log" style="font-size:13px; background:var(--bg-app); padding:12px; border-radius:var(--r-sm); max-height:150px; overflow-y:auto;"></div>
                 </div>
               </div>
             </div>
@@ -1643,10 +1692,6 @@
               </div>
             </div>
 
-            <div class="card" style="padding: 16px; margin-bottom: 16px;">
-              <h4 style="font-size:14px; margin-bottom:12px; color:var(--primary);">سجل الملاحظات:</h4>
-              <div id="err-log" style="font-size:13px; background:var(--bg-app); padding:12px; border-radius:var(--r-sm); max-height:200px; overflow-y:auto;"></div>
-            </div>
             <button class="btn btn-primary btn-block" style="margin-bottom:12px; padding:16px; font-size:16px;" onclick="saveSession()">💾 اعتماد وحفظ الجلسة</button>
           </div>
         </div>
@@ -1879,7 +1924,7 @@ function doGet(e) {
 
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v9'); 
+    const d = localStorage.getItem('alm_pro_v10'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) S = p; 
@@ -1890,7 +1935,7 @@ function loadState() {
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v9', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_v10', JSON.stringify(S)); 
     setSyncDot('local'); 
     hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -2048,7 +2093,6 @@ function navigate(id) {
     document.getElementById('sel-portal').value = loggedInStudentId; 
     loadPortal(); 
   }
-  handleResponsiveLayout();
 }
 
 function toggleSidebar() {
@@ -2098,6 +2142,19 @@ function setSyncDot(state) {
   if(document.getElementById('sum-sync-dot')) { 
     document.getElementById('sum-sync-dot').className = 'dot ' + map[state][0]; 
     document.getElementById('sum-sync-txt').textContent = map[state][1]; 
+  }
+}
+
+function toggleDeductPanel() {
+  const body = document.getElementById('deduct-panel-body');
+  const icon = document.getElementById('panel-toggle-icon');
+  
+  if (body.classList.contains('expanded')) {
+    body.classList.remove('expanded');
+    icon.style.transform = 'rotate(0deg)';
+  } else {
+    body.classList.add('expanded');
+    icon.style.transform = 'rotate(180deg)';
   }
 }
 
@@ -2369,6 +2426,7 @@ function startSession() {
   document.getElementById('quota-info-sess').textContent = `🎯 النصاب المستهدف: ${activeSessQuota.sessionFaces} أوجه`;
   document.getElementById('faces').value = activeSessQuota.sessionFaces;
   document.getElementById('live-score').textContent = '100'; 
+  document.getElementById('live-score-mobile').textContent = '100'; 
   document.getElementById('sess-att').value = 'present';
   
   renderErrLog(); 
@@ -2380,7 +2438,6 @@ function startSession() {
   initQuranApp(); 
   startTimer(); 
   inSession = true;
-  handleResponsiveLayout();
 }
 
 function startTimer() {
@@ -2567,6 +2624,11 @@ function saveSession() {
   renderStudentList(); 
   toast('✅ تم اعتماد وحفظ الجلسة'); 
   stopTimer(); 
+  
+  // طي لوحة التحكم إذا كانت مفتوحة على الموبايل
+  const body = document.getElementById('deduct-panel-body');
+  if (body && body.classList.contains('expanded')) toggleDeductPanel();
+  
   document.getElementById('sess-body').style.display = 'none'; 
   document.getElementById('sel-st').value = '';
   
@@ -2687,19 +2749,11 @@ async function loadCurrentPage() {
         const res = await fetch(`https://api.quran.com/api/v4/verses/by_page/${page}?language=ar&words=true&word_fields=text_uthmani`);
         const data = await res.json();
         
-        let html = '';
-        let cLine = -1;
+        let html = '<div class="q-page-content">';
         
         data.verses.forEach(v => {
             const ayahNum = v.verse_key.split(':')[1];
             v.words.forEach(w => {
-                if(w.line_number !== cLine) { 
-                  if(cLine !== -1) html += '</div>'; 
-                  // استخدمنا block لضمان عمل الجيستفاي
-                  html += '<div class="q-line">'; 
-                  cLine = w.line_number; 
-                }
-                
                 if(w.char_type_name === 'word') {
                   html += `<span class="q-word" onclick="toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span> `;
                 } else if(w.char_type_name === 'end') {
@@ -2708,7 +2762,7 @@ async function loadCurrentPage() {
             });
         });
         
-        if(cLine !== -1) html += '</div>';
+        html += '</div>';
         
         quranCache.set(page, html); 
         container.innerHTML = html;
@@ -2730,6 +2784,14 @@ function toggleWordSelection(ayah, el) {
     
     document.getElementById('u-ayah').value = selectedEls.length > 0 ? ayah : ''; 
     document.getElementById('u-word').value = words.join(' ').trim();
+
+    // Auto-expand panel on mobile if words are selected
+    if(selectedEls.length > 0 && window.innerWidth <= 991) {
+        const body = document.getElementById('deduct-panel-body');
+        if (!body.classList.contains('expanded')) {
+            toggleDeductPanel();
+        }
+    }
 }
 
 function ayahAr(n) { 
@@ -2765,24 +2827,6 @@ function setQuranPoint(type) {
         toast('✅ تم تعيين نقطة النهاية وحساب الأوجه');
     }
 }
-
-// Handle layout adjustments for desktop vs mobile panels
-function handleResponsiveLayout() {
-  if (!document.getElementById('page-session').classList.contains('active')) return;
-  
-  const deskWrap = document.querySelector('.desktop-score-wrap');
-  const mobWrap = document.querySelector('.mobile-score-wrap');
-  
-  if(window.innerWidth <= 991) {
-     if(deskWrap) deskWrap.style.display = 'none';
-     if(mobWrap) mobWrap.style.display = 'flex';
-  } else {
-     if(deskWrap) deskWrap.style.display = 'flex';
-     if(mobWrap) mobWrap.style.display = 'none';
-  }
-}
-
-window.addEventListener('resize', handleResponsiveLayout);
 
 // ══════════════════════════════════════════════════════════
 // 8. DASHBOARD (CHARTS) 📊
@@ -3039,7 +3083,19 @@ function generatePDF() {
       return `<tr><td>${s.date}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td><td colspan="3" style="text-align:center;color:#C0392B;">-</td></tr>`;
     }
     const errs = s.errors && s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا ملاحظات';
-    return `<tr><td>${s.date}</td><td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td><td>${s.rev === 'done' ? `<span style="color:#2E7D52;font-weight:bold;">تمت المراجعة (${s.revG})</span>` : '-'}</td><td>${errs}</td></tr>`;
+    let revStr = '-';
+    if(s.rev === 'done') {
+      revStr = `<span style="color:#2E7D52;font-weight:bold;">تمت المراجعة (${s.revG})</span>`;
+    }
+    
+    return `
+      <tr>
+        <td>${s.date}</td>
+        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td>
+        <td>${revStr}</td>
+        <td>${errs}</td>
+      </tr>
+    `;
   }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
   
   const element = document.getElementById('rep-layer'); 
@@ -3095,22 +3151,26 @@ async function sheetReq(action) {
   }
   
   setSyncDot('sync');
-  try { 
+  try {
     const res = await fetch(S.sheetUrl, { 
       method: 'POST', 
-      body: JSON.stringify({action, code: S.teacherCode, payload: JSON.stringify(S)})
-    }); 
-    return await res.json(); 
+      body: JSON.stringify({
+        action, 
+        code: S.teacherCode, 
+        payload: JSON.stringify(S)
+      })
+    });
+    return await res.json();
   } catch(e) { 
     setSyncDot('err'); 
     return null; 
   }
 }
 
-async function syncToSheet() { 
+async function syncToSheet() {
   if(isStudentMode) return; 
   
-  const r = await sheetReq('save'); 
+  const r = await sheetReq('save');
   if(r?.ok) { 
     setSyncDot('ok'); 
     toast('☁️ تمت المزامنة بنجاح'); 
@@ -3118,7 +3178,7 @@ async function syncToSheet() {
   } else { 
     setSyncDot('err'); 
     toast('❌ فشل الاتصال بقاعدة البيانات'); 
-  } 
+  }
 }
 
 // ══════════════════════════════════════════════════════════
@@ -3134,54 +3194,44 @@ async function syncToSheet() {
   }
   
   if(tP === '1' && uP && cP) {
-    try { 
-      S.sheetUrl = decodeData(uP); 
-      S.teacherCode = decodeData(cP); 
+    try {
+      S.sheetUrl = decodeData(uP);
+      S.teacherCode = decodeData(cP);
     } catch(e) {}
     
     toast('جارٍ استرجاع بيانات المعلمة...');
-    
     sheetReq('load').then(r => {
-      if(r?.ok && r.payload) { 
-        const parsed = JSON.parse(r.payload);
-        if(validateState(parsed)) {
-          S = parsed; 
-          saveState(); 
-          initSetup(); 
-          navigate('setup'); 
-          toast('✅ تم تسجيل الدخول بنجاح');
-        } else {
-          toast('❌ البيانات المسترجعة غير صالحة'); 
-          navigate('setup');
-        }
-      } else { 
-        toast('❌ فشل جلب البيانات من السيرفر'); 
-        navigate('setup'); 
+      if(r?.ok && r.payload) {
+        S = JSON.parse(r.payload);
+        saveState();
+        initSetup();
+        navigate('setup');
+        toast('✅ تم تسجيل الدخول بنجاح');
+      } else {
+        toast('❌ فشل جلب البيانات من السيرفر');
+        navigate('setup');
       }
-    }); 
+    });
     return;
   }
   
   if(sP && uP && cP) {
     isStudentMode = true; 
-    loggedInStudentId = parseInt(sP); 
+    loggedInStudentId = parseInt(sP);
     document.body.classList.add('student-mode');
     
     try { 
       S.sheetUrl = decodeData(uP); 
       S.teacherCode = decodeData(cP); 
-    } catch(e) { 
-      try { 
-        S.sheetUrl = atob(uP); 
-        S.teacherCode = atob(cP); 
-      } catch(ex) {} 
+    } catch(e) {
+      try { S.sheetUrl = atob(uP); S.teacherCode = atob(cP); } catch(ex) {}
     }
     
     navigate('portal'); 
     
-    const alertEl = document.getElementById('student-alert'); 
-    document.getElementById('portal-body').style.display = 'none'; 
-    alertEl.style.display = 'block'; 
+    const alertEl = document.getElementById('student-alert');
+    document.getElementById('portal-body').style.display = 'none';
+    alertEl.style.display = 'block';
     alertEl.innerHTML = 'جاري الاتصال بالمنصة لجلب بياناتك... ⏳';
     
     sheetReq('load').then(r => { 
@@ -3189,24 +3239,27 @@ async function syncToSheet() {
         const parsed = JSON.parse(r.payload);
         if(validateState(parsed)) { 
           S = parsed; 
-          const stExists = S.students.find(s => s.id === loggedInStudentId); 
-          if(stExists) { 
-            alertEl.innerHTML = 'أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟 (تحديث مباشر)'; 
-            loadPortal(); 
+          const stExists = S.students.find(s => s.id === loggedInStudentId);
+          if(stExists) {
+              alertEl.innerHTML = 'أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟 (تحديث مباشر)';
+              loadPortal(); 
           } else {
-            alertEl.innerHTML = '❌ عذراً، لم يتم العثور على بياناتك.';
+              alertEl.innerHTML = '❌ عذراً، لم يتم العثور على بياناتك. قد تكون المعلمة حذفت السجل.';
           }
         } else {
           alertEl.innerHTML = '❌ البيانات المسترجعة غير صالحة.';
         }
       } else {
-        alertEl.innerHTML = '❌ عذراً، لم نتمكن من جلب بياناتك.';
+        alertEl.innerHTML = '❌ عذراً، لم نتمكن من جلب بياناتك. تأكدي أن المعلمة قامت بحفظ التغييرات.';
       }
-    }).catch(err => alertEl.innerHTML = '❌ خطأ في الاتصال بالخادم.');
-  } else { 
+    }).catch(err => {
+        alertEl.innerHTML = '❌ خطأ في الاتصال بالخادم.';
+    });
+    
+  } else {
     loadState(); 
     initSetup(); 
-    navigate('setup'); 
+    navigate('setup');
   }
 })();
 </script>
