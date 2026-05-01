@@ -3208,7 +3208,7 @@ function copyStudentReportFromPortal() {
     const latest = [...sess].sort((a,b)=>b.ts - a.ts)[0]; rep += `📌 آخر جلسة (${latest.date}):\n`;
     if(latest.att === 'present') {
       rep += `▪️ حفظ: ${latest.faces} أوجه (${latest.from} إلى ${latest.to})\n`;
-      rep += `▪️ المراجعة: ${(latest.rev === 'done') ? \`تمت المراجعة (\${latest.revG})\` : 'لا يوجد'}\n`;
+      rep += `▪️ المراجعة: ${(latest.rev === 'done') ? 'تمت المراجعة (' + latest.revG + ')' : 'لا يوجد'}\n`;
       rep += `▪️ الدرجة: ${fmt(latest.score)} / 100 (${latest.grade})\n`;
       rep += `▪️ الملاحظات: ${latest.errors && latest.errors.length ? latest.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات'}\n`;
     } else { rep += `▪️ غياب: ${latest.att === 'excused' ? 'بعذر' : 'بدون عذر'}\n`; }
