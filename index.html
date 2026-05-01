@@ -120,6 +120,7 @@
       text-decoration: none; 
     }
     
+    /* Accessibility fix: Replace outline: none */
     button { 
       cursor: pointer; 
       font-family: 'Cairo', sans-serif; 
@@ -387,6 +388,7 @@
       color: var(--gold); 
     }
 
+    /* Remove obstacles to sticky behavior */
     .app-container, .main-content, .page-wrapper { 
       overflow: visible !important; 
       overflow-x: visible !important; 
@@ -1145,7 +1147,7 @@
     @media (max-width: 991px) {
       .session-layout { 
         grid-template-columns: 1fr; 
-        padding-bottom: 120px; 
+        padding-bottom: 120px; /* Room for the bottom panel */
       }
       
       .session-controls, .session-quran { 
@@ -1156,9 +1158,10 @@
         padding: 0; 
       }
       
+      /* اللوحة السفلية العائمة في الجوال */
       .unified-deduct-container-wrapper { 
         position: fixed; 
-        bottom: 60px; 
+        bottom: 60px; /* أعلى من قائمة التنقل السفلية */
         left: 0; 
         right: 0; 
         z-index: 150; 
@@ -1195,7 +1198,7 @@
       }
       
       .mobile-score-wrap {
-        display: none !important; 
+        display: none !important; /* Hidden because score is in panel header */
       }
       
       .desktop-score-wrap {
@@ -1216,9 +1219,10 @@
       }
       
       .unified-inputs .form-group { margin-bottom: 0; width: 100%; }
-      .unified-inputs label { display: none; } 
+      .unified-inputs label { display: none; } /* إخفاء العناوين لتوفير المساحة */
       .unified-inputs input { height: 36px; padding: 5px 10px; font-size: 13px; }
       
+      /* أزرار قابلة للتمرير أفقياً */
       .unified-buttons { 
         display: flex;
         flex-wrap: nowrap;
@@ -1245,20 +1249,6 @@
       }
       
       .btn-d span.hk { display: none; }
-
-      /* ════ القرآن في الجوال - فقرة متصلة ════ */
-      .q-page-content {
-        display: block !important;
-        text-align: justify !important;
-        text-align-last: center !important;
-      }
-      .q-line {
-        display: contents !important; 
-      }
-      .q-word, .q-ayah-end {
-        display: inline-block !important;
-        margin-bottom: 8px !important;
-      }
     }
 
     @media (max-width: 768px) {
@@ -1310,11 +1300,10 @@
       [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
       .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
       
-      /* Quran Font Adjustments for Mobile */
+      /* ════ القرآن في الجوال - فقرة متصلة ════ */
       .quran-page { 
         font-size: 26px !important; 
         padding: 20px 15px !important; 
-        line-height: 2.2 !important; 
         border-width: 6px !important;
         outline-offset: -4px !important;
       }
@@ -1465,41 +1454,40 @@
     /* Student mode specific styles */
     .student-mode .teacher-only { display: none !important; }
 
-    /* ════ QURAN VIEWER ════ */
+    /* ════ QURAN VIEWER - PERFECT ALIGNMENT ════ */
     .quran-page {
-      font-family: 'Amiri Quran', serif; 
-      font-size: 28px; 
-      line-height: 2.3;
-      text-align: justify; 
-      text-justify: inter-word; 
-      text-align-last: center; 
+      font-family: 'Amiri Quran', 'Amiri', serif; 
+      font-size: 32px; 
       direction: rtl;
-      padding: 30px; 
+      padding: 40px; 
       background: #FDFBF7; 
-      border: 1px solid var(--gold-lt); 
-      border-radius: var(--r-md);
-      min-height: 500px; 
+      border: 12px solid #EFE6D5;
+      outline: 1px solid var(--gold-lt);
+      outline-offset: -8px;
+      border-radius: 8px;
+      min-height: 60vh; 
       user-select: none; 
       word-wrap: break-word; 
       color: #1A1714;
     }
 
     [data-theme="dark"] .quran-page { 
-      background: #1A1714; 
-      border-color: var(--gold-dk); 
-      color: #F0EBF1;
+      background: #151210; 
+      border-color: #2A241E; 
+      outline-color: var(--gold-dk);
+      color: #E6E0D8;
     }
 
-    .q-line { 
+    /* الحل الجذري للمحاذاة التامة للآيات كالمصحف */
+    .q-page-content {
       display: block; 
-      text-align: justify; 
-      text-align-last: center; 
-      width: 100%; 
-      margin-bottom: 5px; 
-      line-height: 2.3; 
+      text-align: justify;
+      text-align-last: center;
+      line-height: 2.4;
+      width: 100%;
     }
 
-    .q-word { 
+    .q-word, .q-ayah-end { 
       display: inline-block; 
       cursor: pointer; 
       padding: 0 2px; 
@@ -1527,8 +1515,6 @@
       color: var(--gold-dk); 
       font-size: 20px; 
       margin: 0 4px; 
-      display: inline-block; 
-      cursor: pointer; 
     }
 
     /* Toast */
@@ -2287,7 +2273,7 @@ function injectMockData() {
 
   const sDateObj = new Date(today.getTime() - (14 * 24 * 60 * 60 * 1000));
   
-  S = {
+  window.S = {
     course: { 
       teacher: 'أ. زينب', 
       cname: 'حلقة الحفاظ', 
@@ -2333,11 +2319,11 @@ function injectMockData() {
 
 window.loadState = function() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v24'); 
+    const d = localStorage.getItem('alm_pro_v25'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) {
-          S = p; 
+          window.S = p; 
       } else {
           injectMockData(); 
       }
@@ -2352,8 +2338,8 @@ window.loadState = function() {
 window.saveState = function() { 
   if(window.isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v24', JSON.stringify(S)); 
-    setSyncDot('local'); 
+    localStorage.setItem('alm_pro_v25', JSON.stringify(window.S)); 
+    window.setSyncDot('local'); 
     window.hasUnsavedChanges = true; 
   } catch(e) {} 
 }
@@ -2491,7 +2477,7 @@ const TITLES = {
 window.navigate = function(id) {
   document.querySelectorAll('.page-wrapper, .nav-item, .b-nav-item').forEach(e => e.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  document.querySelectorAll(`[onclick="navigate('${id}')"]`).forEach(e => e.classList.add('active'));
+  document.querySelectorAll(`[onclick="window.navigate('${id}')"]`).forEach(e => e.classList.add('active'));
   
   if(TITLES[id]) { 
     document.getElementById('top-title').textContent = TITLES[id][0]; 
@@ -2501,12 +2487,12 @@ window.navigate = function(id) {
   document.getElementById('sidebar').style.transform = ''; 
   document.getElementById('sb-overlay').classList.remove('active');
   
-  if(id === 'dash') initDashboard(); 
-  if(id === 'board') renderBoard();
+  if(id === 'dash') window.initDashboard(); 
+  if(id === 'board') window.renderBoard();
   
   if(id === 'portal' && window.isStudentMode) { 
     document.getElementById('sel-portal').value = window.loggedInStudentId; 
-    loadPortal(); 
+    window.loadPortal(); 
   }
 }
 
@@ -2524,7 +2510,7 @@ window.toggleTheme = function() {
   localStorage.setItem('alm_theme', isDark ? 'light' : 'dark');
   
   if(document.getElementById('page-dash').classList.contains('active')) {
-    initDashboard();
+    window.initDashboard();
   }
 }
 
@@ -2574,11 +2560,11 @@ window.toggleDeductPanel = function() {
 window.lockSetup = function() {
   document.getElementById('setup-edit-view').style.display = 'none'; 
   document.getElementById('setup-locked-view').style.display = 'block';
-  document.getElementById('sum-teacher').textContent = S.course.teacher || '—'; 
-  document.getElementById('sum-course').textContent = S.course.cname || '—';
+  document.getElementById('sum-teacher').textContent = window.S.course.teacher || '—'; 
+  document.getElementById('sum-course').textContent = window.S.course.cname || '—';
   
   const sdMap = { 5: 'الأحد-الخميس', 6: 'السبت-الخميس', 7: 'كامل الأسبوع' };
-  document.getElementById('sum-days').textContent = sdMap[S.course.studyDays] || '—';
+  document.getElementById('sum-days').textContent = sdMap[window.S.course.studyDays] || '—';
 }
 
 window.unlockSetup = function() { 
@@ -2601,26 +2587,26 @@ window.validateSetupInline = function() {
 }
 
 window.initSetup = function() {
-  const c = S.course;
+  const c = window.S.course;
   document.getElementById('teacher').value = c.teacher; 
   document.getElementById('cname').value = c.cname;
   document.getElementById('tpages').value = c.pages; 
   document.getElementById('sdate').value = c.sdate;
   document.getElementById('tweeks').value = c.weeks; 
   document.getElementById('study-days').value = c.studyDays;
-  document.getElementById('sheet-url').value = S.sheetUrl || ''; 
-  document.getElementById('teacher-code').value = S.teacherCode || '';
+  document.getElementById('sheet-url').value = window.S.sheetUrl || ''; 
+  document.getElementById('teacher-code').value = window.S.teacherCode || '';
   document.getElementById('gs-code').value = window.GS_CODE;
   
-  updateUI(); 
-  calcPlan(); 
-  renderStudentList();
-  validateSetupInline();
+  window.updateUI(); 
+  window.calcPlan(); 
+  window.renderStudentList();
+  window.validateSetupInline();
   
-  if(S.sheetUrl && S.teacherCode && c.teacher) {
-    lockSetup(); 
+  if(window.S.sheetUrl && window.S.teacherCode && c.teacher) {
+    window.lockSetup(); 
   } else {
-    unlockSetup();
+    window.unlockSetup();
   }
 }
 
@@ -2628,7 +2614,7 @@ window.calcPlan = function() {
   const tF = parseInt(document.getElementById('tpages').value) || 200;
   const wks = parseInt(document.getElementById('tweeks').value) || 10;
   const sd = parseInt(document.getElementById('study-days').value) || 5;
-  const q = calcQuota(tF, wks, sd);
+  const q = window.calcQuota(tF, wks, sd);
   
   document.getElementById('m-days').textContent = wks * sd; 
   document.getElementById('m-daily').textContent = q.dailyText;
@@ -2656,7 +2642,7 @@ window.calcPlan = function() {
 }
 
 window.saveCourse = function() {
-  S.course = { 
+  window.S.course = { 
     teacher: document.getElementById('teacher').value.trim(), 
     cname: document.getElementById('cname').value.trim(), 
     pages: parseInt(document.getElementById('tpages').value) || 200, 
@@ -2664,29 +2650,29 @@ window.saveCourse = function() {
     weeks: parseInt(document.getElementById('tweeks').value) || 10, 
     studyDays: parseInt(document.getElementById('study-days').value) || 5 
   };
-  S.sheetUrl = document.getElementById('sheet-url').value.trim(); 
-  S.teacherCode = document.getElementById('teacher-code').value.trim();
+  window.S.sheetUrl = document.getElementById('sheet-url').value.trim(); 
+  window.S.teacherCode = document.getElementById('teacher-code').value.trim();
   
-  saveState(); 
-  calcPlan(); 
-  updateUI(); 
-  lockSetup(); 
-  toast('✅ تم حفظ الإعدادات بنجاح');
+  window.saveState(); 
+  window.calcPlan(); 
+  window.updateUI(); 
+  window.lockSetup(); 
+  window.toast('✅ تم حفظ الإعدادات بنجاح');
   
-  if(S.sheetUrl) syncToSheet();
+  if(window.S.sheetUrl) window.syncToSheet();
 }
 
 window.archiveCourse = async function() {
-  const word = await showModal('أرشفة وتصفير الدورة', 'هذا سيحذف جميع الدرجات والسجلات للبدء بدورة جديدة. للتاكيد اكتبي كلمة "تأكيد" أدناه:', true, '');
+  const word = await window.showModal('أرشفة وتصفير الدورة', 'هذا سيحذف جميع الدرجات والسجلات للبدء بدورة جديدة. للتاكيد اكتبي كلمة "تأكيد" أدناه:', true, '');
   
   if(word !== 'تأكيد') { 
-    toast('❌ تم إلغاء الأرشفة'); 
+    window.toast('❌ تم إلغاء الأرشفة'); 
     return; 
   }
   
-  const sd = S.course.studyDays || 5;
+  const sd = window.S.course.studyDays || 5;
   
-  S.students.forEach(st => {
+  window.S.students.forEach(st => {
     st.score = null; 
     st.sessions = []; 
     st.days = Array(sd).fill(0); 
@@ -2694,13 +2680,13 @@ window.archiveCourse = async function() {
     st.total = 0; 
   });
   
-  S.course.sdate = new Date().toISOString().split('T')[0];
+  window.S.course.sdate = new Date().toISOString().split('T')[0];
   
-  saveState(); 
-  initSetup(); 
-  toast('🗄️ تم أرشفة وتصفير الدورة بنجاح!');
+  window.saveState(); 
+  window.initSetup(); 
+  window.toast('🗄️ تم أرشفة وتصفير الدورة بنجاح!');
   
-  if(S.sheetUrl) syncToSheet();
+  if(window.S.sheetUrl) window.syncToSheet();
 }
 
 window.filterStudents = function() {
@@ -2711,7 +2697,7 @@ window.filterStudents = function() {
 }
 
 window.renderStudentList = function() {
-  const ss = [...S.students].sort((a,b) => a.name.localeCompare(b.name, 'ar'));
+  const ss = [...window.S.students].sort((a,b) => a.name.localeCompare(b.name, 'ar'));
   const list = document.getElementById('student-list');
   
   if(ss.length === 0) {
@@ -2722,13 +2708,13 @@ window.renderStudentList = function() {
         <div class="list-content">
           <div class="user-avatar" style="width:36px; height:36px; font-size:14px;">${st.name[0]}</div>
           <div>
-            <div style="font-weight:700; font-size:14px; cursor:pointer;" ondblclick="editStudentName(${st.id})" title="انقري مرتين لتعديل الاسم">${st.name} ${st.customFaces ? `<span style="color:var(--gold); font-size:11px;">مقرر خاص</span>` : ''}</div>
-            <div style="font-size:12px; color:var(--text-muted);">آخر درجة: ${fmt(st.score)} | عدد الجلسات: ${st.total||0}</div>
+            <div style="font-weight:700; font-size:14px; cursor:pointer;" ondblclick="window.editStudentName(${st.id})" title="انقري مرتين لتعديل الاسم">${st.name} ${st.customFaces ? `<span style="color:var(--gold); font-size:11px;">مقرر خاص</span>` : ''}</div>
+            <div style="font-size:12px; color:var(--text-muted);">آخر درجة: ${window.fmt(st.score)} | عدد الجلسات: ${st.total||0}</div>
           </div>
         </div>
         <div class="list-actions">
-          <button class="btn btn-outline" style="padding:6px 12px; font-size:12px;" onclick="copyStudentLink(${st.id})">🔗 الرابط</button>
-          <button class="btn btn-danger" style="padding:6px 12px; font-size:12px;" onclick="delSt(${st.id})">حذف</button>
+          <button class="btn btn-outline" style="padding:6px 12px; font-size:12px;" onclick="window.copyStudentLink(${st.id})">🔗 الرابط</button>
+          <button class="btn btn-danger" style="padding:6px 12px; font-size:12px;" onclick="window.delSt(${st.id})">حذف</button>
         </div>
       </div>`).join('');
   }
@@ -2747,14 +2733,14 @@ window.renderStudentList = function() {
 }
 
 window.editStudentName = async function(id) {
-  const st = S.students.find(s=>s.id === id); 
+  const st = window.S.students.find(s=>s.id === id); 
   if(!st) return;
   
-  const newName = await showModal('تعديل اسم الطالبة', 'الاسم:', true, st.name);
+  const newName = await window.showModal('تعديل اسم الطالبة', 'الاسم:', true, st.name);
   if(newName && newName.trim() !== '') { 
     st.name = newName.trim(); 
-    saveState(); 
-    renderStudentList(); 
+    window.saveState(); 
+    window.renderStudentList(); 
   }
 }
 
@@ -2763,80 +2749,80 @@ window.addStudent = function() {
   const cf = parseInt(document.getElementById('new-custom-faces').value);
   
   if(!name) { 
-    toast('⚠️ الرجاء إدخال اسم الطالبة'); 
+    window.toast('⚠️ الرجاء إدخال اسم الطالبة'); 
     return; 
   }
   
-  if(S.students.find(s => s.name === name)) { 
-    toast('⚠️ هذا الاسم موجود مسبقاً'); 
+  if(window.S.students.find(s => s.name === name)) { 
+    window.toast('⚠️ هذا الاسم موجود مسبقاً'); 
     return; 
   }
   
-  const sd = S.course.studyDays || 5;
+  const sd = window.S.course.studyDays || 5;
   const st = { 
-    id: S.nextId++, 
+    id: window.S.nextId++, 
     name, 
     score: null, 
     sessions: [], 
-    days: Array(S.course.studyDays || 5).fill(0), 
+    days: Array(sd).fill(0), 
     ok: 0, 
     total: 0 
   };
   
   if(cf > 0) st.customFaces = cf;
   
-  S.students.push(st); 
-  saveState(); 
+  window.S.students.push(st); 
+  window.saveState(); 
   
   document.getElementById('new-name').value = ''; 
   document.getElementById('new-custom-faces').value = ''; 
   
-  renderStudentList(); 
-  toast('✅ تمت إضافة ' + name);
+  window.renderStudentList(); 
+  window.toast('✅ تمت إضافة ' + name);
 }
 
 window.delSt = async function(id) {
-  const st = S.students.find(s => s.id === id);
-  const confirm = await showModal('تأكيد الحذف', `هل أنتِ متأكدة من حذف الطالبة "${st.name}" بجميع سجلاتها؟`);
+  const st = window.S.students.find(s => s.id === id);
+  const confirm = await window.showModal('تأكيد الحذف', `هل أنتِ متأكدة من حذف الطالبة "${st.name}" بجميع سجلاتها؟`);
   if(!confirm) return;
   
-  S.students = S.students.filter(s => s.id !== id); 
-  saveState(); 
-  renderStudentList();
+  window.S.students = window.S.students.filter(s => s.id !== id); 
+  window.saveState(); 
+  window.renderStudentList();
 }
 
 window.copyStudentLink = function(id) {
-  if(!S.sheetUrl || !S.teacherCode) { 
-    toast('⚠️ اكتبي رابط Google Sheet واحفظي الإعدادات أولاً'); 
+  if(!window.S.sheetUrl || !window.S.teacherCode) { 
+    window.toast('⚠️ اكتبي رابط Google Sheet واحفظي الإعدادات أولاً'); 
     return; 
   }
   
-  const exp = Date.now() + (S.course.weeks * 7 * 24 * 60 * 60 * 1000);
-  const link = `${window.location.href.split('?')[0]}?s=${id}&u=${encodeData(S.sheetUrl)}&c=${encodeData(S.teacherCode)}&exp=${exp}`;
+  const exp = Date.now() + (window.S.course.weeks * 7 * 24 * 60 * 60 * 1000);
+  const link = `${window.location.href.split('?')[0]}?s=${id}&u=${encodeData(window.S.sheetUrl)}&c=${encodeData(window.S.teacherCode)}&exp=${exp}`;
   
-  fallbackCopy(link, '🔗 تم نسخ الرابط السري للطالبة بنجاح!');
+  window.fallbackCopy(link, '🔗 تم نسخ الرابط السري للطالبة بنجاح!');
 }
 
 window.copyTeacherLink = function() {
-  if(!S.sheetUrl || !S.teacherCode) { 
-    toast('⚠️ يجب حفظ إعدادات الربط السحابي أولاً'); 
+  if(!window.S.sheetUrl || !window.S.teacherCode) { 
+    window.toast('⚠️ يجب حفظ إعدادات الربط السحابي أولاً'); 
     return; 
   }
   
-  const link = `${window.location.href.split('?')[0]}?t=1&u=${encodeData(S.sheetUrl)}&c=${encodeData(S.teacherCode)}`;
-  fallbackCopy(link, '🔗 تم نسخ رابط الدخول الخاص بكِ.');
+  const link = `${window.location.href.split('?')[0]}?t=1&u=${encodeData(window.S.sheetUrl)}&c=${encodeData(window.S.teacherCode)}`;
+  window.fallbackCopy(link, '🔗 تم نسخ رابط الدخول الخاص بكِ.');
 }
 
 window.copyGsCode = function(e) {
     e.preventDefault();
-    fallbackCopy(window.GS_CODE, '✅ تم نسخ كود Apps Script');
+    window.fallbackCopy(window.GS_CODE, '✅ تم نسخ كود Apps Script');
 }
 
 window.fallbackCopy = function(text, msg) {
   if(navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text).then(() => toast(msg)).catch(() => useExecCmd(text, msg));
+    navigator.clipboard.writeText(text).then(() => window.toast(msg)).catch(() => window.useExecCmd(text, msg));
   } else {
-    useExecCmd(text, msg);
+    window.useExecCmd(text, msg);
   }
 }
 
@@ -2846,9 +2832,9 @@ window.useExecCmd = function(text, msg) {
   ta.select();
   try { 
     document.execCommand('copy'); 
-    toast(msg); 
+    window.toast(msg); 
   } catch(e) { 
-    toast('❌ فشل النسخ'); 
+    window.toast('❌ فشل النسخ'); 
   }
 }
 
@@ -2863,7 +2849,7 @@ window.startSession = function() {
   const id = document.getElementById('sel-st').value;
   if(!id) { 
     document.getElementById('sess-body').style.display = 'none'; 
-    stopTimer(); 
+    window.stopTimer(); 
     
     const lastSessWrap = document.getElementById('last-sessions-wrap');
     if(lastSessWrap) lastSessWrap.style.display = 'none';
@@ -2871,14 +2857,13 @@ window.startSession = function() {
     return; 
   }
   
-  const st = S.students.find(s => s.id === parseInt(id)); 
+  const st = window.S.students.find(s => s.id === parseInt(id)); 
   window.curSt = st.id; 
   window.sessScore = 100; 
   window.sessErrors = []; 
   window.qStartPage = 0;
-  window.activeSessQuota = calcQuota(st.customFaces || S.course.pages || 200, S.course.weeks||10, S.course.studyDays||5);
+  window.activeSessQuota = window.calcQuota(st.customFaces || window.S.course.pages || 200, window.S.course.weeks||10, window.S.course.studyDays||5);
   
-  // Update last sessions view 
   const lastSessWrap = document.getElementById('last-sessions-wrap');
   const lastSessCont = document.getElementById('last-sessions-list');
   
@@ -2892,7 +2877,7 @@ window.startSession = function() {
               <div style="font-size:11px; color:var(--text-muted);">توقفت عند: ${s.to || '—'}</div>
             </div>
             <div style="text-align:left;">
-              <strong style="color:var(--primary); font-size:16px;">${fmt(s.score)}</strong>
+              <strong style="color:var(--primary); font-size:16px;">${window.fmt(s.score)}</strong>
               <div style="font-size:11px; color:var(--text-muted);">${s.grade || ''}</div>
             </div>
           </div>`).join('');
@@ -2909,19 +2894,19 @@ window.startSession = function() {
   document.getElementById('sess-att').value = 'present';
   document.getElementById('private-note').value = '';
   
-  renderErrLog(); 
-  toggleSessBody(); 
-  updateGradeDisp();
+  window.renderErrLog(); 
+  window.toggleSessBody(); 
+  window.updateGradeDisp();
   
   document.getElementById('sess-body').style.display = 'block';
   
-  initQuranApp(); 
-  startTimer(); 
+  window.initQuranApp(); 
+  window.startTimer(); 
   window.inSession = true;
 }
 
 window.startTimer = function() {
-  stopTimer(); 
+  window.stopTimer(); 
   window.sessionSeconds = 0; 
   document.getElementById('session-timer').style.display = 'flex';
   const display = document.getElementById('timer-display');
@@ -2952,16 +2937,15 @@ window.triggerDeduct = function(pts, label) {
   window.sessScore = parseFloat(Math.max(0, Math.min(110, window.sessScore - pts)).toFixed(1));
   window.sessErrors.push({desc, pts, id: Date.now()});
   
-  updateLiveScore();
+  window.updateLiveScore();
   
   document.getElementById('u-ayah').value = ''; 
   document.getElementById('u-word').value = '';
   document.querySelectorAll('.q-word.selected').forEach(w => w.classList.remove('selected'));
   
-  renderErrLog(); 
-  updateGradeDisp();
+  window.renderErrLog(); 
+  window.updateGradeDisp();
 
-  // طي اللوحة العائمة تلقائياً بعد الخصم في الموبايل
   if(window.innerWidth <= 991) {
     const body = document.getElementById('deduct-panel-body');
     const icon = document.getElementById('panel-toggle-icon');
@@ -2975,11 +2959,10 @@ window.triggerDeduct = function(pts, label) {
 window.updateLiveScore = function() {
   const elDesk = document.getElementById('live-score');
   const elMob = document.getElementById('live-score-mobile');
-  if(elDesk) elDesk.textContent = fmt(window.sessScore);
-  if(elMob) elMob.textContent = fmt(window.sessScore);
+  if(elDesk) elDesk.textContent = window.fmt(window.sessScore);
+  if(elMob) elMob.textContent = window.fmt(window.sessScore);
 }
 
-// Hotkeys for deduction
 document.addEventListener('keydown', e => {
   if(!window.inSession || document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
   const keys = {
@@ -2989,7 +2972,7 @@ document.addEventListener('keydown', e => {
     '4': {p:4, l:'ردة تشكيل'}, 
     '5': {p:0.5, l:'خطأ تجويد'}
   };
-  if(keys[e.key]) triggerDeduct(keys[e.key].p, keys[e.key].l);
+  if(keys[e.key]) window.triggerDeduct(keys[e.key].p, keys[e.key].l);
 });
 
 window.deleteErr = function(id) {
@@ -2997,9 +2980,9 @@ window.deleteErr = function(id) {
   if (idx > -1) { 
     window.sessScore = parseFloat(Math.min(110, window.sessScore + Math.abs(window.sessErrors[idx].pts)).toFixed(1)); 
     window.sessErrors.splice(idx, 1); 
-    updateLiveScore();
-    renderErrLog(); 
-    updateGradeDisp(); 
+    window.updateLiveScore();
+    window.renderErrLog(); 
+    window.updateGradeDisp(); 
   }
 }
 
@@ -3016,10 +2999,10 @@ window.editErr = async function(id) {
     else if(p.startsWith('"')) cWord = p.replace(/"/g, '').trim(); 
   });
   
-  const newAyah = await showModal('تعديل الآية', 'أدخلي رقم الآية الجديد:', true, cAyah); 
+  const newAyah = await window.showModal('تعديل الآية', 'أدخلي رقم الآية الجديد:', true, cAyah); 
   if (newAyah === null) return;
   
-  const newWord = await showModal('تعديل الكلمة', 'أدخلي الملاحظة/الكلمة الجديدة:', true, cWord); 
+  const newWord = await window.showModal('تعديل الكلمة', 'أدخلي الملاحظة/الكلمة الجديدة:', true, cWord); 
   if (newWord === null) return;
   
   let nDesc = []; 
@@ -3028,7 +3011,7 @@ window.editErr = async function(id) {
   nDesc.push(label);
   
   err.desc = nDesc.join(' · '); 
-  renderErrLog();
+  window.renderErrLog();
 }
 
 window.renderErrLog = function() {
@@ -3045,14 +3028,14 @@ window.renderErrLog = function() {
         <span style="font-weight:600;">${e.desc}</span>
       </div>
       <div style="display:flex; gap:6px;">
-        <button class="btn btn-outline btn-sm" style="padding:4px 8px; font-size:11px;" onclick="editErr(${e.id})">✏️ تعديل</button>
-        <button class="btn btn-danger btn-sm" style="padding:4px 8px; font-size:11px;" onclick="deleteErr(${e.id})">🗑️ حذف</button>
+        <button class="btn btn-outline btn-sm" style="padding:4px 8px; font-size:11px;" onclick="window.editErr(${e.id})">✏️ تعديل</button>
+        <button class="btn btn-danger btn-sm" style="padding:4px 8px; font-size:11px;" onclick="window.deleteErr(${e.id})">🗑️ حذف</button>
       </div>
     </div>`).join('');
 }
 
 window.updateGradeDisp = function() { 
-  const g = gradeOf(window.sessScore); 
+  const g = window.gradeOf(window.sessScore); 
   const deskBadge = document.getElementById('grade-badge');
   const mobBadge = document.getElementById('grade-badge-mobile');
   const badgeHTML = `<span class="status-badge ${g.cls}">${g.label}</span>`;
@@ -3062,13 +3045,13 @@ window.updateGradeDisp = function() {
 }
 
 window.resetSess = async function() { 
-  const conf = await showModal('إعادة ضبط', 'هل أنتِ متأكدة من مسح التقييم والبدء من جديد؟', false); 
-  if(conf) startSession(); 
+  const conf = await window.showModal('إعادة ضبط', 'هل أنتِ متأكدة من مسح التقييم والبدء من جديد؟', false); 
+  if(conf) window.startSession(); 
 }
 
 window.saveSession = function() {
   if(!window.curSt) return; 
-  const st = S.students.find(s => s.id === window.curSt);
+  const st = window.S.students.find(s => s.id === window.curSt);
   
   const att = document.getElementById('sess-att').value;
   const faces = parseInt(document.getElementById('faces').value) || 0;
@@ -3110,31 +3093,31 @@ window.saveSession = function() {
   });
   
   window.hasUnsavedChanges = false; 
-  saveState(); 
-  renderStudentList(); 
-  toast('✅ تم اعتماد وحفظ الجلسة'); 
-  stopTimer(); 
+  window.saveState(); 
+  window.renderStudentList(); 
+  window.toast('✅ تم اعتماد وحفظ الجلسة'); 
+  window.stopTimer(); 
   
   if (window.innerWidth <= 991) { 
     const body = document.getElementById('deduct-panel-body'); 
-    if (body && body.classList.contains('expanded')) toggleDeductPanel(); 
+    if (body && body.classList.contains('expanded')) window.toggleDeductPanel(); 
   }
   
   document.getElementById('sess-body').style.display = 'none'; 
   document.getElementById('sel-st').value = '';
   
-  if(S.sheetUrl) syncToSheet();
+  if(window.S.sheetUrl) window.syncToSheet();
 }
 
 window.copyReport = function() {
-  const st = S.students.find(s => s.id === window.curSt); 
+  const st = window.S.students.find(s => s.id === window.curSt); 
   const name = st ? st.name : '—';
   
   const faces = document.getElementById('faces').value;
   const from = document.getElementById('from-a').value || '—';
   const to = document.getElementById('to-a').value || '—';
   
-  const g = gradeOf(window.sessScore);
+  const g = window.gradeOf(window.sessScore);
   const q = window.activeSessQuota?.sessionFaces || 10;
   
   const badge = parseInt(faces) >= q ? '🟢 مكتمل' : '🔴 لم يكتمل';
@@ -3153,23 +3136,23 @@ window.copyReport = function() {
   }
 
   const rep = [
-    `📋 تقرير جلسة التسميع — ${S.course.cname||'حلقة التحفيظ'}`,
+    `📋 تقرير جلسة التسميع — ${window.S.course.cname||'حلقة التحفيظ'}`,
     '━━━━━━━━━━━━━━━━━━━━━━',
     `الطالبة  : ${name}`,
     `التاريخ  : ${new Date().toLocaleDateString('ar-EG')}`,
     `من        : ${from}   إلى : ${to}`,
     `الأوجه   : ${faces} ${badge}`, 
     rTxt,
-    `الدرجة   : ${fmt(window.sessScore)} / 100`,
+    `الدرجة   : ${window.fmt(window.sessScore)} / 100`,
     `التقييم  : ${g.emoji} ${g.label}`,
     '──────────────────────',
-    'الملاحظات الحفظ:',
+    'الملاحظات החفظ:',
     errLines,
     '━━━━━━━━━━━━━━━━━━━━━━',
     'وفّقكِ الله وبارك في جهدكِ 💜'
   ].join('\n');
   
-  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
+  window.fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
 }
 
 // ══════════════════════════════════════════════════════════
@@ -3193,20 +3176,20 @@ window.initQuranApp = async function() {
           `<option value="${page}">الجزء ${i + 1}</option>`
         ).join('');
         
-        loadCurrentPage();
+        window.loadCurrentPage();
     } catch(e) {}
 }
 
 window.goToSurah = function() { 
   document.getElementById('quran-page-input').value = document.getElementById('surah-select').value; 
-  loadCurrentPage(); 
+  window.loadCurrentPage(); 
 }
 
 window.goToJuz = function() { 
   const val = document.getElementById('juz-select').value; 
   if(val) { 
     document.getElementById('quran-page-input').value = val; 
-    loadCurrentPage(); 
+    window.loadCurrentPage(); 
   } 
 }
 
@@ -3214,7 +3197,7 @@ window.changePage = function(dir) {
   let p = parseInt(document.getElementById('quran-page-input').value) - dir; 
   if(p >= 1 && p <= 604) { 
     document.getElementById('quran-page-input').value = p; 
-    loadCurrentPage(); 
+    window.loadCurrentPage(); 
   } 
 }
 
@@ -3238,25 +3221,23 @@ window.loadCurrentPage = async function() {
         const res = await fetch(`https://api.quran.com/api/v4/verses/by_page/${page}?language=ar&words=true&word_fields=text_uthmani`); 
         const data = await res.json();
         
-        let html = '<div class="q-page-content">'; 
-        let cLine = -1;
+        /* التحديث الجذري للمصحف: 
+           بدلاً من الأسطر المنفصلة التي تخرب العرض على الجوال، 
+           نضعها في حاوية واحدة بخاصية الجيستفاي للتجاوب التام.
+        */
+        let html = '<div class="q-page-content" style="text-align: justify; text-align-last: center; line-height: 2.4;">'; 
         
         data.verses.forEach(v => { 
           const ayahNum = v.verse_key.split(':')[1]; 
           v.words.forEach(w => { 
-            if(w.line_number !== cLine) { 
-              if(cLine !== -1) html += '</div>'; 
-              html += '<div class="q-line">'; 
-              cLine = w.line_number; 
-            }
             if(w.char_type_name === 'word') { 
-              html += `<span class="q-word" onclick="toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span> `; 
+              html += `<span class="q-word" onclick="window.toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span> `; 
             } else if(w.char_type_name === 'end') { 
-              html += `<span class="q-ayah-end" onclick="toggleWordSelection('${ayahNum}', this)">﴿${ayahAr(ayahNum)}﴾</span> `; 
+              html += `<span class="q-ayah-end" onclick="window.toggleWordSelection('${ayahNum}', this)">﴿${window.ayahAr(ayahNum)}﴾</span> `; 
             } 
           }); 
         }); 
-        if(cLine !== -1) html += '</div>';
+        
         html += '</div>';
         
         window.quranCache.set(page, html); 
@@ -3279,7 +3260,6 @@ window.toggleWordSelection = function(ayah, el) {
     document.getElementById('u-ayah').value = selectedEls.length > 0 ? ayah : ''; 
     document.getElementById('u-word').value = words.join(' ').trim();
     
-    // Auto-open panel on mobile
     if(selectedEls.length > 0 && window.innerWidth <= 991) { 
       const body = document.getElementById('deduct-panel-body'); 
       const icon = document.getElementById('panel-toggle-icon');
@@ -3305,11 +3285,11 @@ window.setQuranPoint = function(type) {
     if(type === 'start') { 
       document.getElementById('from-a').value = pointText; 
       window.qStartPage = page; 
-      toast('✅ تم تعيين البداية'); 
+      window.toast('✅ تم تعيين البداية'); 
     } else { 
       document.getElementById('to-a').value = pointText; 
       if(window.qStartPage > 0) document.getElementById('faces').value = Math.abs(page - window.qStartPage) + 1; 
-      toast('✅ تم تعيين النهاية'); 
+      window.toast('✅ تم تعيين النهاية'); 
     }
 }
 
@@ -3322,7 +3302,7 @@ window.initDashboard = function() {
   const empty = document.getElementById('dash-empty-state');
   const content = document.getElementById('dash-content');
   
-  if(!S.students || S.students.length === 0 || !S.students.some(s => s.sessions && s.sessions.length > 0)) { 
+  if(!window.S.students || window.S.students.length === 0 || !window.S.students.some(s => s.sessions && s.sessions.length > 0)) { 
     empty.style.display = 'block'; 
     content.style.display = 'none'; 
     document.getElementById('dash-alerts').innerHTML = ''; 
@@ -3352,7 +3332,7 @@ window.initDashboard = function() {
 
   let alertsHtml = '';
 
-  S.students.forEach(st => {
+  window.S.students.forEach(st => {
     names.push(st.name.split(' ')[0]); 
     scores.push(st.score !== null ? st.score : 0);
     
@@ -3362,7 +3342,7 @@ window.initDashboard = function() {
     }
     
     if (st.score !== null && st.score < 80) {
-      alertsHtml += `<div class="alert alert-danger">⚠️ <strong>انتباه:</strong> الطالبة ${st.name} معدلها انخفض لـ ${fmt(st.score)}</div>`;
+      alertsHtml += `<div class="alert alert-danger">⚠️ <strong>انتباه:</strong> الطالبة ${st.name} معدلها انخفض لـ ${window.fmt(st.score)}</div>`;
     }
     
     let absCount = 0;
@@ -3419,15 +3399,15 @@ window.initDashboard = function() {
   const totalSessEl = document.getElementById('d-total-sess');
   if(totalSessEl) totalSessEl.textContent = tSess;
   
-  const sDate = new Date(S.course.sdate).getTime();
+  const sDate = new Date(window.S.course.sdate).getTime();
   const weeksPassed = Math.max(0, (Date.now() - sDate) / (7*24*60*60*1000));
-  const progPct = Math.min(100, Math.round((weeksPassed / S.course.weeks) * 100));
+  const progPct = Math.min(100, Math.round((weeksPassed / window.S.course.weeks) * 100));
   
   const courseProgEl = document.getElementById('d-course-prog');
   if(courseProgEl) courseProgEl.textContent = progPct + '%';
   
   const weekStarsEl = document.getElementById('d-week-stars');
-  if(weekStarsEl) weekStarsEl.textContent = topStudent ? `${topStudent} (${fmt(topScore)})` : 'لا يوجد';
+  if(weekStarsEl) weekStarsEl.textContent = topStudent ? `${topStudent} (${window.fmt(topScore)})` : 'لا يوجد';
 
   const targetAvg = 90;
   if(window.charts.bar) { 
@@ -3483,12 +3463,12 @@ window.initDashboard = function() {
   const sortedDayTs = Array.from(allDatesSet).sort((a,b) => a - b).slice(-10);
   const trendLabels = sortedDayTs.map(ts => new Date(ts).toLocaleDateString('ar-EG', {month:'short', day:'numeric'}));
   
-  const datasets = S.students.filter(s=>s.sessions&&s.sessions.length>0).map((st, i) => {
+  const datasets = window.S.students.filter(s=>s.sessions&&s.sessions.length>0).map((st, i) => {
     const data = []; 
     let lastKnown = null;
     sortedDayTs.forEach(dayTs => {
       const dStart = dayTs;
-      const dEnd = dayTs + 86400000; // +1 day
+      const dEnd = dayTs + 86400000;
       const s = (st.sessions||[]).find(x => x.ts >= dStart && x.ts < dEnd && x.att === 'present');
       if(s && s.score !== null) lastKnown = s.score;
       data.push(lastKnown);
@@ -3514,7 +3494,7 @@ window.initDashboard = function() {
     });
   }
 
-  renderHeatmap(sortedDayTs.slice(-5));
+  window.renderHeatmap(sortedDayTs.slice(-5));
 }
 
 window.renderHeatmap = function(tsArray) {
@@ -3527,7 +3507,7 @@ window.renderHeatmap = function(tsArray) {
     html += `<div class="heat-cell heat-header">${new Date(ts).toLocaleDateString('ar-EG', {month:'numeric', day:'numeric'})}</div>`; 
   });
   
-  S.students.forEach(st => {
+  window.S.students.forEach(st => {
     html += `<div class="heat-name" title="${st.name}">${st.name.split(' ')[0]}</div>`;
     tsArray.forEach(ts => {
       const dStart = ts;
@@ -3551,10 +3531,10 @@ window.renderHeatmap = function(tsArray) {
 // 9. PORTAL & STUDENT VIEW
 // ══════════════════════════════════════════════════════════
 window.deleteSession = async function(stId, ts) {
-  const confirm = await showModal('حذف الجلسة', 'تأكيد حذف هذه الجلسة نهائياً واستعادة الدرجات؟', false);
+  const confirm = await window.showModal('حذف الجلسة', 'تأكيد حذف هذه الجلسة نهائياً واستعادة الدرجات؟', false);
   if(!confirm) return;
   
-  const st = S.students.find(s => s.id === stId); 
+  const st = window.S.students.find(s => s.id === stId); 
   if(!st) return;
   
   const sessIdx = st.sessions.findIndex(s => s.ts === ts);
@@ -3573,11 +3553,11 @@ window.deleteSession = async function(stId, ts) {
     }
     
     st.score = lps;
-    saveState(); 
-    loadPortal(); 
-    toast('🗑️ تم حذف الجلسة وإعادة الحساب'); 
+    window.saveState(); 
+    window.loadPortal(); 
+    window.toast('🗑️ تم حذف الجلسة وإعادة الحساب'); 
     
-    if(S.sheetUrl) syncToSheet();
+    if(window.S.sheetUrl) window.syncToSheet();
   }
 }
 
@@ -3590,7 +3570,7 @@ window.loadPortal = function() {
     return; 
   }
   
-  const st = S.students.find(s => s.id === id); 
+  const st = window.S.students.find(s => s.id === id); 
   
   if(!st) return;
   if(pb) pb.style.display = 'block';
@@ -3598,16 +3578,16 @@ window.loadPortal = function() {
   const pAvEl = document.getElementById('p-av'); if(pAvEl) pAvEl.textContent = st.name[0];
   const pNameEl = document.getElementById('p-name'); if(pNameEl) pNameEl.textContent = st.name;
   
-  const tF = st.customFaces || S.course.pages || 200;
-  const q = calcQuota(tF, S.course.weeks||10, S.course.studyDays||5);
+  const tF = st.customFaces || window.S.course.pages || 200;
+  const q = window.calcQuota(tF, window.S.course.weeks||10, window.S.course.studyDays||5);
   
   const pCourseInfoEl = document.getElementById('p-course-info'); 
   if(pCourseInfoEl) pCourseInfoEl.textContent = st.customFaces ? `سجل محمي · مقرر خاص (${tF} وجه)` : `سجل محمي · المقرر العام (${tF} وجه)`;
   
-  const pScoreEl = document.getElementById('p-score'); if(pScoreEl) pScoreEl.textContent = fmt(st.score);
-  const pStreakEl = document.getElementById('p-streak'); if(pStreakEl) pStreakEl.textContent = calculateStreak(st.sessions);
+  const pScoreEl = document.getElementById('p-score'); if(pScoreEl) pScoreEl.textContent = window.fmt(st.score);
+  const pStreakEl = document.getElementById('p-streak'); if(pStreakEl) pStreakEl.textContent = window.calculateStreak(st.sessions);
   
-  const sd = S.course.studyDays || 5;
+  const sd = window.S.course.studyDays || 5;
   const days = st.days && st.days.length === sd ? st.days : Array(sd).fill(0);
   const dn = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; 
   const pSess = (st.sessions||[]).filter(s => s.att==='present');
@@ -3621,7 +3601,7 @@ window.loadPortal = function() {
 
   const pProgEl = document.getElementById('p-prog'); if(pProgEl) pProgEl.style.width = (days.filter(Boolean).length / sd * 100) + '%';
   
-  const sDateObj = new Date(S.course.sdate);
+  const sDateObj = new Date(window.S.course.sdate);
   const weeksPassed = Math.floor(Math.max(0, (Date.now() - sDateObj.getTime()) / (7*24*60*60*1000))) + 1; 
   
   const pDaysEl = document.getElementById('p-days');
@@ -3630,9 +3610,9 @@ window.loadPortal = function() {
       <div class="list-row" style="margin-bottom:8px; padding:12px 16px;">
         <div>
           <div style="font-weight:700;">${dn[i]||'يوم '+(i+1)}</div>
-          <div style="font-size:11px; color:var(--text-muted);">${getActualDateStr(S.course.sdate, weeksPassed, i, sd)} | المطلوب: ${q.dailyText} أوجه</div>
+          <div style="font-size:11px; color:var(--text-muted);">${window.getActualDateStr(window.S.course.sdate, weeksPassed, i, sd)} | المطلوب: ${q.dailyText} أوجه</div>
         </div>
-        ${d ? `<button class="btn btn-outline btn-sm" onclick="toggleDay(${id},${i})">تم ✓</button>` : `<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">تأكيد الإنجاز</button>`}
+        ${d ? `<button class="btn btn-outline btn-sm" onclick="window.toggleDay(${id},${i})">تم ✓</button>` : `<button class="btn btn-gold btn-sm" onclick="window.toggleDay(${id},${i})">تأكيد الإنجاز</button>`}
       </div>`).join('');
   }
 
@@ -3653,7 +3633,7 @@ window.loadPortal = function() {
   const hist = document.getElementById('p-hist');
   if (hist) {
       hist.innerHTML = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts).map(s => {
-        const delBtn = !window.isStudentMode ? `<button class="btn btn-danger btn-sm" style="padding:4px 8px; font-size:11px; margin-top:8px;" onclick="deleteSession(${id}, ${s.ts})">🗑️ حذف</button>` : '';
+        const delBtn = !window.isStudentMode ? `<button class="btn btn-danger btn-sm" style="padding:4px 8px; font-size:11px; margin-top:8px;" onclick="window.deleteSession(${id}, ${s.ts})">🗑️ حذف</button>` : '';
         
         if(s.att !== 'present') {
           return `<div class="list-row" style="align-items:flex-start;"><div><div style="color:var(--danger); font-weight:700;">${s.date} - غياب</div></div>${delBtn}</div>`;
@@ -3674,7 +3654,7 @@ window.loadPortal = function() {
               ${notesHtml}
               <div>${delBtn}</div>
             </div>
-            <div style="font-size:20px; font-weight:800; font-family:'Amiri',serif; color:var(--primary);">${fmt(s.score)}</div>
+            <div style="font-size:20px; font-weight:800; font-family:'Amiri',serif; color:var(--primary);">${window.fmt(s.score)}</div>
           </div>`;
       }).join('') || '<div class="alert alert-info">لا توجد جلسات مسجلة بعد.</div>';
   }
@@ -3682,21 +3662,21 @@ window.loadPortal = function() {
 
 window.copyStudentReportFromPortal = function() {
   const id = window.isStudentMode ? window.loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
-  const st = S.students.find(s=>s.id===id); 
+  const st = window.S.students.find(s=>s.id===id); 
   if(!st) return;
   
   const sess = st.sessions || [];
   const pSess = sess.filter(s => s.att === 'present');
   const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
   
-  let rep = `📋 التقرير الأكاديمي للطالبة — ${S.course.cname || 'حلقة التحفيظ'}\n━━━━━━━━━━━━━━━━━━━━━━\nالاسم: ${st.name}\nمعدل الإتقان: ${avg}%\nشعلة الحماس: ${calculateStreak(sess)} 🔥\n──────────────────────\n`;
+  let rep = `📋 التقرير الأكاديمي للطالبة — ${window.S.course.cname || 'حلقة التحفيظ'}\n━━━━━━━━━━━━━━━━━━━━━━\nالاسم: ${st.name}\nمعدل الإتقان: ${avg}%\nشعلة الحماس: ${window.calculateStreak(sess)} 🔥\n──────────────────────\n`;
   if(sess.length > 0) {
     const latest = [...sess].sort((a,b)=>b.ts - a.ts)[0]; 
     rep += `📌 آخر جلسة (${latest.date}):\n`;
     if(latest.att === 'present') {
       rep += `▪️ حفظ: ${latest.faces} أوجه (${latest.from} إلى ${latest.to})\n`;
       rep += `▪️ المراجعة: ${(latest.rev === 'done') ? `تمت المراجعة (${latest.revG})` : 'لا يوجد'}\n`;
-      rep += `▪️ الدرجة: ${fmt(latest.score)} / 100 (${latest.grade})\n`;
+      rep += `▪️ الدرجة: ${window.fmt(latest.score)} / 100 (${latest.grade})\n`;
       rep += `▪️ الملاحظات: ${latest.errors && latest.errors.length ? latest.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات'}\n`;
     } else { 
       rep += `▪️ غياب: ${latest.att === 'excused' ? 'بعذر' : 'بدون عذر'}\n`; 
@@ -3705,29 +3685,29 @@ window.copyStudentReportFromPortal = function() {
     rep += `لا توجد جلسات مسجلة بعد.\n`; 
   }
   rep += `━━━━━━━━━━━━━━━━━━━━━━\nوفّقكِ الله وبارك في مسيرتكِ 💜`;
-  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
+  window.fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
 }
 
 window.toggleDay = function(id, idx) { 
-  const st = S.students.find(s => s.id === id); 
+  const st = window.S.students.find(s => s.id === id); 
   if(!st) return; 
   st.days[idx] = st.days[idx] ? 0 : 1; 
-  saveState(); 
-  loadPortal(); 
-  if(S.sheetUrl) syncToSheet(); 
+  window.saveState(); 
+  window.loadPortal(); 
+  if(window.S.sheetUrl) window.syncToSheet(); 
 }
 
 window.generatePDF = function() {
   const id = window.isStudentMode ? window.loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
-  const st = S.students.find(s=>s.id===id); 
+  const st = window.S.students.find(s=>s.id===id); 
   if(!st) return;
   
   const sess = st.sessions || [];
   const pSess = sess.filter(s => s.att === 'present');
   
-  document.getElementById('rep-t-name').textContent = S.course.teacher || '—'; 
+  document.getElementById('rep-t-name').textContent = window.S.course.teacher || '—'; 
   document.getElementById('rep-s-name').textContent = st.name; 
-  document.getElementById('rep-c-name').textContent = S.course.cname || '—';
+  document.getElementById('rep-c-name').textContent = window.S.course.cname || '—';
   document.getElementById('rep-score').textContent = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
   document.getElementById('rep-sessions').textContent = pSess.length; 
   document.getElementById('rep-date').textContent = new Date().toLocaleDateString('ar-EG');
@@ -3744,7 +3724,7 @@ window.generatePDF = function() {
     return `
       <tr>
         <td>${s.date}</td>
-        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td>
+        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${window.fmt(s.score)}</b></td>
         <td>${revStr}</td>
         <td>${errs}</td>
       </tr>
@@ -3769,11 +3749,11 @@ window.setBoardSort = function(s) {
   window.boardSort = s; 
   document.getElementById('sort-alpha-btn').className = s==='alpha' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
   document.getElementById('sort-pts-btn').className = s==='points' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
-  renderBoard(); 
+  window.renderBoard(); 
 }
 
 window.renderBoard = function() {
-  const ss = S.students.filter(s => s.total > 0);
+  const ss = window.S.students.filter(s => s.total > 0);
   const sorted = window.boardSort==='alpha' ? ss.sort((a,b) => a.name.localeCompare(b.name,'ar')) : ss.sort((a,b) => (b.score||0) - (a.score||0));
   
   if (window.boardSort === 'points' && sorted.length >= 1) {
@@ -3791,7 +3771,7 @@ window.renderBoard = function() {
 
   const weekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000); 
   let topName = null, topScore = -1;
-  S.students.forEach(st => { 
+  window.S.students.forEach(st => { 
     (st.sessions||[]).forEach(s => { 
       if(s.att === 'present' && s.ts >= weekAgo && s.score > topScore) { 
         topScore = s.score; 
@@ -3814,7 +3794,7 @@ window.renderBoard = function() {
               <div style="flex:1;">
                 <div style="font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center;">
                    <span>${st.name} ${isMe?'<span style="color:var(--gold); font-size:10px;">(أنتِ)</span>':''} ${isStar?'🌟 <span style="font-size:10px; color:var(--gold);">نجمة الأسبوع</span>':''}</span>
-                   <span style="color:var(--primary);">${fmt(st.score)}</span>
+                   <span style="color:var(--primary);">${window.fmt(st.score)}</span>
                 </div>
                 <div class="progress-bar-container" style="height:4px; margin-top:6px;"><div class="progress-bar-fill" style="width: ${st.score||0}%;"></div></div>
               </div>
@@ -3828,13 +3808,13 @@ window.renderBoard = function() {
 // 10. GOOGLE SHEETS CLOUD SYNC
 // ══════════════════════════════════════════════════════════
 window.sheetReq = async function(action) {
-  if(!S.sheetUrl || !S.teacherCode) { toast('⚠️ إعدادات الربط غير مكتملة'); return null; }
-  setSyncDot('sync');
+  if(!window.S.sheetUrl || !window.S.teacherCode) { window.toast('⚠️ إعدادات الربط غير مكتملة'); return null; }
+  window.setSyncDot('sync');
   try { 
-    const res = await fetch(S.sheetUrl, { method: 'POST', body: JSON.stringify({action, code: S.teacherCode, payload: JSON.stringify(S)})}); 
+    const res = await fetch(window.S.sheetUrl, { method: 'POST', body: JSON.stringify({action, code: window.S.teacherCode, payload: JSON.stringify(window.S)})}); 
     return await res.json(); 
   } catch(e) { 
-    setSyncDot('err'); 
+    window.setSyncDot('err'); 
     return null; 
   }
 }
@@ -3843,12 +3823,12 @@ window.syncToSheet = async function() {
   if(window.isStudentMode) return; 
   const r = await window.sheetReq('save'); 
   if(r?.ok) { 
-    setSyncDot('ok'); 
-    toast('☁️ تمت المزامنة بنجاح'); 
+    window.setSyncDot('ok'); 
+    window.toast('☁️ تمت المزامنة بنجاح'); 
     window.hasUnsavedChanges = false; 
   } else { 
-    setSyncDot('err'); 
-    toast('❌ فشل الاتصال بقاعدة البيانات'); 
+    window.setSyncDot('err'); 
+    window.toast('❌ فشل الاتصال بقاعدة البيانات'); 
   } 
 }
 
@@ -3865,21 +3845,21 @@ function init() {
   }
   
   if(tP === '1' && uP && cP) {
-    try { S.sheetUrl = decodeData(uP); S.teacherCode = decodeData(cP); } catch(e) {}
-    toast('جارٍ استرجاع بيانات المعلمة...');
+    try { window.S.sheetUrl = decodeData(uP); window.S.teacherCode = decodeData(cP); } catch(e) {}
+    window.toast('جارٍ استرجاع بيانات المعلمة...');
     window.sheetReq('load').then(r => {
       if(r?.ok && r.payload) { 
         const parsed = JSON.parse(r.payload); 
         if(validateState(parsed)) { 
-          S = parsed; 
-          saveState(); 
-          initSetup(); 
-          navigate('setup'); 
-          toast('✅ تم تسجيل الدخول بنجاح'); 
+          window.S = parsed; 
+          window.saveState(); 
+          window.initSetup(); 
+          window.navigate('setup'); 
+          window.toast('✅ تم تسجيل الدخول بنجاح'); 
         } 
       } else { 
-        toast('❌ فشل جلب البيانات من السيرفر'); 
-        navigate('setup'); 
+        window.toast('❌ فشل جلب البيانات من السيرفر'); 
+        window.navigate('setup'); 
       }
     }); 
     return;
@@ -3891,16 +3871,16 @@ function init() {
     document.body.classList.add('student-mode');
     
     try { 
-      S.sheetUrl = decodeData(uP); 
-      S.teacherCode = decodeData(cP); 
+      window.S.sheetUrl = decodeData(uP); 
+      window.S.teacherCode = decodeData(cP); 
     } catch(e) { 
       try { 
-        S.sheetUrl = atob(uP); 
-        S.teacherCode = atob(cP); 
+        window.S.sheetUrl = atob(uP); 
+        window.S.teacherCode = atob(cP); 
       } catch(ex) {} 
     }
     
-    navigate('portal'); 
+    window.navigate('portal'); 
     const alertEl = document.getElementById('student-alert'); 
     document.getElementById('portal-body').style.display = 'none'; 
     alertEl.style.display = 'block'; 
@@ -3910,11 +3890,11 @@ function init() {
       if(r?.ok && r.payload) {
         const parsed = JSON.parse(r.payload);
         if(validateState(parsed)) { 
-          S = parsed; 
-          const stExists = S.students.find(s => s.id === window.loggedInStudentId); 
+          window.S = parsed; 
+          const stExists = window.S.students.find(s => s.id === window.loggedInStudentId); 
           if(stExists) { 
             alertEl.innerHTML = 'أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟'; 
-            loadPortal(); 
+            window.loadPortal(); 
           } else {
             alertEl.innerHTML = '❌ عذراً، لم يتم العثور على بياناتك.';
           }
@@ -3928,9 +3908,30 @@ function init() {
         alertEl.innerHTML = '❌ خطأ في الاتصال بالخادم.';
     });
   } else { 
-    loadState(); 
-    initSetup(); 
-    navigate('setup'); 
+    window.loadState(); 
+    window.initSetup(); 
+    window.navigate('setup');
+
+    // --- التحديث الجديد: جلب البيانات تلقائياً من السحابة عند فتح التطبيق (المزامنة بين الأجهزة) ---
+    if (!window.isStudentMode && window.S.sheetUrl && window.S.teacherCode) {
+        window.setSyncDot('sync');
+        window.sheetReq('load').then(r => {
+            if (r?.ok && r.payload) {
+                const parsed = JSON.parse(r.payload);
+                if (validateState(parsed)) {
+                    window.S = parsed;
+                    window.saveState(); // حفظها محلياً
+                    window.initSetup(); // تحديث الواجهة
+                    if (document.getElementById('page-dash').classList.contains('active')) window.initDashboard();
+                    if (document.getElementById('page-board').classList.contains('active')) window.renderBoard();
+                    window.setSyncDot('ok');
+                    window.toast('☁️ تمت مزامنة أحدث البيانات من السحابة بنجاح');
+                }
+            } else {
+                window.setSyncDot('err');
+            }
+        }).catch(() => window.setSyncDot('err'));
+    }
   }
 }
 
