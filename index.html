@@ -22,6 +22,7 @@
        LUXURY DESIGN TOKENS 
     ══════════════════════════════════════════════════════════════════ */
     :root {
+      /* Colors */
       --primary: #3B1C40; 
       --primary-lt: #562B5C; 
       --primary-pale: #F3EAF4;
@@ -158,6 +159,7 @@
       width: 100%; 
     }
 
+    /* Sidebar */
     .sidebar { 
       width: var(--sidebar-w); 
       background: var(--bg-surface); 
@@ -1247,6 +1249,20 @@
       }
       
       .btn-d span.hk { display: none; }
+
+      /* ════ القرآن في الجوال - فقرة متصلة ════ */
+      .q-page-content {
+        display: block !important;
+        text-align: justify !important;
+        text-align-last: center !important;
+      }
+      .q-line {
+        display: contents !important; /* دمج الأسطر كفقرة واحدة متصلة للجيستفاي */
+      }
+      .q-word, .q-ayah-end {
+        display: inline-block !important;
+        margin-bottom: 8px !important;
+      }
     }
 
     @media (max-width: 768px) {
@@ -1343,20 +1359,112 @@
       @page { margin: 15mm; size: A4 portrait; }
     }
 
-    .rep-wrap { width: 100%; max-width: 780px; margin: 0 auto; font-family: 'Cairo', sans-serif; color: #1A1714; background: #fff; padding: 20px; }
-    .rep-hd { text-align: center; border-bottom: 3px solid #D4AF37; padding-bottom: 18px; margin-bottom: 26px; }
-    .rep-hd h1 { font-family: 'Amiri', serif; font-size: 32px; color: #3B1C40; margin-bottom: 4px; }
-    .rep-hd p { font-size: 14px; color: #6B626D; }
-    .rep-info { display: flex; justify-content: space-between; background: #FCF9F1; border: 1px solid rgba(212,175,55,.3); padding: 13px 18px; border-radius: 10px; margin-bottom: 24px; font-size: 14px; font-weight: 600; }
-    .rep-stats { display: flex; gap: 12px; margin-bottom: 24px; }
-    .rep-stat { flex: 1; text-align: center; background: #F8F7F9; border: 1px solid #E4DED4; padding: 13px; border-radius: 10px; }
-    .rep-sv { font-family: 'Amiri', serif; font-size: 26px; font-weight: 700; color: #3B1C40; display: block; }
-    .rep-sl { font-size: 12px; color: #6B626D; }
-    .rep-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; border-right: 4px solid #D4AF37; padding-right: 10px; color: #3B1C40; }
-    .rep-table { width: 100%; border-collapse: collapse; font-size: 12px; color: #1A1714; }
-    .rep-table th { background: #F3EAF4; color: #3B1C40; padding: 9px; text-align: right; border-bottom: 2px solid #E4DED4; }
-    .rep-table td { padding: 9px; border-bottom: 1px solid #E4DED4; }
-    .rep-foot { text-align: center; font-size: 12px; color: #6B626D; margin-top: 30px; border-top: 1px dashed #E4DED4; padding-top: 16px; }
+    .rep-wrap { 
+      width: 100%; 
+      max-width: 780px; 
+      margin: 0 auto; 
+      font-family: 'Cairo', sans-serif; 
+      color: #1A1714; 
+      background: #fff; 
+      padding: 20px; 
+    }
+
+    .rep-hd { 
+      text-align: center; 
+      border-bottom: 3px solid #D4AF37; 
+      padding-bottom: 18px; 
+      margin-bottom: 26px; 
+    }
+
+    .rep-hd h1 { 
+      font-family: 'Amiri', serif; 
+      font-size: 32px; 
+      color: #3B1C40; 
+      margin-bottom: 4px; 
+    }
+
+    .rep-hd p { 
+      font-size: 14px; 
+      color: #6B626D; 
+    }
+
+    .rep-info { 
+      display: flex; 
+      justify-content: space-between; 
+      background: #FCF9F1; 
+      border: 1px solid rgba(212,175,55,.3); 
+      padding: 13px 18px; 
+      border-radius: 10px; 
+      margin-bottom: 24px; 
+      font-size: 14px; 
+      font-weight: 600; 
+    }
+
+    .rep-stats { 
+      display: flex; 
+      gap: 12px; 
+      margin-bottom: 24px; 
+    }
+
+    .rep-stat { 
+      flex: 1; 
+      text-align: center; 
+      background: #F8F7F9; 
+      border: 1px solid #E4DED4; 
+      padding: 13px; 
+      border-radius: 10px; 
+    }
+
+    .rep-sv { 
+      font-family: 'Amiri', serif; 
+      font-size: 26px; 
+      font-weight: 700; 
+      color: #3B1C40; 
+      display: block; 
+    }
+
+    .rep-sl { 
+      font-size: 12px; 
+      color: #6B626D; 
+    }
+
+    .rep-title { 
+      font-size: 16px; 
+      font-weight: 700; 
+      margin-bottom: 12px; 
+      border-right: 4px solid #D4AF37; 
+      padding-right: 10px; 
+      color: #3B1C40; 
+    }
+
+    .rep-table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: 12px; 
+      color: #1A1714; 
+    }
+
+    .rep-table th { 
+      background: #F3EAF4; 
+      color: #3B1C40; 
+      padding: 9px; 
+      text-align: right; 
+      border-bottom: 2px solid #E4DED4; 
+    }
+
+    .rep-table td { 
+      padding: 9px; 
+      border-bottom: 1px solid #E4DED4; 
+    }
+
+    .rep-foot { 
+      text-align: center; 
+      font-size: 12px; 
+      color: #6B626D; 
+      margin-top: 30px; 
+      border-top: 1px dashed #E4DED4; 
+      padding-top: 16px; 
+    }
 
     /* Student mode specific styles */
     .student-mode .teacher-only { display: none !important; }
@@ -1379,7 +1487,7 @@
       word-wrap: break-word; 
       color: #1A1714;
     }
-    
+
     [data-theme="dark"] .quran-page { 
       background: #1A1714; 
       border-color: var(--gold-dk); 
@@ -1387,9 +1495,9 @@
     }
 
     .q-line { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center;
+      display: block; 
+      text-align: justify; 
+      text-align-last: center; 
       width: 100%; 
       margin-bottom: 5px; 
       line-height: 2.3; 
@@ -1401,7 +1509,6 @@
       padding: 0 2px; 
       border-radius: 4px; 
       transition: all 0.2s; 
-      white-space: nowrap; 
     }
 
     .q-word:hover { 
@@ -1841,7 +1948,7 @@
               <!-- Panel Body -->
               <div class="panel-body" id="deduct-panel-body">
                 <!-- سطح المكتب: عرض الدرجة العادي -->
-                <div class="desktop-score-wrap" style="background:var(--bg-surface); border-radius:var(--r-md); padding:16px; text-align:center; border:2px solid var(--gold); margin-bottom:16px; box-shadow: var(--shadow-sm); display:flex; justify-content:space-between; align-items:center;">
+                <div class="desktop-score-wrap">
                   <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
                      <div id="grade-badge"></div>
                      <div id="sess-badge"></div>
@@ -2105,7 +2212,6 @@
 // ══════════════════════════════════════════════════════════
 const SALT = "ALM_SECURE_K8"; 
 
-// تشفير يعتمد على Hex + XOR لضمان حماية أفضل للروابط من Base64 التقليدي
 function encodeData(text) {
   if(!text) return "";
   let hex = '';
@@ -2175,14 +2281,12 @@ function doGet(e) {
   return ContentService.createTextOutput("ALM API Running").setMimeType(ContentService.MimeType.TEXT); 
 }`;
 
-// دالة لتهيئة بيانات افتراضية لاختبار المنصة
 function injectMockData() {
   const today = new Date();
   const d1 = new Date(today.getTime() - 86400000).toLocaleDateString('ar-EG');
   const d2 = new Date(today.getTime() - 86400000 * 2).toLocaleDateString('ar-EG');
   const d3 = new Date(today.getTime() - 86400000 * 3).toLocaleDateString('ar-EG');
 
-  // إعداد تاريخ البدء ليكون قبل أسبوعين لكي يظهر التقدم
   const sDateObj = new Date(today.getTime() - (14 * 24 * 60 * 60 * 1000));
   
   S = {
@@ -2231,7 +2335,7 @@ function injectMockData() {
 
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v20'); 
+    const d = localStorage.getItem('alm_pro_v22'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) {
@@ -2250,7 +2354,7 @@ function loadState() {
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v20', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_v22', JSON.stringify(S)); 
     setSyncDot('local'); 
     hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -2854,6 +2958,7 @@ function triggerDeduct(pts, label) {
   renderErrLog(); 
   updateGradeDisp();
 
+  // طي اللوحة العائمة تلقائياً بعد الخصم في الموبايل
   if(window.innerWidth <= 991) {
     const body = document.getElementById('deduct-panel-body');
     const icon = document.getElementById('panel-toggle-icon');
@@ -3012,6 +3117,9 @@ function saveSession() {
     if (body && body.classList.contains('expanded')) toggleDeductPanel(); 
   }
   
+  document.getElementById('sess-body').style.display = 'none'; 
+  document.getElementById('sel-st').value = '';
+  
   if(S.sheetUrl) syncToSheet();
 }
 
@@ -3087,6 +3195,115 @@ function copyStudentReportFromPortal() {
   }
   rep += `━━━━━━━━━━━━━━━━━━━━━━\nوفّقكِ الله وبارك في مسيرتكِ 💜`;
   fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
+}
+
+function toggleDay(id, idx) { const st = S.students.find(s => s.id === id); if(!st) return; st.days[idx] = st.days[idx] ? 0 : 1; saveState(); loadPortal(); if(S.sheetUrl) syncToSheet(); }
+
+function generatePDF() {
+  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const st = S.students.find(s=>s.id===id); 
+  if(!st) return;
+  
+  const sess = st.sessions || [];
+  const pSess = sess.filter(s => s.att === 'present');
+  
+  document.getElementById('rep-t-name').textContent = S.course.teacher || '—'; 
+  document.getElementById('rep-s-name').textContent = st.name; 
+  document.getElementById('rep-c-name').textContent = S.course.cname || '—';
+  document.getElementById('rep-score').textContent = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
+  document.getElementById('rep-sessions').textContent = pSess.length; 
+  document.getElementById('rep-date').textContent = new Date().toLocaleDateString('ar-EG');
+  
+  document.getElementById('rep-tbody').innerHTML = [...sess].sort((a,b)=>a.ts-b.ts).map(s => {
+    if(s.att !== 'present') {
+      return `<tr><td>${s.date}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td><td colspan="3" style="text-align:center;color:#C0392B;">-</td></tr>`;
+    }
+    const errs = s.errors && s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا ملاحظات';
+    let revStr = '-';
+    if(s.rev === 'done') {
+      revStr = `<span style="color:#2E7D52;font-weight:bold;">تمت المراجعة (${s.revG})</span>`;
+    }
+    return `
+      <tr>
+        <td>${s.date}</td>
+        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td>
+        <td>${revStr}</td>
+        <td>${errs}</td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
+  
+  const element = document.getElementById('rep-layer'); 
+  element.style.display = 'block';
+  
+  html2pdf().set({ 
+    margin: 10, 
+    filename: `تقرير_${st.name}.pdf`, 
+    image: { type: 'jpeg', quality: 0.98 }, 
+    html2canvas: { scale: 2 }, 
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+  }).from(element).save().then(() => { 
+    element.style.display = 'none'; 
+  });
+}
+
+function setBoardSort(s) { 
+  boardSort = s; 
+  document.getElementById('sort-alpha-btn').className = s==='alpha' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
+  document.getElementById('sort-pts-btn').className = s==='points' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
+  renderBoard(); 
+}
+
+function renderBoard() {
+  const ss = S.students.filter(s => s.total > 0);
+  const sorted = boardSort==='alpha' ? ss.sort((a,b) => a.name.localeCompare(b.name,'ar')) : ss.sort((a,b) => (b.score||0) - (a.score||0));
+  
+  if (boardSort === 'points' && sorted.length >= 1) {
+     let podiumHtml = ''; 
+     const p2 = sorted[1], p1 = sorted[0], p3 = sorted[2];
+     if(p2) podiumHtml += `<div class="podium-item podium-2"><div class="podium-avatar">${p2.name[0]}</div><div class="podium-bar">2</div><div class="podium-name">${p2.name}</div></div>`;
+     if(p1) podiumHtml += `<div class="podium-item podium-1"><div class="podium-avatar">${p1.name[0]}</div><div class="podium-bar">1</div><div class="podium-name">${p1.name}</div></div>`;
+     if(p3) podiumHtml += `<div class="podium-item podium-3"><div class="podium-avatar">${p3.name[0]}</div><div class="podium-bar">3</div><div class="podium-name">${p3.name}</div></div>`;
+     const podiumViewEl = document.getElementById('podium-view');
+     if(podiumViewEl) { podiumViewEl.innerHTML = podiumHtml; podiumViewEl.style.display = 'flex'; }
+  } else {
+     const podiumViewEl = document.getElementById('podium-view');
+     if(podiumViewEl) podiumViewEl.style.display = 'none';
+  }
+
+  const weekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000); 
+  let topName = null, topScore = -1;
+  S.students.forEach(st => { 
+    (st.sessions||[]).forEach(s => { 
+      if(s.att === 'present' && s.ts >= weekAgo && s.score > topScore) { 
+        topScore = s.score; 
+        topName = st.name; 
+      } 
+    }); 
+  });
+
+  const boardListEl = document.getElementById('board-list');
+  if (boardListEl) {
+      boardListEl.innerHTML = sorted.map((st,i) => {
+        const isMe = isStudentMode && st.id === loggedInStudentId;
+        const isStar = st.name === topName;
+        return `
+          <div class="list-row" style="${isMe?'border-color:var(--gold); background:var(--gold-pale);':''}">
+            <div class="list-content" style="width:100%;">
+              <div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">
+                ${boardSort==='points' ? (i+1) : '-'}
+              </div>
+              <div style="flex:1;">
+                <div style="font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center;">
+                   <span>${st.name} ${isMe?'<span style="color:var(--gold); font-size:10px;">(أنتِ)</span>':''} ${isStar?'🌟 <span style="font-size:10px; color:var(--gold);">نجمة الأسبوع</span>':''}</span>
+                   <span style="color:var(--primary);">${fmt(st.score)}</span>
+                </div>
+                <div class="progress-bar-container" style="height:4px; margin-top:6px;"><div class="progress-bar-fill" style="width: ${st.score||0}%;"></div></div>
+              </div>
+            </div>
+          </div>`;
+      }).join('') || '<div class="alert alert-info">لا توجد طالبات مقيمات بعد.</div>';
+  }
 }
 
 // ══════════════════════════════════════════════════════════
@@ -3258,7 +3475,8 @@ function initDashboard() {
   Chart.defaults.font.family = 'Cairo';
 
   let tScore = 0, vCount = 0, tSess = 0, pSess = 0, eSess = 0;
-  const names = [], scores = [], errMap = { 'تنبيه حفظ': 0, 'ردة حفظ': 0, 'تنبيه تشكيل': 0, 'ردة تشكيل': 0, 'خطأ تجويد': 0 };
+  const names = [], scores = [];
+  const errMap = { 'تنبيه حفظ': 0, 'ردة حفظ': 0, 'تنبيه تشكيل': 0, 'ردة تشكيل': 0, 'خطأ تجويد': 0 };
   const allDatesSet = new Set();
   
   let weekSess = 0, weekFaces = 0;
@@ -3463,283 +3681,6 @@ function renderHeatmap(tsArray) {
 }
 
 // ══════════════════════════════════════════════════════════
-// 9. PORTAL & STUDENT VIEW
-// ══════════════════════════════════════════════════════════
-async function deleteSession(stId, ts) {
-  const confirm = await showModal('حذف الجلسة', 'تأكيد حذف هذه الجلسة نهائياً واستعادة الدرجات؟', true);
-  if(!confirm) return;
-  
-  const st = S.students.find(s => s.id === stId); 
-  if(!st) return;
-  
-  const sessIdx = st.sessions.findIndex(s => s.ts === ts);
-  if (sessIdx > -1) {
-    st.sessions.splice(sessIdx, 1);
-    st.ok = 0; 
-    st.total = st.sessions.length; 
-    let lps = null;
-    
-    const ascSessions = [...st.sessions].sort((a,b) => a.ts - b.ts);
-    for(let s of ascSessions) { 
-      if (s.att === 'present') { 
-        lps = s.score; 
-        if(s.ok) st.ok++; 
-      } 
-    }
-    
-    st.score = lps;
-    saveState(); 
-    loadPortal(); 
-    toast('🗑️ تم حذف الجلسة وإعادة الحساب'); 
-    
-    if(S.sheetUrl) syncToSheet();
-  }
-}
-
-function loadPortal() {
-  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
-  const pb = document.getElementById('portal-body'); 
-  
-  if(!id) { 
-    if(pb) pb.style.display = 'none'; 
-    return; 
-  }
-  
-  const st = S.students.find(s => s.id === id); 
-  
-  if(!st) return;
-  if(pb) pb.style.display = 'block';
-  
-  const pAvEl = document.getElementById('p-av'); if(pAvEl) pAvEl.textContent = st.name[0];
-  const pNameEl = document.getElementById('p-name'); if(pNameEl) pNameEl.textContent = st.name;
-  
-  const tF = st.customFaces || S.course.pages || 200;
-  const q = calcQuota(tF, S.course.weeks||10, S.course.studyDays||5);
-  
-  const pCourseInfoEl = document.getElementById('p-course-info'); 
-  if(pCourseInfoEl) pCourseInfoEl.textContent = st.customFaces ? `سجل محمي · مقرر خاص (${tF} وجه)` : `سجل محمي · المقرر العام (${tF} وجه)`;
-  
-  const pScoreEl = document.getElementById('p-score'); if(pScoreEl) pScoreEl.textContent = fmt(st.score);
-  const pStreakEl = document.getElementById('p-streak'); if(pStreakEl) pStreakEl.textContent = calculateStreak(st.sessions);
-  
-  const sd = S.course.studyDays || 5;
-  const days = st.days && st.days.length === sd ? st.days : Array(sd).fill(0);
-  const dn = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; 
-  const pSess = (st.sessions||[]).filter(s => s.att==='present');
-  
-  let totCompletedFaces = pSess.reduce((a,s) => a + (s.faces||0), 0);
-  let progFacePct = Math.min(100, Math.round((totCompletedFaces / tF) * 100));
-  
-  const pFacesTxtEl = document.getElementById('p-faces-txt'); if(pFacesTxtEl) pFacesTxtEl.textContent = `أنجزتِ ${totCompletedFaces} وجهاً من ${tF}`;
-  const pFacesPctEl = document.getElementById('p-faces-pct'); if(pFacesPctEl) pFacesPctEl.textContent = progFacePct + '%';
-  const pFacesProgEl = document.getElementById('p-faces-prog'); if(pFacesProgEl) pFacesProgEl.style.width = progFacePct + '%';
-
-  const pProgEl = document.getElementById('p-prog'); if(pProgEl) pProgEl.style.width = (days.filter(Boolean).length / sd * 100) + '%';
-  
-  const sDateObj = new Date(S.course.sdate);
-  const weeksPassed = Math.floor(Math.max(0, (Date.now() - sDateObj.getTime()) / (7*24*60*60*1000))) + 1; 
-  
-  const pDaysEl = document.getElementById('p-days');
-  if (pDaysEl) {
-     pDaysEl.innerHTML = days.map((d, i) => `
-      <div class="list-row" style="margin-bottom:8px; padding:12px 16px;">
-        <div>
-          <div style="font-weight:700;">${dn[i]||'يوم '+(i+1)}</div>
-          <div style="font-size:11px; color:var(--text-muted);">${getActualDateStr(S.course.sdate, weeksPassed, i, sd)} | المطلوب: ${q.dailyText} أوجه</div>
-        </div>
-        ${d ? `<button class="btn btn-outline btn-sm" onclick="toggleDay(${id},${i})">تم ✓</button>` : `<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">تأكيد الإنجاز</button>`}
-      </div>`).join('');
-  }
-
-  const slData = [...pSess].sort((a,b)=>a.ts - b.ts).slice(-5).map(s => s.score);
-  if(charts.sparkline) { 
-    charts.sparkline.destroy();
-  }
-  
-  const sparklineChartEl = document.getElementById('sparklineChart');
-  if (sparklineChartEl) {
-    charts.sparkline = new Chart(sparklineChartEl, { 
-      type: 'line', 
-      data: { labels: Array(slData.length).fill(''), datasets: [{ data: slData, borderColor: '#D4AF37', backgroundColor: 'rgba(212, 175, 55, 0.1)', tension: 0.4, fill: true, pointRadius: 3 }] }, 
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false, min: 60, max: 100 } }, layout: { padding: 5 } } 
-    });
-  }
-
-  const hist = document.getElementById('p-hist');
-  if (hist) {
-      hist.innerHTML = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts).map(s => {
-        const delBtn = !isStudentMode ? `<button class="btn btn-danger btn-sm" style="padding:4px 8px; font-size:11px; margin-top:8px;" onclick="deleteSession(${id}, ${s.ts})">🗑️ حذف</button>` : '';
-        
-        if(s.att !== 'present') {
-          return `<div class="list-row" style="align-items:flex-start;"><div><div style="color:var(--danger); font-weight:700;">${s.date} - غياب</div></div>${delBtn}</div>`;
-        }
-        
-        let revHtml = (s.rev === 'done') ? `<div style="font-size:11px; background:var(--bg-elevated); padding:4px 8px; border-radius:4px; color:var(--primary); margin-top:6px; display:inline-block;">مراجعة: ${s.revG}</div>` : '';
-        
-        let notesHtml = '';
-        if(s.errors && s.errors.length > 0) { notesHtml += `<div style="margin-top:6px; font-size:11px; color:var(--danger);"><strong style="color:var(--text-muted)">الأخطاء:</strong> ${s.errors.map(e=>e.desc).join(' | ')}</div>`; }
-        if(!isStudentMode && s.privateNote) { notesHtml += `<div style="margin-top:6px; font-size:11px; background:var(--gold-pale); padding:4px; border-radius:4px;"><strong style="color:var(--gold-dk)">ملاحظة خاصة:</strong> ${s.privateNote}</div>`; }
-
-        return `
-          <div class="list-row" style="align-items:flex-start;">
-            <div>
-              <div style="font-weight:700;">${s.date}</div>
-              <div style="font-size:12px; color:var(--text-muted);">حفظ: ${s.faces} أوجه (${s.from}-${s.to})</div>
-              ${revHtml}
-              ${notesHtml}
-              <div>${delBtn}</div>
-            </div>
-            <div style="font-size:20px; font-weight:800; font-family:'Amiri',serif; color:var(--primary);">${fmt(s.score)}</div>
-          </div>`;
-      }).join('') || '<div class="alert alert-info">لا توجد جلسات مسجلة بعد.</div>';
-  }
-}
-
-function copyStudentReportFromPortal() {
-  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
-  const st = S.students.find(s=>s.id===id); 
-  if(!st) return;
-  
-  const sess = st.sessions || [];
-  const pSess = sess.filter(s => s.att === 'present');
-  const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
-  
-  let rep = `📋 التقرير الأكاديمي للطالبة — ${S.course.cname || 'حلقة التحفيظ'}\n━━━━━━━━━━━━━━━━━━━━━━\nالاسم: ${st.name}\nمعدل الإتقان: ${avg}%\nشعلة الحماس: ${calculateStreak(sess)} 🔥\n──────────────────────\n`;
-  if(sess.length > 0) {
-    const latest = [...sess].sort((a,b)=>b.ts - a.ts)[0]; 
-    rep += `📌 آخر جلسة (${latest.date}):\n`;
-    if(latest.att === 'present') {
-      rep += `▪️ حفظ: ${latest.faces} أوجه (${latest.from} إلى ${latest.to})\n`;
-      rep += `▪️ المراجعة: ${(latest.rev === 'done') ? `تمت المراجعة (${latest.revG})` : 'لا يوجد'}\n`;
-      rep += `▪️ الدرجة: ${fmt(latest.score)} / 100 (${latest.grade})\n`;
-      rep += `▪️ الملاحظات: ${latest.errors && latest.errors.length ? latest.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات'}\n`;
-    } else { 
-      rep += `▪️ غياب: ${latest.att === 'excused' ? 'بعذر' : 'بدون عذر'}\n`; 
-    }
-  } else { 
-    rep += `لا توجد جلسات مسجلة بعد.\n`; 
-  }
-  rep += `━━━━━━━━━━━━━━━━━━━━━━\nوفّقكِ الله وبارك في مسيرتكِ 💜`;
-  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
-}
-
-function toggleDay(id, idx) { 
-  const st = S.students.find(s => s.id === id); 
-  if(!st) return; 
-  st.days[idx] = st.days[idx] ? 0 : 1; 
-  saveState(); 
-  loadPortal(); 
-  if(S.sheetUrl) syncToSheet(); 
-}
-
-function generatePDF() {
-  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
-  const st = S.students.find(s=>s.id===id); 
-  if(!st) return;
-  
-  const sess = st.sessions || [];
-  const pSess = sess.filter(s => s.att === 'present');
-  
-  document.getElementById('rep-t-name').textContent = S.course.teacher || '—'; 
-  document.getElementById('rep-s-name').textContent = st.name; 
-  document.getElementById('rep-c-name').textContent = S.course.cname || '—';
-  document.getElementById('rep-score').textContent = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
-  document.getElementById('rep-sessions').textContent = pSess.length; 
-  document.getElementById('rep-date').textContent = new Date().toLocaleDateString('ar-EG');
-  
-  document.getElementById('rep-tbody').innerHTML = [...sess].sort((a,b)=>a.ts-b.ts).map(s => {
-    if(s.att !== 'present') {
-      return `<tr><td>${s.date}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td><td colspan="3" style="text-align:center;color:#C0392B;">-</td></tr>`;
-    }
-    const errs = s.errors && s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا ملاحظات';
-    let revStr = '-';
-    if(s.rev === 'done') {
-      revStr = `<span style="color:#2E7D52;font-weight:bold;">تمت المراجعة (${s.revG})</span>`;
-    }
-    return `
-      <tr>
-        <td>${s.date}</td>
-        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td>
-        <td>${revStr}</td>
-        <td>${errs}</td>
-      </tr>
-    `;
-  }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
-  
-  const element = document.getElementById('rep-layer'); 
-  element.style.display = 'block';
-  
-  html2pdf().set({ 
-    margin: 10, 
-    filename: `تقرير_${st.name}.pdf`, 
-    image: { type: 'jpeg', quality: 0.98 }, 
-    html2canvas: { scale: 2 }, 
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
-  }).from(element).save().then(() => { 
-    element.style.display = 'none'; 
-  });
-}
-
-function setBoardSort(s) { 
-  boardSort = s; 
-  document.getElementById('sort-alpha-btn').className = s==='alpha' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
-  document.getElementById('sort-pts-btn').className = s==='points' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
-  renderBoard(); 
-}
-
-function renderBoard() {
-  const ss = S.students.filter(s => s.total > 0);
-  const sorted = boardSort==='alpha' ? ss.sort((a,b) => a.name.localeCompare(b.name,'ar')) : ss.sort((a,b) => (b.score||0) - (a.score||0));
-  
-  if (boardSort === 'points' && sorted.length >= 1) {
-     let podiumHtml = ''; 
-     const p2 = sorted[1], p1 = sorted[0], p3 = sorted[2];
-     if(p2) podiumHtml += `<div class="podium-item podium-2"><div class="podium-avatar">${p2.name[0]}</div><div class="podium-bar">2</div><div class="podium-name">${p2.name}</div></div>`;
-     if(p1) podiumHtml += `<div class="podium-item podium-1"><div class="podium-avatar">${p1.name[0]}</div><div class="podium-bar">1</div><div class="podium-name">${p1.name}</div></div>`;
-     if(p3) podiumHtml += `<div class="podium-item podium-3"><div class="podium-avatar">${p3.name[0]}</div><div class="podium-bar">3</div><div class="podium-name">${p3.name}</div></div>`;
-     const podiumViewEl = document.getElementById('podium-view');
-     if(podiumViewEl) { podiumViewEl.innerHTML = podiumHtml; podiumViewEl.style.display = 'flex'; }
-  } else {
-     const podiumViewEl = document.getElementById('podium-view');
-     if(podiumViewEl) podiumViewEl.style.display = 'none';
-  }
-
-  const weekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000); 
-  let topName = null, topScore = -1;
-  S.students.forEach(st => { 
-    (st.sessions||[]).forEach(s => { 
-      if(s.att === 'present' && s.ts >= weekAgo && s.score > topScore) { 
-        topScore = s.score; 
-        topName = st.name; 
-      } 
-    }); 
-  });
-
-  const boardListEl = document.getElementById('board-list');
-  if (boardListEl) {
-      boardListEl.innerHTML = sorted.map((st,i) => {
-        const isMe = isStudentMode && st.id === loggedInStudentId;
-        const isStar = st.name === topName;
-        return `
-          <div class="list-row" style="${isMe?'border-color:var(--gold); background:var(--gold-pale);':''}">
-            <div class="list-content" style="width:100%;">
-              <div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">
-                ${boardSort==='points' ? (i+1) : '-'}
-              </div>
-              <div style="flex:1;">
-                <div style="font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center;">
-                   <span>${st.name} ${isMe?'<span style="color:var(--gold); font-size:10px;">(أنتِ)</span>':''} ${isStar?'🌟 <span style="font-size:10px; color:var(--gold);">نجمة الأسبوع</span>':''}</span>
-                   <span style="color:var(--primary);">${fmt(st.score)}</span>
-                </div>
-                <div class="progress-bar-container" style="height:4px; margin-top:6px;"><div class="progress-bar-fill" style="width: ${st.score||0}%;"></div></div>
-              </div>
-            </div>
-          </div>`;
-      }).join('') || '<div class="alert alert-info">لا توجد طالبات مقيمات بعد.</div>';
-  }
-}
-
-// ══════════════════════════════════════════════════════════
 // 10. GOOGLE SHEETS CLOUD SYNC
 // ══════════════════════════════════════════════════════════
 async function sheetReq(action) {
@@ -3782,22 +3723,68 @@ async function syncToSheet() {
     try { S.sheetUrl = decodeData(uP); S.teacherCode = decodeData(cP); } catch(e) {}
     toast('جارٍ استرجاع بيانات المعلمة...');
     sheetReq('load').then(r => {
-      if(r?.ok && r.payload) { const parsed = JSON.parse(r.payload); if(validateState(parsed)) { S = parsed; saveState(); initSetup(); navigate('setup'); toast('✅ تم تسجيل الدخول بنجاح'); } } else { toast('❌ فشل جلب البيانات من السيرفر'); navigate('setup'); }
-    }); return;
+      if(r?.ok && r.payload) { 
+        const parsed = JSON.parse(r.payload); 
+        if(validateState(parsed)) { 
+          S = parsed; 
+          saveState(); 
+          initSetup(); 
+          navigate('setup'); 
+          toast('✅ تم تسجيل الدخول بنجاح'); 
+        } 
+      } else { 
+        toast('❌ فشل جلب البيانات من السيرفر'); 
+        navigate('setup'); 
+      }
+    }); 
+    return;
   }
   
   if(sP && uP && cP) {
-    isStudentMode = true; loggedInStudentId = parseInt(sP); document.body.classList.add('student-mode');
-    try { S.sheetUrl = decodeData(uP); S.teacherCode = decodeData(cP); } catch(e) { try { S.sheetUrl = atob(uP); S.teacherCode = atob(cP); } catch(ex) {} }
+    isStudentMode = true; 
+    loggedInStudentId = parseInt(sP); 
+    document.body.classList.add('student-mode');
+    
+    try { 
+      S.sheetUrl = decodeData(uP); 
+      S.teacherCode = decodeData(cP); 
+    } catch(e) { 
+      try { 
+        S.sheetUrl = atob(uP); 
+        S.teacherCode = atob(cP); 
+      } catch(ex) {} 
+    }
+    
     navigate('portal'); 
-    const alertEl = document.getElementById('student-alert'); document.getElementById('portal-body').style.display = 'none'; alertEl.style.display = 'block'; alertEl.innerHTML = 'جاري الاتصال بالمنصة لجلب بياناتك... ⏳';
+    const alertEl = document.getElementById('student-alert'); 
+    document.getElementById('portal-body').style.display = 'none'; 
+    alertEl.style.display = 'block'; 
+    alertEl.innerHTML = 'جاري الاتصال بالمنصة لجلب بياناتك... ⏳';
+    
     sheetReq('load').then(r => { 
       if(r?.ok && r.payload) {
         const parsed = JSON.parse(r.payload);
-        if(validateState(parsed)) { S = parsed; const stExists = S.students.find(s => s.id === loggedInStudentId); if(stExists) { alertEl.innerHTML = 'أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟'; loadPortal(); } else alertEl.innerHTML = '❌ عذراً، لم يتم العثور على بياناتك.'; } else alertEl.innerHTML = '❌ البيانات المسترجعة غير صالحة.';
-      } else alertEl.innerHTML = '❌ عذراً، لم نتمكن من جلب بياناتك.';
+        if(validateState(parsed)) { 
+          S = parsed; 
+          const stExists = S.students.find(s => s.id === loggedInStudentId); 
+          if(stExists) { 
+            alertEl.innerHTML = 'أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟'; 
+            loadPortal(); 
+          } else {
+            alertEl.innerHTML = '❌ عذراً، لم يتم العثور على بياناتك.';
+          }
+        } else {
+          alertEl.innerHTML = '❌ البيانات المسترجعة غير صالحة.';
+        }
+      } else {
+        alertEl.innerHTML = '❌ عذراً، لم نتمكن من جلب بياناتك.';
+      }
     }).catch(err => alertEl.innerHTML = '❌ خطأ في الاتصال بالخادم.');
-  } else { loadState(); initSetup(); navigate('setup'); }
+  } else { 
+    loadState(); 
+    initSetup(); 
+    navigate('setup'); 
+  }
 })();
 </script>
 </body>
