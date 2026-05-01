@@ -386,6 +386,7 @@
       color: var(--gold); 
     }
 
+    /* Remove obstacles to sticky behavior */
     .app-container, .main-content, .page-wrapper { 
       overflow: visible !important; 
       overflow-x: visible !important; 
@@ -921,6 +922,7 @@
       font-size: 13px; 
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
     /* Podium Leaderboard */
@@ -1249,13 +1251,11 @@
       :root { --sidebar-w: 280px; }
       .sidebar { transform: translateX(100%); box-shadow: var(--shadow-lg); }
       .sidebar.open { transform: translateX(0); }
-      .main-content { width: 100%; margin-right: 0 !important; padding-bottom: 80px; }
+      .main-content { margin-right: 0 !important; padding-bottom: 80px; }
       .top-header { padding: 0 16px; }
       .mobile-header-btn { display: flex; }
-      .hide-mobile { display: none !important; }
-      .page-wrapper { padding: 16px 12px; }
-      .card { padding: 16px; }
-      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; gap: 12px; }
+      .page-wrapper { padding: 20px 16px; }
+      .grid-2, .grid-4 { grid-template-columns: 1fr; }
       
       /* Bottom Nav for Mobile */
       .bottom-nav { 
@@ -1360,14 +1360,18 @@
       font-family: 'Amiri Quran', serif; 
       font-size: 28px; 
       line-height: 2.3;
+      text-align: justify; 
+      text-justify: inter-word; 
+      text-align-last: center; 
+      direction: rtl;
       padding: 30px; 
       background: #FDFBF7; 
       border: 1px solid var(--gold-lt); 
       border-radius: var(--r-md);
       min-height: 500px; 
       user-select: none; 
+      word-wrap: break-word; 
       color: #1A1714;
-      direction: rtl;
     }
     
     [data-theme="dark"] .quran-page { 
@@ -1377,9 +1381,9 @@
     }
 
     .q-line { 
-      display: flex; 
-      justify-content: space-between; /* This creates the perfect Uthmani alignment */
-      align-items: center;
+      display: block; 
+      text-align: justify; 
+      text-align-last: center; 
       width: 100%; 
       margin-bottom: 5px; 
       line-height: 2.3; 
@@ -1391,7 +1395,6 @@
       padding: 0 2px; 
       border-radius: 4px; 
       transition: all 0.2s; 
-      white-space: nowrap; /* Prevents word breaking */
     }
 
     .q-word:hover { 
@@ -1645,6 +1648,13 @@
         <div class="card-header">
           <h3 class="card-title">إدارة الطالبات والمقررات الفردية</h3>
         </div>
+        
+        <!-- Search Bar -->
+        <div class="search-bar">
+           <span style="font-size:18px; color:var(--text-muted);">🔍</span>
+           <input type="text" id="student-search" placeholder="ابحثي عن طالبة..." onkeyup="filterStudents()">
+        </div>
+
         <div class="grid-2" style="align-items:end; margin-bottom:24px; background:var(--bg-elevated); padding:20px; border-radius:var(--r-md);">
           <div class="form-group" style="margin:0;">
             <label>اسم الطالبة الجديدة</label>
@@ -1655,12 +1665,6 @@
             <input type="number" class="form-control" id="new-custom-faces" placeholder="يترك فارغاً للمقرر العام">
           </div>
           <button class="btn btn-gold" style="grid-column: span 2;" onclick="addStudent()">إضافة للطالبة للمنصة ➕</button>
-        </div>
-        
-        <!-- Search Bar -->
-        <div class="search-bar">
-           <span style="font-size:18px; color:var(--text-muted);">🔍</span>
-           <input type="text" id="student-search" placeholder="ابحثي عن طالبة..." onkeyup="filterStudents()">
         </div>
 
         <div id="student-list"></div>
@@ -2095,6 +2099,7 @@
 // ══════════════════════════════════════════════════════════
 const SALT = "ALM_SECURE_K8"; 
 
+// تشفير يعتمد على Hex + XOR لضمان حماية أفضل للروابط من Base64 التقليدي
 function encodeData(text) {
   if(!text) return "";
   let hex = '';
@@ -2164,20 +2169,82 @@ function doGet(e) {
   return ContentService.createTextOutput("ALM API Running").setMimeType(ContentService.MimeType.TEXT); 
 }`;
 
+// دالة لتهيئة بيانات افتراضية لاختبار المنصة
+function injectMockData() {
+  const today = new Date();
+  const d1 = new Date(today.getTime() - 86400000).toLocaleDateString('ar-EG');
+  const d2 = new Date(today.getTime() - 86400000 * 2).toLocaleDateString('ar-EG');
+  const d3 = new Date(today.getTime() - 86400000 * 3).toLocaleDateString('ar-EG');
+
+  // إعداد تاريخ البدء ليكون قبل أسبوعين لكي يظهر التقدم
+  const sDateObj = new Date(today.getTime() - (14 * 24 * 60 * 60 * 1000));
+  
+  S = {
+    course: { 
+      teacher: 'أ. زينب', 
+      cname: 'حلقة الحفاظ', 
+      pages: 604, 
+      sdate: sDateObj.toISOString().split('T')[0], 
+      weeks: 30, 
+      studyDays: 5 
+    },
+    nextId: 5, 
+    sheetUrl: '', 
+    teacherCode: '',
+    students: [
+      {
+        id: 1, name: 'مريم أحمد', score: 100, customFaces: null, ok: 3, total: 3, days: [1,1,1,0,0],
+        sessions: [
+          { ts: today.getTime() - 86400000*3, date: d3, att: 'present', score: 100, faces: 5, from: 'سورة البقرة (آية 1)', to: 'سورة البقرة (آية 24)', errors: [], grade: 'ممتاز', rev: 'done', revG: 'ممتاز' },
+          { ts: today.getTime() - 86400000*2, date: d2, att: 'present', score: 98, faces: 5, from: 'سورة البقرة (آية 25)', to: 'سورة البقرة (آية 43)', errors: [{desc: 'آية 30 · "خَلِيفَةً" · تنبيه حفظ', pts: -2}], grade: 'ممتاز', rev: 'done', revG: 'جيد جداً' },
+          { ts: today.getTime() - 86400000, date: d1, att: 'present', score: 100, faces: 6, from: 'سورة البقرة (آية 44)', to: 'سورة البقرة (آية 61)', errors: [], grade: 'ممتاز', rev: 'none' }
+        ]
+      },
+      {
+        id: 2, name: 'سارة محمد', score: 85, customFaces: null, ok: 1, total: 3, days: [1,0,0,0,0],
+        sessions: [
+          { ts: today.getTime() - 86400000*3, date: d3, att: 'present', score: 90, faces: 5, from: 'سورة البقرة (آية 1)', to: 'سورة البقرة (آية 24)', errors: [{desc: 'آية 10 · "مَرَضٌ" · ردة حفظ', pts: -4}], grade: 'جيد جداً', rev: 'done', revG: 'جيد' },
+          { ts: today.getTime() - 86400000*2, date: d2, att: 'unexcused', score: null, faces: 0, from: '—', to: '—', errors: [], grade: '—', rev: 'none' },
+          { ts: today.getTime() - 86400000, date: d1, att: 'present', score: 85, faces: 3, from: 'سورة البقرة (آية 25)', to: 'سورة البقرة (آية 33)', errors: [{desc: 'آية 26 · "يَسْتَحْيِي" · خطأ تجويد', pts: -0.5}, {desc: 'آية 30 · "خَلِيفَةً" · تنبيه حفظ', pts: -2}], grade: 'جيد', rev: 'none' }
+        ]
+      },
+      {
+        id: 3, name: 'فاطمة علي', score: 95, customFaces: 300, ok: 2, total: 2, days: [1,1,0,0,0],
+        sessions: [
+          { ts: today.getTime() - 86400000*3, date: d3, att: 'present', score: 95, faces: 4, from: 'سورة آل عمران (آية 1)', to: 'سورة آل عمران (آية 22)', errors: [{desc: 'آية 15 · "بَصِيرٌ" · تنبيه تشكيل', pts: -2}], grade: 'ممتاز', rev: 'done', revG: 'ممتاز' },
+          { ts: today.getTime() - 86400000*2, date: d2, att: 'excused', score: null, faces: 0, from: '—', to: '—', errors: [], grade: '—', rev: 'none' }
+        ]
+      },
+      {
+        id: 4, name: 'عائشة عمر', score: null, customFaces: null, ok: 0, total: 0, days: [0,0,0,0,0],
+        sessions: []
+      }
+    ]
+  };
+}
+
 function loadState() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v18'); 
+    const d = localStorage.getItem('alm_pro_v20'); 
     if(d) { 
       const p = JSON.parse(d); 
-      if(validateState(p)) S = p; 
-    } 
-  } catch(e) {} 
+      if(validateState(p)) {
+          S = p; 
+      } else {
+          injectMockData(); // إذا كانت البيانات فاسدة نضع بيانات وهمية
+      }
+    } else {
+        injectMockData(); // إذا لم يكن هناك حفظ مسبق نضع بيانات وهمية
+    }
+  } catch(e) {
+      injectMockData();
+  } 
 }
 
 function saveState() { 
   if(isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v18', JSON.stringify(S)); 
+    localStorage.setItem('alm_pro_v20', JSON.stringify(S)); 
     setSyncDot('local'); 
     hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -2202,7 +2269,7 @@ window.addEventListener('beforeunload', function (e) {
 // ══════════════════════════════════════════════════════════
 // 2. CUSTOM MODAL 
 // ══════════════════════════════════════════════════════════
-function showModal(title, bodyHtml, onConfirm, onCancel, showInput = false, inputVal = '') {
+function showModal(title, bodyHtml, showInput = false, inputVal = '') {
   return new Promise((resolve) => {
     const overlay = document.getElementById('custom-modal');
     document.getElementById('modal-title').textContent = title;
@@ -2231,13 +2298,11 @@ function showModal(title, bodyHtml, onConfirm, onCancel, showInput = false, inpu
     btnOk.onclick = () => {
       cleanup();
       const val = showInput ? document.getElementById('modal-input-val').value : true;
-      if(onConfirm) onConfirm(val); 
       resolve(val);
     };
     
     btnCancel.onclick = () => { 
       cleanup(); 
-      if(onCancel) onCancel(); 
       resolve(null); 
     };
   });
@@ -2401,12 +2466,9 @@ function toggleDeductPanel() {
 function lockSetup() {
   document.getElementById('setup-edit-view').style.display = 'none'; 
   document.getElementById('setup-locked-view').style.display = 'block';
-  
   document.getElementById('sum-teacher').textContent = S.course.teacher || '—'; 
   document.getElementById('sum-course').textContent = S.course.cname || '—';
-  
-  const sdMap = { 5: 'الأحد-الخميس', 6: 'السبت-الخميس', 7: 'كامل الأسبوع' };
-  document.getElementById('sum-days').textContent = sdMap[S.course.studyDays] || '—';
+  document.getElementById('sum-days').textContent = {5:'الأحد-الخميس', 6:'السبت-الخميس', 7:'كامل الأسبوع'}[S.course.studyDays] || '—';
 }
 
 function unlockSetup() { 
@@ -2505,7 +2567,7 @@ function saveCourse() {
 }
 
 async function archiveCourse() {
-  const word = await showModal('أرشفة وتصفير الدورة', 'هذا سيحذف جميع الدرجات والسجلات للبدء بدورة جديدة. للتاكيد اكتبي كلمة "تأكيد" أدناه:', true, null, true, '');
+  const word = await showModal('أرشفة وتصفير الدورة', 'هذا سيحذف جميع الدرجات والسجلات للبدء بدورة جديدة. للتاكيد اكتبي كلمة "تأكيد" أدناه:', true, '');
   
   if(word !== 'تأكيد') { 
     toast('❌ تم إلغاء الأرشفة'); 
@@ -2578,7 +2640,7 @@ async function editStudentName(id) {
   const st = S.students.find(s=>s.id === id); 
   if(!st) return;
   
-  const newName = await showModal('تعديل اسم الطالبة', 'الاسم:', true, null, true, st.name);
+  const newName = await showModal('تعديل اسم الطالبة', 'الاسم:', true, st.name);
   if(newName && newName.trim() !== '') { 
     st.name = newName.trim(); 
     saveState(); 
@@ -2625,7 +2687,7 @@ function addStudent() {
 
 async function delSt(id) {
   const st = S.students.find(s => s.id === id);
-  const confirm = await showModal('تأكيد الحذف', `هل أنتِ متأكدة من حذف الطالبة "${st.name}" بجميع سجلاتها؟`, true);
+  const confirm = await showModal('تأكيد الحذف', `هل أنتِ متأكدة من حذف الطالبة "${st.name}" بجميع سجلاتها؟`);
   if(!confirm) return;
   
   S.students = S.students.filter(s => s.id !== id); 
@@ -2688,7 +2750,6 @@ function startSession() {
     document.getElementById('sess-body').style.display = 'none'; 
     stopTimer(); 
     
-    // تأمين إخفاء نافذة الجلسات السابقة بأمان
     const lastSessWrap = document.getElementById('last-sessions-wrap');
     if(lastSessWrap) lastSessWrap.style.display = 'none';
     
@@ -2710,9 +2771,15 @@ function startSession() {
       const sortedSess = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts).slice(0,3);
       if(sortedSess.length > 0) {
          lastSessCont.innerHTML = sortedSess.map(s => `
-          <div class="mini-history-item">
-            <div>${s.date}</div>
-            <strong style="color:var(--primary);">${fmt(s.score)}</strong>
+          <div class="mini-history-item" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:700;">${s.date}</div>
+              <div style="font-size:11px; color:var(--text-muted);">توقفت عند: ${s.to || '—'}</div>
+            </div>
+            <div style="text-align:left;">
+              <strong style="color:var(--primary); font-size:16px;">${fmt(s.score)}</strong>
+              <div style="font-size:11px; color:var(--text-muted);">${s.grade || ''}</div>
+            </div>
           </div>`).join('');
          lastSessWrap.style.display = 'block';
       } else { 
@@ -2810,7 +2877,7 @@ document.addEventListener('keydown', e => {
   if(keys[e.key]) triggerDeduct(keys[e.key].p, keys[e.key].l);
 });
 
-function deleteErr(id) {
+async function deleteErr(id) {
   const idx = sessErrors.findIndex(e => e.id === id);
   if (idx > -1) { 
     sessScore = parseFloat(Math.min(110, sessScore + Math.abs(sessErrors[idx].pts)).toFixed(1)); 
@@ -2834,10 +2901,10 @@ async function editErr(id) {
     else if(p.startsWith('"')) cWord = p.replace(/"/g, '').trim(); 
   });
   
-  const newAyah = await showModal('تعديل الآية', 'أدخلي رقم الآية الجديد:', true, null, true, cAyah); 
+  const newAyah = await showModal('تعديل الآية', 'أدخلي رقم الآية الجديد:', true, cAyah); 
   if (newAyah === null) return;
   
-  const newWord = await showModal('تعديل الكلمة', 'أدخلي الملاحظة/الكلمة الجديدة:', true, null, true, cWord); 
+  const newWord = await showModal('تعديل الكلمة', 'أدخلي الملاحظة/الكلمة الجديدة:', true, cWord); 
   if (newWord === null) return;
   
   let nDesc = []; 
@@ -2880,7 +2947,7 @@ function updateGradeDisp() {
 }
 
 async function resetSess() { 
-  const conf = await showModal('إعادة ضبط', 'هل أنتِ متأكدة من مسح التقييم والبدء من جديد؟', true); 
+  const conf = await showModal('إعادة ضبط', 'هل أنتِ متأكدة من مسح التقييم والبدء من جديد؟'); 
   if(conf) startSession(); 
 }
 
@@ -3083,42 +3150,23 @@ async function loadCurrentPage() {
         
         let html = '<div class="q-page-content">'; 
         let cLine = -1;
-        let wordsInLine = [];
         
-        // Function to render a single line using space-between Flexbox
-        const renderLine = (words) => {
-            if(words.length === 0) return '';
-            // If less than 4 words, center them to avoid ugly stretching
-            const jc = words.length < 4 ? 'center' : 'space-between';
-            const gap = words.length < 4 ? '10px' : '0';
-            let lineHtml = `<div class="q-line" style="justify-content: ${jc}; gap: ${gap};">`;
-            words.forEach(w => {
-               if(w.char_type_name === 'word') { 
-                 lineHtml += `<span class="q-word" onclick="toggleWordSelection('${w.ayahNum}', this)">${w.text_uthmani}</span>`; 
-               } else if(w.char_type_name === 'end') { 
-                 lineHtml += `<span class="q-ayah-end" onclick="toggleWordSelection('${w.ayahNum}', this)">﴿${ayahAr(w.ayahNum)}﴾</span>`; 
-               } 
-            });
-            lineHtml += `</div>`;
-            return lineHtml;
-        };
-
         data.verses.forEach(v => { 
           const ayahNum = v.verse_key.split(':')[1]; 
           v.words.forEach(w => { 
             if(w.line_number !== cLine) { 
-              if(cLine !== -1) {
-                  html += renderLine(wordsInLine);
-                  wordsInLine = [];
-              }
+              if(cLine !== -1) html += '</div>'; 
+              html += '<div class="q-line">'; 
               cLine = w.line_number; 
             }
-            wordsInLine.push({ ...w, ayahNum: ayahNum });
+            if(w.char_type_name === 'word') { 
+              html += `<span class="q-word" onclick="toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span> `; 
+            } else if(w.char_type_name === 'end') { 
+              html += `<span class="q-ayah-end" onclick="toggleWordSelection('${ayahNum}', this)">﴿${ayahAr(ayahNum)}﴾</span> `; 
+            } 
           }); 
         }); 
-        if(wordsInLine.length > 0) {
-            html += renderLine(wordsInLine);
-        }
+        if(cLine !== -1) html += '</div>';
         html += '</div>';
         
         quranCache.set(page, html); 
@@ -3283,7 +3331,9 @@ function initDashboard() {
   document.getElementById('d-week-stars').textContent = topStudent ? `${topStudent} (${fmt(topScore)})` : 'لا يوجد';
 
   const targetAvg = 90;
-  if(charts.bar) charts.bar.destroy();
+  if(charts.bar) { 
+    charts.bar.destroy();
+  }
   
   charts.bar = new Chart(document.getElementById('scoreBarChart'), { 
     type: 'bar', 
@@ -3303,7 +3353,9 @@ function initDashboard() {
   const topErr = Object.keys(errMap).reduce((a, b) => errMap[a] > errMap[b] ? a : b);
   document.getElementById('error-insight').textContent = `الخطأ الأكثر شيوعاً هو: ${topErr}`;
   
-  if(charts.radar) charts.radar.destroy();
+  if(charts.radar) {
+    charts.radar.destroy();
+  }
   
   charts.radar = new Chart(document.getElementById('errorRadarChart'), { 
     type: 'radar', 
@@ -3334,7 +3386,9 @@ function initDashboard() {
     return { label: st.name.split(' ')[0], data: data, borderColor: `hsl(${hue}, 60%, 50%)`, tension: 0.4, borderWidth: 2, fill: false };
   });
 
-  if(charts.line) charts.line.destroy();
+  if(charts.line) {
+    charts.line.destroy();
+  }
   
   charts.line = new Chart(document.getElementById('trendLineChart'), { 
     type: 'line', 
@@ -3379,6 +3433,190 @@ function renderHeatmap(tsArray) {
 }
 
 // ══════════════════════════════════════════════════════════
+// 9. PORTAL & STUDENT VIEW
+// ══════════════════════════════════════════════════════════
+async function deleteSession(stId, ts) {
+  const confirm = await showModal('حذف الجلسة', 'تأكيد حذف هذه الجلسة نهائياً واستعادة الدرجات؟');
+  if(!confirm) return;
+  const st = S.students.find(s => s.id === stId); if(!st) return;
+  const sessIdx = st.sessions.findIndex(s => s.ts === ts);
+  if (sessIdx > -1) {
+    st.sessions.splice(sessIdx, 1);
+    st.ok = 0; st.total = st.sessions.length; let lps = null;
+    const ascSessions = [...st.sessions].sort((a,b) => a.ts - b.ts);
+    for(let s of ascSessions) { if (s.att === 'present') { lps = s.score; if(s.ok) st.ok++; } }
+    st.score = lps;
+    saveState(); loadPortal(); toast('🗑️ تم حذف الجلسة وإعادة الحساب'); if(S.sheetUrl) syncToSheet();
+  }
+}
+
+function loadPortal() {
+  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const pb = document.getElementById('portal-body'); if(!id) { pb.style.display = 'none'; return; }
+  const st = S.students.find(s => s.id === id); if(!st) return;
+  pb.style.display = 'block';
+  
+  document.getElementById('p-av').textContent = st.name[0]; document.getElementById('p-name').textContent = st.name;
+  const tF = st.customFaces || S.course.pages || 200, q = calcQuota(tF, S.course.weeks||10, S.course.studyDays||5);
+  document.getElementById('p-course-info').textContent = st.customFaces ? `سجل محمي · مقرر خاص (${tF} وجه)` : `سجل محمي · المقرر العام (${tF} وجه)`;
+  document.getElementById('p-score').textContent = fmt(st.score); document.getElementById('p-streak').textContent = calculateStreak(st.sessions); 
+  
+  const sd = S.course.studyDays || 5, days = st.days && st.days.length === sd ? st.days : Array(sd).fill(0), dn = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; 
+  const pSess = (st.sessions||[]).filter(s => s.att==='present');
+  
+  let totCompletedFaces = pSess.reduce((a,s) => a + (s.faces||0), 0);
+  let progFacePct = Math.min(100, Math.round((totCompletedFaces / tF) * 100));
+  document.getElementById('p-faces-txt').textContent = `أنجزتِ ${totCompletedFaces} وجهاً من ${tF}`;
+  document.getElementById('p-faces-pct').textContent = progFacePct + '%';
+  document.getElementById('p-faces-prog').style.width = progFacePct + '%';
+
+  document.getElementById('p-prog').style.width = (days.filter(Boolean).length / sd * 100) + '%';
+  const sDateObj = new Date(S.course.sdate);
+  const weeksPassed = Math.floor(Math.max(0, (Date.now() - sDateObj.getTime()) / (7*24*60*60*1000))) + 1; 
+  
+  document.getElementById('p-days').innerHTML = days.map((d, i) => `<div class="list-row" style="margin-bottom:8px; padding:12px 16px;"><div><div style="font-weight:700;">${dn[i]||'يوم '+(i+1)}</div><div style="font-size:11px; color:var(--text-muted);">${getActualDateStr(S.course.sdate, weeksPassed, i, sd)} | المطلوب: ${q.dailyText} أوجه</div></div>${d ? `<button class="btn btn-outline btn-sm" onclick="toggleDay(${id},${i})">تم ✓</button>` : `<button class="btn btn-gold btn-sm" onclick="toggleDay(${id},${i})">تأكيد الإنجاز</button>`}</div>`).join('');
+
+  const slData = [...pSess].sort((a,b)=>a.ts - b.ts).slice(-5).map(s => s.score);
+  if(charts.sparkline) { 
+    charts.sparkline.destroy();
+  }
+  
+  charts.sparkline = new Chart(document.getElementById('sparklineChart'), { 
+    type: 'line', 
+    data: { labels: Array(slData.length).fill(''), datasets: [{ data: slData, borderColor: '#D4AF37', backgroundColor: 'rgba(212, 175, 55, 0.1)', tension: 0.4, fill: true, pointRadius: 3 }] }, 
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false, min: 60, max: 100 } }, layout: { padding: 5 } } 
+  });
+
+  const hist = document.getElementById('p-hist');
+  hist.innerHTML = [...(st.sessions||[])].sort((a,b) => b.ts - a.ts).map(s => {
+    const delBtn = !isStudentMode ? `<button class="btn btn-danger btn-sm" style="padding:4px 8px; font-size:11px; margin-top:8px;" onclick="deleteSession(${id}, ${s.ts})">🗑️ حذف</button>` : '';
+    if(s.att !== 'present') return `<div class="list-row" style="align-items:flex-start;"><div><div style="color:var(--danger); font-weight:700;">${s.date} - غياب</div></div>${delBtn}</div>`;
+    let revHtml = (s.rev === 'done') ? `<div style="font-size:11px; background:var(--bg-elevated); padding:4px 8px; border-radius:4px; color:var(--primary); margin-top:6px; display:inline-block;">مراجعة: ${s.revG}</div>` : '';
+    
+    let notesHtml = '';
+    if(s.errors && s.errors.length > 0) { notesHtml += `<div style="margin-top:6px; font-size:11px; color:var(--danger);"><strong style="color:var(--text-muted)">الأخطاء:</strong> ${s.errors.map(e=>e.desc).join(' | ')}</div>`; }
+    if(!isStudentMode && s.privateNote) { notesHtml += `<div style="margin-top:6px; font-size:11px; background:var(--gold-pale); padding:4px; border-radius:4px;"><strong style="color:var(--gold-dk)">ملاحظة خاصة:</strong> ${s.privateNote}</div>`; }
+
+    return `<div class="list-row" style="align-items:flex-start;"><div><div style="font-weight:700;">${s.date}</div><div style="font-size:12px; color:var(--text-muted);">حفظ: ${s.faces} أوجه (${s.from}-${s.to})</div>${revHtml}${notesHtml}<div>${delBtn}</div></div><div style="font-size:20px; font-weight:800; font-family:'Amiri',serif; color:var(--primary);">${fmt(s.score)}</div></div>`;
+  }).join('') || '<div class="alert alert-info">لا توجد جلسات مسجلة بعد.</div>';
+}
+
+function copyStudentReportFromPortal() {
+  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const st = S.students.find(s=>s.id===id); 
+  if(!st) return;
+  
+  const sess = st.sessions || [];
+  const pSess = sess.filter(s => s.att === 'present');
+  const avg = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
+  
+  let rep = `📋 التقرير الأكاديمي للطالبة — ${S.course.cname || 'حلقة التحفيظ'}\n━━━━━━━━━━━━━━━━━━━━━━\nالاسم: ${st.name}\nمعدل الإتقان: ${avg}%\nشعلة الحماس: ${calculateStreak(sess)} 🔥\n──────────────────────\n`;
+  if(sess.length > 0) {
+    const latest = [...sess].sort((a,b)=>b.ts - a.ts)[0]; 
+    rep += `📌 آخر جلسة (${latest.date}):\n`;
+    if(latest.att === 'present') {
+      rep += `▪️ حفظ: ${latest.faces} أوجه (${latest.from} إلى ${latest.to})\n`;
+      rep += `▪️ المراجعة: ${(latest.rev === 'done') ? `تمت المراجعة (${latest.revG})` : 'لا يوجد'}\n`;
+      rep += `▪️ الدرجة: ${fmt(latest.score)} / 100 (${latest.grade})\n`;
+      rep += `▪️ الملاحظات: ${latest.errors && latest.errors.length ? latest.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا توجد ملاحظات'}\n`;
+    } else { 
+      rep += `▪️ غياب: ${latest.att === 'excused' ? 'بعذر' : 'بدون عذر'}\n`; 
+    }
+  } else { 
+    rep += `لا توجد جلسات مسجلة بعد.\n`; 
+  }
+  rep += `━━━━━━━━━━━━━━━━━━━━━━\nوفّقكِ الله وبارك في مسيرتكِ 💜`;
+  fallbackCopy(rep, '📋 تم نسخ التقرير بنجاح للمشاركة!');
+}
+
+function toggleDay(id, idx) { const st = S.students.find(s => s.id === id); if(!st) return; st.days[idx] = st.days[idx] ? 0 : 1; saveState(); loadPortal(); if(S.sheetUrl) syncToSheet(); }
+
+function generatePDF() {
+  const id = isStudentMode ? loggedInStudentId : parseInt(document.getElementById('sel-portal').value);
+  const st = S.students.find(s=>s.id===id); if(!st) return;
+  
+  const sess = st.sessions || [];
+  const pSess = sess.filter(s => s.att === 'present');
+  
+  document.getElementById('rep-t-name').textContent = S.course.teacher || '—'; 
+  document.getElementById('rep-s-name').textContent = st.name; 
+  document.getElementById('rep-c-name').textContent = S.course.cname || '—';
+  document.getElementById('rep-score').textContent = pSess.length ? (pSess.reduce((a,s)=>a+s.score,0)/pSess.length).toFixed(1) : '—';
+  document.getElementById('rep-sessions').textContent = pSess.length; 
+  document.getElementById('rep-date').textContent = new Date().toLocaleDateString('ar-EG');
+  
+  document.getElementById('rep-tbody').innerHTML = [...sess].sort((a,b)=>a.ts-b.ts).map(s => {
+    if(s.att !== 'present') {
+      return `<tr><td>${s.date}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td><td colspan="3" style="text-align:center;color:#C0392B;">-</td></tr>`;
+    }
+    const errs = s.errors && s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا ملاحظات';
+    let revStr = '-';
+    if(s.rev === 'done') {
+      revStr = `<span style="color:#2E7D52;font-weight:bold;">تمت المراجعة (${s.revG})</span>`;
+    }
+    return `
+      <tr>
+        <td>${s.date}</td>
+        <td>${s.faces} أوجه<br><small>${s.from}-${s.to}</small><br><b style="color:#D4AF37">${fmt(s.score)}</b></td>
+        <td>${revStr}</td>
+        <td>${errs}</td>
+      </tr>
+    `;
+  }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
+  
+  const element = document.getElementById('rep-layer'); 
+  element.style.display = 'block';
+  
+  html2pdf().set({ 
+    margin: 10, 
+    filename: `تقرير_${st.name}.pdf`, 
+    image: { type: 'jpeg', quality: 0.98 }, 
+    html2canvas: { scale: 2 }, 
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+  }).from(element).save().then(() => { 
+    element.style.display = 'none'; 
+  });
+}
+
+function setBoardSort(s) { 
+  boardSort = s; 
+  document.getElementById('sort-alpha-btn').className = s==='alpha' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
+  document.getElementById('sort-pts-btn').className = s==='points' ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; 
+  renderBoard(); 
+}
+
+function renderBoard() {
+  const ss = S.students.filter(s => s.total > 0);
+  const sorted = boardSort==='alpha' ? ss.sort((a,b) => a.name.localeCompare(b.name,'ar')) : ss.sort((a,b) => (b.score||0) - (a.score||0));
+  
+  if (boardSort === 'points' && sorted.length >= 1) {
+     let podiumHtml = ''; 
+     const p2 = sorted[1], p1 = sorted[0], p3 = sorted[2];
+     if(p2) podiumHtml += `<div class="podium-item podium-2"><div class="podium-avatar">${p2.name[0]}</div><div class="podium-bar">2</div><div class="podium-name">${p2.name}</div></div>`;
+     if(p1) podiumHtml += `<div class="podium-item podium-1"><div class="podium-avatar">${p1.name[0]}</div><div class="podium-bar">1</div><div class="podium-name">${p1.name}</div></div>`;
+     if(p3) podiumHtml += `<div class="podium-item podium-3"><div class="podium-avatar">${p3.name[0]}</div><div class="podium-bar">3</div><div class="podium-name">${p3.name}</div></div>`;
+     document.getElementById('podium-view').innerHTML = podiumHtml; 
+     document.getElementById('podium-view').style.display = 'flex';
+  } else document.getElementById('podium-view').style.display = 'none';
+
+  const weekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000); 
+  let topName = null, topScore = -1;
+  S.students.forEach(st => { 
+    (st.sessions||[]).forEach(s => { 
+      if(s.att === 'present' && s.ts >= weekAgo && s.score > topScore) { 
+        topScore = s.score; 
+        topName = st.name; 
+      } 
+    }); 
+  });
+
+  document.getElementById('board-list').innerHTML = sorted.map((st,i) => {
+    const isMe = isStudentMode && st.id === loggedInStudentId, isStar = st.name === topName;
+    return `<div class="list-row" style="${isMe?'border-color:var(--gold); background:var(--gold-pale);':''}"><div class="list-content" style="width:100%;"><div style="font-size:20px; font-weight:800; color:var(--gold); width:24px; text-align:center;">${boardSort==='points' ? (i+1) : '-'}</div><div style="flex:1;"><div style="font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center;"><span>${st.name} ${isMe?'<span style="color:var(--gold); font-size:10px;">(أنتِ)</span>':''} ${isStar?'🌟 <span style="font-size:10px; color:var(--gold);">نجمة الأسبوع</span>':''}</span><span style="color:var(--primary);">${fmt(st.score)}</span></div><div class="progress-bar-container" style="height:4px; margin-top:6px;"><div class="progress-bar-fill" style="width: ${st.score||0}%;"></div></div></div></div></div>`;
+  }).join('') || '<div class="alert alert-info">لا توجد طالبات مقيمات بعد.</div>';
+}
+
+// ══════════════════════════════════════════════════════════
 // 10. GOOGLE SHEETS CLOUD SYNC
 // ══════════════════════════════════════════════════════════
 async function sheetReq(action) {
@@ -3392,7 +3630,18 @@ async function sheetReq(action) {
     return null; 
   }
 }
-async function syncToSheet() { if(isStudentMode) return; const r = await sheetReq('save'); if(r?.ok) { setSyncDot('ok'); toast('☁️ تمت المزامنة بنجاح'); hasUnsavedChanges = false; } else { setSyncDot('err'); toast('❌ فشل الاتصال بقاعدة البيانات'); } }
+async function syncToSheet() { 
+  if(isStudentMode) return; 
+  const r = await sheetReq('save'); 
+  if(r?.ok) { 
+    setSyncDot('ok'); 
+    toast('☁️ تمت المزامنة بنجاح'); 
+    hasUnsavedChanges = false; 
+  } else { 
+    setSyncDot('err'); 
+    toast('❌ فشل الاتصال بقاعدة البيانات'); 
+  } 
+}
 
 // ══════════════════════════════════════════════════════════
 // INIT & MAGIC LINK PARSER
@@ -3401,28 +3650,77 @@ async function syncToSheet() { if(isStudentMode) return; const r = await sheetRe
   const p = new URLSearchParams(window.location.search);
   const sP = p.get('s'), uP = p.get('u'), cP = p.get('c'), tP = p.get('t'), exp = p.get('exp');
   
-  if (exp && Date.now() > parseInt(exp)) { document.body.innerHTML = '<div style="text-align:center; padding:50px; font-size:20px; color:red;">❌ عذراً، انتهت صلاحية هذا الرابط.</div>'; return; }
+  if (exp && Date.now() > parseInt(exp)) { 
+    document.body.innerHTML = '<div style="text-align:center; padding:50px; font-size:20px; color:red;">❌ عذراً، انتهت صلاحية هذا الرابط.</div>'; 
+    return; 
+  }
   
   if(tP === '1' && uP && cP) {
     try { S.sheetUrl = decodeData(uP); S.teacherCode = decodeData(cP); } catch(e) {}
     toast('جارٍ استرجاع بيانات المعلمة...');
     sheetReq('load').then(r => {
-      if(r?.ok && r.payload) { const parsed = JSON.parse(r.payload); if(validateState(parsed)) { S = parsed; saveState(); initSetup(); navigate('setup'); toast('✅ تم تسجيل الدخول بنجاح'); } } else { toast('❌ فشل جلب البيانات من السيرفر'); navigate('setup'); }
-    }); return;
+      if(r?.ok && r.payload) { 
+        const parsed = JSON.parse(r.payload); 
+        if(validateState(parsed)) { 
+          S = parsed; 
+          saveState(); 
+          initSetup(); 
+          navigate('setup'); 
+          toast('✅ تم تسجيل الدخول بنجاح'); 
+        } 
+      } else { 
+        toast('❌ فشل جلب البيانات من السيرفر'); 
+        navigate('setup'); 
+      }
+    }); 
+    return;
   }
   
   if(sP && uP && cP) {
-    isStudentMode = true; loggedInStudentId = parseInt(sP); document.body.classList.add('student-mode');
-    try { S.sheetUrl = decodeData(uP); S.teacherCode = decodeData(cP); } catch(e) { try { S.sheetUrl = atob(uP); S.teacherCode = atob(cP); } catch(ex) {} }
+    isStudentMode = true; 
+    loggedInStudentId = parseInt(sP); 
+    document.body.classList.add('student-mode');
+    
+    try { 
+      S.sheetUrl = decodeData(uP); 
+      S.teacherCode = decodeData(cP); 
+    } catch(e) { 
+      try { 
+        S.sheetUrl = atob(uP); 
+        S.teacherCode = atob(cP); 
+      } catch(ex) {} 
+    }
+    
     navigate('portal'); 
-    const alertEl = document.getElementById('student-alert'); document.getElementById('portal-body').style.display = 'none'; alertEl.style.display = 'block'; alertEl.innerHTML = 'جاري الاتصال بالمنصة لجلب بياناتك... ⏳';
+    const alertEl = document.getElementById('student-alert'); 
+    document.getElementById('portal-body').style.display = 'none'; 
+    alertEl.style.display = 'block'; 
+    alertEl.innerHTML = 'جاري الاتصال بالمنصة لجلب بياناتك... ⏳';
+    
     sheetReq('load').then(r => { 
       if(r?.ok && r.payload) {
         const parsed = JSON.parse(r.payload);
-        if(validateState(parsed)) { S = parsed; const stExists = S.students.find(s => s.id === loggedInStudentId); if(stExists) { alertEl.innerHTML = 'أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟'; loadPortal(); } else alertEl.innerHTML = '❌ عذراً، لم يتم العثور على بياناتك.'; } else alertEl.innerHTML = '❌ البيانات المسترجعة غير صالحة.';
-      } else alertEl.innerHTML = '❌ عذراً، لم نتمكن من جلب بياناتك.';
+        if(validateState(parsed)) { 
+          S = parsed; 
+          const stExists = S.students.find(s => s.id === loggedInStudentId); 
+          if(stExists) { 
+            alertEl.innerHTML = 'أهلاً بكِ! أنتِ في بوابتك الشخصية الخاصة 🌟'; 
+            loadPortal(); 
+          } else {
+            alertEl.innerHTML = '❌ عذراً، لم يتم العثور على بياناتك.';
+          }
+        } else {
+          alertEl.innerHTML = '❌ البيانات المسترجعة غير صالحة.';
+        }
+      } else {
+        alertEl.innerHTML = '❌ عذراً، لم نتمكن من جلب بياناتك.';
+      }
     }).catch(err => alertEl.innerHTML = '❌ خطأ في الاتصال بالخادم.');
-  } else { loadState(); initSetup(); navigate('setup'); }
+  } else { 
+    loadState(); 
+    initSetup(); 
+    navigate('setup'); 
+  }
 })();
 </script>
 </body>
