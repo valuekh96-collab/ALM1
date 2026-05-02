@@ -360,6 +360,12 @@
       border-radius: 50%; 
     }
 
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+    }
+
     .dot.ok { background: var(--success); box-shadow: 0 0 8px var(--success); }
     .dot.err { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
     .dot.sync { background: var(--gold); animation: pulse 1s infinite; }
@@ -1584,6 +1590,9 @@
       <button class="nav-item active teacher-only" onclick="window.navigate('setup')">
         <span class="nav-icon">⚙️</span> إعداد الدورة
       </button>
+      <button class="nav-item teacher-only" onclick="window.navigate('schedule')">
+        <span class="nav-icon">📅</span> مواعيد الطلاب
+      </button>
       <button class="nav-item teacher-only" onclick="window.navigate('session')">
         <span class="nav-icon">🎙️</span> جلسة التسميع
       </button>
@@ -1783,6 +1792,22 @@
         </div>
 
         <div id="student-list"></div>
+      </div>
+    </div>
+
+    <!-- ════ PAGE: SCHEDULE ════ -->
+    <div id="page-schedule" class="page-wrapper teacher-only">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">جدول المواعيد الأسبوعي</h3>
+          <button class="btn btn-outline btn-sm" onclick="window.printSchedule()">🖨️ طباعة الجدول</button>
+        </div>
+        <div id="schedule-list"></div>
+      </div>
+      
+      <div class="card">
+        <h3 class="card-title">توزيع المواعيد على الأيام</h3>
+        <div id="schedule-grid" class="grid-4"></div>
       </div>
     </div>
 
@@ -2073,6 +2098,9 @@
           </div>
         </div>
 
+        <div id="p-today-alert"></div>
+        <div id="p-schedule-wrap"></div>
+
         <div class="grid-2">
           <div class="kpi-card">
             <div class="kpi-value" id="p-score">—</div>
@@ -2142,6 +2170,10 @@
     <div class="b-nav-item active teacher-only" onclick="window.navigate('setup')">
       <span class="b-nav-icon">⚙️</span>
       إعداد
+    </div>
+    <div class="b-nav-item teacher-only" onclick="window.navigate('schedule')">
+      <span class="b-nav-icon">📅</span>
+      مواعيد
     </div>
     <div class="b-nav-item teacher-only" onclick="window.navigate('session')">
       <span class="b-nav-icon">🎙️</span>
@@ -2402,7 +2434,7 @@ function doPost(e) {
             payload.students.push({
               id: id, name: name, score: null, sessions: [],
               days: Array(payload.course.studyDays || 5).fill(0), ok: 0, total: 0,
-              customFaces: isNaN(faces) ? null : faces
+              customFaces: isNaN(faces) ? null : faces, sch: []
             });
           }
         }
@@ -2460,7 +2492,7 @@ function injectMockData() {
     teacherCode: '',
     students: [
       {
-        id: 1, name: 'مريم أحمد', score: 100, customFaces: null, ok: 3, total: 3, days: [1,1,1,0,0],
+        id: 1, name: 'مريم أحمد', score: 100, customFaces: null, ok: 3, total: 3, days: [1,1,1,0,0], sch: [{d: 'الأحد', t: '16:00'}, {d: 'الثلاثاء', t: '16:00'}],
         sessions: [
           { ts: today.getTime() - 86400000*3, date: d3, att: 'present', score: 100, faces: 5, from: 'سورة البقرة (آية 1)', to: 'سورة البقرة (آية 24)', errors: [], grade: 'ممتاز', rev: 'done', revG: 'ممتاز' },
           { ts: today.getTime() - 86400000*2, date: d2, att: 'present', score: 98, faces: 5, from: 'سورة البقرة (آية 25)', to: 'سورة البقرة (آية 43)', errors: [{desc: 'آية 30 · "خَلِيفَةً" · تنبيه حفظ', pts: -2}], grade: 'ممتاز', rev: 'done', revG: 'جيد جداً' },
@@ -2468,7 +2500,7 @@ function injectMockData() {
         ]
       },
       {
-        id: 2, name: 'سارة محمد', score: 85, customFaces: null, ok: 1, total: 3, days: [1,0,0,0,0],
+        id: 2, name: 'سارة محمد', score: 85, customFaces: null, ok: 1, total: 3, days: [1,0,0,0,0], sch: [{d: 'الاثنين', t: '17:00'}, {d: 'الأربعاء', t: '17:00'}],
         sessions: [
           { ts: today.getTime() - 86400000*3, date: d3, att: 'present', score: 90, faces: 5, from: 'سورة البقرة (آية 1)', to: 'سورة البقرة (آية 24)', errors: [{desc: 'آية 10 · "مَرَضٌ" · ردة حفظ', pts: -4}], grade: 'جيد جداً', rev: 'done', revG: 'جيد' },
           { ts: today.getTime() - 86400000*2, date: d2, att: 'unexcused', score: null, faces: 0, from: '—', to: '—', errors: [], grade: '—', rev: 'none' },
@@ -2476,14 +2508,14 @@ function injectMockData() {
         ]
       },
       {
-        id: 3, name: 'فاطمة علي', score: 95, customFaces: 300, ok: 2, total: 2, days: [1,1,0,0,0],
+        id: 3, name: 'فاطمة علي', score: 95, customFaces: 300, ok: 2, total: 2, days: [1,1,0,0,0], sch: [],
         sessions: [
           { ts: today.getTime() - 86400000*3, date: d3, att: 'present', score: 95, faces: 4, from: 'سورة آل عمران (آية 1)', to: 'سورة آل عمران (آية 22)', errors: [{desc: 'آية 15 · "بَصِيرٌ" · تنبيه تشكيل', pts: -2}], grade: 'ممتاز', rev: 'done', revG: 'ممتاز' },
           { ts: today.getTime() - 86400000*2, date: d2, att: 'excused', score: null, faces: 0, from: '—', to: '—', errors: [], grade: '—', rev: 'none' }
         ]
       },
       {
-        id: 4, name: 'عائشة عمر', score: null, customFaces: null, ok: 0, total: 0, days: [0,0,0,0,0],
+        id: 4, name: 'عائشة عمر', score: null, customFaces: null, ok: 0, total: 0, days: [0,0,0,0,0], sch: [],
         sessions: []
       }
     ]
@@ -2492,7 +2524,7 @@ function injectMockData() {
 
 window.loadState = function() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v27'); 
+    const d = localStorage.getItem('alm_pro_v28'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) {
@@ -2511,7 +2543,7 @@ window.loadState = function() {
 window.saveState = function() { 
   if(window.isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v27', JSON.stringify(window.S)); 
+    localStorage.setItem('alm_pro_v28', JSON.stringify(window.S)); 
     window.setSyncDot('local'); 
     window.hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -2636,11 +2668,23 @@ window.calculateStreak = function(sessions) {
   return streak;
 }
 
+window.calUrl = function(day, time) {
+  const dm = {'الأحد':0,'الاثنين':1,'الثلاثاء':2,'الأربعاء':3,'الخميس':4,'الجمعة':5,'السبت':6};
+  let d = new Date();
+  d.setDate(d.getDate() + (dm[day] + 7 - d.getDay()) % 7);
+  const [h, m] = time.split(':');
+  d.setHours(+h, +m, 0, 0);
+  const fmt = t => t.toISOString().replace(/[-:.]|\d{3}/g, '').slice(0, -1) + 'Z';
+  const e = new Date(d.getTime() + 15 * 60000); 
+  return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('جلسة تسميع قرآن')}&dates=${fmt(d)}/${fmt(e)}`;
+}
+
 // ══════════════════════════════════════════════════════════
 // 4. UI & NAVIGATION
 // ══════════════════════════════════════════════════════════
 const TITLES = { 
   setup: ['إعداد الدورة','تخصيص البيانات'], 
+  schedule: ['مواعيد الطلاب','تخصيص جدول التسميع'],
   session: ['جلسة التسميع','حضور، تقييم، مراجعة'], 
   dash: ['لوحة التحليلات','نظرة عامة'], 
   portal: ['بوابة الطالبة','سجل شخصي'], 
@@ -2662,6 +2706,7 @@ window.navigate = function(id) {
   
   if(id === 'dash') window.initDashboard(); 
   if(id === 'board') window.renderBoard();
+  if(id === 'schedule') window.renderSchedule();
   
   if(id === 'portal' && window.isStudentMode) { 
     document.getElementById('sel-portal').value = window.loggedInStudentId; 
@@ -2775,6 +2820,7 @@ window.initSetup = function() {
   window.calcPlan(); 
   window.renderStudentList();
   window.validateSetupInline();
+  window.renderSchedule();
   
   if(window.S.sheetUrl && window.S.teacherCode && c.teacher) {
     window.lockSetup(); 
@@ -2939,7 +2985,8 @@ window.addStudent = function() {
     sessions: [], 
     days: Array(sd).fill(0), 
     ok: 0, 
-    total: 0 
+    total: 0,
+    sch: []
   };
   
   if(cf > 0) st.customFaces = cf;
@@ -3009,6 +3056,134 @@ window.useExecCmd = function(text, msg) {
   } catch(e) { 
     window.toast('❌ فشل النسخ'); 
   }
+}
+
+// ══════════════════════════════════════════════════════════
+// 5.5 SCHEDULE MANAGEMENT
+// ══════════════════════════════════════════════════════════
+window.renderSchedule = function() {
+  const list = document.getElementById('schedule-list');
+  if(!list) return;
+  
+  const ss = [...window.S.students].sort((a,b) => a.name.localeCompare(b.name, 'ar'));
+  if(ss.length === 0) {
+    list.innerHTML = '<div class="alert alert-info">لا توجد طالبات لإدارة مواعيدهن.</div>';
+    document.getElementById('schedule-grid').innerHTML = '';
+    return;
+  }
+  
+  list.innerHTML = ss.map(st => {
+    const s1 = st.sch && st.sch[0] ? `${st.sch[0].d} <span style="color:var(--gold-dk);" dir="ltr">${st.sch[0].t}</span>` : 'لم يحدد';
+    const s2 = st.sch && st.sch[1] ? `${st.sch[1].d} <span style="color:var(--gold-dk);" dir="ltr">${st.sch[1].t}</span>` : 'لم يحدد';
+    return `
+      <div class="list-row">
+        <div>
+          <div style="font-weight:700;">${st.name}</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">
+            <span style="background:var(--bg-elevated); padding:4px 10px; border-radius:12px; margin-left:8px; display:inline-block; border:1px solid var(--border-strong);">1️⃣ ${s1}</span>
+            <span style="background:var(--bg-elevated); padding:4px 10px; border-radius:12px; display:inline-block; border:1px solid var(--border-strong);">2️⃣ ${s2}</span>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="window.editSchedule(${st.id})">✏️ تخصيص</button>
+      </div>
+    `;
+  }).join('');
+  
+  const daysAr = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  let gridHtml = '';
+  daysAr.forEach(day => {
+    const dayStudents = [];
+    ss.forEach(st => {
+      if(st.sch) {
+        st.sch.forEach(s => {
+          if(s.d === day) dayStudents.push({name: st.name, t: s.t});
+        });
+      }
+    });
+    
+    if(dayStudents.length > 0) {
+      dayStudents.sort((a,b) => a.t.localeCompare(b.t));
+      gridHtml += `
+        <div style="background:var(--bg-elevated); padding:16px; border-radius:var(--r-md); border:1px solid var(--border-strong);">
+          <h4 style="color:var(--primary); margin-bottom:12px; border-bottom:2px solid var(--gold); padding-bottom:8px; text-align:center;">${day}</h4>
+          ${dayStudents.map(ds => `
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; margin-bottom:8px; background:var(--bg-surface); padding:8px 10px; border-radius:6px; box-shadow:var(--shadow-sm);">
+              <span style="font-weight:700;">${ds.name}</span>
+              <span style="color:var(--gold-dk); font-weight:800;" dir="ltr">${ds.t}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+  });
+  document.getElementById('schedule-grid').innerHTML = gridHtml || '<div style="grid-column:1/-1; color:var(--text-muted); text-align:center;">لم يتم تعيين أي مواعيد بعد.</div>';
+}
+
+window.editSchedule = async function(id) {
+  const st = window.S.students.find(s=>s.id === id);
+  if(!st) return;
+  
+  const s1 = st.sch && st.sch[0] ? st.sch[0] : {d: '', t: ''};
+  const s2 = st.sch && st.sch[1] ? st.sch[1] : {d: '', t: ''};
+  
+  const daysOpts = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'].map(d => `<option value="${d}">${d}</option>`).join('');
+  
+  const html = `
+    <div style="margin-bottom:15px; font-weight:bold; color:var(--primary);">تخصيص مواعيد: ${st.name}</div>
+    <div style="background:var(--bg-app); padding:15px; border-radius:10px; margin-bottom:15px; border:1px solid var(--border-strong);">
+      <div style="font-size:13px; font-weight:bold; margin-bottom:8px; color:var(--gold-dk);">الموعد الأول:</div>
+      <div style="display:flex; gap:10px;">
+        <select id="sch-d1" class="form-control" style="padding:8px;">
+          <option value="">اليوم...</option>
+          ${daysOpts.replace(`value="${s1.d}"`, `value="${s1.d}" selected`)}
+        </select>
+        <input type="time" id="sch-t1" class="form-control" value="${s1.t}" style="padding:8px;">
+      </div>
+    </div>
+    <div style="background:var(--bg-app); padding:15px; border-radius:10px; border:1px solid var(--border-strong);">
+      <div style="font-size:13px; font-weight:bold; margin-bottom:8px; color:var(--gold-dk);">الموعد الثاني:</div>
+      <div style="display:flex; gap:10px;">
+        <select id="sch-d2" class="form-control" style="padding:8px;">
+          <option value="">اليوم...</option>
+          ${daysOpts.replace(`value="${s2.d}"`, `value="${s2.d}" selected`)}
+        </select>
+        <input type="time" id="sch-t2" class="form-control" value="${s2.t}" style="padding:8px;">
+      </div>
+    </div>
+  `;
+  
+  const res = await window.showModal('تعديل المواعيد', html, false);
+  if(res) {
+    const d1 = document.getElementById('sch-d1').value;
+    const t1 = document.getElementById('sch-t1').value;
+    const d2 = document.getElementById('sch-d2').value;
+    const t2 = document.getElementById('sch-t2').value;
+    
+    st.sch = [];
+    if(d1 && t1) st.sch.push({d: d1, t: t1});
+    if(d2 && t2) st.sch.push({d: d2, t: t2});
+    
+    window.saveState();
+    window.renderSchedule();
+    window.toast('✅ تم حفظ المواعيد');
+    if(window.S.sheetUrl) window.syncToSheet();
+  }
+}
+
+window.printSchedule = function() {
+   const printContent = `
+     <div style="direction:rtl; font-family:'Cairo',sans-serif; padding:20px;">
+       <h2 style="text-align:center; color:#3B1C40; border-bottom:2px solid #D4AF37; padding-bottom:10px;">جدول مواعيد الحلقة - ${window.S.course.teacher}</h2>
+       <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-top:20px;">
+         ${document.getElementById('schedule-grid').innerHTML}
+       </div>
+       <div style="text-align:center; margin-top:30px; font-size:12px; color:#666;">تم الإنشاء بواسطة منصة ألف لام ميم الأكاديمية</div>
+     </div>
+   `;
+   const win = window.open('', '', 'width=800,height=600');
+   win.document.write('<html><head><title>طباعة الجدول</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"><style>body{font-family:"Cairo",sans-serif;}</style></head><body>' + printContent + '</body></html>');
+   win.document.close();
+   setTimeout(() => { win.print(); win.close(); }, 500);
 }
 
 // ══════════════════════════════════════════════════════════
@@ -3896,6 +4071,43 @@ window.loadPortal = function() {
       </div>`).join('');
   }
 
+  const daysAr = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const todayName = daysAr[new Date().getDay()];
+  let todayAlert = '';
+  
+  let schHtml = '';
+  if(st.sch && st.sch.length > 0) {
+    schHtml = `<div class="card" style="border-color:var(--gold); border-width:2px;">
+      <h3 class="card-title">مواعيد التسميع الأسبوعية 📅</h3>
+      <div class="grid-2">`;
+    
+    st.sch.forEach((s, i) => {
+      const isToday = s.d === todayName;
+      if(isToday) {
+        todayAlert = `<div class="alert" style="background:var(--gold); color:#fff; border-color:var(--gold-dk); font-size:15px; font-weight:800; animation: pulse 2s infinite;">
+          ⏳ تذكير: لديك جلسة تسميع اليوم (${s.d}) الساعة <span dir="ltr">${s.t}</span> .. استعدي!
+        </div>`;
+      }
+      
+      const calLink = window.calUrl(s.d, s.t);
+      schHtml += `
+        <div style="background:${isToday ? 'var(--gold-pale)' : 'var(--bg-elevated)'}; padding:16px; border-radius:var(--r-md); border:1px solid ${isToday ? 'var(--gold)' : 'var(--border-strong)'}; text-align:center;">
+          <div style="font-size:12px; color:var(--text-muted); font-weight:700;">الموعد ${i+1}</div>
+          <div style="font-size:22px; font-weight:800; color:var(--primary); margin:8px 0;">${s.d}</div>
+          <div style="font-size:18px; color:var(--gold-dk); font-weight:700; margin-bottom:12px;" dir="ltr">${s.t}</div>
+          <a href="${calLink}" target="_blank" class="btn btn-outline btn-sm" style="width:100%; border-color:var(--primary); color:var(--primary);">🗓️ إضافة لتقويم جوجل</a>
+        </div>
+      `;
+    });
+    schHtml += `</div></div>`;
+  }
+  
+  const alertCont = document.getElementById('p-today-alert');
+  if(alertCont) alertCont.innerHTML = todayAlert;
+  
+  const schCont = document.getElementById('p-schedule-wrap');
+  if(schCont) schCont.innerHTML = schHtml;
+
   const slData = [...pSess].sort((a,b)=>a.ts - b.ts).slice(-5).map(s => s.score);
   if(window.charts.sparkline) { 
     window.charts.sparkline.destroy();
@@ -4225,6 +4437,7 @@ function init() {
                     window.initSetup(); 
                     if (document.getElementById('page-dash').classList.contains('active')) window.initDashboard();
                     if (document.getElementById('page-board').classList.contains('active')) window.renderBoard();
+                    if (document.getElementById('page-schedule').classList.contains('active')) window.renderSchedule();
                     window.setSyncDot('ok');
                     window.toast('☁️ تمت مزامنة أحدث البيانات من السحابة بنجاح');
                 }
