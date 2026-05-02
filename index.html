@@ -2524,7 +2524,7 @@ function injectMockData() {
 
 window.loadState = function() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v28'); 
+    const d = localStorage.getItem('alm_pro_v29'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) {
@@ -2543,7 +2543,7 @@ window.loadState = function() {
 window.saveState = function() { 
   if(window.isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v28', JSON.stringify(window.S)); 
+    localStorage.setItem('alm_pro_v29', JSON.stringify(window.S)); 
     window.setSyncDot('local'); 
     window.hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -3516,7 +3516,7 @@ window.copyReport = function() {
     `الدرجة   : ${window.fmt(window.sessScore)} / 100`,
     `التقييم  : ${g.emoji} ${g.label}`,
     '──────────────────────',
-    'الملاحظات:',
+    'الملاحظات الحفظ:',
     errLines,
     '━━━━━━━━━━━━━━━━━━━━━━',
     'وفّقكِ الله وبارك في جهدكِ 💜'
