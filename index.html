@@ -1344,8 +1344,8 @@
     /* ════ PRINT STYLES ════ */
     @media print {
       body * { visibility: hidden; }
-      .app-container, .modal-overlay, .unified-deduct-container-wrapper { display: none !important; }
-      #rep-layer { 
+      .app-container, .modal-overlay, .unified-deduct-container-wrapper, .bottom-nav { display: none !important; }
+      #rep-layer, #course-rep-layer { 
         display: block !important; 
         visibility: visible !important; 
         position: absolute; 
@@ -1356,13 +1356,8 @@
         z-index: 99999; 
         color: #1A1714; 
       }
-      #rep-layer * { visibility: visible; }
+      #rep-layer *, #course-rep-layer * { visibility: visible; }
       @page { margin: 15mm; size: A4 portrait; }
-    }
-
-    #rep-layer {
-      direction: rtl !important;
-      text-align: right !important;
     }
 
     .rep-wrap { 
@@ -1453,15 +1448,17 @@
     .rep-table th { 
       background: #F3EAF4; 
       color: #3B1C40; 
-      padding: 9px; 
+      padding: 12px 9px; 
       text-align: right; 
-      border-bottom: 2px solid #E4DED4; 
+      border-bottom: 2px solid #D4AF37; 
+      font-weight: 800;
     }
 
     .rep-table td { 
-      padding: 9px; 
+      padding: 12px 9px; 
       border-bottom: 1px solid #E4DED4; 
       vertical-align: top;
+      line-height: 1.6;
     }
 
     .rep-foot { 
@@ -1791,6 +1788,12 @@
 
     <!-- ════ PAGE: DASHBOARD 📊 ════ -->
     <div id="page-dash" class="page-wrapper teacher-only">
+      
+      <!-- زر طباعة التقرير الشامل -->
+      <div style="display:flex; justify-content:flex-end; margin-bottom: 20px;">
+        <button class="btn btn-gold" onclick="window.generateCoursePDF()">🖨️ طباعة التقرير الشامل للحلقة</button>
+      </div>
+
       <div id="dash-empty-state" class="alert alert-warning" style="display:none;">
         ⚠️ لا توجد بيانات كافية لعرض التحليلات. أضيفي طالبات وقومي بتقييمهن أولاً.
       </div>
@@ -2174,7 +2177,7 @@
 <div id="toast"></div>
 <textarea id="copy-helper" style="position:fixed; left:-9999px; top:-9999px; opacity:0;"></textarea>
 
-<!-- ════ PRINT LAYER (PDF) ════ -->
+<!-- ════ PRINT LAYER (STUDENT PDF) ════ -->
 <div id="rep-layer" style="display:none; padding:20px; background:#fff; direction:rtl; font-family:'Cairo',sans-serif;">
   <div class="rep-wrap">
     <div class="rep-hd">
@@ -2193,7 +2196,7 @@
       </div>
       <div class="rep-stat">
         <span class="rep-sv" id="rep-sessions">0</span>
-        <span class="rep-sl">حضور منضبط</span>
+        <span class="rep-sl">إجمالي الجلسات</span>
       </div>
     </div>
     <div class="rep-title">السجل التفصيلي</div>
@@ -2203,13 +2206,54 @@
           <th>التاريخ / الحضور</th>
           <th>الحفظ والدرجة</th>
           <th>المراجعة</th>
-          <th>الملاحظات التجويدية</th>
+          <th>أخطاء الحفظ</th>
+          <th>أخطاء التشكيل والتجويد</th>
         </tr>
       </thead>
       <tbody id="rep-tbody"></tbody>
     </table>
     <div class="rep-foot">
       وفّقكِ الله وبارك في مسيرتكِ مع القرآن الكريم 💜<br>
+      استخراج آلي من نظام ألف لام ميم
+    </div>
+  </div>
+</div>
+
+<!-- ════ PRINT LAYER (COURSE FULL PDF) ════ -->
+<div id="course-rep-layer" style="display:none; padding:20px; background:#fff; direction:rtl; font-family:'Cairo',sans-serif;">
+  <div class="rep-wrap">
+    <div class="rep-hd">
+      <h1>منصة ألف لام ميم الأكاديمية</h1>
+      <p>التقرير الشامل للدورة · <span id="cr-date"></span></p>
+    </div>
+    <div class="rep-info">
+      <div>المعلمة: <span id="cr-t-name">—</span></div>
+      <div>المقرر: <span id="cr-c-name">—</span></div>
+      <div>إجمالي الطالبات: <span id="cr-total-st">—</span></div>
+    </div>
+    <div class="rep-stats">
+      <div class="rep-stat">
+        <span class="rep-sv" id="cr-score">—</span>
+        <span class="rep-sl">متوسط إتقان الحلقة</span>
+      </div>
+      <div class="rep-stat">
+        <span class="rep-sv" id="cr-sessions">0</span>
+        <span class="rep-sl">إجمالي الجلسات المُسمّعة</span>
+      </div>
+    </div>
+    <div class="rep-title">سجل مستوى الطالبات التفصيلي</div>
+    <table class="rep-table">
+      <thead>
+        <tr>
+          <th>اسم الطالبة</th>
+          <th>إجمالي الجلسات</th>
+          <th>المتوسط العام</th>
+          <th>أكثر الأخطاء تكراراً</th>
+        </tr>
+      </thead>
+      <tbody id="cr-tbody"></tbody>
+    </table>
+    <div class="rep-foot">
       استخراج آلي من نظام ألف لام ميم
     </div>
   </div>
@@ -2448,7 +2492,7 @@ function injectMockData() {
 
 window.loadState = function() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v26'); 
+    const d = localStorage.getItem('alm_pro_v27'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) {
@@ -2467,7 +2511,7 @@ window.loadState = function() {
 window.saveState = function() { 
   if(window.isStudentMode) return; 
   try { 
-    localStorage.setItem('alm_pro_v26', JSON.stringify(window.S)); 
+    localStorage.setItem('alm_pro_v27', JSON.stringify(window.S)); 
     window.setSyncDot('local'); 
     window.hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -3055,7 +3099,12 @@ window.stopTimer = function() {
 }
 
 window.toggleSessBody = function() { 
-  document.getElementById('evaluation-wrap').style.display = document.getElementById('sess-att').value === 'present' ? 'grid' : 'none'; 
+  const att = document.getElementById('sess-att').value;
+  // إظهار أو إخفاء مساحة التقييم القرآنية بناءً على الحضور
+  document.getElementById('evaluation-wrap').style.display = att === 'present' ? 'grid' : 'none'; 
+  
+  // تأكد من بقاء أزرار الحفظ ظاهرة دائماً (مفصولة)
+  document.getElementById('session-actions-wrap').style.display = 'block';
 }
 
 window.triggerDeduct = function(pts, label) {
@@ -3368,18 +3417,41 @@ window.loadCurrentPage = async function() {
         const data = await res.json();
         
         let html = '<div class="q-page-content">'; 
+        let cLine = -1;
+        let wordsInLine = [];
         
+        const renderLine = (words) => {
+            if(words.length === 0) return '';
+            const jc = words.length < 4 ? 'center' : 'space-between';
+            const gap = words.length < 4 ? '10px' : '0';
+            let lineHtml = `<div class="q-line" style="justify-content: ${jc}; gap: ${gap};">`;
+            words.forEach(w => {
+               if(w.char_type_name === 'word') { 
+                 lineHtml += `<span class="q-word" onclick="window.toggleWordSelection('${w.ayahNum}', this)">${w.text_uthmani}</span>`; 
+               } else if(w.char_type_name === 'end') { 
+                 lineHtml += `<span class="q-ayah-end" onclick="window.toggleWordSelection('${w.ayahNum}', this)">﴿${window.ayahAr(w.ayahNum)}﴾</span>`; 
+               } 
+            });
+            lineHtml += `</div>`;
+            return lineHtml;
+        };
+
         data.verses.forEach(v => { 
           const ayahNum = v.verse_key.split(':')[1]; 
           v.words.forEach(w => { 
-            if(w.char_type_name === 'word') { 
-              html += `<span class="q-word" onclick="window.toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span> `; 
-            } else if(w.char_type_name === 'end') { 
-              html += `<span class="q-ayah-end" onclick="window.toggleWordSelection('${ayahNum}', this)">﴿${window.ayahAr(ayahNum)}﴾</span> `; 
-            } 
+            if(w.line_number !== cLine) { 
+              if(cLine !== -1) {
+                  html += renderLine(wordsInLine);
+                  wordsInLine = [];
+              }
+              cLine = w.line_number; 
+            }
+            wordsInLine.push({ ...w, ayahNum: ayahNum });
           }); 
         }); 
-        
+        if(wordsInLine.length > 0) {
+            html += renderLine(wordsInLine);
+        }
         html += '</div>';
         
         window.quranCache.set(page, html); 
@@ -3402,7 +3474,6 @@ window.toggleWordSelection = function(ayah, el) {
     document.getElementById('u-ayah').value = selectedEls.length > 0 ? ayah : ''; 
     document.getElementById('u-word').value = words.join(' ').trim();
     
-    // Auto-open panel on mobile
     if(selectedEls.length > 0 && window.innerWidth <= 991) { 
       const body = document.getElementById('deduct-panel-body'); 
       const icon = document.getElementById('panel-toggle-icon');
@@ -3502,6 +3573,7 @@ window.initDashboard = function() {
     (st.sessions||[]).forEach(s => {
       tSess++; 
       
+      // Grouping logic for dashboard chart to prevent randomness
       const dateObj = new Date(s.ts);
       dateObj.setHours(0,0,0,0);
       const dayTs = dateObj.getTime();
@@ -3668,6 +3740,71 @@ window.renderHeatmap = function(tsArray) {
   
   container.style.gridTemplateColumns = `80px repeat(${tsArray.length}, minmax(30px, 1fr))`;
   container.innerHTML = html;
+}
+
+window.generateCoursePDF = function() {
+  const S_data = window.S;
+  if(!S_data.students || S_data.students.length === 0) {
+     window.toast("⚠️ لا توجد بيانات لطالبات في هذه الدورة لطباعتها.");
+     return;
+  }
+  
+  document.getElementById('cr-t-name').textContent = S_data.course.teacher || '—'; 
+  document.getElementById('cr-c-name').textContent = S_data.course.cname || '—';
+  document.getElementById('cr-total-st').textContent = S_data.students.length;
+  document.getElementById('cr-date').textContent = new Date().toLocaleDateString('ar-EG');
+  
+  let totalScore = 0, totalSess = 0, validStCount = 0;
+  
+  const tbody = document.getElementById('cr-tbody');
+  tbody.innerHTML = S_data.students.map(st => {
+      const pSess = (st.sessions||[]).filter(s => s.att === 'present');
+      const stTotalSess = st.sessions ? st.sessions.length : 0;
+      let avg = '—';
+      let topError = 'لا يوجد';
+      
+      if(pSess.length > 0) {
+          totalSess += stTotalSess;
+          const stAvg = pSess.reduce((a,s)=>a+s.score,0)/pSess.length;
+          totalScore += stAvg;
+          validStCount++;
+          avg = window.fmt(stAvg);
+          
+          let errMap = {};
+          pSess.forEach(s => {
+             if(s.errors) s.errors.forEach(e => {
+                let errType = e.desc.split(' · ').pop();
+                errMap[errType] = (errMap[errType] || 0) + 1;
+             });
+          });
+          if(Object.keys(errMap).length > 0) {
+              topError = Object.keys(errMap).reduce((a, b) => errMap[a] > errMap[b] ? a : b);
+          }
+      }
+      
+      return `<tr>
+         <td><b>${st.name}</b></td>
+         <td style="text-align:center;">${stTotalSess}</td>
+         <td style="text-align:center; direction:ltr;">${avg}</td>
+         <td style="color:var(--danger); font-size:11px;">${topError}</td>
+      </tr>`;
+  }).join('');
+  
+  document.getElementById('cr-score').textContent = validStCount > 0 ? window.fmt(totalScore / validStCount) : '—';
+  document.getElementById('cr-sessions').textContent = totalSess;
+  
+  const element = document.getElementById('course-rep-layer'); 
+  element.style.display = 'block';
+  
+  html2pdf().set({ 
+    margin: 10, 
+    filename: `تقرير_الدورة_الشامل.pdf`, 
+    image: { type: 'jpeg', quality: 0.98 }, 
+    html2canvas: { scale: 2 }, 
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+  }).from(element).save().then(() => { 
+    element.style.display = 'none'; 
+  });
 }
 
 // ══════════════════════════════════════════════════════════
@@ -3859,22 +3996,41 @@ window.generatePDF = function() {
   
   document.getElementById('rep-tbody').innerHTML = [...sess].sort((a,b)=>a.ts-b.ts).map(s => {
     if(s.att !== 'present') {
-      return `<tr><td style="vertical-align:top;">${rlm}${s.date}${rlm}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td><td colspan="3" style="text-align:center;color:#C0392B;vertical-align:top;">-</td></tr>`;
+      return `<tr>
+        <td style="vertical-align:top; direction:rtl; unicode-bidi:isolate;">${rlm}${s.date}${rlm}<br><small style="color:#C0392B;">${s.att === 'excused' ? 'غائبة بعذر' : 'غائبة بدون عذر'}</small></td>
+        <td colspan="4" style="text-align:center;color:#C0392B;vertical-align:top;">-</td>
+      </tr>`;
     }
-    const errs = s.errors && s.errors.length ? s.errors.map(e=>e.desc).join(' | ') : 'ممتاز - لا ملاحظات';
+    
+    // Separation of errors
+    let hifzErr = [], tashErr = [];
+    if(s.errors && s.errors.length) {
+        s.errors.forEach(e => {
+            if(e.desc.includes('حفظ')) hifzErr.push(`${rlm}${e.desc}${rlm}`);
+            else tashErr.push(`${rlm}${e.desc}${rlm}`);
+        });
+    }
+    let hifzStr = hifzErr.length ? hifzErr.join('<br>') : '-';
+    let tashStr = tashErr.length ? tashErr.join('<br>') : '-';
+
     let revStr = '-';
     if(s.rev === 'done') {
       revStr = `<span style="color:#2E7D52;font-weight:bold;">تمت المراجعة (${s.revG})</span>`;
     }
     return `
       <tr>
-        <td style="vertical-align:top;">${rlm}${s.date}${rlm}</td>
-        <td style="vertical-align:top;">${rlm}${s.faces} أوجه${rlm}<br><small>${rlm}${s.from} - ${s.to}${rlm}</small><br><b style="color:#D4AF37">${window.fmt(s.score)}</b></td>
-        <td style="vertical-align:top;">${revStr}</td>
-        <td style="vertical-align:top;">${rlm}${errs}${rlm}</td>
+        <td style="vertical-align:top; direction:rtl; unicode-bidi:isolate;">${rlm}${s.date}${rlm}</td>
+        <td style="vertical-align:top; direction:rtl; unicode-bidi:isolate;">
+            ${rlm}${s.faces} أوجه${rlm}<br>
+            <small style="unicode-bidi: isolate;">${rlm}(${s.from} - ${s.to})${rlm}</small><br>
+            <b style="color:#D4AF37">${window.fmt(s.score)}</b>
+        </td>
+        <td style="vertical-align:top; direction:rtl; unicode-bidi:isolate;">${revStr}</td>
+        <td style="vertical-align:top; direction:rtl; unicode-bidi:isolate; color:#C0392B;">${hifzStr}</td>
+        <td style="vertical-align:top; direction:rtl; unicode-bidi:isolate; color:#2980B9;">${tashStr}</td>
       </tr>
     `;
-  }).join('') || '<tr><td colspan="4" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
+  }).join('') || '<tr><td colspan="5" style="text-align:center;">لا توجد جلسات بعد.</td></tr>';
   
   const element = document.getElementById('rep-layer'); 
   element.style.display = 'block';
@@ -3883,7 +4039,7 @@ window.generatePDF = function() {
     margin: 10, 
     filename: `تقرير_${st.name}.pdf`, 
     image: { type: 'jpeg', quality: 0.98 }, 
-    html2canvas: { scale: 2 }, 
+    html2canvas: { scale: 2, useCORS: true }, 
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
   }).from(element).save().then(() => { 
     element.style.display = 'none'; 
@@ -4057,6 +4213,7 @@ function init() {
     window.initSetup(); 
     window.navigate('setup');
 
+    // Auto-sync on open
     if (!window.isStudentMode && window.S.sheetUrl && window.S.teacherCode) {
         window.setSyncDot('sync');
         window.sheetReq('load').then(r => {
