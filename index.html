@@ -1154,7 +1154,7 @@
     @media (max-width: 991px) {
       .session-layout { 
         grid-template-columns: 1fr; 
-        padding-bottom: 120px; /* Room for the bottom panel */
+        padding-bottom: 120px; 
       }
       
       .session-controls, .session-quran { 
@@ -1165,10 +1165,9 @@
         padding: 0; 
       }
       
-      /* اللوحة السفلية العائمة في الجوال */
       .unified-deduct-container-wrapper { 
         position: fixed; 
-        bottom: 60px; /* أعلى من قائمة التنقل السفلية */
+        bottom: 60px; 
         left: 0; 
         right: 0; 
         z-index: 150; 
@@ -1205,7 +1204,7 @@
       }
       
       .mobile-score-wrap {
-        display: none !important; /* Hidden because score is in panel header */
+        display: none !important; 
       }
       
       .desktop-score-wrap {
@@ -1226,10 +1225,9 @@
       }
       
       .unified-inputs .form-group { margin-bottom: 0; width: 100%; }
-      .unified-inputs label { display: none; } /* إخفاء العناوين لتوفير المساحة */
+      .unified-inputs label { display: none; } 
       .unified-inputs input { height: 36px; padding: 5px 10px; font-size: 13px; }
       
-      /* أزرار قابلة للتمرير أفقياً */
       .unified-buttons { 
         display: flex;
         flex-wrap: nowrap;
@@ -1256,20 +1254,6 @@
       }
       
       .btn-d span.hk { display: none; }
-
-      /* ════ القرآن في الجوال - فقرة متصلة ════ */
-      .q-page-content {
-        display: block !important;
-        text-align: justify !important;
-        text-align-last: center !important;
-      }
-      .q-line {
-        display: contents !important; /* دمج الأسطر كفقرة واحدة متصلة للجيستفاي */
-      }
-      .q-word, .q-ayah-end {
-        display: inline-block !important;
-        margin-bottom: 8px !important;
-      }
     }
 
     @media (max-width: 768px) {
@@ -1320,15 +1304,6 @@
       .b-nav-item.active { color: var(--primary); }
       [data-theme="dark"] .b-nav-item.active { color: var(--gold); }
       .b-nav-icon { font-size: 22px; margin-bottom: 2px; }
-      
-      /* Quran Font Adjustments for Mobile */
-      .quran-page { 
-        font-size: 26px !important; 
-        padding: 20px 15px !important; 
-        line-height: 2.2 !important; 
-        border-width: 6px !important;
-        outline-offset: -4px !important;
-      }
     }
 
     .sidebar-overlay { 
@@ -1508,16 +1483,17 @@
       display: block; 
       text-align: justify;
       text-align-last: center;
-      line-height: 2.4;
+      line-height: 2.5;
       width: 100%;
     }
 
     .q-word, .q-ayah-end { 
       display: inline-block; 
       cursor: pointer; 
-      padding: 0 2px; 
+      padding: 0 3px; 
       border-radius: 4px; 
       transition: all 0.2s; 
+      white-space: nowrap;
     }
 
     .q-word:hover { 
@@ -1538,8 +1514,8 @@
 
     .q-ayah-end { 
       color: var(--gold-dk); 
-      font-size: 20px; 
-      margin: 0 4px; 
+      font-size: 22px; 
+      margin: 0 5px; 
     }
 
     /* Toast */
@@ -1565,6 +1541,16 @@
     #toast.show { 
       transform: translateX(-50%) translateY(0); 
       opacity: 1; 
+    }
+    
+    @media (max-width: 768px) {
+      .quran-page { 
+        font-size: 26px; 
+        padding: 20px 15px; 
+        line-height: 2.2; 
+        border-width: 6px;
+        outline-offset: -4px;
+      }
     }
   </style>
 </head>
@@ -2524,7 +2510,7 @@ function injectMockData() {
 
 window.loadState = function() { 
   try { 
-    const d = localStorage.getItem('alm_pro_v29'); 
+    const d = localStorage.getItem('alm_pro_v30'); 
     if(d) { 
       const p = JSON.parse(d); 
       if(validateState(p)) {
@@ -2541,9 +2527,9 @@ window.loadState = function() {
 }
 
 window.saveState = function() { 
-  if(window.isStudentMode) return; 
+  // تمت إزالة التقييد الخاص بالطالبة ليُسمح بحفظ تقدمها محلياً
   try { 
-    localStorage.setItem('alm_pro_v29', JSON.stringify(window.S)); 
+    localStorage.setItem('alm_pro_v30', JSON.stringify(window.S)); 
     window.setSyncDot('local'); 
     window.hasUnsavedChanges = true; 
   } catch(e) {} 
@@ -3516,7 +3502,7 @@ window.copyReport = function() {
     `الدرجة   : ${window.fmt(window.sessScore)} / 100`,
     `التقييم  : ${g.emoji} ${g.label}`,
     '──────────────────────',
-    'الملاحظات الحفظ:',
+    'الملاحظات:',
     errLines,
     '━━━━━━━━━━━━━━━━━━━━━━',
     'وفّقكِ الله وبارك في جهدكِ 💜'
@@ -3591,42 +3577,20 @@ window.loadCurrentPage = async function() {
         const res = await fetch(`https://api.quran.com/api/v4/verses/by_page/${page}?language=ar&words=true&word_fields=text_uthmani`); 
         const data = await res.json();
         
-        let html = '<div class="q-page-content">'; 
-        let cLine = -1;
-        let wordsInLine = [];
+        // Continuous Block Justified text rendering (Responsive)
+        let html = '<div class="q-page-content" style="text-align: justify; text-align-last: center; line-height: 2.5; width: 100%;">'; 
         
-        const renderLine = (words) => {
-            if(words.length === 0) return '';
-            const jc = words.length < 4 ? 'center' : 'space-between';
-            const gap = words.length < 4 ? '10px' : '0';
-            let lineHtml = `<div class="q-line" style="justify-content: ${jc}; gap: ${gap};">`;
-            words.forEach(w => {
-               if(w.char_type_name === 'word') { 
-                 lineHtml += `<span class="q-word" onclick="window.toggleWordSelection('${w.ayahNum}', this)">${w.text_uthmani}</span>`; 
-               } else if(w.char_type_name === 'end') { 
-                 lineHtml += `<span class="q-ayah-end" onclick="window.toggleWordSelection('${w.ayahNum}', this)">﴿${window.ayahAr(w.ayahNum)}﴾</span>`; 
-               } 
-            });
-            lineHtml += `</div>`;
-            return lineHtml;
-        };
-
         data.verses.forEach(v => { 
           const ayahNum = v.verse_key.split(':')[1]; 
           v.words.forEach(w => { 
-            if(w.line_number !== cLine) { 
-              if(cLine !== -1) {
-                  html += renderLine(wordsInLine);
-                  wordsInLine = [];
-              }
-              cLine = w.line_number; 
-            }
-            wordsInLine.push({ ...w, ayahNum: ayahNum });
+            if(w.char_type_name === 'word') { 
+              html += `<span class="q-word" onclick="window.toggleWordSelection('${ayahNum}', this)">${w.text_uthmani}</span> `; 
+            } else if(w.char_type_name === 'end') { 
+              html += `<span class="q-ayah-end" onclick="window.toggleWordSelection('${ayahNum}', this)">﴿${window.ayahAr(ayahNum)}﴾</span> `; 
+            } 
           }); 
         }); 
-        if(wordsInLine.length > 0) {
-            html += renderLine(wordsInLine);
-        }
+        
         html += '</div>';
         
         window.quranCache.set(page, html); 
@@ -3748,7 +3712,6 @@ window.initDashboard = function() {
     (st.sessions||[]).forEach(s => {
       tSess++; 
       
-      // Grouping logic for dashboard chart to prevent randomness
       const dateObj = new Date(s.ts);
       dateObj.setHours(0,0,0,0);
       const dayTs = dateObj.getTime();
@@ -3858,7 +3821,7 @@ window.initDashboard = function() {
     let lastKnown = null;
     sortedDayTs.forEach(dayTs => {
       const dStart = dayTs;
-      const dEnd = dayTs + 86400000; // +1 day
+      const dEnd = dayTs + 86400000;
       const s = (st.sessions||[]).find(x => x.ts >= dStart && x.ts < dEnd && x.att === 'present');
       if(s && s.score !== null) lastKnown = s.score;
       data.push(lastKnown);
@@ -3915,71 +3878,6 @@ window.renderHeatmap = function(tsArray) {
   
   container.style.gridTemplateColumns = `80px repeat(${tsArray.length}, minmax(30px, 1fr))`;
   container.innerHTML = html;
-}
-
-window.generateCoursePDF = function() {
-  const S_data = window.S;
-  if(!S_data.students || S_data.students.length === 0) {
-     window.toast("⚠️ لا توجد بيانات لطالبات في هذه الدورة لطباعتها.");
-     return;
-  }
-  
-  document.getElementById('cr-t-name').textContent = S_data.course.teacher || '—'; 
-  document.getElementById('cr-c-name').textContent = S_data.course.cname || '—';
-  document.getElementById('cr-total-st').textContent = S_data.students.length;
-  document.getElementById('cr-date').textContent = new Date().toLocaleDateString('ar-EG');
-  
-  let totalScore = 0, totalSess = 0, validStCount = 0;
-  
-  const tbody = document.getElementById('cr-tbody');
-  tbody.innerHTML = S_data.students.map(st => {
-      const pSess = (st.sessions||[]).filter(s => s.att === 'present');
-      const stTotalSess = st.sessions ? st.sessions.length : 0;
-      let avg = '—';
-      let topError = 'لا يوجد';
-      
-      if(pSess.length > 0) {
-          totalSess += stTotalSess;
-          const stAvg = pSess.reduce((a,s)=>a+s.score,0)/pSess.length;
-          totalScore += stAvg;
-          validStCount++;
-          avg = window.fmt(stAvg);
-          
-          let errMap = {};
-          pSess.forEach(s => {
-             if(s.errors) s.errors.forEach(e => {
-                let errType = e.desc.split(' · ').pop();
-                errMap[errType] = (errMap[errType] || 0) + 1;
-             });
-          });
-          if(Object.keys(errMap).length > 0) {
-              topError = Object.keys(errMap).reduce((a, b) => errMap[a] > errMap[b] ? a : b);
-          }
-      }
-      
-      return `<tr>
-         <td><b>${st.name}</b></td>
-         <td style="text-align:center;">${stTotalSess}</td>
-         <td style="text-align:center; direction:ltr;">${avg}</td>
-         <td style="color:var(--danger); font-size:11px;">${topError}</td>
-      </tr>`;
-  }).join('');
-  
-  document.getElementById('cr-score').textContent = validStCount > 0 ? window.fmt(totalScore / validStCount) : '—';
-  document.getElementById('cr-sessions').textContent = totalSess;
-  
-  const element = document.getElementById('course-rep-layer'); 
-  element.style.display = 'block';
-  
-  html2pdf().set({ 
-    margin: 10, 
-    filename: `تقرير_الدورة_الشامل.pdf`, 
-    image: { type: 'jpeg', quality: 0.98 }, 
-    html2canvas: { scale: 2 }, 
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
-  }).from(element).save().then(() => { 
-    element.style.display = 'none'; 
-  });
 }
 
 // ══════════════════════════════════════════════════════════
@@ -4333,7 +4231,6 @@ window.sheetReq = async function(action) {
 }
 
 window.syncToSheet = async function() { 
-  if(window.isStudentMode) return; 
   const r = await window.sheetReq('save'); 
   if(r?.ok) { 
     window.setSyncDot('ok'); 
